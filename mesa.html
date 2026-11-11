@@ -496,7 +496,7 @@ body.obs #ytBox{bottom:12px}body.obs.ytTop #ytBox{top:12px}
 .dvLit,.dvBeam{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .35s}
 .dvLit{-webkit-mask-image:radial-gradient(circle var(--r,120px) at var(--x,50%) var(--y,40%),#000 50%,transparent 100%);mask-image:radial-gradient(circle var(--r,120px) at var(--x,50%) var(--y,40%),#000 50%,transparent 100%)}
 .dvLit>img{position:absolute;inset:0;width:100%;height:100%}
-.dvLit>img:first-child{filter:brightness(.6) sepia(1) hue-rotate(215deg) saturate(2.4) contrast(1.15)}
+.dvLit>img:first-child{filter:brightness(.42) sepia(1) hue-rotate(215deg) saturate(2.2) contrast(1.15)}
 .dvUvImg{mix-blend-mode:screen;filter:saturate(1.6) brightness(1.15)}
 .dvUvTx{position:absolute;left:6%;right:6%;transform:translateY(-50%) rotate(-4deg);text-align:center;white-space:pre-wrap;word-break:break-word;
   font:400 var(--fs)/1.15 'Special Elite',monospace;letter-spacing:.04em;color:#e2ff6e;text-shadow:0 0 6px #c8ff3a,0 0 18px #7dff1e,0 0 38px #39ff14}
@@ -705,6 +705,17 @@ body.obs #ytBox{bottom:12px}body.obs.ytTop #ytBox{top:12px}
 .emoPop{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:280px;overflow:auto}
 .emoPop button{font-size:21px;line-height:1;padding:6px 0;border-radius:8px;background:none;border:0;cursor:pointer}.emoPop button:hover{background:var(--p3);transform:scale(1.15)}
 .emoCat{grid-column:1/-1;font-size:10px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin:6px 2px 2px}
+.dvStage{touch-action:none;cursor:grab}.dvStage.grab{cursor:grabbing}.dvStage.zoomed{touch-action:auto;cursor:default}
+#docView.uv .dvStage{cursor:none}
+.dvUvImg{filter:saturate(1.6) brightness(1.2) drop-shadow(0 0 4px rgba(200,255,120,.5))!important}
+.uvdWrap{display:grid;place-items:center;background:#05030a;border-radius:10px;padding:8px}
+.uvdBox{position:relative;max-width:100%}
+.uvdBox img{position:absolute;inset:0;width:100%;height:100%;filter:brightness(.32) saturate(.5);pointer-events:none}
+.uvdBox canvas{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen;touch-action:none;cursor:crosshair}
+.uvdTools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.uvdCol{width:30px;height:30px;border-radius:50%;background:var(--c);border:2px solid #0008;box-shadow:0 0 10px var(--c);cursor:pointer;padding:0}
+.uvdCol.on{outline:2px solid #fff;outline-offset:2px}
+.uvdTools .btn.on{background:#5b1fd1;color:#fff}
 </style>
 </head>
 <body>
@@ -2306,6 +2317,24 @@ function rainCanvas(cv) {
   };
   requestAnimationFrame(loop);
 }
+const climaSnd = new Map();
+function climaClick(o, t) { const g = gain(0, o); env(g, t, .002, .5, .05); noise(t, .06, filt('bandpass', 2600, 1.2, g)); const g2 = gain(0, o); env(g2, t + .015, .002, .3, .08); osc('sine', 180, t + .015, .1, g2); }
+const CLIMA_AUD = {
+  chuva: () => { const h = startStream(fileUrl(FILES.rain), ambBus, .5, 2.5); return () => h.stop(T(), 2); },
+  nevoa: () => { const h = startStream(fileUrl(FILES.wind), ambBus, .32, 3); return () => h.stop(T(), 2.5); },
+  sangue: () => { const h = startStream(fileUrl(FILES.drip), ambBus, .45, 2); return () => h.stop(T(), 1.5); },
+  pulso: () => { const g = gain(.0001, ambBus); g.gain.setTargetAtTime(.75, T(), .8); const st = seq(.92, t => heartbeat(t, g, .7)); return () => { g.gain.setTargetAtTime(.0001, T(), .4); setTimeout(() => { st(); try { g.disconnect(); } catch (e) {} }, 2500); }; },
+  lanterna: () => { climaClick(ambBus, T() + .02); const g = gain(.0001, ambBus); g.gain.setTargetAtTime(.006, T(), .3); const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = 100; o.connect(filt('lowpass', 500, 1, g)); o.start(); return () => { climaClick(ambBus, T() + .02); g.gain.setTargetAtTime(.0001, T(), .1); setTimeout(() => { try { o.stop(); g.disconnect(); } catch (e) {} }, 800); }; },
+  vhs: () => { const g = gain(.0001, ambBus); g.gain.setTargetAtTime(.05, T(), .5); const sN = ctx.createBufferSource(); sN.buffer = noiseBuf; sN.loop = true; sN.connect(filt('highpass', 2500, .7, filt('lowpass', 7000, .7, g))); sN.start(); const hm = gain(.25, g); const o = ctx.createOscillator(); o.frequency.value = 60; o.connect(hm); o.start(); const cr = every(.3, 1.4, t => { const c = gain(0, g); env(c, t, .001, rand(.6, 1.6), .03); noise(t, .04, filt('highpass', 3000, null, c)); }); return () => { g.gain.setTargetAtTime(.0001, T(), .3); cr(); setTimeout(() => { try { sN.stop(); o.stop(); g.disconnect(); } catch (e) {} }, 1500); }; },
+  tremor: () => { const g = gain(.0001, ambBus); g.gain.setTargetAtTime(.9, T(), 1); const sN = ctx.createBufferSource(); sN.buffer = noiseBuf; sN.loop = true; const lp = filt('lowpass', 85, 1.4); sN.connect(lp); const am = gain(.6, g); lp.connect(am); const l = ctx.createOscillator(); l.frequency.value = 6.5; const ld = gain(.45); l.connect(ld); ld.connect(am.gain); sN.start(); l.start(); return () => { g.gain.setTargetAtTime(.0001, T(), .6); setTimeout(() => { try { sN.stop(); l.stop(); g.disconnect(); } catch (e) {} }, 3000); }; },
+  escuro: () => { const g = gain(.0001, ambBus); g.gain.setTargetAtTime(.12, T(), 2); const lp = filt('lowpass', 320, .8, g); const os = [41, 41.6, 61.7, 82.4].map((f, i) => { const o = ctx.createOscillator(); o.type = i === 3 ? 'triangle' : 'sine'; o.frequency.value = f; o.connect(lp); o.start(); return o; }); return () => { g.gain.setTargetAtTime(.0001, T(), 1); setTimeout(() => { os.forEach(o => { try { o.stop(); } catch (e) {} }); try { g.disconnect(); } catch (e) {} }, 4000); }; }
+};
+async function syncClimaSound() {
+  if (!isHost) return; await audioInit(); ambEnsure();
+  const want = new Set(S.climaSnd === false ? [] : (state.clima || []));
+  climaSnd.forEach((stop, k) => { if (!want.has(k)) { try { stop(); } catch (e) {} climaSnd.delete(k); } });
+  want.forEach(k => { if (!climaSnd.has(k) && CLIMA_AUD[k]) { try { climaSnd.set(k, CLIMA_AUD[k]()); } catch (e) { console.warn(e); } } });
+}
 function renderClima() {
   const box = $('#clima'); if (!box) return;
   const list = (state.clima || []).filter(k => CLIMAS[k]), key = list.join(',');
@@ -2631,6 +2660,7 @@ function renderSide() {
       <div class="row" style="margin-top:10px"><span class="hint" style="margin:0;flex:1">Cor personalizada</span><input type="color" data-a="acc" value="${th.acc || (THEMES[curId] || THEMES.ordem).red}">${th.acc ? '<button class="btn sm" data-a="accrm">Usar a do tema</button>' : ''}</div>
       <div class="row" style="margin-top:8px"><button class="btn sm" data-a="bgup">🖼️ Imagem de fundo</button>${roomImg ? '<button class="btn sm" data-a="bgrm">Remover fundo</button>' : ''}</div>`, true)
       + grp('clima', `🌧️ Clima da tela <small>${nCl ? nCl + ' ligado' + (nCl > 1 ? 's' : '') : 'desligado'}</small>`, `<div class="grid">${Object.entries(CLIMAS).map(([k, [e, n]]) => `<button class="tile2 ${(state.clima || []).includes(k) ? 'on' : ''}" data-clima="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
+      <label class="sw"><input type="checkbox" data-a2="climasnd" ${S.climaSnd !== false ? 'checked' : ''}><i></i><span>Som do clima <small>Chuva, vento, coração, chiado de fita, tremor… Usa o volume do ambiente.</small></span></label>
       <div class="hint">Dá para combinar, ex.: chuva + escuridão + lanterna.</div>`, nCl > 0)
       + grp('timer', `⏱️ Cronômetro <small>${tm ? (tm.run ? 'rodando' : 'pausado') : 'desligado'}</small>`, `<div class="row"><input class="in" id="tmL" maxlength="40" placeholder="Ex.: O ritual se completa em" value="${esc(tm ? tm.label : lsGet('mesa-tmL', ''))}" style="flex:1"><input class="in" id="tmM" type="number" min="0.1" step="0.5" value="${lsGet('mesa-tmM', 3)}" style="width:72px"><span class="hint" style="margin:0">min</span></div>
       <div class="row" style="margin-top:8px"><button class="btn sm red" data-a="tstart">▶ ${tm ? 'Reiniciar' : 'Iniciar'}</button>${tm ? `<button class="btn sm" data-a="tpause">${tm.run ? '⏸ Pausar' : '▶ Continuar'}</button><button class="btn sm" data-a="tclear">Remover</button>` : ''}</div>`, !!tm)
@@ -2681,7 +2711,7 @@ $('#pane').addEventListener('click', e => {
   if (b.dataset.dopen) { docOpen(b.dataset.dopen, !(docGot.find(x => x.id === b.dataset.dopen) || {}).seen); return; }
   if (b.dataset.mydel) { const id = b.dataset.mydel; confirmBox('Remover este arquivo do navegador?', 'Remover').then(ok => { if (ok) myDel(id).then(renderSfxGrid); }); return; }
   if (b.dataset.theme) { state.theme = {id: b.dataset.theme, acc: ''}; applyTheme(); pushState(); saveRoom(); renderSide(); return; }
-  if (b.dataset.clima) { const k = b.dataset.clima, l = state.clima || (state.clima = []); const i = l.indexOf(k); if (i >= 0) l.splice(i, 1); else l.push(k); renderClima(); pushState(); renderSide(); return; }
+  if (b.dataset.clima) { const k = b.dataset.clima, l = state.clima || (state.clima = []); const i = l.indexOf(k); if (i >= 0) l.splice(i, 1); else l.push(k); renderClima(); syncClimaSound(); pushState(); renderSide(); return; }
   {
     const a0 = b.dataset.a;
     if (a0 === 'loop') { S.loop = !S.loop; saveS(); if (curEl) curEl.loop = S.loop; renderSide(); return; }
@@ -2725,6 +2755,7 @@ $('#pane').addEventListener('toggle', e => { const d = e.target; if (d && d.data
 $('#pane').addEventListener('change', e => {
   const a2 = e.target.dataset.a2;
   if (a2 === 'covmus') { S.coverMusic = e.target.checked; saveS(); syncCoverSound(); }
+  if (a2 === 'climasnd') { S.climaSnd = e.target.checked; saveS(); syncClimaSound(); }
   if (a2 === 'covfrz') { setCover({freeze: e.target.checked}); if (!e.target.checked) syncFreeze(); }
   if (a2 === 'uvall') { state.uv = e.target.checked; pushState(); renderSide(); toast(state.uv ? '🔦 Agentes agora têm lanterna UV' : 'Lanterna UV recolhida'); }
   if (e.target.dataset.myin) { myAdd([...(e.target.files || [])], e.target.dataset.myin); e.target.value = ''; }
@@ -3116,7 +3147,7 @@ function openDocEditor(id, draft) {
     <div class="sec">🔦 Escondido na luz UV (opcional)</div>
     <textarea class="in" id="deUv" rows="3" maxlength="300" placeholder="Ex.: ELE AINDA ESTÁ NA CASA">${esc(e.uvText)}</textarea>
     <div class="row" style="margin-top:8px"><span class="hint" style="margin:0;flex:1">Posição do texto</span><select class="in" id="dePos" style="width:auto">${[['top', 'Em cima'], ['mid', 'No meio'], ['bot', 'Embaixo']].map(([k, n]) => `<option value="${k}"${e.uvPos === k ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
-    <div class="row" style="margin-top:8px"><button class="btn sm" id="deUvImg">${e.uvImg ? '🔁 Trocar imagem UV' : '➕ Imagem UV'}</button>${e.uvImg ? '<button class="btn sm" id="deUvRm">Remover imagem UV</button><img alt="" class="deUvTh" src="' + e.uvImg + '">' : ''}</div>
+    <div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn sm red" id="deUvDraw">🖌️ ${e.uvImg ? 'Editar desenho UV' : 'Desenhar na luz UV'}</button><button class="btn sm" id="deUvImg">${e.uvImg ? '🔁 Trocar imagem UV' : '➕ Imagem UV'}</button>${e.uvImg ? '<button class="btn sm" id="deUvRm">Remover imagem UV</button><img alt="" class="deUvTh" src="' + e.uvImg + '">' : ''}</div>
     <div class="hint">O texto e a imagem UV só aparecem quando o agente acende a lanterna UV em cima do documento. Na imagem UV, o preto fica invisível e só o que é claro brilha (bom para símbolos, digitais e manchas).</div>
     <button class="btn red wide" id="deSave" style="margin-top:14px">Salvar documento</button></div>`);
   const setHint = () => { $('#deKindHint').textContent = DOC_HINTS[docEdit.kind]; }; setHint();
@@ -3125,6 +3156,7 @@ function openDocEditor(id, draft) {
   $('#deKind').onclick = ev => { const b = ev.target.closest('[data-dk]'); if (!b) return; docEdit.kind = b.dataset.dk; $$('#deKind [data-dk]').forEach(x => x.classList.toggle('on', x === b)); setHint(); };
   $('#deUvImg').onclick = async () => { const [f] = await pickFile('image/*'); if (!f) return; try { keepForm(); docEdit.uvImg = await imgToDataURL(f, 1200, .85); openDocEditor(ex ? ex.id : null, docEdit); } catch (err) { toast('Não consegui abrir essa imagem.'); } };
   if ($('#deUvRm')) $('#deUvRm').onclick = () => { keepForm(); docEdit.uvImg = ''; openDocEditor(ex ? ex.id : null, docEdit); };
+  $('#deUvDraw').onclick = () => { keepForm(); if (!docEdit.img) { toast('Escolha a imagem do documento primeiro.'); return; } openUvDraw(ex ? ex.id : null); };
   $('#deSave').onclick = async () => {
     keepForm();
     if (!docEdit.img) { toast('Escolha a imagem do documento.'); return; }
@@ -3134,6 +3166,37 @@ function openDocEditor(id, draft) {
     try { await docTx('lib', 'readwrite', st => st.put(d)); } catch (err) { toast('Não consegui guardar o documento neste navegador.'); return; }
     await docLoadLib(); closeModal('ok'); renderSide(); toast(ex ? 'Documento atualizado' : 'Documento guardado. Toque em “Entregar” quando quiser.');
   };
+}
+function openUvDraw(exId) {
+  const e = docEdit, base = new Image();
+  base.onload = () => {
+    let W = base.naturalWidth, H = base.naturalHeight; const k = Math.min(1100 / W, 1100 / H); W = Math.round(W * k); H = Math.round(H * k);
+    const COLS = ['#b6ff3b', '#3df5ff', '#c77dff', '#ffffff', '#ff3d6e', '#ffd23d'];
+    let col = COLS[0], erase = false, last = null; const undo = [];
+    openModal(`<div class="mhead"><h3>🖌️ Desenho na luz UV</h3><button class="btn sm" data-m="x">Voltar</button></div><div class="mbody">
+      <div class="uvdWrap"><div class="uvdBox" style="aspect-ratio:${W}/${H};width:min(100%,calc(54vh * ${(W / H).toFixed(4)}))"><img alt="" src="${e.img}"><canvas id="uvdC" width="${W}" height="${H}"></canvas></div></div>
+      <div class="uvdTools">${COLS.map(c => `<button class="uvdCol ${c === col ? 'on' : ''}" data-col="${c}" style="--c:${c}" title="Cor"></button>`).join('')}<span style="flex:1"></span><button class="btn sm" data-t="erase">🧽 Borracha</button><button class="btn sm" data-t="undo">↶</button><button class="btn sm" data-t="clear">Limpar</button></div>
+      <div class="row" style="margin-top:8px"><span class="hint" style="margin:0">Espessura</span><input type="range" min="2" max="48" value="10" id="uvdSz" style="flex:1"></div>
+      <div class="hint">Desenhe símbolos, setas, digitais ou recados. Só aparece quando o agente acender a lanterna UV em cima do documento.</div>
+      <button class="btn red wide" id="uvdSave" style="margin-top:10px">Salvar desenho</button></div>`, () => openDocEditor(exId, docEdit));
+    const cv = $('#uvdC'), g = cv.getContext('2d', {willReadFrequently: true});
+    g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+    if (e.uvImg) { const u = new Image(); u.onload = () => g.drawImage(u, 0, 0, W, H); u.src = e.uvImg; }
+    const pt = ev => { const r = cv.getBoundingClientRect(); return [(ev.clientX - r.left) * W / r.width, (ev.clientY - r.top) * H / r.height]; };
+    const line = (a, b2) => { const sz = +$('#uvdSz').value * W / 700; g.lineCap = g.lineJoin = 'round'; g.lineWidth = erase ? sz * 2 : sz; g.strokeStyle = erase ? '#000' : col; g.shadowColor = erase ? 'transparent' : col; g.shadowBlur = erase ? 0 : sz * 1.1; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b2[0], b2[1]); g.stroke(); };
+    cv.onpointerdown = ev => { ev.preventDefault(); undo.push(g.getImageData(0, 0, W, H)); if (undo.length > 25) undo.shift(); last = pt(ev); line(last, [last[0] + .1, last[1] + .1]); try { cv.setPointerCapture(ev.pointerId); } catch (_) {} };
+    cv.onpointermove = ev => { if (!last) return; const p2 = pt(ev); line(last, p2); last = p2; };
+    cv.onpointerup = cv.onpointercancel = () => { last = null; };
+    $('#mbox').querySelector('.uvdTools').onclick = ev => {
+      const bc = ev.target.closest('[data-col]'), bt = ev.target.closest('[data-t]');
+      if (bc) { col = bc.dataset.col; erase = false; $$('#mbox [data-col]').forEach(x => x.classList.toggle('on', x === bc)); $('#mbox [data-t="erase"]').classList.remove('on'); }
+      if (bt && bt.dataset.t === 'erase') { erase = !erase; bt.classList.toggle('on', erase); }
+      if (bt && bt.dataset.t === 'undo' && undo.length) g.putImageData(undo.pop(), 0, 0);
+      if (bt && bt.dataset.t === 'clear') { undo.push(g.getImageData(0, 0, W, H)); g.shadowBlur = 0; g.fillStyle = '#000'; g.fillRect(0, 0, W, H); }
+    };
+    $('#uvdSave').onclick = () => { let u = cv.toDataURL('image/jpeg', .86); if (u.length > 880000) u = cv.toDataURL('image/jpeg', .7); const d = g.getImageData(0, 0, W, H).data; let lit = false; for (let i = 0; i < d.length; i += 64) if (d[i] + d[i + 1] + d[i + 2] > 60) { lit = true; break; } docEdit.uvImg = lit ? u : ''; closeModal('ok'); toast(lit ? 'Desenho UV salvo. Não esqueça de salvar o documento.' : 'Desenho vazio removido.'); };
+  };
+  base.src = e.img;
 }
 async function docDelete(id) { if (!await confirmBox('Apagar este documento da sua lista? (quem já recebeu continua com ele, a não ser que você recolha)', 'Apagar')) return; try { await docTx('lib', 'readwrite', st => st.delete(id)); } catch (e) {} await docLoadLib(); renderSide(); }
 function docShowAll(id) {
@@ -3260,12 +3323,15 @@ function docShow(d, w, h, fade, enter) {
 }
 /* drag to rotate, like inspecting an item in a game */
 function inspInit(kind) {
-  const tilt = $('#dvTilt'); if (!tilt) return;
+  const tilt = $('#dvTilt'), stage = $('#dvStage'); if (!tilt || !stage) return;
   const s = insp = {el: tilt, rx: 0, ry: 0, vx: 0, vy: 0, drag: false, lx: 0, ly: 0, base: kind === 'foto' ? -2 : kind === 'bilhete' ? 2.5 : 0, t0: performance.now(), target: null, item: kind === 'item'};
-  tilt.addEventListener('pointerdown', e => { if (insp !== s || uvOn || docZoomed()) return; s.drag = true; s.lx = e.clientX; s.ly = e.clientY; s.vx = s.vy = 0; s.target = null; tilt.classList.add('grab'); try { tilt.setPointerCapture(e.pointerId); } catch (_) {} });
-  tilt.addEventListener('pointermove', e => { if (!s.drag) return; const dx = e.clientX - s.lx, dy = e.clientY - s.ly; s.lx = e.clientX; s.ly = e.clientY; s.ry += dx * .5; s.rx = clamp(s.rx - dy * .5, -70, 70); s.vy = dx * .5; s.vx = -dy * .5; });
-  const up = () => { s.drag = false; tilt.classList.remove('grab'); };
-  tilt.addEventListener('pointerup', up); tilt.addEventListener('pointercancel', up); tilt.addEventListener('lostpointercapture', up);
+  if (!stage._insp) {
+    stage._insp = 1;
+    stage.addEventListener('pointerdown', e => { const q = insp; if (!q || uvOn || docZoomed() || e.target.closest('button')) return; q.drag = true; q.lx = e.clientX; q.ly = e.clientY; q.vx = q.vy = 0; q.target = null; stage.classList.add('grab'); try { stage.setPointerCapture(e.pointerId); } catch (_) {} });
+    stage.addEventListener('pointermove', e => { const q = insp; if (!q || !q.drag) return; const dx = e.clientX - q.lx, dy = e.clientY - q.ly; q.lx = e.clientX; q.ly = e.clientY; q.ry += dx * .5; q.rx = clamp(q.rx - dy * .5, -70, 70); q.vy = dx * .5; q.vx = -dy * .5; });
+    const up = () => { const q = insp; if (q) q.drag = false; stage.classList.remove('grab'); };
+    stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up); stage.addEventListener('lostpointercapture', up);
+  }
   const tick = now => {
     if (insp !== s || !tilt.isConnected) return;
     if (!s.drag) {
@@ -3275,7 +3341,7 @@ function inspInit(kind) {
     }
     const still = uvOn || docZoomed(), t = (now - s.t0) / 1000;
     const sx = still ? 0 : Math.sin(t * .9) * 2.4, sy = still ? 0 : Math.sin(t * .6 + 1) * (s.item ? 14 : 3.2), bob = s.item && !still ? Math.sin(t * 1.6) * 8 : 0;
-    tilt.style.transform = `translateY(${bob.toFixed(1)}px) rotateX(${(s.rx + sx).toFixed(2)}deg) rotateY(${(s.ry + sy).toFixed(2)}deg) rotateZ(${still ? 0 : s.base}deg)`;
+    tilt.style.transform = still && Math.abs(s.rx) < .05 && Math.abs(s.ry % 360) < .05 ? 'none' : `perspective(1500px) translateY(${bob.toFixed(1)}px) rotateX(${(s.rx + sx).toFixed(2)}deg) rotateY(${(s.ry + sy).toFixed(2)}deg) rotateZ(${still ? 0 : s.base}deg)`;
     tilt.style.setProperty('--sh', (((s.ry + sy) % 360 + 360) % 360 * .55 + 20 + (s.rx + sx) * .4).toFixed(1) + '%');
     requestAnimationFrame(tick);
   };
@@ -3351,7 +3417,7 @@ document.addEventListener('click', e => {
   if (b.dataset.dv === 'xall') { if (docViewing) sendAll({t: 'docclose', id: docViewing.id}); docClose(); }
   if (b.dataset.dv === 'uv') uvSet(!uvOn);
   if (b.dataset.dv === 'flip') { if (uvOn) uvSet(false); inspFlip(); }
-  if (b.dataset.dv === 'zoom') { const s = $('#dvScroll'); if (!s) return; inspFront(); const z = s.classList.toggle('zoom'); b.textContent = z ? '🔍 Reduzir' : '🔍 Ampliar'; }
+  if (b.dataset.dv === 'zoom') { const s = $('#dvScroll'); if (!s) return; inspFront(); const z = s.classList.toggle('zoom'); const st = $('#dvStage'); if (st) st.classList.toggle('zoomed', z); b.textContent = z ? '🔍 Reduzir' : '🔍 Ampliar'; }
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && docViewing) docClose(); });
 
