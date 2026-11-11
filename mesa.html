@@ -971,7 +971,7 @@ function startHost() {
   peer.on('disconnected', () => { setNet(null, 'reconectando…'); setTimeout(() => { try { if (!peer.destroyed) peer.reconnect(); } catch (e) {} }, 1500); });
   peer.on('call', onIncomingCall);
   peer.on('connection', conn => {
-    conn.on('data', d => onHostData(conn, d));
+    conn.on('data', d => { conn._seen = Date.now(); onHostData(conn, d); });
     conn.on('open', () => {
       const md = conn.metadata || {}, id = conn.peer;
       const old = conns.get(id); if (old && old !== conn) try { old.close(); } catch (e) {}
@@ -1009,6 +1009,7 @@ function onHostData(conn, d) {
   if (d.t === 'roll' && d.r) addChat({k: 'roll', from: name, r: sanitizeRoll(d.r)}, true);
   if (d.t === 'status' && p) { p.mic = !!d.mic; p.cam = !!d.cam; p.deaf = !!d.deaf; broadcastRoster(); }
   if (d.t === 'recall') callStage(id);
+  if (d.t === 'bye') { if (conns.get(id) === conn) dropPlayer(id); try { conn.close(); } catch (e) {} }
 }
 function kick(id) { const c = conns.get(id); if (!c) return; try { c.send({t: 'kicked'}); } catch (e) {} setTimeout(() => { try { c.close(); } catch (e) {} dropPlayer(id); }, 300); }
 /* ----- player ----- */
@@ -1032,7 +1033,7 @@ function connectHost() {
   const c = peer.connect(PREFIX + code, {metadata: {name: me.name, mic: me.mic, cam: me.cam}, reliable: true});
   hostConn = c;
   c.on('open', () => { setNet(true, 'conectado'); renderStage(); setTimeout(() => { if (!gotStage && c.open) c.send({t: 'recall'}); }, 7000); });
-  c.on('data', onPlayerData);
+  c.on('data', d => { c._seen = Date.now(); onPlayerData(d); });
   c.on('close', () => { if (hostConn !== c) return; setNet(false, 'Mestre desconectou'); state.sharing = false; state.cover.on = false; renderCover(null); renderStage(); gotStage = false; scheduleRetry(3000); });
   c.on('error', () => {});
 }
@@ -1043,6 +1044,8 @@ function onPlayerData(d) {
   if (d.t === 'state') { state = d.state || state; renderCover(state.cover); renderStage(); }
   if (d.t === 'chat') addChat(d.m, false);
   if (d.t === 'fx' && typeof d.name === 'string') doFx(d.name, false);
+  if (d.t === 'ping' && hostConn && hostConn.open) { try { hostConn.send({t: 'pong'}); } catch (e) {} }
+  if (d.t === 'bye') { setNet(false, 'O Mestre encerrou a sala'); }
   if (d.t === 'kicked') { kicked = true; toast('O Mestre removeu você da sala.', 5000); setNet(false, 'removido'); clearTimeout(retryT); try { peer.destroy(); } catch (e) {} }
 }
 function setRoster(list) { roster.clear(); (list || []).forEach(p => { if (p && p.id) roster.set(p.id, {id: p.id, name: cleanName(p.name), role: p.role === 'mestre' ? 'mestre' : 'agente', mic: !!p.mic, cam: !!p.cam, deaf: !!p.deaf}); }); if (me.id) roster.set(me.id, {...me}); }
@@ -1519,6 +1522,7 @@ $('#jGo').onclick = () => {
 let leaving = false;
 function leave() {
   leaving = true;
+  sayBye();
   try { if (isHost) sendAll({t: 'chat', m: {k: 'sys', text: 'O Mestre encerrou a sala.', ts: Date.now()}}); } catch (e) {}
   setTimeout(() => {
     try { peer && peer.destroy(); } catch (e) {}
@@ -1535,6 +1539,14 @@ function leave() {
   if (last && last.code) { $('#reopen').classList.remove('hide'); $('#reopenBtn').textContent = 'reabrir a sala ' + last.code; $('#reopenBtn').onclick = () => { me.name = cleanName($('#hName').value || last.name || 'Mestre'); code = last.code; showPrejoin(true); }; }
   if (typeof Peer === 'undefined') toast('Não consegui carregar a conexão. Verifique a internet e recarregue.', 6000);
 })();
+/* presence: goodbye + heartbeat so people who close the tab vanish in seconds */
+function sayBye() { try { if (isHost) sendAll({t: 'bye'}); else if (hostConn && hostConn.open) hostConn.send({t: 'bye'}); } catch (e) {} }
+addEventListener('pagehide', sayBye);
+setInterval(() => {
+  const now = Date.now();
+  if (isHost) { conns.forEach((c, id) => { if (!c._seen) c._seen = now; if (now - c._seen > 25000) { try { c.close(); } catch (e) {} if (conns.get(id) === c) dropPlayer(id); } else { try { if (c.open) c.send({t: 'ping'}); } catch (e) {} } }); }
+  else if (hostConn && hostConn.open) { if (!hostConn._seen) hostConn._seen = now; if (now - hostConn._seen > 25000) { const c = hostConn; hostConn = null; try { c.close(); } catch (e) {} setNet(false, 'Mestre desconectou'); gotStage = false; renderStage(); scheduleRetry(1500); } }
+}, 5000);
 addEventListener('beforeunload', e => { if (!leaving && !$('#room').classList.contains('hide') && (isHost ? conns.size : true)) { e.preventDefault(); e.returnValue = ''; } });
 addEventListener('resize', () => { if (innerWidth > 900) $('#side').classList.remove('open'); });
 })();
