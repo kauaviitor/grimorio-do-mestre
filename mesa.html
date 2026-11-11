@@ -672,6 +672,39 @@ body.obs #ytBox{bottom:12px}body.obs.ytTop #ytBox{top:12px}
 /* ---------- frozen stage behind the cover ---------- */
 #frz{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:1}
 #frz.hide{display:none}
+.grp{border:1px solid var(--line);border-radius:12px;margin-top:12px;background:color-mix(in srgb,var(--p2) 55%,transparent)}
+.grp>summary{list-style:none;cursor:pointer;padding:11px 12px;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;user-select:none}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary small{color:var(--mut);font-weight:500;font-size:12px;margin-left:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%}
+.grp>summary::after{content:'▾';margin-left:auto;color:var(--mut);transition:transform .2s}
+.grp:not([open])>summary::after{transform:rotate(-90deg)}
+.grp>summary:hover{color:var(--red2)}
+.gb{padding:0 12px 12px}.gb>.sw:first-child{margin-top:0}
+#ytBox.ghost{background:none;border:0;box-shadow:none;pointer-events:none}
+#ytBox.ghost .ytHd,#ytBox.ghost #ytFrame{opacity:0}
+#ytBox.ghost #ytTap{pointer-events:auto}
+.chatTop{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12px;font-weight:700;color:var(--mut);min-height:44px}
+.msg.cm{display:flex;flex-direction:column;gap:3px}
+.mh{display:flex;align-items:center;gap:7px;min-width:0}
+.mh b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mav{width:22px;height:22px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;flex:none}
+.mtag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;background:var(--red);color:#fff;border-radius:4px;padding:2px 5px;flex:none}
+.mt{margin-left:29px;padding:7px 11px;border-radius:4px 12px 12px 12px;background:var(--p2);border:1px solid var(--line);align-self:flex-start;max-width:calc(100% - 29px);white-space:pre-wrap}
+.msg.cm.me .mt{background:color-mix(in srgb,var(--red) 16%,var(--p2));border-color:color-mix(in srgb,var(--red) 35%,var(--line))}
+.msg.cont{margin-top:-4px}.msg.cont .mt{border-radius:12px}
+.mt.emo{background:none!important;border:0!important;padding:0 0 0 2px;font-size:32px;line-height:1.15}
+.rmsg .mh{margin-bottom:2px}.rmsg .rl{font-size:12px;color:var(--mut);font-weight:600}
+.quickD{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.dqT{color:var(--ink)!important}.dqT.on{background:color-mix(in srgb,var(--red) 35%,var(--p3))}
+.dicePanel{display:flex;flex-direction:column;gap:8px}.dicePanel.hide{display:none}
+.chatIn{display:flex;gap:6px;align-items:center}.chatIn .in{flex:1;min-width:0}
+.emoBtn{width:40px;height:40px;border-radius:10px;background:var(--p3);font-size:20px;flex:none;border:1px solid var(--line);cursor:pointer;line-height:1}
+.emoBtn:hover{background:color-mix(in srgb,var(--red) 25%,var(--p3))}
+.sendB{width:44px;padding:0!important;height:40px;font-size:17px;flex:none}
+#pop.emo{max-width:340px;min-width:300px;padding:8px}
+.emoPop{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:280px;overflow:auto}
+.emoPop button{font-size:21px;line-height:1;padding:6px 0;border-radius:8px;background:none;border:0;cursor:pointer}.emoPop button:hover{background:var(--p3);transform:scale(1.15)}
+.emoCat{grid-column:1/-1;font-size:10px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin:6px 2px 2px}
 </style>
 </head>
 <body>
@@ -1908,9 +1941,11 @@ function onPlayerData(d) {
   if (d.t === 'roomimg') { roomImg = okImg(d.img) ? d.img : ''; applyTheme(); }
   if (d.t === 'reveal') { curReveal = d.r && okImg(d.r.img) ? {id: String(d.r.id || Date.now()), img: d.r.img, cap: String(d.r.cap || '').slice(0, 120)} : null; revealHidden = false; renderReveal(); }
   if (d.t === 'whisper' && typeof d.text === 'string') showWhisper(d.text.slice(0, 200));
-  if (d.t === 'doc' && d.doc) docReceive(d.doc);
+  if (d.t === 'doc' && d.doc) docReceive(d.doc, !!d.show);
+  if (d.t === 'docclose' && docViewing && docViewing.id === String(d.id)) docClose();
   if (d.t === 'docdel' && d.id) docRemove(String(d.id));
   if (d.t === 'chat') addChat(d.m, false);
+  if (d.t === 'chatclear') { chat = []; unread = 0; renderSide(); renderControls(); }
   if (d.t === 'fx' && typeof d.name === 'string') doFx(d.name, false);
   if (d.t === 'ping' && hostConn && hostConn.open) { try { hostConn.send({t: 'pong'}); } catch (e) {} }
   if (d.t === 'bye') { setNet(false, 'O Mestre encerrou a sala'); }
@@ -2385,18 +2420,33 @@ function addChat(m, fromHost) {
   chat.push(m); if (chat.length > 300) chat.shift();
   if (isHost && fromHost) sendAll({t: 'chat', m});
   const log = $('#log');
-  if (log) { const em = log.querySelector('.empty'); if (em) em.remove(); const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 60; log.insertAdjacentHTML('beforeend', msgHTML(m)); if (m.k === 'roll') { const de = log.lastElementChild && log.lastElementChild.querySelector('.rdice'); if (de) mountRollDice(de, m.r, 46, true); } if (atBottom || m.from === me.name || (m.from || '').startsWith(me.name)) log.scrollTop = log.scrollHeight; }
+  if (log) { const em = log.querySelector('.empty'); if (em) em.remove(); const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 60; log.insertAdjacentHTML('beforeend', msgHTML(m, chat[chat.length - 2])); if (m.k === 'roll') { const de = log.lastElementChild && log.lastElementChild.querySelector('.rdice'); if (de) mountRollDice(de, m.r, 46, true); } if (atBottom || m.from === me.name || (m.from || '').startsWith(me.name)) log.scrollTop = log.scrollHeight; }
   if (m.k === 'roll' && m.r && m.r.dice) { try { if (m.pid) rollOverlay(m.pid, m.r); diceSound(m.r.dice.length); } catch (e) {} }
   if ((!log || !sideOpen()) && m.k !== 'sys') { unread++; renderTabs(); renderControls(); }
 }
 function sideOpen() { return innerWidth > 900 ? curTab === 'chat' : $('#side').classList.contains('open') && curTab === 'chat'; }
 function sys(text) { addChat({k: 'sys', text}, true); }
 const hhmm = ts => { const d = new Date(ts); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
-function msgHTML(m) {
+const EMO_RE = /^(?:\p{Extended_Pictographic}|\p{Emoji_Component}|️|‍|\s)+$/u;
+function msgHead(m) { const nm = String(m.from || ''), isM = /\(Mestre\)$/.test(nm), cl = nm.replace(/ \(Mestre\)$/, ''); return `<div class="mh"><span class="mav" style="--c:${colorOf(cl)}">${initial(cl)}</span><b>${esc(cl)}</b>${isM ? '<span class="mtag">Mestre</span>' : ''}<span class="tm">${hhmm(m.ts)}</span></div>`; }
+function msgHTML(m, prev) {
   if (m.k === 'sys') return `<div class="msg sys">${esc(m.text)}</div>`;
+  const cl = String(m.from || '').replace(/ \(Mestre\)$/, ''), mine = cl === me.name;
   if (m.k === 'roll') { const r = m.r; const dice = r.dice.map((x, i) => i === r.keep && r.mode !== 'soma' ? `<b style="color:#fff">${x}</b>` : x).join(', ');
-    return `<div class="msg rmsg"><b>${esc(m.from)}</b> · ${esc(r.label || 'Rolagem')}<span class="tm">${hhmm(m.ts)}</span><div class="rdice" data-ts="${m.ts}"></div><div class="res${r.crit ? ' crit' : r.fail ? ' fail' : ''}">${r.total}${r.crit ? ' · CRÍTICO!' : r.fail ? ' · desastre' : ''}</div><div class="det">${esc(r.expr)} → [${dice}]${r.bonus ? (r.bonus > 0 ? ' + ' : ' − ') + Math.abs(r.bonus) : ''}${r.mode === 'menor' ? ' (pega o menor)' : r.mode === 'maior' ? ' (pega o maior)' : ''}</div></div>`; }
-  return `<div class="msg"><b>${esc(m.from)}</b><span class="tm">${hhmm(m.ts)}</span><br>${esc(m.text)}</div>`;
+    return `<div class="msg rmsg">${msgHead(m)}<div class="rl">🎲 ${esc(r.label || 'Rolagem')}</div><div class="rdice" data-ts="${m.ts}"></div><div class="res${r.crit ? ' crit' : r.fail ? ' fail' : ''}">${r.total}${r.crit ? ' · CRÍTICO!' : r.fail ? ' · desastre' : ''}</div><div class="det">${esc(r.expr)} → [${dice}]${r.bonus ? (r.bonus > 0 ? ' + ' : ' − ') + Math.abs(r.bonus) : ''}${r.mode === 'menor' ? ' (pega o menor)' : r.mode === 'maior' ? ' (pega o maior)' : ''}</div></div>`; }
+  const t = String(m.text || ''), emo = t.length <= 16 && EMO_RE.test(t) && /\p{Extended_Pictographic}/u.test(t);
+  const cont = prev && prev.k === 'chat' && prev.from === m.from && m.ts - prev.ts < 120000;
+  return `<div class="msg cm${mine ? ' me' : ''}${cont ? ' cont' : ''}">${cont ? '' : msgHead(m)}<div class="mt${emo ? ' emo' : ''}">${esc(t)}</div></div>`;
+}
+const EMOJIS = [['Rostos', '😀 😂 🤣 😅 😊 😍 😎 🤔 😏 😐 😬 🙄 😴 🥺 😭 😡 🤬 🤯 😳 🥶 🤡 🥴 😇 🤓'], ['Medo', '😱 😨 😰 💀 ☠️ 👻 👁️ 👀 🫣 🤫 😈 👹 👺 🧟 🧛 🕷️ 🦇 🐺 🐍 🩸 🫀 🧠 🦴 ⚰️'], ['Ação', '🎲 🔪 🗡️ 🔫 🪓 🔦 🕯️ 🔥 ⚡ 💥 🌑 🌕 ⛓️ 🗝️ 📜 📷 💊 🧪 🧭 🚪 🏚️ 🌲 🌧️ 🚗'], ['Reações', '👍 👎 👏 🙏 🤝 💪 🫡 ❤️ 💔 ✨ ❓ ❗ ✅ ❌ 💯 🏃 🙈 🤞 🍿 ☕ 💤 🆘 🎉 👑']];
+function openEmoji(anchor) {
+  const pop = $('#pop');
+  pop.className = 'emo'; pop.innerHTML = `<div class="emoPop">${EMOJIS.map(([c, l]) => `<div class="emoCat">${c}</div>` + l.split(' ').map(e => `<button data-emo="${e}">${e}</button>`).join('')).join('')}</div>`;
+  pop.classList.remove('hide');
+  const rc = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+  pop.style.left = clamp(rc.left, 8, innerWidth - pw - 8) + 'px'; pop.style.top = clamp(rc.top - ph - 8, 8, innerHeight - ph - 8) + 'px';
+  pop.oninput = pop.onchange = null;
+  pop.onclick = e => { const b = e.target.closest('[data-emo]'); if (!b) return; const i = $('#chatIn'); if (!i) return; const st = i.selectionStart ?? i.value.length, en = i.selectionEnd ?? st; i.value = i.value.slice(0, st) + b.dataset.emo + i.value.slice(en); const p2 = st + b.dataset.emo.length; i.focus(); try { i.setSelectionRange(p2, p2); } catch (err) {} };
 }
 function sendChat(text) {
   text = text.trim(); if (!text) return;
@@ -2515,6 +2565,8 @@ function renderTabs() {
   $('#tabs').innerHTML = tabs.map(([k, i, l]) => `<button data-tab="${k}" class="${k === curTab ? 'on' : ''}">${ic(i)}${l}${k === 'chat' && unread && curTab !== 'chat' ? '<i class="dot"></i>' : ''}</button>`).join('');
 }
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; curTab = b.dataset.tab; if (curTab === 'chat') unread = 0; renderSide(); renderControls(); });
+const grpOpen = lsGet('mesa-grp', {});
+function grp(k, title, inner, def) { const o = grpOpen[k] ?? def; return `<details class="grp" data-g="${k}"${o ? ' open' : ''}><summary>${title}</summary><div class="gb">${inner}</div></details>`; }
 function renderSide() {
   if ($('#room').classList.contains('hide')) return;
   renderTabs();
@@ -2523,11 +2575,15 @@ function renderSide() {
   P.classList.toggle('chatPane', curTab === 'chat');
   if (curTab === 'chat') {
     unread = 0;
-    h = `<div id="log">${chat.map(msgHTML).join('') || '<div class="msg sys empty">Nenhuma mensagem ainda. Role dados ou converse aqui.</div>'}</div>
+    h = `<div class="chatTop"><span>💬 Chat da mesa</span>${isHost ? '<button class="btn sm" data-a="chatclear" title="Apaga as mensagens para todos">🧹 Limpar chat</button>' : ''}</div>
+      <div id="log">${chat.map((m, i) => msgHTML(m, chat[i - 1])).join('') || '<div class="msg sys empty">Nenhuma mensagem ainda. Role dados ou converse aqui.</div>'}</div>
       <div class="chatBot">
-        <div class="diceBar"><label>Atributo</label><input class="in" id="dA" type="number" min="-3" max="10" value="${lsGet('mesa-dA', 2)}"><label>Bônus</label><input class="in" id="dB" type="number" value="${lsGet('mesa-dB', 0)}"><button class="btn red sm" data-a="rollop">🎲 Teste</button></div>
-        <div class="diceBar"><input class="in wide" id="dE" value="${esc(lsGet('mesa-dE', '1d6'))}" placeholder="2d6+3"><button class="btn sm" data-a="rollex">Rolar</button>${['1d4', '1d6', '1d8', '1d10', '1d12', '1d20'].map(x => `<button class="dq" data-q="${x}">${x.slice(1)}</button>`).join('')}</div>
-        <form id="chatF" class="row"><input class="in" id="chatIn" maxlength="600" placeholder="Mensagem para a mesa…" autocomplete="off"><button class="btn red" type="submit">Enviar</button></form>
+        <div class="dicePanel ${S.diceOpen ? '' : 'hide'}" id="diceP">
+          <div class="diceBar"><label>Atributo</label><input class="in" id="dA" type="number" min="-3" max="10" value="${lsGet('mesa-dA', 2)}"><label>Bônus</label><input class="in" id="dB" type="number" value="${lsGet('mesa-dB', 0)}"><button class="btn red sm" data-a="rollop">🎲 Teste</button></div>
+          <div class="diceBar"><input class="in wide" id="dE" value="${esc(lsGet('mesa-dE', '1d6'))}" placeholder="2d6+3"><button class="btn sm" data-a="rollex">Rolar</button></div>
+        </div>
+        <div class="quickD"><button class="dq dqT ${S.diceOpen ? 'on' : ''}" data-a="dicetog">🎲 Teste ${S.diceOpen ? '▾' : '▸'}</button>${['1d4', '1d6', '1d8', '1d10', '1d12', '1d20'].map(x => `<button class="dq" data-q="${x}">${x.slice(1)}</button>`).join('')}</div>
+        <form id="chatF" class="chatIn"><button type="button" class="emoBtn" data-a="emo" title="Emojis">😀</button><input class="in" id="chatIn" maxlength="600" placeholder="Mensagem para a mesa…" autocomplete="off"><button class="btn red sendB" type="submit" title="Enviar">➤</button></form>
       </div>`;
   } else if (curTab === 'music' && isHost) {
     const np = trackLabel(curTrack);
@@ -2537,64 +2593,54 @@ function renderSide() {
       h += ytPaneHTML();
     } else if (musicMode === 'gen') {
       h += `<div class="grid g2">${Object.entries(TRACKS).map(([k, t]) => `<button class="tile2 ${curTrack === k ? 'on' : ''}" data-track="${k}"><span class="e">${t.e}</span>${t.name}<small>${t.d}</small></button>`).join('')}</div>
-        <div class="hint">Geradas ao vivo pelo site: nunca repetem igual e funcionam até sem internet.</div>`;
+        <div class="hint">Criadas ao vivo pelo site, funcionam até sem internet.</div>`;
     } else if (musicMode === 'my') {
       const mine = myList.filter(x => x.kind === 'music');
       h += `<label class="btn sm red wide" style="cursor:pointer">+ Adicionar músicas do seu PC<input type="file" accept="audio/*" multiple hidden data-myin="music"></label>
         ${mine.length ? '<div style="margin-top:10px">' + mine.map(x => `<div class="trk ${curTrack === 'my:' + x.id ? 'on' : ''}"><button class="pl" data-track="my:${x.id}">${curTrack === 'my:' + x.id ? '■' : '▶'}</button><button class="nm" data-track="my:${x.id}" style="text-align:left">${esc(x.name)}<br><small>${(x.size / 1048576).toFixed(1)} MB</small></button><button class="x" data-mydel="${x.id}" title="Remover">🗑</button></div>`).join('') + '</div>' : ''}
-        <div class="hint">Coloque aqui as trilhas que você tem no computador, como as músicas oficiais de Ordem Paranormal que você baixou. Elas ficam salvas só neste navegador, tocam para todos os agentes com o mesmo volume e passam pela troca suave de faixa.</div>`;
+        <div class="hint">Suas trilhas (ex.: as oficiais de Ordem). Ficam salvas só neste navegador.</div>`;
     } else {
       h += `<div class="chips">${[['all', 'Todas'], ...LIB_CATS].map(([k, l]) => `<button class="chip ${libCat === k ? 'on' : ''}" data-lc="${k}">${l}</button>`).join('')}</div>`
-        + LIB.filter(x => libCat === 'all' || x[2] === libCat).map(x => { const on = curTrack === 'lib:' + x[0]; return `<button class="trk ${on ? 'on' : ''}" data-track="lib:${x[0]}"><span class="pl">${on ? '■' : '▶'}</span><span class="nm">${esc(x[1])}<br><small>${esc(x[6])} · ${(LIB_CATS.find(c => c[0] === x[2]) || ['', ''])[1]}</small></span></button>`; }).join('')
-        + `<div class="hint">Músicas de verdade com licença livre (Kevin MacLeod e outros compositores). Carregam da internet na hora em que você toca. Créditos em Ajustes → Créditos.</div>`;
+        + LIB.filter(x => libCat === 'all' || x[2] === libCat).map(x => { const on = curTrack === 'lib:' + x[0]; return `<button class="trk ${on ? 'on' : ''}" data-track="lib:${x[0]}"><span class="pl">${on ? '■' : '▶'}</span><span class="nm">${esc(x[1])}<br><small>${esc(x[6])} · ${(LIB_CATS.find(c => c[0] === x[2]) || ['', ''])[1]}</small></span></button>`; }).join('');
     }
-    h += `<div class="sec">Ambiente (toca junto com a música)</div><div class="grid">${Object.entries(AMBS).map(([k, a]) => `<button class="tile2 ${ambOn.has(k) ? 'on' : ''}" data-amb="${k}"><span class="e">${a.e}</span>${a.n}</button>`).join('')}</div>${ambOn.size ? '<button class="btn sm wide" data-a="ambstop" style="margin-top:8px">Parar todos os ambientes</button>' : ''}
-      <div class="sec">Volume da trilha</div><input type="range" min="0" max="100" value="${Math.round(S.musicVol * 100)}" data-a="mvol">
-      <div class="sec">Volume do ambiente</div><input type="range" min="0" max="100" value="${Math.round(S.ambVol * 100)}" data-a="avol">
-      <div class="sec">O que você ouve (só para você)</div><input type="range" min="0" max="100" value="${Math.round(S.monVol * 100)}" data-a="monvol">
-      <div class="hint">Os ambientes são gravações reais e podem tocar vários ao mesmo tempo, por exemplo chuva com casa assombrada.</div>`;
+    h += grp('amb', `🌲 Ambiente <small>${ambOn.size ? ambOn.size + ' tocando' : 'junto com a música'}</small>`, `<div class="grid">${Object.entries(AMBS).map(([k, a]) => `<button class="tile2 ${ambOn.has(k) ? 'on' : ''}" data-amb="${k}"><span class="e">${a.e}</span>${a.n}</button>`).join('')}</div>${ambOn.size ? '<button class="btn sm wide" data-a="ambstop" style="margin-top:8px">Parar todos os ambientes</button>' : ''}`, true)
+      + grp('mvols', '🔊 Volumes', `<label class="lab" style="margin-top:0">Trilha</label><input type="range" min="0" max="100" value="${Math.round(S.musicVol * 100)}" data-a="mvol">
+      <label class="lab">Ambiente</label><input type="range" min="0" max="100" value="${Math.round(S.ambVol * 100)}" data-a="avol">
+      <label class="lab">O que você ouve (só você)</label><input type="range" min="0" max="100" value="${Math.round(S.monVol * 100)}" data-a="monvol">`, false);
   } else if (curTab === 'sfx' && isHost) {
     preloadSfx();
     h = `<input class="in srch" id="sfxQ" placeholder="🔎 Buscar som… (lobo, porta, grito)" value="${esc(sfxQ)}" autocomplete="off">
       <div class="chips">${[['all', 'Todos'], ...SFX_GROUPS].map(([k, l]) => `<button class="chip ${sfxGroup === k ? 'on' : ''}" data-sg="${k}">${l}</button>`).join('')}</div>
       <button class="btn red wide ${sfxPlaying.size ? '' : 'hide'}" id="sfxStopAll" data-a="sfxstop">■ Parar todos os efeitos <small style="opacity:.7">(tecla S)</small></button>
-      <div id="sfxGrid">${sfxGridHTML()}</div>
-      <div class="sec">Só visual na tela dos agentes</div><div class="grid">${[['flash', '⚡', 'Susto'], ['glitch', '👾', 'Glitch'], ['static', '📺', 'Estática'], ['blood', '🩸', 'Sangue'], ['dark', '🌑', 'Apagão'], ['flashw', '🌩️', 'Relâmpago']].map(([k, e, n]) => `<button class="tile2" data-fx="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
-      <div class="sec">Volume dos efeitos</div><input type="range" min="0" max="100" value="${Math.round(S.sfxVol * 100)}" data-a="svol">
-      <div class="hint">Os sons são gravações reais. Na primeira vez eles carregam da internet (o pontinho some quando o som está pronto) e depois ficam guardados no seu navegador. As criaturas são gravações de animais e vozes deformadas na hora.</div>`;
+      <div id="sfxGrid">${sfxGridHTML()}</div>`
+      + grp('fxvis', '👁️ Efeitos só visuais', `<div class="grid">${[['flash', '⚡', 'Susto'], ['glitch', '👾', 'Glitch'], ['static', '📺', 'Estática'], ['blood', '🩸', 'Sangue'], ['dark', '🌑', 'Apagão'], ['flashw', '🌩️', 'Relâmpago']].map(([k, e, n]) => `<button class="tile2" data-fx="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>`, false)
+      + grp('svol', '🔊 Volume dos efeitos', `<input type="range" min="0" max="100" value="${Math.round(S.sfxVol * 100)}" data-a="svol"><div class="hint">Toque de novo num efeito tocando para parar só ele.</div>`, false);
   } else if (curTab === 'cover' && isHost) {
     const c = state.cover, def = COVERS[c.style] || COVERS.intervalo;
     h = `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
-      <div class="sec">Estilo</div><div class="grid">${Object.entries(COVERS).map(([k, v]) => `<button class="tile2 ${c.style === k ? 'on' : ''}" data-cs="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>
-      <label class="lab">Título</label><input class="in" id="cT" maxlength="60" placeholder="${esc(def.t)}" value="${esc(c.title)}">
+      <div class="sec">Estilo</div><div class="grid">${Object.entries(COVERS).map(([k, v]) => `<button class="tile2 ${c.style === k ? 'on' : ''}" data-cs="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>`
+      + grp('ctext', `✏️ Texto da capa <small>${c.title ? esc(c.title) : 'padrão'}</small>`, `<label class="lab" style="margin-top:0">Título</label><input class="in" id="cT" maxlength="60" placeholder="${esc(def.t)}" value="${esc(c.title)}">
       <label class="lab">Subtítulo</label><input class="in" id="cS" maxlength="90" placeholder="${esc(def.s)}" value="${esc(c.sub)}">
-      <div class="row" style="margin-top:10px"><button class="btn sm" data-a="capply">Aplicar texto</button><span class="hint" style="margin:0">vazio = texto padrão</span></div>
-      <label class="sw" style="margin-top:10px"><input type="checkbox" data-a2="covfrz" ${c.freeze !== false ? 'checked' : ''}><i></i><span>Congelar a imagem de trás <small>A capa continua transparente, mas a tela por trás fica parada no momento em que você tampou, até destampar.</small></span></label>
-      <div class="sec">Trilha da capa</div><label class="sw"><input type="checkbox" data-a2="covmus" ${S.coverMusic ? 'checked' : ''}><i></i><span>Tocar trilha enquanto a tela está tampada <small>Cada capa tem sua trilha curta. A música e o ambiente abaixam sozinhos e voltam quando você destampa.</small></span></label>
-      <input type="range" min="0" max="100" value="${Math.round(S.coverVol * 100)}" data-a="cvol">
-      <div class="hint">A capa cobre a transmissão para os agentes com animação. Você continua vendo sua tela por baixo. Atalho: botão “Tampar” na barra de baixo.</div>`;
+      <div class="row" style="margin-top:10px"><button class="btn sm" data-a="capply">Aplicar texto</button><span class="hint" style="margin:0">vazio = texto padrão</span></div>`, false)
+      + grp('copt', '⚙️ Opções da capa', `<label class="sw" style="margin-top:0"><input type="checkbox" data-a2="covfrz" ${c.freeze !== false ? 'checked' : ''}><i></i><span>Congelar a imagem de trás <small>A tela por trás fica parada até destampar.</small></span></label>
+      <label class="sw"><input type="checkbox" data-a2="covmus" ${S.coverMusic ? 'checked' : ''}><i></i><span>Tocar trilha da capa <small>A música abaixa sozinha e volta ao destampar.</small></span></label>
+      <label class="lab">Volume da trilha da capa</label><input type="range" min="0" max="100" value="${Math.round(S.coverVol * 100)}" data-a="cvol">`, false);
   } else if (curTab === 'room' && isHost) {
-    const th = state.theme || {}, curId = th.id || 'ordem', tm = state.timer;
-    h = `<div class="sec">Tema da sala</div><div class="thm">${Object.entries(THEMES).map(([k, t]) => `<button data-theme="${k}" class="${curId === k && !th.acc ? 'on' : ''}" style="--c:${t.red2};--c2:${t.p3}"><i></i>${t.n}</button>`).join('')}</div>
+    const th = state.theme || {}, curId = th.id || 'ordem', tm = state.timer, nCl = (state.clima || []).length;
+    h = grp('theme', `🎨 Tema e fundo <small>${esc((THEMES[curId] || THEMES.ordem).n)}</small>`, `<div class="thm">${Object.entries(THEMES).map(([k, t]) => `<button data-theme="${k}" class="${curId === k && !th.acc ? 'on' : ''}" style="--c:${t.red2};--c2:${t.p3}"><i></i>${t.n}</button>`).join('')}</div>
       <div class="row" style="margin-top:10px"><span class="hint" style="margin:0;flex:1">Cor personalizada</span><input type="color" data-a="acc" value="${th.acc || (THEMES[curId] || THEMES.ordem).red}">${th.acc ? '<button class="btn sm" data-a="accrm">Usar a do tema</button>' : ''}</div>
-      <div class="row" style="margin-top:8px"><button class="btn sm" data-a="bgup">🖼️ Imagem de fundo</button>${roomImg ? '<button class="btn sm" data-a="bgrm">Remover fundo</button>' : ''}</div>
-      <div class="hint">Todos os agentes veem o tema e a imagem de fundo (aparece atrás da tela e no modo live).</div>
-      <div class="sec">Modo live (para stream)</div>
-      <label class="lab" style="margin-top:0">Linha de cima</label><input class="in" id="lvS" maxlength="50" value="${esc((state.live || {}).sub || '')}" placeholder="Ex.: Ordem Paranormal apresenta">
+      <div class="row" style="margin-top:8px"><button class="btn sm" data-a="bgup">🖼️ Imagem de fundo</button>${roomImg ? '<button class="btn sm" data-a="bgrm">Remover fundo</button>' : ''}</div>`, true)
+      + grp('clima', `🌧️ Clima da tela <small>${nCl ? nCl + ' ligado' + (nCl > 1 ? 's' : '') : 'desligado'}</small>`, `<div class="grid">${Object.entries(CLIMAS).map(([k, [e, n]]) => `<button class="tile2 ${(state.clima || []).includes(k) ? 'on' : ''}" data-clima="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
+      <div class="hint">Dá para combinar, ex.: chuva + escuridão + lanterna.</div>`, nCl > 0)
+      + grp('timer', `⏱️ Cronômetro <small>${tm ? (tm.run ? 'rodando' : 'pausado') : 'desligado'}</small>`, `<div class="row"><input class="in" id="tmL" maxlength="40" placeholder="Ex.: O ritual se completa em" value="${esc(tm ? tm.label : lsGet('mesa-tmL', ''))}" style="flex:1"><input class="in" id="tmM" type="number" min="0.1" step="0.5" value="${lsGet('mesa-tmM', 3)}" style="width:72px"><span class="hint" style="margin:0">min</span></div>
+      <div class="row" style="margin-top:8px"><button class="btn sm red" data-a="tstart">▶ ${tm ? 'Reiniciar' : 'Iniciar'}</button>${tm ? `<button class="btn sm" data-a="tpause">${tm.run ? '⏸ Pausar' : '▶ Continuar'}</button><button class="btn sm" data-a="tclear">Remover</button>` : ''}</div>`, !!tm)
+      + grp('live', '📺 Modo live (stream)', `<label class="lab" style="margin-top:0">Linha de cima</label><input class="in" id="lvS" maxlength="50" value="${esc((state.live || {}).sub || '')}" placeholder="Ex.: Ordem Paranormal apresenta">
       <label class="lab">Título</label><input class="in" id="lvT" maxlength="40" value="${esc((state.live || {}).title || '')}" placeholder="Ex.: O ÚLTIMO ADEUS">
       <div class="row" style="margin-top:8px"><button class="btn sm" data-a="lvsave">Salvar título</button></div>
       <label class="lab">Visualização de todos</label>
       <div class="row"><select class="in" id="lvLay" style="flex:1">${LAYOUTS.map(([k, n]) => `<option value="${k}"${(state.layout || layout) === k ? ' selected' : ''}>${n}</option>`).join('')}</select><button class="btn sm red" data-a="lvall">Aplicar a todos</button></div>
-      <div class="hint">No modo live cada pessoa aparece num quadro com a foto, o nome e o título do personagem, como nas lives de RPG. Os agentes configuram em Pessoas → Meu personagem (você também pode editar tocando no quadro deles). Para capturar no OBS: botão de visualização lá em cima → Esconder interface (tecla H).</div>
-      <div class="sec">Clima da tela</div><div class="grid">${Object.entries(CLIMAS).map(([k, [e, n]]) => `<button class="tile2 ${(state.clima || []).includes(k) ? 'on' : ''}" data-clima="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
-      <div class="hint">Fica por cima da tela de todos até você desligar. Dá para combinar (ex.: chuva + escuridão + lanterna). Na lanterna, cada agente ilumina com o próprio mouse ou dedo.</div>
-      <div class="sec">Cronômetro na tela</div>
-      <div class="row"><input class="in" id="tmL" maxlength="40" placeholder="Ex.: O ritual se completa em" value="${esc(tm ? tm.label : lsGet('mesa-tmL', ''))}" style="flex:1"><input class="in" id="tmM" type="number" min="0.1" step="0.5" value="${lsGet('mesa-tmM', 3)}" style="width:72px"><span class="hint" style="margin:0">min</span></div>
-      <div class="row" style="margin-top:8px"><button class="btn sm red" data-a="tstart">▶ ${tm ? 'Reiniciar' : 'Iniciar'}</button>${tm ? `<button class="btn sm" data-a="tpause">${tm.run ? '⏸ Pausar' : '▶ Continuar'}</button><button class="btn sm" data-a="tclear">Remover</button>` : ''}</div>
-      <div class="sec">Revelar imagem (pista)</div>
-      <input class="in" id="rvCapIn" maxlength="120" placeholder="Legenda (opcional), ex.: Foto encontrada no bolso da vítima">
-      <div class="row" style="margin-top:8px"><button class="btn sm red" data-a="rvpick">🖼️ Escolher e mostrar</button>${curReveal ? '<button class="btn sm" data-a="rvhide">Esconder dos agentes</button>' : ''}</div>
-      <div class="hint">A imagem aparece por cima da tela de todos, como uma foto ou documento entregue aos agentes. Para mandar uma mensagem secreta a um agente, toque no quadro dele → Sussurrar.</div>`;
+      <div class="hint">Cada um edita o próprio personagem em Pessoas. Para o OBS: tecla H esconde a interface.</div>`, false)
+      + '<div class="hint">Para mandar uma mensagem secreta a um agente: toque no quadro dele → Sussurrar.</div>';
 
   } else if (curTab === 'voice' && isHost) {
     h = `<div class="row"><button class="btn ${me.mic ? 'grn' : ''}" data-c2="mic" style="flex:1">${ic('mic', !me.mic)} ${me.mic ? 'Microfone ligado' : 'Microfone mudo'}</button><button class="btn ${hearSelf ? 'on' : ''}" data-a="hear" style="flex:1">🎧 ${hearSelf ? 'Me escutando' : 'Me escutar'}</button></div>
@@ -2669,8 +2715,12 @@ $('#pane').addEventListener('click', e => {
   if (a === 'capply') { setCover({title: $('#cT').value.trim(), sub: $('#cS').value.trim()}); toast('Texto da capa atualizado'); }
   if (a === 'hear') { (async () => { if (!micStream && !await openMic()) return; setSelfMon(!hearSelf); renderSide(); })(); }
   if (a === 'rollop') { const A = +$('#dA').value, B = +$('#dB').value; lsSet('mesa-dA', A); lsSet('mesa-dB', B); doRoll(rollOP(A, B)); }
+  if (a === 'dicetog') { S.diceOpen = !S.diceOpen; saveS(); const d = $('#diceP'); if (d) d.classList.toggle('hide', !S.diceOpen); b.classList.toggle('on', S.diceOpen); b.textContent = '🎲 Teste ' + (S.diceOpen ? '▾' : '▸'); }
+  if (a === 'emo') openEmoji(b);
+  if (a === 'chatclear') { confirmBox('Limpar o chat para todos? As mensagens somem da tela de todo mundo.', 'Limpar').then(ok => { if (!ok) return; chat = []; unread = 0; sendAll({t: 'chatclear'}); renderSide(); sys('🧹 O Mestre limpou o chat'); }); }
   if (a === 'rollex') { const ex = $('#dE').value; lsSet('mesa-dE', ex); doRoll(rollExpr(ex)); }
 });
+$('#pane').addEventListener('toggle', e => { const d = e.target; if (d && d.dataset && d.dataset.g) { grpOpen[d.dataset.g] = d.open; lsSet('mesa-grp', grpOpen); } }, true);
 $('#pane').addEventListener('change', e => {
   const a2 = e.target.dataset.a2;
   if (a2 === 'covmus') { S.coverMusic = e.target.checked; saveS(); syncCoverSound(); }
@@ -2713,7 +2763,7 @@ function openPop(id, anchor) {
   pop.onchange = e => { if (e.target.dataset.pa === 'lmute') { const rr = remotes.get(id); if (rr) { rr.localMute = e.target.checked; if (rr.el) rr.el.muted = deaf || rr.localMute; } } };
   pop.onclick = async e => { const b = e.target.closest('[data-pa]'); if (!b) return; if (b.dataset.pa === 'settings') { closePop(); openSettings('audio'); } if (b.dataset.pa === 'mych') { closePop(); openCharEditor(me.id); } if (b.dataset.pa === 'ech') { closePop(); openCharEditor(id); } if (b.dataset.pa === 'wsp') { closePop(); openWhisper(id); } if (b.dataset.pa === 'kick') { closePop(); if (await confirmBox('Remover ' + esc(p.name) + ' da sala?', 'Remover')) kick(id); } };
 }
-function closePop() { $('#pop').classList.add('hide'); }
+function closePop() { const p = $('#pop'); p.classList.add('hide'); p.classList.remove('emo'); }
 document.addEventListener('pointerdown', e => { if (!$('#pop').classList.contains('hide') && !e.target.closest('#pop') && !e.target.closest('.tile') && !e.target.closest('.lf') && !e.target.closest('[data-p]') && !e.target.closest('#layoutBtn') && !e.target.closest('[data-c="vol"]')) closePop(); });
 $('#live').addEventListener('click', e => { const f = e.target.closest('.lf'); if (f) openPop(f.dataset.id, f); });
 $('#tiles').addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) openPop(t.dataset.id, t); });
@@ -2983,7 +3033,7 @@ function ytOnErr(code) {
 async function ytSync() {
   const y = state.yt, box = $('#ytBox'); if (!box) return;
   if (!y) { if (ytP) { try { ytP.destroy(); } catch (e) {} } ytP = null; ytVid = ''; ytReady = false; box.classList.add('hide'); ytShowTap(false); return; }
-  box.classList.remove('hide'); $('#ytTitle').textContent = y.title || 'Carregando…';
+  box.classList.remove('hide'); box.classList.toggle('ghost', !isHost); $('#ytTitle').textContent = y.title || 'Carregando…';
   try { await ytLoadApi(); } catch (e) { if (isHost) toast('Não consegui carregar o YouTube. Verifique a internet.'); return; }
   if (!state.yt || state.yt.id !== y.id) return;
   if (!ytP) { ytCreate(y); return; }
@@ -3011,7 +3061,7 @@ function ytPaneHTML() {
       <div class="row" style="margin-top:6px"><button class="btn sm" data-a="ytpp">${y.playing ? '⏸ Pausar' : '▶ Continuar'}</button><button class="btn sm ${y.loop ? 'on' : ''}" data-a="ytloop" title="Repetir">🔁</button><button class="btn sm" data-a="ytstop">■ Parar</button></div></div></div>` : ''}
     <div class="sec">Volume do YouTube</div><input type="range" min="0" max="100" value="${Math.round(S.ytVol * 100)}" data-a="ytvol">
     ${ytSaved.length ? `<div class="sec">Seus links</div>` + ytSaved.map(x => `<div class="trk ${y && y.id === x.id ? 'on' : ''}"><button class="pl" data-ytp="${x.id}">${y && y.id === x.id ? '♪' : '▶'}</button><button class="nm" data-ytp="${x.id}" style="text-align:left">${esc(x.title || 'youtu.be/' + x.id)}</button><button class="x" data-ytdel="${x.id}" title="Remover da lista">🗑</button></div>`).join('') : ''}
-    <div class="hint">A música toca no navegador de cada agente, sincronizada com a sua, pelo player oficial do YouTube. Ele precisa aparecer na tela, por isso surge uma janelinha no canto (o botão ⇱ troca ela de canto). Vídeos com propaganda podem tocar o anúncio antes. Alguns vídeos não deixam tocar fora do YouTube.</div>`;
+    <div class="hint">A música toca no navegador de cada agente, sincronizada com a sua, pelo player oficial do YouTube. A janelinha do player aparece só para você (o ⇱ troca de canto); os agentes só ouvem. Alguns vídeos não deixam tocar fora do YouTube.</div>`;
 }
 
 /* =====================================================================
@@ -3089,7 +3139,7 @@ function docGiveMenu(id, anchor) {
   const d = docLib.find(x => x.id === id); if (!d) return;
   const ags = [...roster.values()].filter(p => p.id !== me.id);
   const pop = $('#pop');
-  pop.innerHTML = `<h4>📨 Entregar “${esc(d.name)}”</h4>${ags.length ? `<button class="btn sm red wide" data-dg="*" style="margin-top:6px">Para todos os agentes</button>` + ags.map(p => `<button class="btn sm wide" data-dg="${esc(p.id)}" style="margin-top:6px">Só para ${esc(p.name)}</button>`).join('') : '<div class="hint">Nenhum agente na sala ainda.</div>'}
+  pop.innerHTML = `<h4>📨 Entregar “${esc(d.name)}”</h4>${ags.length ? `<button class="btn sm red wide" data-dg="!" style="margin-top:6px">🌐 Mostrar na tela de todos agora</button><button class="btn sm wide" data-dg="*" style="margin-top:6px">📨 Entregar para todos (cada um abre)</button>` + ags.map(p => `<button class="btn sm wide" data-dg="${esc(p.id)}" style="margin-top:6px">Só para ${esc(p.name)}</button>`).join('') : '<div class="hint">Nenhum agente na sala ainda.</div>'}
     ${(docSent[id] || []).length ? `<div class="hint">Já entregue para: ${esc(docSent[id].join(', '))}</div><button class="btn sm wide" data-dg="-" style="margin-top:6px">Recolher de todos</button>` : ''}`;
   pop.classList.remove('hide');
   const rc = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
@@ -3098,20 +3148,21 @@ function docGiveMenu(id, anchor) {
   pop.onclick = e => {
     const b = e.target.closest('[data-dg]'); if (!b) return; const to = b.dataset.dg; closePop();
     if (to === '-') { sendAll({t: 'docdel', id}); docSent[id] = []; toast('Documento recolhido'); renderSide(); return; }
-    const msg = {t: 'doc', doc: d}; let n = 0; const names = new Set(docSent[id] || []);
-    conns.forEach((c, pid) => { if ((to === '*' || to === pid) && c.open) { try { c.send(msg); n++; const p = roster.get(pid); if (p) names.add(p.name); } catch (err) {} } });
+    const msg = {t: 'doc', doc: d, show: to === '!'}; let n = 0; const names = new Set(docSent[id] || []);
+    conns.forEach((c, pid) => { if ((to === '*' || to === '!' || to === pid) && c.open) { try { c.send(msg); n++; const p = roster.get(pid); if (p) names.add(p.name); } catch (err) {} } });
     docSent[id] = [...names];
+    if (to === '!') { docOpen(id, true, true); return; }
     toast(n ? `“${d.name}” entregue${to === '*' ? ' para todos' : ' para ' + (roster.get(to) || {}).name}` : 'Ninguém conectado para receber.'); renderSide();
   };
 }
 function docPaneHost() {
   return `<button class="btn red wide" data-a="docnew">📜 Novo documento</button>
-    <label class="sw" style="margin-top:12px"><input type="checkbox" data-a2="uvall" ${state.uv ? 'checked' : ''}><i></i><span>🔦 Agentes têm lanterna UV <small>Liga a luz ultravioleta nos documentos deles. Ao ligar, eles recebem um aviso de que acharam a lanterna.</small></span></label>
+    <label class="sw" style="margin-top:12px"><input type="checkbox" data-a2="uvall" ${state.uv ? 'checked' : ''}><i></i><span>🔦 Agentes têm lanterna UV <small>Eles recebem um aviso de que acharam a lanterna.</small></span></label>
     <div class="sec">Seus documentos (${docLib.length})</div>
     ${docLib.length ? `<div class="dlist">${docLib.map(d => `<div class="dItem"><button class="dTh" data-dprev="${d.id}" title="Prévia (só você vê)"><img alt="" src="${d.img}"><i>${DOC_KINDS[d.kind][0]}</i>${d.uvText || d.uvImg ? '<em title="Tem algo escondido na luz UV">UV</em>' : ''}</button>
       <div class="dIn"><b>${esc(d.name)}</b><small>${DOC_KINDS[d.kind][1]}${d.back ? ' · com verso' : ''}${(docSent[d.id] || []).length ? ' · com ' + esc(docSent[d.id].join(', ')) : ''}</small>
       <div class="row"><button class="btn sm red" data-dgive="${d.id}">📨 Entregar</button><button class="btn sm" data-dedit="${d.id}" title="Editar">✏️</button><button class="btn sm" data-ddel="${d.id}" title="Apagar">🗑</button></div></div></div>`).join('')}</div>` : '<div class="hint">Nenhum documento ainda. Crie cartas, fotos, arquivos, evidências e itens antes da sessão e entregue na hora certa.</div>'}
-    <div class="hint">Toque na miniatura para ver a prévia com a animação. Quando você entrega, aparece um objeto na tela do agente. Ele toca, o documento abre com animação, dá para girar em 3D e virar, e fica guardado na aba Pistas dele.</div>`;
+    <div class="hint">Miniatura = prévia só pra você. 📨 Entregar: escolha <b>mostrar na tela de todos</b> (abre junto pra todo mundo) ou entregar para cada um abrir quando quiser.</div>`;
 }
 function docPanePlayer() {
   return `<div class="sec" style="margin-top:0">Pistas encontradas (${docGot.length})</div>
@@ -3120,10 +3171,11 @@ function docPanePlayer() {
 }
 
 /* ----- player: receiving ----- */
-function docReceive(raw) {
+function docReceive(raw, show) {
   const d = sanDoc(raw); if (!d) return;
   const old = docGot.find(x => x.id === d.id);
   docGot = [{...d, seen: false}, ...docGot.filter(x => x.id !== d.id)]; docSaveGot(docGot[0]);
+  if (show) { docQueue = docQueue.filter(x => x !== d.id); if (docViewing) docClose(); docOpen(d.id, true, true); renderSide(); renderControls(); return; }
   if (!old || old.seen) { docQueue = docQueue.filter(x => x !== d.id); docQueue.push(d.id); }
   docDropRender(); renderSide(); renderControls();
 }
@@ -3148,17 +3200,18 @@ function docUnseen() { return docGot.filter(x => !x.seen).length; }
 /* ----- viewer ----- */
 function docFind(id) { return docGot.find(x => x.id === id) || docLib.find(x => x.id === id); }
 function docFit(w, h, kind) { const mw = Math.min(innerWidth * .88, 980), mh = innerHeight * (kind === 'item' ? .56 : kind === 'foto' || kind === 'arquivo' || kind === 'evidencia' ? .62 : .72); const k = Math.min(mw / w, mh / h, kind === 'item' ? 1.6 : 9); return [Math.round(w * k), Math.round(h * k)]; }
-function docOpen(id, anim) {
+let docUni = false;
+function docOpen(id, anim, uni) {
   const d = docFind(id); if (!d) return;
-  docViewing = d; uvSet(false); insp = null;
+  docViewing = d; docUni = !!uni; uvSet(false); insp = null;
   const v = $('#docView'); v.className = 'k-' + d.kind; v.innerHTML = `<div class="dvTop"><b>${DOC_KINDS[d.kind][0]} ${esc(d.name)}</b><small>arraste para girar · vire para ver o verso</small></div><div class="dvStage" id="dvStage"></div>
-    <div class="dvBar hide" id="dvBar"><button class="btn" data-dv="flip">🔄 Virar</button>${isHost || state.uv ? '<button class="btn" data-dv="uv">🔦 Luz UV</button>' : ''}<button class="btn" data-dv="zoom">🔍 Ampliar</button><button class="btn red" data-dv="x">✕ Fechar</button></div>`;
+    <div class="dvBar hide" id="dvBar"><button class="btn" data-dv="flip">🔄 Virar</button>${isHost || state.uv ? '<button class="btn" data-dv="uv">🔦 Luz UV</button>' : ''}<button class="btn" data-dv="zoom">🔍 Ampliar</button>${isHost && uni ? '<button class="btn red" data-dv="xall">✕ Fechar para todos</button><button class="btn" data-dv="x">Fechar só pra mim</button>' : '<button class="btn red" data-dv="x">✕ Fechar</button>'}</div>`;
   docDropRender();
   const img = new Image();
   img.onload = () => { const [w, h] = docFit(img.naturalWidth, img.naturalHeight, d.kind); if (anim) docAnim(d, w, h); else docShow(d, w, h, true); };
   img.onerror = () => docShow(d, 600, 800, true);
   img.src = d.img;
-  if (!isHost) { const g = docGot.find(x => x.id === id); if (g && !g.seen) { g.seen = true; docSaveGot(g); if (hostConn && hostConn.open) try { hostConn.send({t: 'docopen', id}); } catch (e) {} renderSide(); renderControls(); } }
+  if (!isHost) { const g = docGot.find(x => x.id === id); if (g && !g.seen) { g.seen = true; docSaveGot(g); if (!uni && hostConn && hostConn.open) try { hostConn.send({t: 'docopen', id}); } catch (e) {} renderSide(); renderControls(); } }
 }
 function docClose() { uvSet(false); insp = null; docViewing = null; const v = $('#docView'); v.className = 'hide'; v.innerHTML = ''; docDropRender(); }
 function tornPath() { const pts = [], n = 22; for (let i = 0; i <= n; i++) pts.push(`${(i / n * 100).toFixed(1)}% ${(Math.random() * 3.2).toFixed(1)}%`); for (let i = n; i >= 0; i--) pts.push(`${(i / n * 100).toFixed(1)}% ${(100 - Math.random() * 3.2).toFixed(1)}%`); return `polygon(${pts.join(',')})`; }
@@ -3288,6 +3341,7 @@ function uvSet(on) {
 document.addEventListener('click', e => {
   const b = e.target.closest('#docView [data-dv]'); if (!b) return;
   if (b.dataset.dv === 'x') docClose();
+  if (b.dataset.dv === 'xall') { if (docViewing) sendAll({t: 'docclose', id: docViewing.id}); docClose(); }
   if (b.dataset.dv === 'uv') uvSet(!uvOn);
   if (b.dataset.dv === 'flip') { if (uvOn) uvSet(false); inspFlip(); }
   if (b.dataset.dv === 'zoom') { const s = $('#dvScroll'); if (!s) return; inspFront(); const z = s.classList.toggle('zoom'); b.textContent = z ? '🔍 Reduzir' : '🔍 Ampliar'; }
