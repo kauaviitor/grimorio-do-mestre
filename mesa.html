@@ -716,6 +716,86 @@ body.obs #ytBox{bottom:12px}body.obs.ytTop #ytBox{top:12px}
 .uvdCol{width:30px;height:30px;border-radius:50%;background:var(--c);border:2px solid #0008;box-shadow:0 0 10px var(--c);cursor:pointer;padding:0}
 .uvdCol.on{outline:2px solid #fff;outline-offset:2px}
 .uvdTools .btn.on{background:#5b1fd1;color:#fff}
+
+/* ===== v9: HUD de personagem (PV/PE), live corrigido, expulsar/silenciar, fim de sala ===== */
+body.lay-livestage #lvMaster,body.lay-livestage #lvGrid{flex:none;min-height:auto}
+body.lay-livestage #live>*{flex:none}
+body:not(.isHost) #layoutBtn{display:none}
+.lf{container-type:size}
+.np .l1{display:flex;align-items:baseline;gap:.4em;min-width:0;flex-wrap:wrap;row-gap:0}
+.np .l1 b{min-width:0;max-width:100%}
+.np .pv,.np .pe{font-family:'Bebas Neue',Impact,sans-serif;font-style:normal;font-weight:400;line-height:.95;white-space:nowrap;color:#fff;letter-spacing:.03em}
+.np .pv{font-size:clamp(18px,2.3vw,38px);text-shadow:0 0 6px #ff2a2a,0 0 16px #ff1f1fcc,0 0 30px #ff000088,0 2px 3px #000}
+.np .pe{font-size:clamp(14px,1.7vw,27px);text-shadow:0 0 6px #3b8bff,0 0 16px #2a7dffcc,0 0 28px #0050ff88,0 2px 3px #000}
+.np .pv small,.np .pe small{font-size:.62em;opacity:.85}
+.np .pe em{font-style:normal;font-size:.62em;letter-spacing:.1em;margin-right:.18em}
+.np .pv:empty,.np .pe:empty{display:none}
+.lf .bars{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+.lf .bars i{display:block;height:5px;background:#000a}
+.lf .bars i.no{display:none}
+.lf .bars b{display:block;height:100%;width:var(--w,0%);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.lf .bars .bpv b{background:linear-gradient(90deg,#7a0000,#ff2a2a);box-shadow:0 0 10px #ff2a2a}
+.lf .bars .bpe b{background:linear-gradient(90deg,#0a2f80,#3b8bff);box-shadow:0 0 10px #3b8bff}
+.lf.hasSt .np{padding-bottom:18px}
+.lf.hasSt .np .pt{box-shadow:0 0 0 2px #ff2a2a66,0 0 22px #ff2a2aaa,0 4px 14px #000a}
+.lf.low{border-color:#ff2a2a}
+.lf.low .np .pv{animation:pvPulse 1.05s ease-in-out infinite}
+@keyframes pvPulse{50%{text-shadow:0 0 10px #ff2a2a,0 0 30px #ff0000,0 0 50px #ff0000,0 2px 3px #000;transform:scale(1.06)}}
+.lf.down video,.lf.down .lart,.lf.down .np .pt{filter:grayscale(1) brightness(.55)}
+.lf.down .l1::after{content:'MORRENDO';font-size:10px;font-weight:800;letter-spacing:.14em;color:#fff;background:#b00;border-radius:4px;padding:2px 6px;align-self:center;box-shadow:0 0 12px #f00}
+.lf.hit{animation:lfHit .5s}
+@keyframes lfHit{20%{box-shadow:0 0 0 3px #ff2a2a,0 0 40px #ff0000;transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}}
+.lf.heal{animation:lfHeal .7s}
+@keyframes lfHeal{30%{box-shadow:0 0 0 3px #3bff8a,0 0 40px #3bff8a}}
+@container (max-height:170px){.np .tx i,.np .tx s{display:none}.np{padding:6px 8px}.lf.hasSt .np{padding-bottom:14px}}
+@container (max-height:110px){.np .pt{display:none}.np .pe{display:none}}
+@container (max-width:200px){.np .tx s{display:none}.np .pt{width:38px}}
+.tile .hpc{position:absolute;left:6px;top:6px;display:flex;gap:4px;z-index:2}
+.tile .crown~.hpc{top:30px}
+.tile .hpc b{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:15px;letter-spacing:.04em;line-height:1;padding:3px 6px 2px;border-radius:6px;background:#000c;color:#fff}
+.tile .hpc .v{text-shadow:0 0 6px #ff2a2a,0 0 12px #ff2a2a}
+.tile .hpc .e{text-shadow:0 0 6px #3b8bff,0 0 12px #3b8bff}
+.tile .bd .fm,.lbd .fm{background:#b00000e6;color:#fff}
+.stEd{margin-top:10px;padding:10px;border-radius:12px;background:#0006;border:1px solid var(--line)}
+.stEd h5{margin:0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.stEd .sr{display:flex;align-items:center;gap:5px;margin-top:6px}
+.stEd .sl{width:26px;font-family:'Bebas Neue',Impact,sans-serif;font-size:19px;line-height:1}
+.stEd .r .sl{color:#ff5555;text-shadow:0 0 8px #ff2a2a}
+.stEd .b .sl{color:#6aa8ff;text-shadow:0 0 8px #3b8bff}
+.stEd button{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--p2);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;flex:none}
+.stEd button:active{transform:scale(.94)}
+.stEd .r button:hover{border-color:#ff2a2a}
+.stEd .b button:hover{border-color:#3b8bff}
+.stEd input{width:48px;height:32px;border-radius:9px;border:1px solid var(--line);background:#000;color:#fff;text-align:center;font-size:15px;font-weight:700;padding:0;-moz-appearance:textfield}
+.stEd input::-webkit-outer-spin-button,.stEd input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stEd .sr span{color:var(--mut)}
+.stEd small{display:block;margin-top:8px;color:var(--mut);font-size:11px;line-height:1.35}
+.chSt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.chSt .in{text-align:center}
+.mav{background-position:center;background-size:cover;background-repeat:no-repeat}
+.mh small{font-size:11px;color:var(--mut);font-weight:600;margin-left:-2px}
+.dCard .dOpen{display:block;width:100%;padding:0;margin:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.dCard .dRm{position:absolute;top:6px;left:6px;z-index:2;width:28px;height:28px;border-radius:8px;border:1px solid #fff3;background:#000c;color:#fff;font-size:14px;cursor:pointer;opacity:0;transition:opacity .15s;display:grid;place-items:center}
+.dCard:hover .dRm,.dCard:focus-within .dRm{opacity:1}
+.dCard .dRm:hover{background:#b00000}
+@media(hover:none){.dCard .dRm{opacity:.9}}
+#reqBox{position:fixed;top:66px;right:14px;z-index:120;display:flex;flex-direction:column;gap:10px;max-width:min(360px,calc(100vw - 28px))}
+.reqCard{display:flex;gap:10px;align-items:center;padding:10px;border-radius:14px;background:var(--p1);border:1px solid var(--gold);box-shadow:0 0 24px #d8a74a44,0 16px 40px #000c;animation:rqIn .35s cubic-bezier(.2,.9,.3,1.3);transition:opacity .3s,transform .3s}
+.reqCard.out{opacity:0;transform:translateX(30px)}
+@keyframes rqIn{from{opacity:0;transform:translateX(40px)}}
+.reqCard img{width:58px;height:58px;object-fit:cover;border-radius:8px;flex:none}
+.reqCard b{display:block;font-size:14px}.reqCard small{display:block;color:var(--mut);font-size:12px;margin:2px 0 7px}
+.reqCard .row{gap:6px}
+#endOv{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#2a0000ee,#000 70%);text-align:center;padding:30px;animation:endIn .8s ease}
+@keyframes endIn{from{opacity:0}}
+#endOv .eb{max-width:520px}
+#endOv svg{width:90px;height:90px;color:var(--red2);opacity:.85;margin-bottom:10px}
+#endOv h2{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:clamp(34px,6vw,60px);letter-spacing:.06em;margin:0;color:#fff;text-shadow:0 0 24px var(--red)}
+#endOv p{color:#ccc;margin:8px 0 22px;font-size:15px;line-height:1.5}
+#endOv .row{justify-content:center;gap:10px;flex-wrap:wrap}
+.invPop{display:flex;flex-direction:column;gap:8px}
+.invPop .cd{font-family:'Bebas Neue',Impact,sans-serif;font-size:34px;letter-spacing:.2em;text-align:center;color:#fff;padding:4px 0}
+.invPop small{color:var(--mut);font-size:11.5px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -776,10 +856,11 @@ body.obs #ytBox{bottom:12px}body.obs.ytTop #ytBox{top:12px}
 <section id="room" class="hide">
   <header class="tb">
     <div class="lg">MESA <span>PARANORMAL</span></div>
-    <div class="code">SALA <b id="rCode">-----</b><button class="btn sm" id="copyLink">Convidar</button></div>
+    <div class="code">SALA <b id="rCode">-----</b><button class="btn sm" id="copyLink">Convidar ▾</button></div>
     <span class="sp"></span>
     <div class="net" id="net"><i></i><span id="netTxt">conectando…</span></div>
     <button class="tbb" id="layoutBtn" title="Visualização: palco, grade, live"></button>
+    <button class="tbb" id="bfsBtn" title="Tela cheia"></button>
     <button class="tbb" id="setBtn" title="Configurações"></button>
   </header>
   <main class="mainA">
@@ -834,6 +915,7 @@ let toastT;
 function toast(m, ms = 2800) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms); }
 const S = Object.assign({micId: '', camId: '', outId: '', hq: true, ns: true, gate: -60, cq: 'med', sq: 'hd', selfVol: .8, stageVol: .9, monVol: .8, musicVol: .6, sfxVol: .9, ambVol: .6, coverMusic: true, coverVol: .7, voiceVol: 1, loop: true, vols: {}}, lsGet('mesa2-s', {}));
 const saveS = () => lsSet('mesa2-s', S);
+if (!S.aec9) { S.hq = false; S.aec9 = true; saveS(); }
 const IC = {
   mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/>',
   cam: '<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>',
@@ -850,6 +932,7 @@ const IC = {
   grid: '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>',
   stage: '<rect x="3" y="3" width="18" height="12" rx="2"/><rect x="3" y="17" width="5" height="4" rx="1"/><rect x="10" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="4" height="4" rx="1"/>',
   full: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+  fsx: '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>',
   vol: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a3 3 0 0 1 0 6M18.5 6.5a7 7 0 0 1 0 11"/>',
   volx: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/>',
   palette: '<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.6-1.2-.6-2.1 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="15" cy="7" r="1.2"/>',
@@ -1745,14 +1828,16 @@ async function toggleCam(force) {
   if (want) { if (!await openCam()) return; me.cam = true; } else { me.cam = false; closeCam(); }
   replaceAVVideo(curCamTrack()); pushStatus(); renderTiles(); renderControls(); saveS();
 }
+let forcedMute = false;
 async function toggleMic() {
+  if (forcedMute && !me.mic) { toast('🔇 O Mestre silenciou seu microfone no chat de voz.'); return; }
   if (!micStream) { if (!await openMic()) return; }
   if (deaf) { setDeaf(false); }
   setMuted(me.mic); pushStatus(); renderTiles(); renderControls();
 }
 function setDeaf(d) {
   deaf = d;
-  remotes.forEach(r => { if (r.el) r.el.muted = d || !!r.localMute; });
+  deaf = d; applyForcedMutes();
   const v = $('#vid'); if (!isHost) v.muted = d;
   if (monitor) monitor.gain.setTargetAtTime(d ? 0 : S.monVol, T(), .03);
   setMuted(!me.mic); setSelfMon(hearSelf); ytApply(false); me.deaf = d; pushStatus(); renderTiles(); renderControls();
@@ -1834,13 +1919,15 @@ function attachRemote(id, stream) {
   if (r.stream === stream) { renderTiles(); return; }
   r.stream = stream;
   if (!r.el) { r.el = document.createElement('audio'); r.el.autoplay = true; $('#audios').appendChild(r.el); }
-  r.el.srcObject = stream; r.el.muted = deaf || !!r.localMute;
+  r.el.srcObject = stream; r.el.muted = remoteMuted(id, r);
   const p = roster.get(id); r.el.volume = clamp((S.vols[p ? p.name : id] ?? 100) / 100 * S.voiceVol, 0, 1);
   if (S.outId && r.el.setSinkId) r.el.setSinkId(S.outId).catch(() => {});
   r.el.play().catch(() => $('#unmute').classList.remove('hide'));
   try { const src = ctx.createMediaStreamSource(stream); r.an = ctx.createAnalyser(); r.an.fftSize = 512; src.connect(r.an); } catch (e) {}
   renderTiles();
 }
+function remoteMuted(id, r) { const p = roster.get(id); return deaf || !!(r && r.localMute) || !!(p && p.fm); }
+function applyForcedMutes() { remotes.forEach((r, id) => { if (r.el) r.el.muted = remoteMuted(id, r); }); }
 function dropRemote(id) { const r = remotes.get(id); if (!r) return; if (r.el) { r.el.srcObject = null; r.el.remove(); } remotes.delete(id); renderTiles(); }
 function onIncomingCall(call) {
   const kind = call.metadata && call.metadata.kind;
@@ -1870,12 +1957,17 @@ function startHost() {
   peer.on('disconnected', () => { setNet(null, 'reconectando…'); setTimeout(() => { try { if (!peer.destroyed) peer.reconnect(); } catch (e) {} }, 1500); });
   peer.on('call', onIncomingCall);
   peer.on('connection', conn => {
-    conn.on('data', d => { conn._seen = Date.now(); onHostData(conn, d); });
+    const md0 = conn.metadata || {};
+    if (md0.probe) { conn.on('open', () => { try { conn.send({t: 'probe-ok'}); } catch (e) {} setTimeout(() => { try { conn.close(); } catch (e) {} }, 400); }); conn.on('error', () => {}); return; }
+    conn.on('data', d => { conn._seen = Date.now(); if (conns.get(conn.peer) === conn) onHostData(conn, d); });
     conn.on('open', () => {
       const md = conn.metadata || {}, id = conn.peer;
+      if (banned.has(cleanName(md.name).toLowerCase())) { try { conn.send({t: 'kicked'}); } catch (e) {} setTimeout(() => { try { conn.close(); } catch (e) {} }, 400); toast(cleanName(md.name) + ' tentou voltar, mas foi expulso.'); return; }
       const old = conns.get(id); if (old && old !== conn) try { old.close(); } catch (e) {}
       conns.set(id, conn);
-      roster.set(id, {id, name: cleanName(md.name), role: 'agente', mic: !!md.mic, cam: !!md.cam, deaf: false});
+      const fmOn = fmNames.has(cleanName(md.name).toLowerCase());
+      roster.set(id, {id, name: cleanName(md.name), role: 'agente', mic: !!md.mic, cam: !!md.cam, deaf: false, fm: fmOn});
+      if (fmOn) { try { conn.send({t: 'forcemute', on: true}); } catch (e) {} }
       refreshTimerState();
       conn.send({t: 'hello', now: Date.now(), state, roster: [...roster.values()], chat: chat.slice(-80), chars, reveal: curReveal});
       if (roomImg) conn.send({t: 'roomimg', img: roomImg});
@@ -1893,7 +1985,7 @@ function dropPlayer(id) {
 function sendAll(m) { conns.forEach(c => { try { if (c.open) c.send(m); } catch (e) {} }); }
 function broadcastRoster() { if (me.id) roster.set(me.id, {...me}); sendAll({t: 'roster', roster: [...roster.values()]}); renderAll(); }
 function pushState() { refreshTimerState(); sendAll({t: 'state', state, now: Date.now()}); }
-function saveRoom() { lsSet('mesa-room', {theme: state.theme, live: state.live, img: roomImg}); }
+function saveRoom() { lsSet('mesa-room', {theme: state.theme, live: state.live, img: roomImg, uv: !!state.uv}); }
 function stageVideoTrack() { if (screenStream) return screenStream.getVideoTracks()[0]; if (!stagePh || stagePh.readyState !== 'live') { const c = document.createElement('canvas'); c.width = 320; c.height = 180; const g = c.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, 320, 180); setInterval(() => { g.fillStyle = '#000'; g.fillRect(0, 0, 320, 180); }, 1000); stagePh = c.captureStream(1).getVideoTracks()[0]; } return stagePh; }
 function callStage(id) {
   if (!peer || !conns.has(id)) return;
@@ -1907,19 +1999,51 @@ function callStage(id) {
 function onHostData(conn, d) {
   if (!d || typeof d !== 'object') return;
   const id = conn.peer, p = roster.get(id), name = p ? p.name : 'Agente';
-  if (d.t === 'chat' && typeof d.text === 'string') addChat({k: 'chat', from: name, text: d.text.slice(0, 600)}, true);
-  if (d.t === 'roll' && d.r) addChat({k: 'roll', from: name, pid: id, r: sanitizeRoll(d.r)}, true);
-  if (d.t === 'status' && p) { p.mic = !!d.mic; p.cam = !!d.cam; p.deaf = !!d.deaf; broadcastRoster(); }
+  const cn = String((chars[id] || {}).char || '').slice(0, 30);
+  if (d.t === 'chat' && typeof d.text === 'string') addChat({k: 'chat', from: name, pid: id, cn, text: d.text.slice(0, 600)}, true);
+  if (d.t === 'roll' && d.r) addChat({k: 'roll', from: name, pid: id, cn, r: sanitizeRoll(d.r)}, true);
+  if (d.t === 'status' && p) { p.mic = p.fm ? false : !!d.mic; p.cam = !!d.cam; p.deaf = !!d.deaf; broadcastRoster(); }
+  if (d.t === 'stats' && p) { const st = sanSt(d.s); applySt(id, st); sendAll({t: 'stats', id, s: st}); }
+  if (d.t === 'docreq' && p && d.id) docReqShow(id, String(d.id));
   if (d.t === 'recall') callStage(id);
   if (d.t === 'mych' && p) { chars[id] = sanCh(d.ch); broadcastChars(); }
   if (d.t === 'docopen' && p) { const dd = docLib.find(x => x.id === String(d.id)); toast(`${name} abriu “${dd ? dd.name : 'um documento'}”`); }
   if (d.t === 'bye') { if (conns.get(id) === conn) dropPlayer(id); try { conn.close(); } catch (e) {} }
 }
-function kick(id) { const c = conns.get(id); if (!c) return; try { c.send({t: 'kicked'}); } catch (e) {} setTimeout(() => { try { c.close(); } catch (e) {} dropPlayer(id); }, 300); }
+const banned = new Set(), fmNames = new Set();
+function kick(id) { const c = conns.get(id), p = roster.get(id); if (!c) return; if (p) banned.add(p.name.toLowerCase()); try { c.send({t: 'kicked'}); } catch (e) {} setTimeout(() => { try { c.close(); } catch (e) {} dropPlayer(id); }, 300); toast((p ? p.name : 'Agente') + ' foi expulso da sala'); }
+function forceMute(id, on) { const p = roster.get(id), c = conns.get(id); if (!p) return; p.fm = !!on; if (on) { p.mic = false; fmNames.add(p.name.toLowerCase()); } else fmNames.delete(p.name.toLowerCase()); try { if (c && c.open) c.send({t: 'forcemute', on: !!on}); } catch (e) {} broadcastRoster(); applyForcedMutes(); toast(on ? '🔇 ' + p.name + ' foi silenciado no chat de voz' : '🎙️ ' + p.name + ' pode falar de novo'); }
 /* ----- player ----- */
 let retryT = null, kicked = false;
+let ended = false, lastHostOk = 0;
+function endRoom(title, sub, canRetry) {
+  if (ended) return; ended = true; clearTimeout(retryT);
+  const hc = hostConn; hostConn = null; try { hc && hc.close(); } catch (e) {}
+  try { peer && peer.destroy(); } catch (e) {}
+  remotes.forEach((r, id) => dropRemote(id)); gotStage = false;
+  const v = $('#vid'); v.srcObject = null;
+  state = normState({}); try { onRoomState(); } catch (e) {} renderStage();
+  setNet(false, title.toLowerCase());
+  let ov = $('#endOv'); if (ov) ov.remove();
+  ov = document.createElement('div'); ov.id = 'endOv';
+  ov.innerHTML = `<div class="eb"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><circle cx="50" cy="50" r="46" opacity=".5"/><path d="M14 50 Q50 18 86 50 Q50 82 14 50Z"/><path d="M20 80 L80 20" stroke-width="3"/></svg><h2>${esc(title)}</h2><p>${esc(sub)}</p><div class="row"><button class="btn red" id="endHome">Voltar ao início</button>${canRetry ? '<button class="btn" id="endRetry">Tentar entrar de novo</button>' : ''}</div></div>`;
+  document.body.appendChild(ov);
+  $('#endHome').onclick = () => leave();
+  const rb = $('#endRetry'); if (rb) rb.onclick = async () => { rb.disabled = true; rb.textContent = 'Procurando sala…'; const r = await probeRoom(code); if (r === 'none') { rb.disabled = false; rb.textContent = 'Tentar entrar de novo'; toast('A sala ainda está fechada.'); return; } ov.remove(); ended = false; startPlayer(); };
+}
+function probeRoom(c) {
+  return new Promise(res => {
+    if (typeof Peer === 'undefined') return res('neterr');
+    let done = false, pp = null;
+    const fin = r => { if (done) return; done = true; clearTimeout(t); setTimeout(() => { try { pp && pp.destroy(); } catch (e) {} }, 50); res(r); };
+    const t = setTimeout(() => fin('timeout'), 12000);
+    try { pp = new Peer(undefined, {config: ICE, debug: 0}); } catch (e) { return fin('neterr'); }
+    pp.on('open', () => { try { const cn = pp.connect(PREFIX + c, {metadata: {probe: true}, reliable: true}); cn.on('open', () => fin('ok')); cn.on('data', () => fin('ok')); cn.on('error', () => {}); } catch (e) { fin('neterr'); } });
+    pp.on('error', e => { if (e.type === 'peer-unavailable') fin('none'); else if (['network', 'server-error', 'socket-error', 'socket-closed', 'browser-incompatible'].includes(e.type)) fin('neterr'); });
+  });
+}
 function startPlayer() {
-  isHost = false; me.role = 'agente';
+  isHost = false; me.role = 'agente'; ended = false; lastHostOk = Date.now();
   peer = new Peer(undefined, {config: ICE, debug: 0});
   setNet(null, 'conectando…');
   peer.on('open', id => { me.id = id; roster.set(id, {...me}); connectHost(); renderAll(); });
@@ -1930,14 +2054,14 @@ function startPlayer() {
   });
   peer.on('disconnected', () => setTimeout(() => { try { if (!peer.destroyed) peer.reconnect(); } catch (e) {} }, 1500));
 }
-function scheduleRetry(ms) { if (kicked) return; clearTimeout(retryT); retryT = setTimeout(() => { if (!hostConn || !hostConn.open) connectHost(); }, ms); }
+function scheduleRetry(ms) { if (kicked || ended) return; clearTimeout(retryT); retryT = setTimeout(() => { if (!hostConn || !hostConn.open) connectHost(); }, ms); }
 function connectHost() {
-  if (!peer || peer.destroyed || !peer.open || kicked) return;
+  if (!peer || peer.destroyed || !peer.open || kicked || ended) return;
   try { if (hostConn) hostConn.close(); } catch (e) {}
   const c = peer.connect(PREFIX + code, {metadata: {name: me.name, mic: me.mic, cam: me.cam}, reliable: true});
   hostConn = c;
   c.on('open', () => { setNet(true, 'conectado'); renderStage(); try { c.send({t: 'mych', ch: myCh}); } catch (e) {} setTimeout(() => { if (!gotStage && c.open) c.send({t: 'recall'}); }, 7000); });
-  c.on('data', d => { c._seen = Date.now(); onPlayerData(d); });
+  c.on('data', d => { c._seen = lastHostOk = Date.now(); if (hostConn === c) onPlayerData(d); });
   c.on('close', () => { if (hostConn !== c) return; setNet(false, 'Mestre desconectou'); state.sharing = false; state.cover.on = false; renderCover(null); renderStage(); gotStage = false; scheduleRetry(3000); });
   c.on('error', () => {});
 }
@@ -1952,19 +2076,24 @@ function onPlayerData(d) {
   if (d.t === 'roomimg') { roomImg = okImg(d.img) ? d.img : ''; applyTheme(); }
   if (d.t === 'reveal') { curReveal = d.r && okImg(d.r.img) ? {id: String(d.r.id || Date.now()), img: d.r.img, cap: String(d.r.cap || '').slice(0, 120)} : null; revealHidden = false; renderReveal(); }
   if (d.t === 'whisper' && typeof d.text === 'string') showWhisper(d.text.slice(0, 200));
-  if (d.t === 'doc' && d.doc) docReceive(d.doc, !!d.show);
+  if (d.t === 'doc' && d.doc) docReceive(d.doc, !!d.show, d.keep !== false, !!d.quiet, d.by);
+  if (d.t === 'docreqres') { const dd = docGot.find(x => x.id === String(d.id)); if (!d.ok) toast(d.why === 'missing' ? 'O Mestre não tem mais essa pista para mostrar.' : '🙅 O Mestre não liberou mostrar “' + (dd ? dd.name : 'a pista') + '” agora.', 4500); delete docReqT[String(d.id)]; }
   if (d.t === 'docclose' && docViewing && docViewing.id === String(d.id)) docClose();
+  if (d.t === 'docuv' && docViewing && docViewing.id === String(d.id)) { uvSet(!!d.on, true); if (d.on) toast('🔦 O Mestre acendeu a luz UV', 2500); }
+  if (d.t === 'docuvp' && docViewing && docViewing.id === String(d.id) && uvOn) { const doc = $('#dvDoc'); if (doc) { doc.style.setProperty('--x', clamp(+d.x || 0, -20, 120) + '%'); doc.style.setProperty('--y', clamp(+d.y || 0, -20, 120) + '%'); } }
   if (d.t === 'docdel' && d.id) docRemove(String(d.id));
   if (d.t === 'chat') addChat(d.m, false);
   if (d.t === 'chatclear') { chat = []; unread = 0; renderSide(); renderControls(); }
   if (d.t === 'fx' && typeof d.name === 'string') doFx(d.name, false);
   if (d.t === 'ping' && hostConn && hostConn.open) { try { hostConn.send({t: 'pong'}); } catch (e) {} }
-  if (d.t === 'bye') { setNet(false, 'O Mestre encerrou a sala'); }
-  if (d.t === 'kicked') { kicked = true; toast('O Mestre removeu você da sala.', 5000); setNet(false, 'removido'); clearTimeout(retryT); try { peer.destroy(); } catch (e) {} }
+  if (d.t === 'bye') { endRoom('A sala foi encerrada', 'O Mestre saiu e fechou a sala. Obrigado por jogar!', true); }
+  if (d.t === 'kicked') { kicked = true; endRoom('Você foi expulso', 'O Mestre removeu você desta sala.', false); }
+  if (d.t === 'stats' && d.id) applySt(String(d.id), d.s);
+  if (d.t === 'forcemute') { forcedMute = !!d.on; if (forcedMute) { if (me.mic) setMuted(true); toast('🔇 O Mestre silenciou seu microfone no chat de voz.', 4500); } else toast('🎙️ O Mestre liberou seu microfone. Aperte o microfone para falar.', 4500); pushStatus(); renderTiles(); renderControls(); }
 }
 let prevUv = null;
-function onRoomState() { renderCover(state.cover); applyTheme(); renderClima(); syncTimerFromState(); ytSync(); if (!isHost) { if (prevUv === false && state.uv) { toast('🔦 Vocês encontraram uma lanterna UV! Use nos documentos da aba Pistas.', 5000); docSnd('uvon'); } prevUv = state.uv; if (docViewing && !state.uv && uvOn) uvSet(false); const bar = $('#dvBar'); if (bar) { const u = bar.querySelector('[data-dv="uv"]'); if (state.uv && !u) { const z = bar.querySelector('[data-dv="zoom"]'); if (z) z.insertAdjacentHTML('beforebegin', '<button class="btn" data-dv="uv">🔦 Luz UV</button>'); } if (!state.uv && u) u.remove(); } } if (state.layoutTs && state.layoutTs !== roomLayoutTs) { roomLayoutTs = state.layoutTs; if (state.layout) setLayout(state.layout); } renderLive(); }
-function setRoster(list) { roster.clear(); (list || []).forEach(p => { if (p && p.id) roster.set(p.id, {id: p.id, name: cleanName(p.name), role: p.role === 'mestre' ? 'mestre' : 'agente', mic: !!p.mic, cam: !!p.cam, deaf: !!p.deaf}); }); if (me.id) roster.set(me.id, {...me}); }
+function onRoomState() { renderCover(state.cover); applyTheme(); renderClima(); syncTimerFromState(); ytSync(); if (!isHost) { if (prevUv === false && state.uv) { toast('🔦 Vocês encontraram uma lanterna UV! Use nos documentos da aba Pistas.', 5000); docSnd('uvon'); } prevUv = state.uv; if (docViewing && !state.uv && uvOn && !docUni) uvSet(false); const bar = $('#dvBar'); if (bar) { const u = bar.querySelector('[data-dv="uv"]'); if (state.uv && !u) { const z = bar.querySelector('[data-dv="zoom"]'); if (z) z.insertAdjacentHTML('beforebegin', '<button class="btn" data-dv="uv">🔦 Luz UV</button>'); } if (!state.uv && u) u.remove(); } } if (state.layoutTs && state.layoutTs !== roomLayoutTs) { roomLayoutTs = state.layoutTs; if (state.layout) setLayout(state.layout); } if (!isHost && state.layout && state.layout !== layout) setLayout(state.layout); renderLive(); }
+function setRoster(list) { roster.clear(); (list || []).forEach(p => { if (p && p.id) roster.set(p.id, {id: p.id, name: cleanName(p.name), role: p.role === 'mestre' ? 'mestre' : 'agente', mic: !!p.mic, cam: !!p.cam, deaf: !!p.deaf, fm: !!p.fm}); }); if (me.id) roster.set(me.id, {...me, fm: forcedMute}); }
 function pushStatus() {
   if (me.id) roster.set(me.id, {...me});
   if (isHost) broadcastRoster(); else { if (hostConn && hostConn.open) hostConn.send({t: 'status', mic: me.mic, cam: me.cam, deaf: me.deaf}); }
@@ -1975,7 +2104,7 @@ async function toggleShare() {
   if (screenStream) { stopShare(); return; }
   if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { toast('Este navegador não compartilha tela. Use Chrome ou Edge no computador.'); return; }
   const q = SQ[S.sq] || SQ.hd;
-  try { screenStream = await navigator.mediaDevices.getDisplayMedia({video: {width: {ideal: q.w}, height: {ideal: q.h}, frameRate: {ideal: q.fps, max: q.fps}}, audio: {echoCancellation: false, noiseSuppression: false, autoGainControl: false}, systemAudio: 'include', selfBrowserSurface: 'exclude'}); }
+  try { screenStream = await navigator.mediaDevices.getDisplayMedia({video: {width: {ideal: q.w}, height: {ideal: q.h}, frameRate: {ideal: q.fps, max: q.fps}}, audio: {echoCancellation: false, noiseSuppression: false, autoGainControl: false, restrictOwnAudio: true, suppressLocalAudioPlayback: false}, systemAudio: 'include', selfBrowserSurface: 'exclude', surfaceSwitching: 'include'}); }
   catch (e) { screenStream = null; return; }
   const vt = screenStream.getVideoTracks()[0];
   try { vt.contentHint = q.hint; } catch (e) {}
@@ -1985,7 +2114,10 @@ async function toggleShare() {
   stageCalls.forEach(c => { replaceSenderTrack(c, 'video', vt); tuneSenders(c, 'stage'); });
   const v = $('#vid'); v.srcObject = new MediaStream([vt]); v.muted = true; v.play().catch(() => {});
   state.sharing = true; pushState(); renderStage(); renderControls(); renderSide();
-  toast(at ? '📡 Transmitindo tela com áudio' : '📡 Transmitindo tela (sem áudio da aba)');
+  let surf = ''; try { surf = vt.getSettings().displaySurface || ''; } catch (e) {}
+  const own = !!(navigator.mediaDevices.getSupportedConstraints && navigator.mediaDevices.getSupportedConstraints().restrictOwnAudio);
+  if (at && surf === 'monitor' && !own) toast('⚠️ Tela inteira com áudio pode devolver a voz dos agentes (eco). Prefira compartilhar uma ABA/janela, ou use fone.', 7000);
+  else toast(at ? '📡 Transmitindo tela com áudio' : '📡 Transmitindo tela (sem áudio da aba)');
 }
 function stopShare() {
   if (!screenStream) return;
@@ -2208,8 +2340,42 @@ function bloodCanvas(cv, mode = 'cover') {
    CHARACTERS · LIVE LAYOUT · OBS MODE
    ===================================================================== */
 let chars = {};
-const myCh = Object.assign({char: '', sub: '', handle: '', img: ''}, lsGet('mesa-ch', {}));
-const sanCh = c => ({char: String((c && c.char) || '').slice(0, 30), sub: String((c && c.sub) || '').slice(0, 40), handle: String((c && c.handle) || '').slice(0, 30), img: okImg(c && c.img) ? c.img : ''});
+const myCh = Object.assign({char: '', sub: '', handle: '', img: '', pv: 0, pvMax: 0, pe: 0, peMax: 0}, lsGet('mesa-ch', {}));
+const stN = (v, hi) => clamp(Math.round(+v || 0), 0, hi);
+const sanSt = c => { c = c || {}; return {pv: stN(c.pv, 999), pvMax: stN(c.pvMax, 999), pe: stN(c.pe, 999), peMax: stN(c.peMax, 999)}; };
+const hasSt = c => !!(c && (c.pvMax || c.peMax || c.pv || c.pe));
+const sanCh = c => Object.assign({char: String((c && c.char) || '').slice(0, 30), sub: String((c && c.sub) || '').slice(0, 40), handle: String((c && c.handle) || '').slice(0, 30), img: okImg(c && c.img) ? c.img : ''}, sanSt(c));
+const stOf = id => sanSt(id === me.id ? myCh : (chars[id] || {}));
+function applySt(id, st) {
+  st = sanSt(st); const old = stOf(id);
+  if (id === me.id) { Object.assign(myCh, st); lsSet('mesa-ch', myCh); }
+  if (id !== me.id || chars[id]) chars[id] = Object.assign(chars[id] || sanCh({}), st);
+  renderLive(); renderTiles(); stPopSync(id);
+  const f = document.querySelector(`#live .lf[data-id="${CSS.escape(id)}"]`);
+  if (f && st.pv !== old.pv) { const c = st.pv < old.pv ? 'hit' : 'heal'; f.classList.remove('hit', 'heal'); void f.offsetWidth; f.classList.add(c); setTimeout(() => f.classList.remove(c), 800); }
+}
+function setStats(id, patch) {
+  const st = sanSt(Object.assign(stOf(id), patch));
+  if (isHost) { applySt(id, st); sendAll({t: 'stats', id, s: st}); }
+  else if (id === me.id) { applySt(id, st); if (hostConn && hostConn.open) hostConn.send({t: 'stats', s: st}); }
+}
+function stEdHTML(id) {
+  const st = stOf(id), isMe = id === me.id;
+  return `<div class="stEd" data-sid="${esc(id)}"><h5>${isMe ? 'Sua vida e esforço' : 'Vida e esforço'} <span style="text-transform:none;letter-spacing:0">(todos veem)</span></h5>
+    <div class="sr r"><span class="sl">PV</span><button data-st="pv:-1" title="Tirar 1 PV">−</button><input type="number" inputmode="numeric" min="0" max="999" data-sv="pv" value="${st.pv}" aria-label="PV atual"><span>/</span><input type="number" inputmode="numeric" min="0" max="999" data-sv="pvMax" value="${st.pvMax}" aria-label="PV máximo"><button data-st="pv:1" title="Curar 1 PV">+</button></div>
+    <div class="sr b"><span class="sl">PE</span><button data-st="pe:-1" title="Gastar 1 PE">−</button><input type="number" inputmode="numeric" min="0" max="999" data-sv="pe" value="${st.pe}" aria-label="PE atual"><span>/</span><input type="number" inputmode="numeric" min="0" max="999" data-sv="peMax" value="${st.peMax}" aria-label="PE máximo"><button data-st="pe:1" title="Recuperar 1 PE">+</button></div>
+    <small>Atual / máximo. Digite um número ou use − e +.${isHost && !isMe ? ' O agente vê a mudança na hora.' : ''}</small></div>`;
+}
+function stPopSync(id) {
+  const ed = document.querySelector('#pop .stEd'); if (!ed || ed.dataset.sid !== id) return;
+  const st = stOf(id); ed.querySelectorAll('[data-sv]').forEach(i => { if (document.activeElement !== i) i.value = st[i.dataset.sv]; });
+}
+function stEdWire(pop) {
+  const ed = pop.querySelector('.stEd'); if (!ed) return; const id = ed.dataset.sid;
+  ed.addEventListener('click', e => { const b = e.target.closest('[data-st]'); if (!b) return; e.stopPropagation(); const [k, d] = b.dataset.st.split(':'); const st = stOf(id); setStats(id, {[k]: st[k] + (+d)}); });
+  ed.addEventListener('change', e => { const i = e.target.closest('[data-sv]'); if (!i) return; e.stopPropagation(); setStats(id, {[i.dataset.sv]: i.value}); });
+  ed.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('[data-sv]')) { e.target.blur(); } });
+}
 function broadcastChars() { if (!isHost) return; sendAll({t: 'chars', chars}); renderLive(); renderTiles(); }
 function setMyChar(ch) {
   Object.assign(myCh, sanCh(ch)); lsSet('mesa-ch', myCh);
@@ -2227,6 +2393,9 @@ function openCharEditor(id) {
       <label class="lab">Título / classe</label><input class="in" id="chSub" maxlength="40" value="${esc(ch.sub)}" placeholder="Ex.: Ocultista · NEX 35%">
       <label class="lab">Seu @ (aparece no modo live)</label><input class="in" id="chHandle" maxlength="30" value="${esc(ch.handle)}" placeholder="@seunome">
     </div></div>
+    <label class="lab" style="margin-top:12px">Vida (PV) e Pontos de Esforço (PE)</label>
+    <div class="chSt"><div><small class="hint" style="margin:0 0 3px;display:block">PV atual</small><input class="in" id="chPv" type="number" min="0" max="999" value="${ch.pv}"></div><div><small class="hint" style="margin:0 0 3px;display:block">PV máx.</small><input class="in" id="chPvM" type="number" min="0" max="999" value="${ch.pvMax}"></div><div><small class="hint" style="margin:0 0 3px;display:block">PE atual</small><input class="in" id="chPe" type="number" min="0" max="999" value="${ch.pe}"></div><div><small class="hint" style="margin:0 0 3px;display:block">PE máx.</small><input class="in" id="chPeM" type="number" min="0" max="999" value="${ch.peMax}"></div></div>
+    <div class="hint">Durante a sessão, toque no seu quadro para mudar a vida rapidinho. O Mestre também pode alterar.</div>
     <div class="row" style="margin-top:12px"><button class="btn sm" id="chUp">🖼️ Escolher imagem</button><button class="btn sm" id="chRm">Remover imagem</button></div>
     <div class="hint">A imagem aparece no círculo do personagem e no fundo do quadro quando a câmera está desligada (como nas lives de RPG).</div>
     <button class="btn red wide" id="chSave" style="margin-top:14px">Salvar</button></div>`);
@@ -2235,7 +2404,7 @@ function openCharEditor(id) {
   const up = async () => { const [f] = await pickFile('image/*'); if (!f) return; try { img = await imgToDataURL(f, 360, .85, true); pic(); } catch (e) { toast('Não consegui abrir essa imagem.'); } };
   $('#chPic').onclick = up; $('#chUp').onclick = up; $('#chRm').onclick = () => { img = ''; pic(); };
   $('#chSave').onclick = () => {
-    const nc = sanCh({char: $('#chName').value.trim(), sub: $('#chSub').value.trim(), handle: $('#chHandle').value.trim(), img});
+    const nc = sanCh({char: $('#chName').value.trim(), sub: $('#chSub').value.trim(), handle: $('#chHandle').value.trim(), img, pv: $('#chPv').value, pvMax: $('#chPvM').value, pe: $('#chPe').value, peMax: $('#chPeM').value});
     if (isMe) setMyChar(nc);
     else if (isHost) { chars[id] = nc; broadcastChars(); const c = conns.get(id); if (c && c.open) c.send({t: 'yourch', ch: nc}); }
     closeModal('x'); toast('Personagem salvo');
@@ -2253,10 +2422,10 @@ function setLayout(l) {
 }
 function openLayoutMenu(anchor) {
   const pop = $('#pop');
-  pop.innerHTML = `<h4>Visualização</h4><div class="lmenu">${LAYOUTS.map(([k, n, d]) => `<button data-lay="${k}" class="${layout === k ? 'on' : ''}"><b>${n}</b><small>${d}</small></button>`).join('')}<button data-lay="obs"><b>🙈 Esconder interface</b><small>para capturar no OBS · aperte H para voltar</small></button></div>`;
+  pop.innerHTML = `<h4>Visualização <small style="font-weight:500;color:var(--mut)">· muda para todos</small></h4><div class="lmenu">${LAYOUTS.map(([k, n, d]) => `<button data-lay="${k}" class="${layout === k ? 'on' : ''}"><b>${n}</b><small>${d}</small></button>`).join('')}<button data-lay="obs"><b>🙈 Esconder interface</b><small>para capturar no OBS · aperte H para voltar</small></button></div>`;
   pop.classList.remove('hide');
   const rc = anchor.getBoundingClientRect(); pop.style.left = clamp(rc.right - pop.offsetWidth, 8, innerWidth - pop.offsetWidth - 8) + 'px'; pop.style.top = (rc.bottom + 6) + 'px';
-  pop.onclick = e => { const b = e.target.closest('[data-lay]'); if (!b) return; closePop(); if (b.dataset.lay === 'obs') setObs(true); else setLayout(b.dataset.lay); };
+  pop.onclick = e => { const b = e.target.closest('[data-lay]'); if (!b) return; closePop(); if (b.dataset.lay === 'obs') setObs(true); else { setLayout(b.dataset.lay); if (isHost) { state.layout = layout; state.layoutTs = Date.now(); roomLayoutTs = state.layoutTs; pushState(); toast('Visualização aplicada para todos'); } } };
   pop.oninput = null; pop.onchange = null;
 }
 function setObs(on) { document.body.classList.toggle('obs', on); if (on) toast('Interface escondida · aperte H (ou Esc) para voltar', 3500); }
@@ -2276,19 +2445,27 @@ function renderLive() {
   const put = (p, parent) => {
     seen.add(p.id);
     let f = box.querySelector(`.lf[data-id="${CSS.escape(p.id)}"]`);
-    if (!f) { f = document.createElement('div'); f.className = 'lf'; f.dataset.id = p.id; f.innerHTML = '<div class="lart"></div><video playsinline autoplay muted></video><div class="lbd"></div><div class="np"><span class="pt"></span><div class="tx"><b></b><i></i><s></s></div></div>'; }
+    if (!f) { f = document.createElement('div'); f.className = 'lf'; f.dataset.id = p.id; f.innerHTML = '<div class="lart"></div><video playsinline autoplay muted></video><div class="lbd"></div><div class="np"><span class="pt"></span><div class="tx"><div class="l1"><b></b><em class="pv"></em><em class="pe"></em></div><i></i><s></s></div></div><div class="bars"><i class="bpv"><b></b></i><i class="bpe"><b></b></i></div>'; }
     if (f.parentElement !== parent) parent.appendChild(f);
     const ch = liveCh(p), isMe = p.id === me.id, cam = isMe ? me.cam : p.cam, mic = isMe ? me.mic : p.mic;
     f.classList.toggle('master', p.role === 'mestre'); f.classList.toggle('me', isMe);
-    const key = JSON.stringify([ch.char, ch.sub, ch.handle, (ch.img || '').length, p.name, p.role, mic]);
+    const fm = isMe ? forcedMute : !!p.fm, st = sanSt(ch);
+    const key = JSON.stringify([ch.char, ch.sub, ch.handle, (ch.img || '').length, p.name, p.role, mic, fm, st]);
     if (f._k !== key) {
       f._k = key;
       f.querySelector('.lart').style.backgroundImage = ch.img ? `url("${ch.img}")` : '';
       const pt = f.querySelector('.pt'); pt.style.backgroundImage = ch.img ? `url("${ch.img}")` : ''; pt.textContent = ch.img ? '' : (String(ch.char || p.name || '?').trim()[0] || '?').toUpperCase(); pt.style.setProperty('--c', colorOf(p.name));
-      f.querySelector('.tx b').textContent = ch.char || p.name;
+      f.querySelector('.l1 b').textContent = ch.char || p.name;
+      const sh = hasSt(st);
+      f.querySelector('.pv').innerHTML = sh && (st.pvMax || st.pv) ? `${st.pv}<small>/${st.pvMax}</small>` : '';
+      f.querySelector('.pe').innerHTML = sh && (st.peMax || st.pe) ? `<em>PE</em>${st.pe}<small>/${st.peMax}</small>` : '';
+      const bp = f.querySelector('.bpv'), be = f.querySelector('.bpe');
+      bp.classList.toggle('no', !st.pvMax); be.classList.toggle('no', !st.peMax);
+      bp.style.setProperty('--w', (st.pvMax ? clamp(st.pv / st.pvMax, 0, 1) * 100 : 0) + '%'); be.style.setProperty('--w', (st.peMax ? clamp(st.pe / st.peMax, 0, 1) * 100 : 0) + '%');
+      f.classList.toggle('hasSt', sh); f.classList.toggle('low', !!st.pvMax && st.pv > 0 && st.pv / st.pvMax <= .25); f.classList.toggle('down', !!st.pvMax && st.pv <= 0);
       f.querySelector('.tx i').textContent = ch.sub || (p.role === 'mestre' ? 'O Mestre' : 'Agente');
       f.querySelector('.tx s').textContent = [ch.char ? p.name : '', ch.handle].filter(Boolean).join(' · ');
-      f.querySelector('.lbd').innerHTML = !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : '';
+      f.querySelector('.lbd').innerHTML = fm ? `<b class="m fm" title="Silenciado pelo Mestre">${ic('mic', 1)}</b>` : !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : '';
     }
     const v = f.querySelector('video'); let src = null;
     if (cam) { if (isMe) src = camTrack ? (f._ms && f._ms.getVideoTracks()[0] === camTrack ? f._ms : new MediaStream([camTrack])) : null; else { const r = remotes.get(p.id); src = r && r.stream ? r.stream : null; } }
@@ -2457,7 +2634,19 @@ function sideOpen() { return innerWidth > 900 ? curTab === 'chat' : $('#side').c
 function sys(text) { addChat({k: 'sys', text}, true); }
 const hhmm = ts => { const d = new Date(ts); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
 const EMO_RE = /^(?:\p{Extended_Pictographic}|\p{Emoji_Component}|️|‍|\s)+$/u;
-function msgHead(m) { const nm = String(m.from || ''), isM = /\(Mestre\)$/.test(nm), cl = nm.replace(/ \(Mestre\)$/, ''); return `<div class="mh"><span class="mav" style="--c:${colorOf(cl)}">${initial(cl)}</span><b>${esc(cl)}</b>${isM ? '<span class="mtag">Mestre</span>' : ''}<span class="tm">${hhmm(m.ts)}</span></div>`; }
+function msgHead(m) {
+  const nm = String(m.from || ''), isM = /\(Mestre\)$/.test(nm), cl = nm.replace(/ \(Mestre\)$/, '');
+  const c = m.pid ? (m.pid === me.id ? myCh : chars[m.pid]) : null, cn = String((c && c.char) || m.cn || '').trim(), shown = cn || cl;
+  return `<div class="mh"><span class="mav"${m.pid ? ` data-pid="${esc(m.pid)}"` : ''} style="--c:${colorOf(cl)}">${initial(shown)}</span><b>${esc(shown)}</b>${cn && cn !== cl ? `<small>${esc(cl)}</small>` : ''}${isM ? '<span class="mtag">Mestre</span>' : ''}<span class="tm">${hhmm(m.ts)}</span></div>`;
+}
+let avCssKey = '';
+function avCss() {
+  const all = Object.assign({}, chars); if (me.id) all[me.id] = myCh;
+  const ent = Object.entries(all).filter(([, c]) => c && c.img), key = ent.map(([k, c]) => k + ':' + c.img.length + c.img.slice(-24)).join('|');
+  if (key === avCssKey) return; avCssKey = key;
+  let st = $('#avCss'); if (!st) { st = document.createElement('style'); st.id = 'avCss'; document.head.appendChild(st); }
+  st.textContent = ent.map(([k, c]) => `.mav[data-pid="${String(k).replace(/["\\]/g, '')}"]{background-image:url("${c.img}");color:transparent!important}`).join('\n');
+}
 function msgHTML(m, prev) {
   if (m.k === 'sys') return `<div class="msg sys">${esc(m.text)}</div>`;
   const cl = String(m.from || '').replace(/ \(Mestre\)$/, ''), mine = cl === me.name;
@@ -2479,7 +2668,7 @@ function openEmoji(anchor) {
 }
 function sendChat(text) {
   text = text.trim(); if (!text) return;
-  if (isHost) addChat({k: 'chat', from: me.name + ' (Mestre)', text}, true);
+  if (isHost) addChat({k: 'chat', from: me.name + ' (Mestre)', pid: me.id, cn: myCh.char, text}, true);
   else if (hostConn && hostConn.open) hostConn.send({t: 'chat', text}); else toast('Sem conexão com o Mestre.');
 }
 const dN = n => 1 + Math.floor(Math.random() * n);
@@ -2502,7 +2691,7 @@ function rollExpr(expr) {
 }
 function doRoll(r) {
   if (!r) { toast('Fórmula inválida. Ex.: 2d6+3'); return; }
-  if (isHost) addChat({k: 'roll', from: me.name + ' (Mestre)', pid: me.id, r}, true);
+  if (isHost) addChat({k: 'roll', from: me.name + ' (Mestre)', pid: me.id, cn: myCh.char, r}, true);
   else if (hostConn && hostConn.open) hostConn.send({t: 'roll', r}); else toast('Sem conexão com o Mestre.');
 }
 
@@ -2516,6 +2705,7 @@ function renderTop() {
   $('#layoutBtn').innerHTML = ic('layout');
   $('#setBtn').innerHTML = ic('gear');
   $('#fsBtn').innerHTML = ic('full');
+  const bf = $('#bfsBtn'); if (bf) { const on = document.fullscreenElement === document.documentElement; bf.innerHTML = ic(on ? 'fsx' : 'full'); bf.title = on ? 'Sair da tela cheia' : 'Tela cheia'; bf.classList.toggle('on', on); }
 }
 function renderStage() {
   const on = state.sharing && (isHost ? !!screenStream : gotStage);
@@ -2529,7 +2719,8 @@ function renderStage() {
 }
 function tileHTML(p) {
   const isMe = p.id === me.id, cam = isMe ? me.cam : p.cam, mic = isMe ? me.mic : p.mic, dfn = isMe ? deaf : p.deaf;
-  return `<div class="av"${cam ? ' style="display:none"' : ''}><i style="--c:${colorOf(p.name)}">${initial(p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}<div class="bd">${!mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <em>' + esc(p.name) + '</em>' : ''}${isMe ? ' (você)' : ''}</span></div>`;
+  const ch = liveCh(p), st = sanSt(ch), fm = isMe ? forcedMute : !!p.fm, av = ch.img ? ` style="background:url('${ch.img}') center/cover;color:transparent"` : ` style="--c:${colorOf(p.name)}"`;
+  return `<div class="av"${cam ? ' style="display:none"' : ''}><i${av}>${initial(ch.char || p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}${hasSt(st) ? `<div class="hpc">${st.pvMax || st.pv ? `<b class="v">${st.pv}/${st.pvMax}</b>` : ''}${st.peMax || st.pe ? `<b class="e">PE ${st.pe}/${st.peMax}</b>` : ''}</div>` : ''}<div class="bd">${fm ? `<b class="m fm" title="Silenciado pelo Mestre">${ic('mic', 1)}</b>` : !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <em>' + esc(p.name) + '</em>' : ''}${isMe ? ' (você)' : ''}</span></div>`;
 }
 function renderTiles() {
   const box = $('#tiles'); if (!box) return;
@@ -2540,7 +2731,7 @@ function renderTiles() {
     let t = box.querySelector(`.tile[data-id="${CSS.escape(p.id)}"]`);
     if (!t) { t = document.createElement('div'); t.className = 'tile'; t.dataset.id = p.id; t.innerHTML = '<video playsinline autoplay muted></video><div class="lay"></div>'; box.appendChild(t); }
     t.classList.toggle('me', p.id === me.id);
-    const key = JSON.stringify([p.name, p.role, liveCh(p).char, p.id === me.id ? [me.mic, me.cam, deaf] : [p.mic, p.cam, p.deaf]]);
+    const key = JSON.stringify([p.name, p.role, liveCh(p).char, (liveCh(p).img || '').length, sanSt(liveCh(p)), p.id === me.id ? [me.mic, me.cam, deaf, forcedMute] : [p.mic, p.cam, p.deaf, !!p.fm]]);
     if (t._k !== key) { t._k = key; t.querySelector('.lay').innerHTML = tileHTML(p); }
     const v = t.querySelector('video'), cam = p.id === me.id ? me.cam : p.cam;
     let src = null;
@@ -2549,6 +2740,7 @@ function renderTiles() {
     v.style.display = cam && src ? '' : 'none';
   });
   $$('.tile', box).forEach(t => { if (!seen.has(t.dataset.id)) t.remove(); });
+  applyForcedMutes(); avCss();
   [...box.children].sort((a, b) => list.findIndex(p => p.id === a.dataset.id) - list.findIndex(p => p.id === b.dataset.id)).forEach(t => box.appendChild(t));
   renderLive();
 }
@@ -2708,6 +2900,7 @@ $('#pane').addEventListener('click', e => {
   if (b.dataset.dedit) { openDocEditor(b.dataset.dedit); return; }
   if (b.dataset.ddel) { docDelete(b.dataset.ddel); return; }
   if (b.dataset.dprev) { docOpen(b.dataset.dprev, true); return; }
+  if (b.dataset.drm) { const id = b.dataset.drm, dd = docGot.find(x => x.id === id); confirmBox('Excluir a pista “' + esc(dd ? dd.name : '') + '” da sua lista?<br><small style="color:var(--mut)">Só some para você. Se o Mestre entregar de novo, ela volta.</small>', 'Excluir').then(ok => { if (ok) { docRemove(id); toast('Pista excluída'); } }); return; }
   if (b.dataset.dopen) { docOpen(b.dataset.dopen, !(docGot.find(x => x.id === b.dataset.dopen) || {}).seen); return; }
   if (b.dataset.mydel) { const id = b.dataset.mydel; confirmBox('Remover este arquivo do navegador?', 'Remover').then(ok => { if (ok) myDel(id).then(renderSfxGrid); }); return; }
   if (b.dataset.theme) { state.theme = {id: b.dataset.theme, acc: ''}; applyTheme(); pushState(); saveRoom(); renderSide(); return; }
@@ -2757,7 +2950,7 @@ $('#pane').addEventListener('change', e => {
   if (a2 === 'covmus') { S.coverMusic = e.target.checked; saveS(); syncCoverSound(); }
   if (a2 === 'climasnd') { S.climaSnd = e.target.checked; saveS(); syncClimaSound(); }
   if (a2 === 'covfrz') { setCover({freeze: e.target.checked}); if (!e.target.checked) syncFreeze(); }
-  if (a2 === 'uvall') { state.uv = e.target.checked; pushState(); renderSide(); toast(state.uv ? '🔦 Agentes agora têm lanterna UV' : 'Lanterna UV recolhida'); }
+  if (a2 === 'uvall') { state.uv = e.target.checked; pushState(); saveRoom(); renderSide(); toast(state.uv ? '🔦 Agentes agora têm lanterna UV' : 'Lanterna UV recolhida'); }
   if (e.target.dataset.myin) { myAdd([...(e.target.files || [])], e.target.dataset.myin); e.target.value = ''; }
 });
 $('#pane').addEventListener('input', e => { if (e.target.id === 'sfxQ') { sfxQ = e.target.value; renderSfxGrid(); } });
@@ -2781,22 +2974,23 @@ function openPop(id, anchor) {
   const p = roster.get(id); if (!p) return;
   const pop = $('#pop'), isMe = id === me.id, r = remotes.get(id);
   let h = `<h4><span class="av"><i style="--c:${colorOf(p.name)};width:28px;height:28px;font-size:12px">${initial(p.name)}</i></span>${esc(p.name)}${p.role === 'mestre' ? ' <span class="role">Mestre</span>' : ''}</h4>`;
-  if (isMe) h += `<button class="btn sm wide" data-pa="mych" style="margin-top:6px">🎭 Meu personagem</button><button class="btn sm wide" data-pa="settings" style="margin-top:6px">⚙️ Meus ajustes de áudio e vídeo</button>`;
+  if (isMe) h += stEdHTML(id) + `<button class="btn sm wide" data-pa="mych" style="margin-top:8px">🎭 Meu personagem</button><button class="btn sm wide" data-pa="settings" style="margin-top:6px">⚙️ Meus ajustes de áudio e vídeo</button>`;
   else {
     h += `<label class="lab">Volume para você</label><input type="range" min="0" max="100" value="${S.vols[p.name] ?? 100}" data-pa="vol">
       <label class="sw"><input type="checkbox" data-pa="lmute" ${r && r.localMute ? 'checked' : ''}><i></i><span>Silenciar só para mim</span></label>`;
-    if (isHost) h += `<button class="btn sm wide" data-pa="ech" style="margin-top:6px">🎭 Editar personagem</button><button class="btn sm wide" data-pa="wsp" style="margin-top:6px">🤫 Sussurrar</button><button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">Remover da sala</button>`;
+    if (isHost) h += stEdHTML(id) + `<button class="btn sm wide" data-pa="fm" style="margin-top:8px${p.fm ? ';border-color:#ff5b5b' : ''}">${p.fm ? '🎙️ Deixar falar de novo' : '🔇 Silenciar no chat de voz'}</button><button class="btn sm wide" data-pa="ech" style="margin-top:6px">🎭 Editar personagem</button><button class="btn sm wide" data-pa="wsp" style="margin-top:6px">🤫 Sussurrar</button><button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">🚫 Expulsar da sala</button>`;
+    else if (hasSt(stOf(id))) { const st = stOf(id); h += `<div class="stEd"><h5>Vida e esforço</h5><div style="display:flex;gap:14px;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px"><span style="text-shadow:0 0 8px #ff2a2a">PV ${st.pv}/${st.pvMax}</span><span style="text-shadow:0 0 8px #3b8bff">PE ${st.pe}/${st.peMax}</span></div></div>`; }
   }
-  pop.innerHTML = h; pop.classList.remove('hide');
+  pop.innerHTML = h; pop.classList.remove('hide'); stEdWire(pop);
   const rc = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
   let x = rc.left + rc.width / 2 - pw / 2, y = rc.top - ph - 8; if (y < 8) y = rc.bottom + 8;
   pop.style.left = clamp(x, 8, innerWidth - pw - 8) + 'px'; pop.style.top = clamp(y, 8, innerHeight - ph - 8) + 'px';
-  pop.oninput = e => { if (e.target.dataset.pa === 'vol') { S.vols[p.name] = +e.target.value; saveS(); const rr = remotes.get(id); if (rr && rr.el) rr.el.volume = clamp(+e.target.value / 100 * S.voiceVol, 0, 1); } };
-  pop.onchange = e => { if (e.target.dataset.pa === 'lmute') { const rr = remotes.get(id); if (rr) { rr.localMute = e.target.checked; if (rr.el) rr.el.muted = deaf || rr.localMute; } } };
-  pop.onclick = async e => { const b = e.target.closest('[data-pa]'); if (!b) return; if (b.dataset.pa === 'settings') { closePop(); openSettings('audio'); } if (b.dataset.pa === 'mych') { closePop(); openCharEditor(me.id); } if (b.dataset.pa === 'ech') { closePop(); openCharEditor(id); } if (b.dataset.pa === 'wsp') { closePop(); openWhisper(id); } if (b.dataset.pa === 'kick') { closePop(); if (await confirmBox('Remover ' + esc(p.name) + ' da sala?', 'Remover')) kick(id); } };
+  pop.oninput = e => { if (e.target.dataset.sv) return; if (e.target.dataset.pa === 'vol') { S.vols[p.name] = +e.target.value; saveS(); const rr = remotes.get(id); if (rr && rr.el) rr.el.volume = clamp(+e.target.value / 100 * S.voiceVol, 0, 1); } };
+  pop.onchange = e => { if (e.target.dataset.pa === 'lmute') { const rr = remotes.get(id); if (rr) { rr.localMute = e.target.checked; if (rr.el) rr.el.muted = remoteMuted(id, rr); } } };
+  pop.onclick = async e => { const b = e.target.closest('[data-pa]'); if (!b) return; if (b.dataset.pa === 'settings') { closePop(); openSettings('audio'); } if (b.dataset.pa === 'mych') { closePop(); openCharEditor(me.id); } if (b.dataset.pa === 'ech') { closePop(); openCharEditor(id); } if (b.dataset.pa === 'wsp') { closePop(); openWhisper(id); } if (b.dataset.pa === 'fm') { closePop(); forceMute(id, !p.fm); } if (b.dataset.pa === 'kick') { closePop(); if (await confirmBox('Expulsar ' + esc(p.name) + ' da sala?<br><small style="color:var(--mut)">Ele sai na hora e não consegue voltar com esse nome enquanto a sala estiver aberta.</small>', 'Expulsar')) kick(id); } };
 }
-function closePop() { const p = $('#pop'); p.classList.add('hide'); p.classList.remove('emo'); }
-document.addEventListener('pointerdown', e => { if (!$('#pop').classList.contains('hide') && !e.target.closest('#pop') && !e.target.closest('.tile') && !e.target.closest('.lf') && !e.target.closest('[data-p]') && !e.target.closest('#layoutBtn') && !e.target.closest('[data-c="vol"]')) closePop(); });
+function closePop() { const p = $('#pop'); p.classList.add('hide'); p.classList.remove('emo'); p.dataset.k = ''; }
+document.addEventListener('pointerdown', e => { if (!$('#pop').classList.contains('hide') && !e.target.closest('#pop') && !e.target.closest('.tile') && !e.target.closest('.lf') && !e.target.closest('[data-p]') && !e.target.closest('#layoutBtn') && !e.target.closest('#copyLink') && !e.target.closest('[data-c="vol"]')) closePop(); });
 $('#live').addEventListener('click', e => { const f = e.target.closest('.lf'); if (f) openPop(f.dataset.id, f); });
 $('#tiles').addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) openPop(t.dataset.id, t); });
 /* modal */
@@ -2829,7 +3023,7 @@ function audioPanelHTML() {
     <div class="meter" id="setMeter"><b></b><s></s></div>
     <label class="lab">Sensibilidade (corta ruído quando você não fala)</label><input type="range" min="-90" max="-20" value="${S.gate}" data-d="gate">
     ${canOut ? `<label class="lab">Saída de som</label><select class="in" data-d="out"><option value="">Padrão do sistema</option>${devices.filter(d => d.kind === 'audiooutput' && d.deviceId !== 'default').map(d => `<option value="${esc(d.deviceId)}"${d.deviceId === S.outId ? ' selected' : ''}>${esc(d.label || 'Saída')}</option>`).join('')}</select>` : ''}
-    <label class="sw"><input type="checkbox" data-d="hq" ${S.hq ? 'checked' : ''}><i></i><span>Estou de fone de ouvido <small>Som em alta qualidade, sem o “abafado” do cancelamento de eco. Desligue se usar caixa de som.</small></span></label>
+    <label class="sw"><input type="checkbox" data-d="hq" ${S.hq ? 'checked' : ''}><i></i><span>Estou de fone de ouvido <small>Desligado = cancelamento de eco ligado (recomendado). Só ligue se TODOS os sons saem no seu fone; com caixa de som ou notebook sem fone, os outros escutam a própria voz de volta (eco).</small></span></label>
     <label class="sw"><input type="checkbox" data-d="ns" ${S.ns ? 'checked' : ''}><i></i><span>Supressão de ruído <small>Tira ventilador, teclado e barulho de fundo.</small></span></label>
     <label class="sw"><input type="checkbox" data-d="hear" ${hearSelf ? 'checked' : ''}><i></i><span>Me escutar (teste) <small>Você ouve o seu microfone. Use fone.</small></span></label>`;
 }
@@ -2897,7 +3091,18 @@ $('#layoutBtn').onclick = e => { e.stopPropagation(); openLayoutMenu($('#layoutB
 $('#volB').onclick = () => { const cur = isHost ? S.monVol : S.stageVol; if (cur > .001) { window._lastVol = cur; setStageVol(0); } else setStageVol(window._lastVol || .8); };
 $('#volR').addEventListener('input', e => setStageVol(+e.target.value / 100));
 $('#fsBtn').onclick = () => { const s = $('#stage'); if (document.fullscreenElement) document.exitFullscreen(); else (s.requestFullscreen || s.webkitRequestFullscreen || (() => {})).call(s); };
-$('#copyLink').onclick = () => { const url = location.origin + location.pathname + '#' + code; (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast('Link copiado! Mande para os agentes.')).catch(() => prompt('Copie o link:', url)); };
+function copyTxt(t, msg, label) { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(msg)).catch(() => prompt(label, t)); }
+$('#copyLink').onclick = e => {
+  e.stopPropagation(); const pop = $('#pop'), url = location.origin + location.pathname + '#' + code;
+  if (!pop.classList.contains('hide') && pop.dataset.k === 'inv') { closePop(); return; }
+  pop.innerHTML = `<h4>Convidar agentes</h4><div class="invPop"><div class="cd">${esc(code)}</div><button class="btn sm wide" data-inv="code">📋 Copiar só o código</button><button class="btn sm wide red" data-inv="link">🔗 Copiar o link</button><small>Com o link a pessoa já cai na sala. Com o código, ela digita em “Entrar numa sala”.</small></div>`;
+  pop.dataset.k = 'inv'; pop.classList.remove('hide');
+  const rc = $('#copyLink').getBoundingClientRect(); pop.style.left = clamp(rc.left, 8, innerWidth - pop.offsetWidth - 8) + 'px'; pop.style.top = (rc.bottom + 6) + 'px';
+  pop.oninput = pop.onchange = null;
+  pop.onclick = ev => { const b = ev.target.closest('[data-inv]'); if (!b) return; closePop(); if (b.dataset.inv === 'code') copyTxt(code, 'Código ' + code + ' copiado!', 'Copie o código:'); else copyTxt(url, 'Link copiado! Mande para os agentes.', 'Copie o link:'); };
+};
+$('#bfsBtn').onclick = () => { if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document); else { const el = document.documentElement, f = el.requestFullscreen || el.webkitRequestFullscreen; if (f) f.call(el).catch && f.call(el).catch(() => {}); else toast('Seu navegador não deixa entrar em tela cheia. No celular: menu do navegador → “Adicionar à tela inicial”.', 5000); } };
+document.addEventListener('fullscreenchange', () => { if ($('#bfsBtn')) renderTop(); });
 $('#unmute').onclick = () => { remotes.forEach(r => r.el && r.el.play().catch(() => {})); const v = $('#vid'); v.play().catch(() => {}); if (ctx) ctx.resume(); $('#unmute').classList.add('hide'); };
 
 /* meters & speaking indicator */
@@ -2951,8 +3156,9 @@ $('#pjGo').onclick = () => {
   document.title = (isHost ? 'Mestre · ' : '') + 'Sala ' + code + ' · Mesa Paranormal';
   setMuted(!(pjWantMic && micStream));
   curTab = 'chat';
-  if (isHost) { const R = lsGet('mesa-room', null); if (R) { if (R.theme) state.theme = R.theme; if (R.live) state.live = R.live; roomImg = okImg(R.img) ? R.img : ''; } }
-  applyTheme(); setLayout(layout); myRefresh();
+  if (isHost) { const R = lsGet('mesa-room', null); if (R) { if (R.theme) state.theme = R.theme; if (R.live) state.live = R.live; state.uv = !!R.uv; roomImg = okImg(R.img) ? R.img : ''; } }
+  applyTheme(); setLayout(isHost ? layout : 'stage'); myRefresh();
+  if (isHost) { state.layout = layout; state.layoutTs = Date.now(); roomLayoutTs = state.layoutTs; }
   $('#volR').value = Math.round((isHost ? S.monVol : S.stageVol) * 100); updVolIcon();
   if (isHost) setTimeout(() => { if (ctx) preloadSfx(); }, 6000);
   if (isHost) startHost(); else startPlayer();
@@ -2963,7 +3169,14 @@ $('#hGo').onclick = () => { me.name = cleanName($('#hName').value || 'Mestre'); 
 $('#jGo').onclick = () => {
   const c = $('#jCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
   if (c.length < 4) { toast('Digite o código da sala.'); return; }
-  me.name = cleanName($('#jName').value || 'Agente'); code = c; showPrejoin(false);
+  me.name = cleanName($('#jName').value || 'Agente');
+  const b = $('#jGo'), lbl = b.textContent; if (b.disabled) return; b.disabled = true; b.textContent = 'Procurando sala…';
+  probeRoom(c).then(r => {
+    b.disabled = false; b.textContent = lbl;
+    if (r === 'none') { toast('❌ A sala ' + c + ' não existe ou já foi fechada. Confira o código com o Mestre.', 5000); $('#jCode').focus(); return; }
+    if (r === 'neterr') { toast('Sem conexão com o servidor. Verifique a internet e tente de novo.', 5000); return; }
+    code = c; showPrejoin(false);
+  });
 };
 let leaving = false;
 function leave() {
@@ -3199,17 +3412,48 @@ function openUvDraw(exId) {
   base.src = e.img;
 }
 async function docDelete(id) { if (!await confirmBox('Apagar este documento da sua lista? (quem já recebeu continua com ele, a não ser que você recolha)', 'Apagar')) return; try { await docTx('lib', 'readwrite', st => st.delete(id)); } catch (e) {} await docLoadLib(); renderSide(); }
-function docShowAll(id) {
+let docPickAfter = null;
+function docShowAll(id, by) {
   const d = docLib.find(x => x.id === id); if (!d) return;
-  const names = new Set(docSent[id] || []);
-  conns.forEach((c, pid) => { if (c.open) { try { c.send({t: 'doc', doc: d, show: true}); const p = roster.get(pid); if (p) names.add(p.name); } catch (err) {} } });
-  docSent[id] = [...names]; docOpen(id, true, true);
+  conns.forEach(c => { if (c.open) { try { c.send({t: 'doc', doc: d, show: true, keep: false, by: by || ''}); } catch (err) {} } });
+  docPickAfter = by ? null : id; docOpen(id, true, true);
+}
+function docKeepPicker(id) {
+  const d = docLib.find(x => x.id === id); if (!d) return;
+  const ags = [...roster.values()].filter(p => p.id !== me.id), has = new Set(docSent[id] || []);
+  if (!ags.length) return;
+  openModal(`<div class="mhead"><h3>📁 Quem fica com “${esc(d.name)}”?</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
+    <div class="hint" style="margin-top:0">Todo mundo viu a pista. Escolha quem guarda ela na aba Pistas para olhar de novo depois.</div>
+    ${ags.map(p => `<label class="sw"><input type="checkbox" data-kp="${esc(p.id)}" ${has.has(p.name) ? 'checked disabled' : ''}><i></i><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <small style="display:inline">(' + esc(p.name) + ')</small>' : ''}${has.has(p.name) ? ' <small style="display:inline">· já tem</small>' : ''}</span></label>`).join('')}
+    <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap"><button class="btn sm" id="kpAll">Marcar todos</button><span style="flex:1"></span><button class="btn sm" data-m="x">Ninguém guarda</button><button class="btn sm red" id="kpGo">📁 Entregar</button></div></div>`);
+  $('#kpAll').onclick = () => $$('#mbox [data-kp]').forEach(i => { i.checked = true; });
+  $('#kpGo').onclick = () => {
+    const names = new Set(docSent[id] || []); let n = 0;
+    $$('#mbox [data-kp]').forEach(i => { if (!i.checked || i.disabled) return; const c = conns.get(i.dataset.kp), p = roster.get(i.dataset.kp); if (c && c.open) { try { c.send({t: 'doc', doc: d, show: false, quiet: true}); n++; if (p) names.add(p.name); } catch (e) {} } });
+    docSent[id] = [...names]; closeModal('ok'); renderSide();
+    toast(n ? `“${d.name}” guardada com ${n} agente${n > 1 ? 's' : ''}` : 'Ninguém novo recebeu a pista.');
+  };
+}
+const docReqs = new Map();
+function docReqShow(pid, id) {
+  const p = roster.get(pid), c = conns.get(pid); if (!p || !c) return;
+  const d = docLib.find(x => x.id === id), reply = (ok, why) => { try { if (c.open) c.send({t: 'docreqres', id, ok, why: why || ''}); } catch (e) {} };
+  if (!d) { reply(false, 'missing'); return; }
+  const k = pid + ':' + id; if (docReqs.has(k)) return;
+  let box = $('#reqBox'); if (!box) { box = document.createElement('div'); box.id = 'reqBox'; document.body.appendChild(box); }
+  const el = document.createElement('div'); el.className = 'reqCard';
+  el.innerHTML = `<img alt="" src="${d.img}"><div><b>🙋 ${esc(liveCh(p).char || p.name)}</b><small>quer mostrar “${esc(d.name)}” para todos</small><div class="row"><button class="btn sm red" data-rq="ok">🌐 Mostrar</button><button class="btn sm" data-rq="no">Negar</button></div></div>`;
+  box.appendChild(el); try { docSnd('found'); } catch (e) {}
+  const done = ok => { if (!docReqs.has(k)) return; docReqs.delete(k); clearTimeout(t); el.classList.add('out'); setTimeout(() => el.remove(), 300); reply(ok); if (ok) docShowAll(id, liveCh(p).char || p.name); };
+  const t = setTimeout(() => done(false), 60000);
+  docReqs.set(k, done);
+  el.onclick = e => { const b = e.target.closest('[data-rq]'); if (b) done(b.dataset.rq === 'ok'); };
 }
 function docGiveMenu(id, anchor) {
   const d = docLib.find(x => x.id === id); if (!d) return;
   const ags = [...roster.values()].filter(p => p.id !== me.id);
   const pop = $('#pop');
-  pop.innerHTML = `<h4>📨 Entregar “${esc(d.name)}”</h4><button class="btn sm red wide" data-dg="!" style="margin-top:6px">🌐 Mostrar na tela de todos agora</button>${ags.length ? `<button class="btn sm wide" data-dg="*" style="margin-top:6px">📨 Entregar para todos (cada um abre)</button>` + ags.map(p => `<button class="btn sm wide" data-dg="${esc(p.id)}" style="margin-top:6px">Só para ${esc(p.name)}</button>`).join('') : '<div class="hint">Nenhum agente na sala ainda.</div>'}
+  pop.innerHTML = `<h4>📨 Entregar “${esc(d.name)}”</h4><button class="btn sm red wide" data-dg="!" style="margin-top:6px">🌐 Mostrar na tela de todos agora</button><div class="hint" style="margin:4px 0 2px">Mostrar não entrega: no fim você escolhe quem guarda.</div>${ags.length ? `<button class="btn sm wide" data-dg="*" style="margin-top:6px">📨 Entregar para todos (cada um abre)</button>` + ags.map(p => `<button class="btn sm wide" data-dg="${esc(p.id)}" style="margin-top:6px">Só para ${esc(p.name)}</button>`).join('') : '<div class="hint">Nenhum agente na sala ainda.</div>'}
     ${(docSent[id] || []).length ? `<div class="hint">Já entregue para: ${esc(docSent[id].join(', '))}</div><button class="btn sm wide" data-dg="-" style="margin-top:6px">Recolher de todos</button>` : ''}`;
   pop.classList.remove('hide');
   const rc = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
@@ -3218,31 +3462,34 @@ function docGiveMenu(id, anchor) {
   pop.onclick = e => {
     const b = e.target.closest('[data-dg]'); if (!b) return; const to = b.dataset.dg; closePop();
     if (to === '-') { sendAll({t: 'docdel', id}); docSent[id] = []; toast('Documento recolhido'); renderSide(); return; }
-    const msg = {t: 'doc', doc: d, show: to === '!'}; let n = 0; const names = new Set(docSent[id] || []);
+    if (to === '!') { docShowAll(id); return; }
+    const msg = {t: 'doc', doc: d, show: false}; let n = 0; const names = new Set(docSent[id] || []);
     conns.forEach((c, pid) => { if ((to === '*' || to === '!' || to === pid) && c.open) { try { c.send(msg); n++; const p = roster.get(pid); if (p) names.add(p.name); } catch (err) {} } });
     docSent[id] = [...names];
-    if (to === '!') { docShowAll(id); return; }
+    if (to === '!') return;
     toast(n ? `“${d.name}” entregue${to === '*' ? ' para todos' : ' para ' + (roster.get(to) || {}).name}` : 'Ninguém conectado para receber.'); renderSide();
   };
 }
 function docPaneHost() {
   return `<button class="btn red wide" data-a="docnew">📜 Novo documento</button>
-    <label class="sw" style="margin-top:12px"><input type="checkbox" data-a2="uvall" ${state.uv ? 'checked' : ''}><i></i><span>🔦 Agentes têm lanterna UV <small>Eles recebem um aviso de que acharam a lanterna.</small></span></label>
+    <label class="sw" style="margin-top:12px"><input type="checkbox" data-a2="uvall" ${state.uv ? 'checked' : ''}><i></i><span>🔦 Agentes têm lanterna UV <small>Liga o botão “Luz UV” nos documentos dos agentes (eles recebem um aviso de que acharam a lanterna). Mesmo desligado, quando você mostra uma pista para todos e acende a UV, todos veem a luz junto com você.</small></span></label>
     <div class="sec">Seus documentos (${docLib.length})</div>
     ${docLib.length ? `<div class="dlist">${docLib.map(d => `<div class="dItem"><button class="dTh" data-dprev="${d.id}" title="Prévia (só você vê)"><img alt="" src="${d.img}"><i>${DOC_KINDS[d.kind][0]}</i>${d.uvText || d.uvImg ? '<em title="Tem algo escondido na luz UV">UV</em>' : ''}</button>
       <div class="dIn"><b>${esc(d.name)}</b><small>${DOC_KINDS[d.kind][1]}${d.back ? ' · com verso' : ''}${(docSent[d.id] || []).length ? ' · com ' + esc(docSent[d.id].join(', ')) : ''}</small>
       <div class="row"><button class="btn sm red" data-dall="${d.id}" title="Abre com animação na tela de todos ao mesmo tempo">🌐 Todos</button><button class="btn sm" data-dgive="${d.id}" title="Entregar para cada um abrir quando quiser">📨 Entregar</button><button class="btn sm" data-dedit="${d.id}" title="Editar">✏️</button><button class="btn sm" data-ddel="${d.id}" title="Apagar">🗑</button></div></div></div>`).join('')}</div>` : '<div class="hint">Nenhum documento ainda. Crie cartas, fotos, arquivos, evidências e itens antes da sessão e entregue na hora certa.</div>'}
-    <div class="hint"><b>🌐 Todos</b>: abre na tela de todo mundo ao mesmo tempo. <b>📨 Entregar</b>: cada agente recebe e abre quando quiser. Tocar na miniatura mostra a prévia só pra você.</div>`;
+    <div class="hint"><b>🌐 Todos</b>: abre na tela de todo mundo ao mesmo tempo (ninguém guarda até você escolher quem fica com ela). <b>📨 Entregar</b>: cada agente recebe e abre quando quiser. Tocar na miniatura mostra a prévia só pra você.</div>`;
 }
 function docPanePlayer() {
   return `<div class="sec" style="margin-top:0">Pistas encontradas (${docGot.length})</div>
-    ${docGot.length ? `<div class="dgrid">${docGot.map(d => `<button class="dCard ${d.seen ? '' : 'new'} k-${d.kind}" data-dopen="${d.id}"><img alt="" src="${d.img}"><span>${DOC_KINDS[d.kind][0]} ${esc(d.name)}</span></button>`).join('')}</div>` : '<div class="hint">Quando o Mestre entregar cartas, fotos, arquivos e objetos, eles ficam guardados aqui para você olhar de novo.</div>'}
+    ${docGot.length ? `<div class="dgrid">${docGot.map(d => `<div class="dCard ${d.seen ? '' : 'new'} k-${d.kind}"><button class="dOpen" data-dopen="${d.id}"><img alt="" src="${d.img}"><span>${DOC_KINDS[d.kind][0]} ${esc(d.name)}</span></button><button class="dRm" data-drm="${d.id}" title="Excluir esta pista">✕</button></div>`).join('')}</div>` : '<div class="hint">Quando o Mestre entregar cartas, fotos, arquivos e objetos, eles ficam guardados aqui para você olhar de novo.</div>'}
     ${state.uv ? '<div class="hint">🔦 Você tem uma lanterna UV. Abra um documento e acenda a luz para procurar coisas escondidas.</div>' : ''}`;
 }
 
 /* ----- player: receiving ----- */
-function docReceive(raw, show) {
+function docReceive(raw, show, keep, quiet, by) {
   const d = sanDoc(raw); if (!d) return;
+  if (show && !keep) { if (!docGot.some(x => x.id === d.id)) docTemp.set(d.id, d); if (docViewing) docClose(); docBy = String(by || '').slice(0, 40); docOpen(d.id, true, true); return; }
+  if (quiet && !show) { const had = docGot.find(x => x.id === d.id); docGot = [{...d, seen: true}, ...docGot.filter(x => x.id !== d.id)]; docSaveGot(docGot[0]); if (!had) toast('📁 “' + d.name + '” foi guardada na sua aba Pistas', 4000); renderSide(); renderControls(); if (docViewing && docViewing.id === d.id && $('#dvBar') && !$('#dvBar [data-dv="req"]')) {} return; }
   const old = docGot.find(x => x.id === d.id);
   docGot = [{...d, seen: false}, ...docGot.filter(x => x.id !== d.id)]; docSaveGot(docGot[0]);
   if (show) { docQueue = docQueue.filter(x => x !== d.id); if (docViewing) docClose(); docOpen(d.id, true, true); renderSide(); renderControls(); return; }
@@ -3268,14 +3515,15 @@ function docDropRender() {
 function docUnseen() { return docGot.filter(x => !x.seen).length; }
 
 /* ----- viewer ----- */
-function docFind(id) { return docGot.find(x => x.id === id) || docLib.find(x => x.id === id); }
+const docTemp = new Map(), docReqT = {}; let docBy = '';
+function docFind(id) { return docGot.find(x => x.id === id) || docTemp.get(id) || docLib.find(x => x.id === id); }
 function docFit(w, h, kind) { const mw = Math.min(innerWidth * .88, 980), mh = innerHeight * (kind === 'item' ? .56 : kind === 'foto' || kind === 'arquivo' || kind === 'evidencia' ? .62 : .72); const k = Math.min(mw / w, mh / h, kind === 'item' ? 1.6 : 9); return [Math.round(w * k), Math.round(h * k)]; }
 let docUni = false;
 function docOpen(id, anim, uni) {
   const d = docFind(id); if (!d) return;
   docViewing = d; docUni = !!uni; uvSet(false); insp = null;
-  const v = $('#docView'); v.className = 'k-' + d.kind; v.innerHTML = `<div class="dvTop"><b>${DOC_KINDS[d.kind][0]} ${esc(d.name)}</b><small>arraste para girar · vire para ver o verso</small></div><div class="dvStage" id="dvStage"></div>
-    <div class="dvBar hide" id="dvBar"><button class="btn" data-dv="flip">🔄 Virar</button>${isHost || state.uv ? '<button class="btn" data-dv="uv">🔦 Luz UV</button>' : ''}<button class="btn" data-dv="zoom">🔍 Ampliar</button>${isHost && uni ? '<button class="btn red" data-dv="xall">✕ Fechar para todos</button><button class="btn" data-dv="x">Fechar só pra mim</button>' : '<button class="btn red" data-dv="x">✕ Fechar</button>'}</div>`;
+  const v = $('#docView'); v.className = 'k-' + d.kind; v.innerHTML = `<div class="dvTop"><b>${DOC_KINDS[d.kind][0]} ${esc(d.name)}</b><small>${uni && docBy ? 'mostrado por ' + esc(docBy) + ' · ' : ''}arraste para girar · vire para ver o verso</small></div><div class="dvStage" id="dvStage"></div>
+    <div class="dvBar hide" id="dvBar"><button class="btn" data-dv="flip">🔄 Virar</button>${isHost || state.uv ? `<button class="btn" data-dv="uv"${isHost && uni ? ' title="Todos veem a luz se mexendo junto com você"' : ''}>🔦 Luz UV</button>` : ''}<button class="btn" data-dv="zoom">🔍 Ampliar</button>${isHost && uni ? '<button class="btn" data-dv="keep">📁 Quem guarda?</button><button class="btn red" data-dv="xall">✕ Fechar para todos</button><button class="btn" data-dv="x">Fechar só pra mim</button>' : (!isHost && !uni && docGot.some(x => x.id === id) ? '<button class="btn" data-dv="req">🙋 Pedir pra mostrar a todos</button>' : '') + '<button class="btn red" data-dv="x">✕ Fechar</button>'}</div>`;
   docDropRender();
   const img = new Image();
   img.onload = () => { const [w, h] = docFit(img.naturalWidth, img.naturalHeight, d.kind); if (anim) docAnim(d, w, h); else docShow(d, w, h, true); };
@@ -3283,7 +3531,7 @@ function docOpen(id, anim, uni) {
   img.src = d.img;
   if (!isHost) { const g = docGot.find(x => x.id === id); if (g && !g.seen) { g.seen = true; docSaveGot(g); if (!uni && hostConn && hostConn.open) try { hostConn.send({t: 'docopen', id}); } catch (e) {} renderSide(); renderControls(); } }
 }
-function docClose() { uvSet(false); insp = null; docViewing = null; const v = $('#docView'); v.className = 'hide'; v.innerHTML = ''; docDropRender(); }
+function docClose() { if (docViewing && docTemp.has(docViewing.id)) docTemp.delete(docViewing.id); docBy = ''; uvSet(false); insp = null; docViewing = null; const v = $('#docView'); v.className = 'hide'; v.innerHTML = ''; docDropRender(); }
 function tornPath() { const pts = [], n = 22; for (let i = 0; i <= n; i++) pts.push(`${(i / n * 100).toFixed(1)}% ${(Math.random() * 3.2).toFixed(1)}%`); for (let i = n; i >= 0; i--) pts.push(`${(i / n * 100).toFixed(1)}% ${(100 - Math.random() * 3.2).toFixed(1)}%`); return `polygon(${pts.join(',')})`; }
 function docBackHTML(d) {
   const bt = d.back ? `<div class="bkTx">${esc(d.back)}</div>` : '';
@@ -3315,7 +3563,7 @@ function docShow(d, w, h, fade, enter) {
   $('#dvBar').classList.remove('hide');
   if (torn) { const bk = $('#dvTilt .dvBack'); if (bk) bk.style.clipPath = torn; }
   const doc = $('#dvDoc');
-  const mv = e => { if (!uvOn) return; const r = doc.getBoundingClientRect(); doc.style.setProperty('--x', (e.clientX - r.left) / r.width * 100 + '%'); doc.style.setProperty('--y', (e.clientY - r.top) / r.height * 100 + '%'); };
+  const mv = e => { if (!uvOn) return; const r = doc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 100, y = (e.clientY - r.top) / r.height * 100; doc.style.setProperty('--x', x + '%'); doc.style.setProperty('--y', y + '%'); if (isHost && docUni && docViewing) { const n = performance.now(); if (n - uvSendT > 60) { uvSendT = n; sendAll({t: 'docuvp', id: docViewing.id, x: +x.toFixed(1), y: +y.toFixed(1)}); } } };
   doc.addEventListener('pointermove', mv); doc.addEventListener('pointerdown', mv);
   if (d.kind === 'evidencia' && enter) setTimeout(() => { const l = $('#dvDoc .dvLabel'); if (l) { l.classList.add('on', 'slap'); docSnd('stamp'); } }, 1250);
   if (d.kind === 'item' && enter) setTimeout(() => { const r = $('.dvRays'); if (r) r.classList.remove('intro'); const t = $('.dvItemT'); if (t) t.classList.add('out'); }, 3200);
@@ -3405,8 +3653,10 @@ function docAnim(d, w, h) {
   else if (d.kind === 'item') { done = true; docSnd('item'); docShow(d, w, h, false, 'item'); }
   else finish();
 }
-function uvSet(on) {
-  uvOn = !!on; const v = $('#docView'); if (v) v.classList.toggle('uv', uvOn);
+let uvSendT = 0;
+function uvSet(on, remote) {
+  const was = uvOn; uvOn = !!on;
+  if (isHost && docUni && docViewing && !remote && was !== uvOn) sendAll({t: 'docuv', id: docViewing.id, on: uvOn}); const v = $('#docView'); if (v) v.classList.toggle('uv', uvOn);
   const b = v && v.querySelector('[data-dv="uv"]'); if (b) { b.classList.toggle('on', uvOn); b.textContent = uvOn ? '💡 Luz normal' : '🔦 Luz UV'; }
   if (uvOn) { inspFront(); docSnd('uvon'); if (!uvHum) uvHum = docHum(); } else if (uvHum) { try { uvHum(); } catch (e) {} uvHum = null; }
   if (uvOn) { const doc = $('#dvDoc'); if (doc && !doc.style.getPropertyValue('--x')) { doc.style.setProperty('--x', '50%'); doc.style.setProperty('--y', '40%'); } }
@@ -3414,7 +3664,9 @@ function uvSet(on) {
 document.addEventListener('click', e => {
   const b = e.target.closest('#docView [data-dv]'); if (!b) return;
   if (b.dataset.dv === 'x') docClose();
-  if (b.dataset.dv === 'xall') { if (docViewing) sendAll({t: 'docclose', id: docViewing.id}); docClose(); }
+  if (b.dataset.dv === 'xall') { const id = docViewing && docViewing.id; if (id) sendAll({t: 'docclose', id}); docClose(); if (id && docPickAfter === id) { docPickAfter = null; setTimeout(() => docKeepPicker(id), 250); } }
+  if (b.dataset.dv === 'keep') { if (docViewing) { const id = docViewing.id; docPickAfter = null; docKeepPicker(id); } }
+  if (b.dataset.dv === 'req') { const id = docViewing && docViewing.id; if (!id) return; if (!hostConn || !hostConn.open) { toast('Sem conexão com o Mestre.'); return; } const w = docReqT[id] || 0; if (Date.now() - w < 30000) { toast('Pedido já enviado. Espere o Mestre responder.'); return; } docReqT[id] = Date.now(); try { hostConn.send({t: 'docreq', id}); } catch (e) {} b.disabled = true; b.textContent = '⏳ Pedido enviado ao Mestre'; toast('🙋 Pedido enviado. Se o Mestre aceitar, a pista abre na tela de todos.'); }
   if (b.dataset.dv === 'uv') uvSet(!uvOn);
   if (b.dataset.dv === 'flip') { if (uvOn) uvSet(false); inspFlip(); }
   if (b.dataset.dv === 'zoom') { const s = $('#dvScroll'); if (!s) return; inspFront(); const z = s.classList.toggle('zoom'); const st = $('#dvStage'); if (st) st.classList.toggle('zoomed', z); b.textContent = z ? '🔍 Reduzir' : '🔍 Ampliar'; }
@@ -3616,6 +3868,7 @@ addEventListener('pagehide', sayBye);
 setInterval(() => {
   const now = Date.now();
   if (isHost) { conns.forEach((c, id) => { if (!c._seen) c._seen = now; if (now - c._seen > 25000) { try { c.close(); } catch (e) {} if (conns.get(id) === c) dropPlayer(id); } else { try { if (c.open) c.send({t: 'ping'}); } catch (e) {} } }); }
+  else if (!isHost && !ended && !kicked && peer && !$('#room').classList.contains('hide') && (!hostConn || !hostConn.open) && lastHostOk && now - lastHostOk > 60000) endRoom('A sala foi fechada', 'Não consigo mais falar com o Mestre: ele saiu ou perdeu a conexão.', true);
   else if (hostConn && hostConn.open) { if (!hostConn._seen) hostConn._seen = now; if (now - hostConn._seen > 25000) { const c = hostConn; hostConn = null; try { c.close(); } catch (e) {} setNet(false, 'Mestre desconectou'); gotStage = false; renderStage(); scheduleRetry(1500); } }
 }, 5000);
 addEventListener('beforeunload', e => { if (!leaving && !$('#room').classList.contains('hide') && (isHost ? conns.size : true)) { e.preventDefault(); e.returnValue = ''; } });
