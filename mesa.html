@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
-:root{--bg:#09090b;--p1:#111114;--p2:#18181c;--p3:#202026;--line:#27272e;--ink:#ecebe8;--mut:#8e8b93;--red:#c3161f;--red2:#ff3b3b;--grn:#3ba55d;--gold:#d8a74a}
+:root{--bg:#09090b;--p1:#111114;--p2:#18181c;--p3:#202026;--line:#27272e;--ink:#ecebe8;--mut:#8e8b93;--red:#c3161f;--red2:#ff3b3b;--grn:#3ba55d;--gold:#d8a74a;--tint:#3a0a0e;--on:#fff;--roomImg:none}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -20,12 +20,12 @@ button{cursor:pointer;background:none;border:0;padding:0}
 @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-5%,3%)}50%{transform:translate(4%,-6%)}75%{transform:translate(-3%,5%)}100%{transform:translate(0,0)}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;background:var(--p3);border:1px solid var(--line);font-weight:700;font-size:14px;transition:background .15s,border-color .15s}
 .btn:hover{border-color:#444}
-.btn.red{background:linear-gradient(180deg,#d61d27,#9c0f17);border-color:#e1323a;color:#fff}
-.btn.on{background:var(--red);border-color:var(--red2);color:#fff}
+.btn.red{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 85%,#fff 15%),color-mix(in srgb,var(--red) 72%,#000));border-color:var(--red2);color:var(--on)}
+.btn.on{background:var(--red);border-color:var(--red2);color:var(--on)}
 .btn.grn{background:#23663b;border-color:#2f8a4f;color:#fff}
 .btn.sm{padding:7px 10px;font-size:12.5px;border-radius:8px}
 .btn.wide{width:100%}
-.in{width:100%;background:#0c0c0f;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;outline:none}
+.in{width:100%;background:color-mix(in srgb,var(--bg) 75%,#000);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;outline:none}
 .in:focus{border-color:var(--red)}
 select.in{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#8e8b93 50%),linear-gradient(135deg,#8e8b93 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:32px}
 .lab{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:14px 0 6px;font-weight:800}
@@ -47,15 +47,15 @@ input[type=range]{accent-color:var(--red);width:100%}
 .meter s{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff}
 
 /* ---------- lobby / prejoin ---------- */
-.screen{min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:radial-gradient(800px 500px at 50% -10%,#3a0a0e55,transparent 70%),var(--bg)}
+.screen{min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:radial-gradient(800px 500px at 50% -10%,color-mix(in srgb,var(--tint) 40%,transparent),transparent 70%),var(--bg)}
 .lw{width:100%;max-width:900px}
 .brand{text-align:center;margin-bottom:24px}
-.brand h1{font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(46px,10vw,88px);margin:0;letter-spacing:.08em;line-height:.9;text-shadow:0 0 30px #c3161f66}
+.brand h1{font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(46px,10vw,88px);margin:0;letter-spacing:.08em;line-height:.9;text-shadow:0 0 30px color-mix(in srgb,var(--red) 45%,transparent)}
 .brand h1 span{color:var(--red2)}
 .brand p{font-family:'Special Elite',monospace;color:var(--mut);margin:10px 0 0}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:720px){.cards{grid-template-columns:1fr}}
-.card{background:linear-gradient(180deg,#141417,#0e0e11);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card{background:linear-gradient(180deg,var(--p1),color-mix(in srgb,var(--bg) 60%,var(--p1)));border:1px solid var(--line);border-radius:16px;padding:20px}
 .card h2{font-family:'Bebas Neue',Impact,sans-serif;font-size:30px;margin:0 0 2px;letter-spacing:.06em;font-weight:400}
 .card .d{color:var(--mut);font-size:13.5px;line-height:1.45;margin:0 0 4px}
 .card .btn.red{width:100%;margin-top:16px;padding:13px}
@@ -72,7 +72,7 @@ input[type=range]{accent-color:var(--red);width:100%}
 
 /* ---------- room ---------- */
 #room{height:100vh;height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) 370px;grid-template-rows:56px minmax(0,1fr) 78px;grid-template-areas:"tb tb" "main side" "ctl side";overflow:hidden}
-.tb{grid-area:tb;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--line);background:#0c0c0f;min-width:0}
+.tb{grid-area:tb;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 55%,var(--p1));min-width:0}
 .tb .lg{font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.08em;white-space:nowrap}
 .tb .lg span{color:var(--red2)}
 .code{display:flex;align-items:center;gap:8px;padding:5px 6px 5px 10px;border:1px dashed #3a3a42;border-radius:10px;font-family:'Special Elite',monospace;font-size:14px;white-space:nowrap}
@@ -91,7 +91,7 @@ input[type=range]{accent-color:var(--red);width:100%}
 #stage:fullscreen{border-radius:0;border:0}
 #vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
 #vid.off{opacity:0}
-#idle{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 45%,#1a0507,#000 70%);padding:20px}
+#idle{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--tint) 50%,#000),#000 70%);padding:20px}
 #idle .eye{width:min(22%,150px);aspect-ratio:1;margin:0 auto 10px;opacity:.85;animation:breathe 4s ease-in-out infinite}
 @keyframes breathe{50%{transform:scale(1.06);opacity:1}}
 #idle .t1{font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,3.6vw,42px);letter-spacing:.12em}
@@ -101,7 +101,7 @@ input[type=range]{accent-color:var(--red);width:100%}
 .stOv button:hover{opacity:1}
 #unmute{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:10}
 #tiles{flex:none;display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
-.tile{position:relative;flex:none;width:196px;aspect-ratio:16/9;border-radius:12px;background:#17171b;overflow:hidden;border:2px solid transparent;cursor:pointer;transition:border-color .12s,box-shadow .12s}
+.tile{position:relative;flex:none;width:196px;aspect-ratio:16/9;border-radius:12px;background:var(--p2);overflow:hidden;border:2px solid transparent;cursor:pointer;transition:border-color .12s,box-shadow .12s}
 .tile.speaking{border-color:var(--grn);box-shadow:0 0 0 3px #3ba55d40}
 .tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .tile.me video{transform:scaleX(-1)}
@@ -113,11 +113,11 @@ input[type=range]{accent-color:var(--red);width:100%}
 .tile .bd b{width:24px;height:24px;border-radius:6px;background:#000b;display:grid;place-items:center}
 .tile .bd .ic{width:15px;height:15px}
 .tile .bd .m{color:#ff5b5b}
-.tile .crown{position:absolute;left:6px;top:6px;font-size:10px;font-weight:800;letter-spacing:.1em;padding:3px 7px;border-radius:6px;background:#c3161fcc;color:#fff}
+.tile .crown{position:absolute;left:6px;top:6px;font-size:10px;font-weight:800;letter-spacing:.1em;padding:3px 7px;border-radius:6px;background:var(--red);color:var(--on)}
 body.gridMode #stageW{display:none}
 body.gridMode #tiles{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));align-content:center;overflow:auto}
 body.gridMode .tile{width:auto}
-.ctl{grid-area:ctl;display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line);background:#0c0c0f}
+.ctl{grid-area:ctl;display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg) 55%,var(--p1))}
 .cbw{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--mut);min-width:56px}
 .cb{position:relative;width:52px;height:46px;border-radius:14px;background:var(--p3);display:grid;place-items:center;color:var(--ink);transition:background .15s,transform .08s}
 .cb:hover{background:#2b2b33}
@@ -143,12 +143,12 @@ body.gridMode .tile{width:auto}
 .tile2:active{transform:scale(.95)}
 .tile2 .e{font-size:22px;line-height:1}
 .tile2 small{font-weight:500;color:var(--mut);font-size:10.5px;line-height:1.25}
-.tile2.on{border-color:var(--red2);background:#2a0b0e;box-shadow:inset 0 0 0 1px var(--red2)}
-.tile2.flash{background:#3a1216}
+.tile2.on{border-color:var(--red2);background:color-mix(in srgb,var(--red) 20%,var(--p2));box-shadow:inset 0 0 0 1px var(--red2)}
+.tile2.flash{background:color-mix(in srgb,var(--red) 35%,var(--p2))}
 .vp{position:relative;overflow:hidden}
 .vp::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--c)}
 .big{width:100%;padding:14px;font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;letter-spacing:.08em;font-weight:400}
-.now{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#160809;border:1px solid #4a1a1f;margin-bottom:10px;font-size:13px}
+.now{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--red) 10%,var(--p1));border:1px solid color-mix(in srgb,var(--red) 40%,var(--line));margin-bottom:10px;font-size:13px}
 .now .eq{display:flex;gap:2px;align-items:flex-end;height:16px}
 .now .eq i{width:3px;background:var(--red2);animation:eq .8s ease-in-out infinite}
 .now .eq i:nth-child(2){animation-delay:-.3s}.now .eq i:nth-child(3){animation-delay:-.55s}
@@ -160,29 +160,29 @@ body.gridMode .tile{width:auto}
 .pl .st{display:flex;gap:6px;color:var(--mut)}
 .pl .st .ic{width:16px;height:16px}
 .pl .st .m{color:#ff5b5b}
-.role{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:#2a0b0e;color:#ff8a8a;border:1px solid #5a1a1f}
+.role{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:color-mix(in srgb,var(--red) 20%,var(--p1));color:color-mix(in srgb,var(--red2) 65%,#fff);border:1px solid color-mix(in srgb,var(--red) 45%,var(--line))}
 /* chat */
 #log{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:0}
 .msg{font-size:13.5px;line-height:1.45;overflow-wrap:anywhere}
-.msg b{color:#ffb3b3}
+.msg b{color:color-mix(in srgb,var(--red2) 60%,#fff)}
 .msg .tm{color:#5d5a62;font-size:11px;margin-left:6px}
 .msg.sys{color:var(--mut);font-size:12px;font-style:italic;text-align:center}
-.msg.rmsg{padding:9px 11px;border-radius:12px;border:1px solid #4a1a1f;background:#160809}
+.msg.rmsg{padding:9px 11px;border-radius:12px;border:1px solid color-mix(in srgb,var(--red) 40%,var(--line));background:color-mix(in srgb,var(--red) 10%,var(--p1))}
 .msg .res{font-family:'Bebas Neue',Impact,sans-serif;font-size:28px;letter-spacing:.04em;color:#fff;line-height:1.05}
-.msg .res.crit{color:var(--red2);text-shadow:0 0 12px #ff3b3b88}
+.msg .res.crit{color:var(--red2);text-shadow:0 0 12px color-mix(in srgb,var(--red2) 55%,transparent)}
 .msg .res.fail{color:#8e8b93}
 .msg .det{font-size:12px;color:var(--mut)}
-.chatBot{flex:none;border-top:1px solid var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:#0e0e11}
+.chatBot{flex:none;border-top:1px solid var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:color-mix(in srgb,var(--bg) 50%,var(--p1))}
 .diceBar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .diceBar .in{width:58px;padding:7px 8px;font-size:14px;text-align:center}
 .diceBar .in.wide{flex:1;width:auto;min-width:80px;text-align:left}
 .diceBar label{font-size:11px;color:var(--mut);font-weight:700}
-.dq{padding:6px 9px;border-radius:8px;background:var(--p3);font-size:12px;font-weight:800;color:#ffb3b3}
+.dq{padding:6px 9px;border-radius:8px;background:var(--p3);font-size:12px;font-weight:800;color:color-mix(in srgb,var(--red2) 60%,#fff)}
 /* popover & modal */
-#pop{position:fixed;z-index:60;min-width:230px;max-width:280px;background:#141418;border:1px solid #33333b;border-radius:14px;padding:12px;box-shadow:0 18px 40px #000c}
+#pop{position:fixed;z-index:60;min-width:230px;max-width:300px;background:var(--p1);border:1px solid #33333b;border-radius:14px;padding:12px;box-shadow:0 18px 40px #000c}
 #pop h4{margin:0 0 6px;font-size:15px;display:flex;align-items:center;gap:8px}
 #shade{position:fixed;inset:0;z-index:70;background:#000b;display:grid;place-items:center;padding:16px}
-.mbox{width:100%;max-width:640px;max-height:92vh;display:flex;flex-direction:column;background:#111114;border:1px solid #2e2e35;border-radius:18px;box-shadow:0 30px 80px #000}
+.mbox{width:100%;max-width:640px;max-height:92vh;display:flex;flex-direction:column;background:var(--p1);border:1px solid #2e2e35;border-radius:18px;box-shadow:0 30px 80px #000}
 .mhead{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
 .mhead h3{margin:0;font-size:18px;flex:1}
 .mtabs{display:flex;gap:4px;padding:8px 12px 0;border-bottom:1px solid var(--line);overflow-x:auto}
@@ -208,9 +208,9 @@ body.gridMode .tile{width:auto}
   .side{position:fixed;left:0;right:0;bottom:72px;height:min(72vh,620px);z-index:40;border:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(110%);visibility:hidden;transition:transform .25s cubic-bezier(.2,.8,.2,1),visibility .25s;box-shadow:0 -20px 50px #000a}
   .side.open{transform:none;visibility:visible}
   .mobOnly{display:flex!important}
-  .cbw{min-width:44px;font-size:0;gap:0}
-  .cb{width:46px;height:44px;border-radius:12px}
-  .ctl{gap:6px;padding:6px}
+  .cbw{min-width:0;flex:1 1 0;max-width:52px;font-size:0;gap:0}
+  .cb{width:100%;max-width:46px;height:44px;border-radius:12px}
+  .ctl{gap:4px;padding:6px}
   .cbgap{display:none}
   .deskOnly{display:none!important}
 }
@@ -219,7 +219,7 @@ body.gridMode .tile{width:auto}
 #cover{z-index:5;opacity:0;transition:opacity .9s ease}
 #cover.show{opacity:1}
 .isHost #cover.show{opacity:.93}
-#coverTag{position:absolute;top:10px;left:10px;z-index:9;font-size:11px;font-weight:800;letter-spacing:.1em;padding:4px 8px;border-radius:6px;background:#c3161fdd;color:#fff;display:none}
+#coverTag{position:absolute;top:10px;left:10px;z-index:9;font-size:11px;font-weight:800;letter-spacing:.1em;padding:4px 8px;border-radius:6px;background:var(--red);color:var(--on);display:none}
 .isHost #cover.show~#coverTag{display:block}
 .cv{position:absolute;inset:0;overflow:hidden;display:grid;place-items:center;text-align:center}
 .cv .tt{position:relative;z-index:3;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(30px,7vw,110px);letter-spacing:.1em;line-height:.95;padding:0 4%}
@@ -251,7 +251,6 @@ body.gridMode .tile{width:auto}
 @keyframes beat{0%,100%{filter:brightness(1)}12%{filter:brightness(1.5)}24%{filter:brightness(1)}36%{filter:brightness(1.3)}}
 .drip{position:absolute;top:0;width:var(--w);left:var(--x);height:0;background:linear-gradient(#5b0006,#a3000d);border-radius:0 0 50% 50%;animation:drip var(--d) ease-in infinite;animation-delay:var(--dl)}
 @keyframes drip{0%{height:0;opacity:1}70%{height:var(--h);opacity:1}100%{height:var(--h);opacity:0}}
-.cv-sangue .tt{color:#ff2636;text-shadow:0 0 24px #a3000d}
 .cv-dossie{background:#0d0c0a}
 .paper{position:relative;z-index:1;width:min(78%,820px);aspect-ratio:1.5;background:linear-gradient(135deg,#d8ccb2,#c4b593);color:#2a2219;border-radius:4px;box-shadow:0 30px 80px #000;display:flex;flex-direction:column;justify-content:center;align-items:center;transform:rotate(-1.5deg);padding:4%}
 .paper::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0000 0 26px,#0000000d 26px 27px);border-radius:4px}
@@ -283,9 +282,148 @@ body.gridMode .tile{width:auto}
 .glitchOn #vid,.glitchOn #idle{animation:vg .12s steps(2) infinite}
 @keyframes vg{0%{transform:translate(0);filter:hue-rotate(0)}50%{transform:translate(-8px,2px) skewX(6deg);filter:hue-rotate(90deg) saturate(3)}100%{transform:translate(6px,-3px);filter:invert(.2)}}
 #fx canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.6}
+/* ---------- v3: themes, library, live, immersion ---------- */
+.mainA{position:relative;background:linear-gradient(color-mix(in srgb,var(--bg) 80%,transparent),color-mix(in srgb,var(--bg) 90%,transparent)),var(--roomImg) center/cover no-repeat,radial-gradient(900px 500px at 50% 0,color-mix(in srgb,var(--tint) 35%,transparent),transparent 70%)}
+#idle .eye{color:var(--red)}
+.tile .nm em{font-style:normal;opacity:.65;font-weight:600}
+.tile2{position:relative}
+.tile2.nl::after{content:"";position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--mut);opacity:.5}
+.tile2.ld{opacity:.75}
+.tile2.ld::after{content:"";position:absolute;top:6px;right:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--mut);border-top-color:var(--red2);animation:spin .8s linear infinite;background:none;opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{padding:6px 10px;border-radius:99px;background:var(--p2);border:1px solid var(--line);font-size:12px;font-weight:700;color:var(--mut)}
+.chip.on{color:var(--on);background:var(--red);border-color:var(--red2)}
+.seg{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;padding:8px 4px;border-radius:8px;font-size:12.5px;font-weight:800;color:var(--mut)}
+.seg button.on{background:var(--p3);color:var(--ink)}
+.trk{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:10px;background:var(--p2);border:1px solid var(--line);margin-bottom:6px;text-align:left;font-size:13.5px;font-weight:700}
+.trk:hover{border-color:color-mix(in srgb,var(--red) 50%,var(--line))}
+.trk.on{border-color:var(--red2);background:color-mix(in srgb,var(--red) 16%,var(--p2))}
+.trk .pl{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--p3);flex:none;font-size:11px}
+.trk.on .pl{background:var(--red);color:var(--on)}
+.trk .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.25}
+.trk small{color:var(--mut);font-size:11px;font-weight:500}
+.trk .x{color:var(--mut);padding:4px 8px;border-radius:6px}
+.trk .x:hover{background:var(--p3);color:var(--ink)}
+.prog{height:4px;border-radius:2px;background:var(--p3);overflow:hidden;margin-top:6px}
+.prog b{display:block;height:100%;width:0;background:var(--red2);transition:width .4s linear}
+.srch{margin-bottom:10px;padding:8px 12px;font-size:14px}
+.thm{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.thm button{padding:8px 2px;border-radius:10px;border:1px solid var(--line);background:var(--c2);font-size:10.5px;font-weight:800;color:#fff;display:flex;flex-direction:column;align-items:center;gap:5px}
+.thm button i{width:20px;height:20px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.thm button.on{outline:2px solid var(--red2);outline-offset:1px}
+input[type=color]{width:44px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--p2);padding:2px}
+.volOv{position:absolute;left:10px;bottom:10px;z-index:13;display:flex;align-items:center;gap:6px;padding:4px 8px 4px 4px;border-radius:10px;background:#000b;opacity:.7;transition:opacity .2s}
+.volOv:hover,.volOv:focus-within{opacity:1}
+.volOv button{width:30px;height:30px;display:grid;place-items:center;color:#fff}
+.volOv input{width:0;opacity:0;transition:width .2s,opacity .2s}
+.volOv:hover input,.volOv:focus-within input{width:110px;opacity:1}
+@media (hover:none){.volOv input{width:90px;opacity:1}}
+#clima{position:absolute;inset:12px;z-index:8;pointer-events:none;overflow:hidden;border-radius:14px}
+@media(max-width:900px){#clima{inset:8px}}
+.isHost #clima{opacity:.5}
+#clima>*{position:absolute;inset:0;width:100%;height:100%}
+.cl-nevoa .fog{opacity:1}
+.cl-pulso{background:radial-gradient(circle,transparent 40%,#000 100%);animation:clp 1.4s ease-in-out infinite}
+@keyframes clp{0%,100%{opacity:.45}15%{opacity:1}30%{opacity:.55}45%{opacity:.95}}
+.cl-lanterna{--x:50%;--y:50%;background:radial-gradient(circle at var(--x) var(--y),transparent 0,transparent 80px,#000f 210px)}
+.cl-sangue{box-shadow:inset 0 0 120px 30px #8a0008,inset 0 0 40px 10px #3a0003;animation:clb 2.2s ease-in-out infinite}
+@keyframes clb{50%{box-shadow:inset 0 0 170px 55px #a3000d,inset 0 0 60px 20px #3a0003}}
+.cl-vhs{background:repeating-linear-gradient(0deg,#0000 0 2px,#0005 2px 3px)}
+.cl-vhs::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#ff00401a,#00e5ff14);mix-blend-mode:screen;animation:vhs 5s steps(25) infinite}
+@keyframes vhs{0%,100%{transform:none}50%{transform:translateX(4px)}52%{transform:translateX(-6px)}}
+.cl-escuro{background:#000;opacity:.65}
+.cl-tremorOn #stage,.cl-tremorOn #live{animation:trem 2.6s ease-in-out infinite}
+@keyframes trem{0%,100%{transform:none}10%{transform:translate(-1px,1px)}20%{transform:translate(2px,-1px)}30%{transform:translate(-2px,0)}40%{transform:translate(1px,2px)}50%{transform:translate(-1px,-2px)}60%{transform:translate(2px,1px)}70%{transform:translate(-2px,1px)}}
+#timerOv{position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:14;padding:6px 18px;border-radius:12px;background:#000c;border:1px solid var(--red);text-align:center;pointer-events:none;box-shadow:0 0 22px color-mix(in srgb,var(--red) 45%,transparent)}
+#timerOv small{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#cfc8c8;font-weight:800}
+#timerOv b{font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(26px,3.6vw,48px);letter-spacing:.08em;line-height:1;color:#fff;font-weight:400}
+#timerOv.low b{color:var(--red2);animation:pulse .5s ease-in-out infinite}
+#timerOv.done{animation:tmDone .5s linear 4;border-color:var(--red2)}
+@keyframes tmDone{25%{translate:-6px 0}75%{translate:6px 0}}
+body.lay-live #timerOv,body.lay-livestage #timerOv{left:auto;right:28px;transform:none;top:26px}
+@media(max-width:900px){body.lay-live #timerOv,body.lay-livestage #timerOv{right:16px;top:16px}}
+#timerOv.done b{color:var(--red2)}
+#timerOv.paused b{opacity:.5}
+#revealOv{position:absolute;inset:12px;z-index:15;display:grid;place-items:center;background:#000b;padding:4%;border-radius:14px;animation:rvIn .6s ease both}
+@keyframes rvIn{from{opacity:0}}
+.rvCard{position:relative;max-width:100%;background:#efe7d6;padding:12px 12px 14px;border-radius:4px;box-shadow:0 30px 80px #000;transform:rotate(-1.2deg);animation:rvDrop .8s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes rvDrop{from{transform:translateY(-40px) rotate(-9deg) scale(.8);opacity:0;filter:brightness(4)}}
+.rvCard img{display:block;max-width:min(100%,1100px);max-height:62vh;object-fit:contain;margin:0 auto}
+.rvCap{font-family:'Special Elite',monospace;color:#2a2219;font-size:clamp(13px,1.5vw,17px);margin-top:8px;text-align:center}
+.rvX{position:absolute;top:-12px;right:-12px;width:32px;height:32px;border-radius:50%;background:var(--red);color:var(--on);font-weight:800;box-shadow:0 4px 12px #0008}
+#whisperOv{position:fixed;inset:0;z-index:95;display:grid;place-items:center;align-content:center;background:radial-gradient(circle,#000c,#000);text-align:center;padding:30px;cursor:pointer;transition:opacity 1.1s}
+#whisperOv.out{opacity:0}
+.wsp{font-family:'Special Elite',monospace;font-size:clamp(20px,3.4vw,42px);color:#f0e6e6;line-height:1.4;max-width:900px;text-shadow:0 0 18px var(--red),0 0 4px #000}
+.wsp span{opacity:0;animation:wspIn 1s ease forwards;display:inline-block;white-space:pre}
+@keyframes wspIn{from{opacity:0;filter:blur(10px);transform:translateY(8px)}to{opacity:1;filter:none;transform:none}}
+#whisperOv small{display:block;margin-top:22px;color:#777;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+#live{flex:1;min-height:0;position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,30%);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"head master" "grid master";gap:14px;padding:14px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(color-mix(in srgb,var(--bg) 35%,transparent),color-mix(in srgb,var(--bg) 60%,transparent)),var(--roomImg) center/cover no-repeat,radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--tint) 75%,#000),#000 80%);overflow:hidden}
+.lvHead{grid-area:head;justify-self:start;padding:8px 18px 10px;border-radius:10px;background:color-mix(in srgb,var(--red) 88%,#000);border:2px solid color-mix(in srgb,var(--red2) 55%,#000);box-shadow:0 8px 24px #0009;max-width:100%}
+.lvHead small{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;opacity:.85}
+.lvHead b{display:block;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(22px,3.2vw,46px);font-weight:400;letter-spacing:.06em;line-height:1;color:#fff}
+.lvHead.hide~#lvGrid{grid-row:1/3}
+#lvGrid{grid-area:grid;display:grid;grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:14px;min-height:0}
+#lvMaster{grid-area:master;display:flex;flex-direction:column;gap:14px;min-height:0}
+.lf{position:relative;border-radius:12px;overflow:hidden;border:3px solid color-mix(in srgb,var(--red) 85%,#000);background:#000a;box-shadow:0 10px 30px #000a;min-height:0;transition:border-color .12s,box-shadow .12s}
+#lvMaster .lf{flex:1;border-color:var(--red2);border-width:4px}
+.lf video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lf.me video{transform:scaleX(-1)}
+.lart{position:absolute;inset:0;background:center/cover no-repeat;opacity:.4;filter:saturate(.85)}
+.lf:not(.nocam) .lart{display:none}
+.lbd{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:2}
+.lbd b{width:26px;height:26px;border-radius:7px;background:#000b;display:grid;place-items:center;color:#ff5b5b}
+.lbd .ic{width:16px;height:16px}
+.np{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;gap:10px;padding:10px 12px;background:linear-gradient(transparent,#000d 65%);z-index:2}
+.lf.master .np{background:linear-gradient(transparent,color-mix(in srgb,var(--red) 92%,#000) 60%)}
+.np .pt{flex:none;width:clamp(42px,20%,86px);aspect-ratio:1;border-radius:50%;border:3px solid var(--red2);background:var(--c,#333) center/cover no-repeat;display:grid;place-items:center;font-weight:800;font-size:clamp(16px,2vw,28px);color:#fff;box-shadow:0 4px 14px #000a}
+.np .tx{min-width:0;display:flex;flex-direction:column;gap:1px}
+.np .tx b{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;font-size:clamp(18px,2.3vw,38px);letter-spacing:.05em;line-height:.95;color:var(--red2);text-shadow:0 2px 8px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lf.master .np .tx b{color:#fff}
+.np .tx i{font-style:normal;font-size:clamp(10px,1vw,13px);font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np .tx s{text-decoration:none;font-size:clamp(10px,.95vw,12.5px);color:#e4e4e4;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lf.speaking{border-color:var(--grn)!important;box-shadow:0 0 0 2px var(--grn),0 0 30px color-mix(in srgb,var(--grn) 55%,transparent)}
+body.lay-live #stageW,body.lay-live #tiles{display:none}
+body.lay-livestage .mainA{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,25%);grid-template-rows:minmax(0,1fr)}
+body.lay-livestage #tiles{display:none}
+body.lay-livestage #live{display:flex;flex-direction:column;overflow-y:auto;padding:10px;gap:10px}
+body.lay-livestage .lvHead{display:none}
+body.lay-livestage #lvMaster,body.lay-livestage #lvGrid{display:flex;flex-direction:column;gap:10px}
+body.lay-livestage .lf,body.lay-livestage #lvMaster .lf{flex:none;aspect-ratio:16/10}
+@media(max-width:900px){
+  #live{grid-template-columns:1fr;grid-template-areas:"head" "master" "grid";grid-template-rows:auto auto auto;overflow-y:auto;padding:10px;gap:10px}
+  #lvGrid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto}
+  .lf,#lvMaster .lf{aspect-ratio:16/11;flex:none}
+  .lvHead.hide~#lvGrid{grid-row:auto}
+  body.lay-livestage .mainA{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+  body.lay-livestage #stageW{aspect-ratio:16/9}
+}
+body.obs #room{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr);grid-template-areas:"main"}
+body.obs .tb,body.obs .ctl,body.obs .side,body.obs .grain,body.obs .volOv,body.obs .stOv,body.obs #coverTag{display:none!important}
+body.obs .mainA{padding:0;gap:0}
+body.obs #stage,body.obs #live{border-radius:0;border:0}
+body.obs #clima,body.obs #revealOv{inset:0;border-radius:0}
+.lmenu{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.lmenu button{text-align:left;padding:8px 10px;border-radius:9px;border:1px solid transparent}
+.lmenu button:hover{background:var(--p3)}
+.lmenu button.on{border-color:var(--red2);background:color-mix(in srgb,var(--red) 14%,var(--p2))}
+.lmenu b{display:block;font-size:13.5px}
+.lmenu small{color:var(--mut);font-size:11.5px}
+.chEd{display:flex;gap:16px;align-items:flex-start}
+.chPic{flex:none;width:100px;height:100px;border-radius:50%;border:3px solid var(--red2);background:var(--p3) center/cover no-repeat;margin-top:30px;font-size:32px;color:var(--mut)}
+@media(max-width:520px){.chEd{flex-direction:column;align-items:center}.chPic{margin-top:8px}}
+.credits{font-size:12px;line-height:1.5;color:var(--mut);padding-left:16px;margin:4px 0}
+.credits a{color:var(--ink)}
+.cv-sangue{background:radial-gradient(ellipse at 50% 42%,#140002 15%,#2a0004 55%,#470006);animation:beat 1.6s ease-in-out infinite}
+.bloodC{position:absolute;inset:0;width:100%;height:100%;filter:url(#goo) drop-shadow(0 3px 4px #000c);z-index:1}
+.bvign{position:absolute;inset:0;z-index:2;background:radial-gradient(circle at 50% 50%,transparent 30%,#000c 100%)}
+.bloodT{color:#e0101c;text-shadow:0 0 24px #a3000d,0 3px 0 #2a0003,0 0 2px #000}
+.fx-bloodC{position:absolute;inset:0;width:100%;height:100%;filter:url(#goo) drop-shadow(0 3px 4px #000c);animation:fxbf 3.4s ease both}
+@keyframes fxbf{0%,72%{opacity:1}100%{opacity:0}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="goo" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/><feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter></defs></svg>
 <div class="grain"></div>
 
 <!-- ================= LOBBY ================= -->
@@ -345,23 +483,28 @@ body.gridMode .tile{width:auto}
     <div class="code">SALA <b id="rCode">-----</b><button class="btn sm" id="copyLink">Convidar</button></div>
     <span class="sp"></span>
     <div class="net" id="net"><i></i><span id="netTxt">conectando…</span></div>
-    <button class="tbb" id="layoutBtn" title="Alternar palco / grade"></button>
+    <button class="tbb" id="layoutBtn" title="Visualização: palco, grade, live"></button>
     <button class="tbb" id="setBtn" title="Configurações"></button>
   </header>
   <main class="mainA">
     <div id="stageW"><div id="stage">
       <video id="vid" class="off" playsinline autoplay></video>
       <div id="idle"><div>
-        <svg class="eye" viewBox="0 0 100 100" fill="none" stroke="#c3161f" stroke-width="2"><circle cx="50" cy="50" r="46" opacity=".5"/><circle cx="50" cy="50" r="38" stroke-dasharray="3 5"/><path d="M14 50 Q50 18 86 50 Q50 82 14 50Z"/><circle cx="50" cy="50" r="11" fill="#c3161f"/><path d="M50 4v10M50 86v10M4 50h10M86 50h10" opacity=".6"/></svg>
+        <svg class="eye" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><circle cx="50" cy="50" r="46" opacity=".5"/><circle cx="50" cy="50" r="38" stroke-dasharray="3 5"/><path d="M14 50 Q50 18 86 50 Q50 82 14 50Z"/><circle cx="50" cy="50" r="11" fill="currentColor"/><path d="M50 4v10M50 86v10M4 50h10M86 50h10" opacity=".6"/></svg>
         <div class="t1" id="idleT">AGUARDANDO</div><div class="t2" id="idleS"></div>
       </div></div>
       <div id="cover"></div>
       <div id="coverTag">CAPA ATIVA · agentes estão vendo isto</div>
       <div id="fx"></div>
       <div class="stOv"><button id="fsBtn" title="Tela cheia"></button></div>
+      <div class="volOv" id="volOv"><button id="volB" title="Volume"></button><input type="range" min="0" max="100" id="volR" aria-label="Volume"></div>
       <button class="btn red hide" id="unmute">🔊 Toque para ativar o som</button>
     </div></div>
     <div id="tiles"></div>
+    <div id="live" class="hide"><div class="lvHead hide" id="lvHead"><small id="lvSub"></small><b id="lvTitle"></b></div><div id="lvGrid"></div><div id="lvMaster"></div></div>
+    <div id="clima"></div>
+    <div id="timerOv" class="hide"></div>
+    <div id="revealOv" class="hide"></div>
   </main>
   <aside class="side" id="side"><div class="tabs" id="tabs"></div><div class="pane" id="pane"></div></aside>
   <nav class="ctl" id="ctl"></nav>
@@ -370,6 +513,7 @@ body.gridMode .tile{width:auto}
 <div id="pop" class="hide"></div>
 <div id="shade" class="hide"><div class="mbox" id="mbox"></div></div>
 <div id="toast"></div>
+<div id="whisperOv" class="hide"></div>
 <div id="audios" hidden></div>
 
 <script>
@@ -386,9 +530,10 @@ const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } ca
 const rand = (a, b) => a + Math.random() * (b - a);
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 let toastT;
 function toast(m, ms = 2800) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms); }
-const S = Object.assign({micId: '', camId: '', outId: '', hq: true, ns: true, gate: -60, cq: 'med', sq: 'hd', selfVol: .8, stageVol: .9, monVol: .8, musicVol: .6, sfxVol: .9, vols: {}}, lsGet('mesa2-s', {}));
+const S = Object.assign({micId: '', camId: '', outId: '', hq: true, ns: true, gate: -60, cq: 'med', sq: 'hd', selfVol: .8, stageVol: .9, monVol: .8, musicVol: .6, sfxVol: .9, ambVol: .6, coverMusic: true, coverVol: .7, voiceVol: 1, loop: true, vols: {}}, lsGet('mesa2-s', {}));
 const saveS = () => lsSet('mesa2-s', S);
 const IC = {
   mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/>',
@@ -406,6 +551,10 @@ const IC = {
   grid: '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>',
   stage: '<rect x="3" y="3" width="18" height="12" rx="2"/><rect x="3" y="17" width="5" height="4" rx="1"/><rect x="10" y="17" width="5" height="4" rx="1"/><rect x="17" y="17" width="4" height="4" rx="1"/>',
   full: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+  vol: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a3 3 0 0 1 0 6M18.5 6.5a7 7 0 0 1 0 11"/>',
+  volx: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/>',
+  palette: '<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.6-1.2-.6-2.1 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="15" cy="7" r="1.2"/>',
+  layout: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/>',
   panel: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'
 };
 const SLASH = '<path d="M3 3l18 18" stroke-width="2.4"/>';
@@ -647,19 +796,42 @@ const TRACKS = {
     return t => { pad.stop(t); rg.gain.setTargetAtTime(.0001, t, .6); rs.stop(t + 3); s(); };
   }}
 };
-let curTrack = null, curStop = null, trackBus = null;
+let curTrack = null, curStop = null, curEl = null;
+function trackLabel(id) {
+  if (!id) return null;
+  if (TRACKS[id]) return {n: TRACKS[id].name, src: 'Gerada ao vivo'};
+  if (id.startsWith('lib:')) { const x = LIBM[id.slice(4)]; return x ? {n: x[1], src: x[6], stream: true} : null; }
+  if (id.startsWith('my:')) { const m = myList.find(x => x.id === id.slice(3)); return {n: m ? m.name : 'Seu arquivo', src: 'Seu arquivo', stream: true}; }
+  return null;
+}
 function playTrack(id) {
   audioInit();
   const t = T();
-  if (curStop) { const old = trackBus, st = curStop; old.gain.setTargetAtTime(.0001, t, .9); setTimeout(() => { try { st(T()); } catch (e) {} setTimeout(() => old.disconnect(), 6000); }, 3000); }
-  curStop = null; curTrack = null;
-  if (id && TRACKS[id]) { trackBus = gain(.0001, musicBus); trackBus.gain.setTargetAtTime(1, t, 1.2); curStop = TRACKS[id].make(trackBus); curTrack = id; }
+  if (curStop) { try { curStop(t); } catch (e) {} }
+  curStop = null; curTrack = null; curEl = null;
+  if (id && TRACKS[id]) {
+    const bus = gain(.0001, musicBus); bus.gain.setTargetAtTime(1, t, 1.2);
+    const stop = TRACKS[id].make(bus);
+    curStop = tt => { bus.gain.setTargetAtTime(.0001, tt, .9); setTimeout(() => { try { stop(T()); } catch (e) {} setTimeout(() => { try { bus.disconnect(); } catch (e) {} }, 6000); }, 3000); };
+    curTrack = id;
+  } else if (id && (id.startsWith('lib:') || id.startsWith('my:'))) {
+    curTrack = id; const want = id;
+    const go = url => {
+      if (curTrack !== want || !url) { if (curTrack === want) { curTrack = null; renderSide(); } return; }
+      const h = startStream(url, musicBus, .55, 1.5, S.loop);
+      curEl = h.el; curStop = tt => h.stop(tt, 2.5);
+      h.el.addEventListener('ended', () => { if (curTrack === want && !h.el.loop) { curTrack = null; curStop = null; curEl = null; renderSide(); } });
+      h.el.addEventListener('error', () => { if (curTrack === want) { toast('Não consegui tocar esta música (sem internet?).'); curTrack = null; curStop = null; curEl = null; renderSide(); } });
+    };
+    if (id.startsWith('lib:')) { const x = LIBM[id.slice(4)]; go(x ? libUrl(x) : null); }
+    else myUrl(id.slice(3)).then(go, () => go(null));
+  }
   renderSide();
 }
+setInterval(() => { const b = document.getElementById('npProg'); if (b && curEl && curEl.duration) b.style.width = (100 * curEl.currentTime / curEl.duration).toFixed(1) + '%'; }, 500);
 
 /* ---------- sound effects ---------- */
-const SFX_GROUPS = [['Sustos', ['jumpscare', 'braam', 'riser', 'impacto', 'grito']], ['Ambiente', ['sussurros', 'batidas', 'porta', 'passos', 'correndo', 'respiracao', 'coracao', 'correntes', 'sino']], ['Ação', ['tiro', 'trovao', 'vidro']], ['Sobrenatural', ['estatica', 'glitch']]];
-const SFX = {
+const SYN = {
   jumpscare: {name: 'Jumpscare', e: '😱', fx: 'flash', play(t, o) { braam(t, o, 30, .8, 2.4); screech(t, o, .18, 1.4); const g = gain(0, o); env(g, t, .002, .6, .5); noise(t, .6, filt('bandpass', 2500, .6, g)); metal(t, o, .2, 300); }},
   braam: {name: 'Braam', e: '📯', play(t, o) { braam(t, o, 31, .7, 3.5); }},
   riser: {name: 'Subida + Impacto', e: '📈', fx: 'flash', fxDelay: 4.5, play(t, o) { riser(t, o, 4.5, .35); taiko(t + 4.5, o, 1, 50); braam(t + 4.5, o, 30, .6, 2.5); }},
@@ -689,10 +861,392 @@ const SFX = {
   estatica: {name: 'Estática', e: '📺', fx: 'static', play(t, o) { const g = gain(0, o), bp = filt('bandpass', 2600, .6, g); noise(t, 1.8, bp); for (let i = 0; i < 24; i++) g.gain.setValueAtTime(Math.random() < .3 ? .02 : rand(.12, .3), t + i * .07); g.gain.setValueAtTime(.0001, t + 1.75); }},
   glitch: {name: 'Glitch', e: '⚡', fx: 'glitch', play(t, o) { const ds = shaper(crushCurve(6)), g = gain(.18, o); ds.connect(g); for (let i = 0; i < 16; i++) { const tt = t + i * rand(.04, .09); const bg = gain(0, ds); env(bg, tt, .001, .9, .05); osc(pick(['square', 'sawtooth']), rand(80, 2400), tt, .06, bg); } }}
 };
-function playSfx(id) {
-  audioInit(); const s = SFX[id]; if (!s) return;
-  try { s.play(T() + .02, sfxBus); } catch (e) { console.warn(e); }
-  if (s.fx) { if (s.fxDelay) setTimeout(() => doFx(s.fx, true), s.fxDelay * 1000); else doFx(s.fx, true); }
+
+/* =====================================================================
+   REAL RECORDINGS (Wikimedia Commons · free licences) + LIBRARY MUSIC
+   ===================================================================== */
+const WM = 'https://upload.wikimedia.org/wikipedia/commons/';
+const GS = 'Gravity Sound';
+// key: [path, mp3 derivative, licence, author, title]
+const FILES = {
+  braam: ['1/1c/647712_unfa_braam.flac', 'transcoded/1/1c/647712_unfa_braam.flac/647712_unfa_braam.flac.mp3', 'CC0', 'Unfa', '647712 unfa braam.flac'],
+  swell: ['4/4e/Horror_swell.wav', 'transcoded/4/4e/Horror_swell.wav/Horror_swell.wav.mp3', 'SA4', 'Iirogueking', 'Horror swell.wav'],
+  boom: ['3/37/Explosion_10.ogg', 'transcoded/3/37/Explosion_10.ogg/Explosion_10.ogg.mp3', 'PD', 'tcpp', 'Explosion 10.ogg'],
+  scrW: ['e/e6/Nick121087_-_Demonic_Woman_Scream_%28cc0%29_%28freesound%29.mp3', '', 'CC0', 'nick121087', 'Nick121087 - Demonic Woman Scream (cc0) (freesound).mp3'],
+  scrM: ['3/32/UncleSigmund_-_ahhh_%28cc0%29_%28freesound%29.mp3', '', 'CC0', 'UncleSigmund', 'UncleSigmund - ahhh (cc0) (freesound).mp3'],
+  knock: ['1/1c/Knocking_on_wood_or_door.ogg', 'transcoded/1/1c/Knocking_on_wood_or_door.ogg/Knocking_on_wood_or_door.ogg.mp3', 'PD', 'stephan', 'Knocking on wood or door.ogg'],
+  creak: ['7/74/Door_handle_creaking.ogg', 'transcoded/7/74/Door_handle_creaking.ogg/Door_handle_creaking.ogg.mp3', 'PD', 'stephan', 'Door handle creaking.ogg'],
+  mdoor: ['c/c9/Puerta_met%C3%A1lica_crujiendo_al_abrir_y_cerrar.mp3', '', 'SA4', 'Luis Alvaz', 'Puerta metálica crujiendo al abrir y cerrar.mp3'],
+  slam: ['d/d2/Slam_closet_door_%28Gravity_Sound%29.wav', 'transcoded/d/d2/Slam_closet_door_%28Gravity_Sound%29.wav/Slam_closet_door_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Slam closet door (Gravity Sound).wav'],
+  lock: ['5/56/Lock_squeaky_door_%28Gravity_Sound%29.wav', 'transcoded/5/56/Lock_squeaky_door_%28Gravity_Sound%29.wav/Lock_squeaky_door_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Lock squeaky door (Gravity Sound).wav'],
+  stairs: ['0/0a/Pasos_en_escalera_de_caracol.ogg', 'transcoded/0/0a/Pasos_en_escalera_de_caracol.ogg/Pasos_en_escalera_de_caracol.ogg.mp3', 'SA4', 'Hippocampuz', 'Pasos en escalera de caracol.ogg'],
+  leaves: ['6/69/Joseph_Sardin_-_Pas_dans_les_feuilles.ogg', 'transcoded/6/69/Joseph_Sardin_-_Pas_dans_les_feuilles.ogg/Joseph_Sardin_-_Pas_dans_les_feuilles.ogg.mp3', 'CC0', 'Joseph Sardin', 'Joseph Sardin - Pas dans les feuilles.ogg'],
+  drag: ['3/37/Drag_chair_2_%28Gravity_Sound%29.wav', 'transcoded/3/37/Drag_chair_2_%28Gravity_Sound%29.wav/Drag_chair_2_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Drag chair 2 (Gravity Sound).wav'],
+  breath: ['4/4b/Heavy_breathing_3.ogg', 'transcoded/4/4b/Heavy_breathing_3.ogg/Heavy_breathing_3.ogg.mp3', 'PD', 'ezwa', 'Heavy breathing 3.ogg'],
+  clock: ['5/56/Clock_ticking.ogg', 'transcoded/5/56/Clock_ticking.ogg/Clock_ticking.ogg.mp3', 'PD', 'natalie', 'Clock ticking.ogg'],
+  drip: ['1/1c/Water_drops_dripping.ogg', 'transcoded/1/1c/Water_drops_dripping.ogg/Water_drops_dripping.ogg.mp3', 'SA3', 'ZooFari', 'Water drops dripping.ogg'],
+  keys: ['f/f7/Keys_shaking_%28Gravity_Sound%29.wav', 'transcoded/f/f7/Keys_shaking_%28Gravity_Sound%29.wav/Keys_shaking_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Keys shaking (Gravity Sound).wav'],
+  bell: ['2/22/Samariter_Church_bell_I_%28Es%29_01.ogg', 'transcoded/2/22/Samariter_Church_bell_I_%28Es%29_01.ogg/Samariter_Church_bell_I_%28Es%29_01.ogg.mp3', 'SA4', 'Pete w. View', 'Samariter Church bell I (Es) 01.ogg'],
+  mbox: ['9/9a/Music_Box_Sound_Effect.ogg', 'transcoded/9/9a/Music_Box_Sound_Effect.ogg/Music_Box_Sound_Effect.ogg.mp3', 'PD', 'Big Daddy', 'Music Box Sound Effect.ogg'],
+  typew: ['2/25/WWS_Typewriter.ogg', 'transcoded/2/25/WWS_Typewriter.ogg/WWS_Typewriter.ogg.mp3', 'BY4', 'Work With Sounds / Konrad Gutkowski', 'WWS Typewriter.ogg'],
+  ecg: ['8/81/Heart_Monitor_Beep--freesound.org.oga', 'transcoded/8/81/Heart_Monitor_Beep--freesound.org.oga/Heart_Monitor_Beep--freesound.org.oga.mp3', 'CC0', 'samfk360', 'Heart Monitor Beep--freesound.org.oga'],
+  gun: ['0/05/9_mm_gunshot-mike-koenig-123.wav', 'transcoded/0/05/9_mm_gunshot-mike-koenig-123.wav/9_mm_gunshot-mike-koenig-123.wav.mp3', 'SA4', 'Mike Koenig / Dantedun', '9 mm gunshot-mike-koenig-123.wav'],
+  guns: ['e/ee/Gunshots_8.ogg', 'transcoded/e/ee/Gunshots_8.ogg/Gunshots_8.ogg.mp3', 'PD', 'aradlaw', 'Gunshots 8.ogg'],
+  thunder: ['7/75/Thunder_crack_2B.ogg', 'transcoded/7/75/Thunder_crack_2B.ogg/Thunder_crack_2B.ogg.mp3', 'SA4', 'Jud McCranie', 'Thunder crack 2B.ogg'],
+  glass: ['a/af/Glass_breaking_%28Gravity_Sound%29.wav', 'transcoded/a/af/Glass_breaking_%28Gravity_Sound%29.wav/Glass_breaking_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Glass breaking (Gravity Sound).wav'],
+  punch: ['8/84/Hard_Punch_Flesh_%28Gravity_Sound%29.mp3', '', 'BY4', GS, 'Hard Punch Flesh (Gravity Sound).mp3'],
+  bite: ['e/e8/Big_bite_%28Gravity_Sound%29.wav', 'transcoded/e/e8/Big_bite_%28Gravity_Sound%29.wav/Big_bite_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Big bite (Gravity Sound).wav'],
+  crunch: ['3/35/Eating_something_crunchy_%28Gravity_Sound%29.wav', 'transcoded/3/35/Eating_something_crunchy_%28Gravity_Sound%29.wav/Eating_something_crunchy_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Eating something crunchy (Gravity Sound).wav'],
+  scene: ['a/aa/Creepy_footsteps_and_screaming_and_growl.wav', 'transcoded/a/aa/Creepy_footsteps_and_screaming_and_growl.wav/Creepy_footsteps_and_screaming_and_growl.wav.mp3', 'SA4', 'Edisonisthebest', 'Creepy footsteps and screaming and growl.wav'],
+  ghostv: ['7/79/ERH_-_ghostly_voices_%28cc-by%29_%28freesound%29.mp3', '', 'BY3', 'ERH', 'ERH - ghostly voices (cc-by) (freesound).mp3'],
+  ghost: ['f/f4/Joseph_SARDIN_-_Fant%C3%B4me_1.oga', 'transcoded/f/f4/Joseph_SARDIN_-_Fant%C3%B4me_1.oga/Joseph_SARDIN_-_Fant%C3%B4me_1.oga.mp3', 'CC0', 'Joseph SARDIN', 'Joseph SARDIN - Fantôme 1.oga'],
+  laughH: ['a/ac/Anonyme_-_Rire_horrible_1.ogg', 'transcoded/a/ac/Anonyme_-_Rire_horrible_1.ogg/Anonyme_-_Rire_horrible_1.ogg.mp3', 'CC0', 'Anônimo (LaSonotheque)', 'Anonyme - Rire horrible 1.ogg'],
+  laughE: ['4/48/Evil_laugh.ogg', 'transcoded/4/48/Evil_laugh.ogg/Evil_laugh.ogg.mp3', 'CC0', 'freesound', 'Evil laugh.ogg'],
+  laughI: ['1/1e/Insane_laughter_man_reverb.ogg', 'transcoded/1/1e/Insane_laughter_man_reverb.ogg/Insane_laughter_man_reverb.ogg.mp3', 'BY3', 'Leady', 'Insane laughter man reverb.ogg'],
+  child: ['8/80/Four_Years_Old_child_laughing.ogg', 'transcoded/8/80/Four_Years_Old_child_laughing.ogg/Four_Years_Old_child_laughing.ogg.mp3', 'BY3', 'morgantj', 'Four Years Old child laughing.ogg'],
+  cry: ['a/a4/Woman_crying.ogg', 'transcoded/a/a4/Woman_crying.ogg/Woman_crying.ogg.mp3', 'BY3', 'bulbastre', 'Woman crying.ogg'],
+  monster: ['1/1b/Sea_Fury_-_Monster_5_%28cc-by%29_%28freesound%29.mp3', '', 'BY3', 'Sea Fury', 'Sea Fury - Monster 5 (cc-by) (freesound).mp3'],
+  mgrowl: ['7/71/Monster_growls.ogg', 'transcoded/7/71/Monster_growls.ogg/Monster_growls.ogg.mp3', 'PD', 'stilgar', 'Monster growls.ogg'],
+  mgrowl2: ['3/36/Monster_growls_2.ogg', 'transcoded/3/36/Monster_growls_2.ogg/Monster_growls_2.ogg.mp3', 'PD', 'stilgar', 'Monster growls 2.ogg'],
+  zombie: ['e/e0/Zombie_moan.ogg', 'transcoded/e/e0/Zombie_moan.ogg/Zombie_moan.ogg.mp3', 'PD', 'gregoryweir', 'Zombie moan.ogg'],
+  orca: ['7/79/Killer_whale.ogg', 'transcoded/7/79/Killer_whale.ogg/Killer_whale.ogg.mp3', 'PD', 'NOAA', 'Killer whale.ogg'],
+  wolf: ['8/87/Wolf_howls.ogg', 'transcoded/8/87/Wolf_howls.ogg/Wolf_howls.ogg.mp3', 'PD', 'NPS', 'Wolf howls.ogg'],
+  dog: ['a/a2/Barking_of_a_dog.ogg', 'transcoded/a/a2/Barking_of_a_dog.ogg/Barking_of_a_dog.ogg.mp3', 'SA3', 'Amada44', 'Barking of a dog.ogg'],
+  dgrowl: ['c/ce/Dogs%27-Expectation-about-Signalers%27-Body-Size-by-Virtue-of-Their-Growls-pone.0015175.s005.ogg', 'transcoded/c/ce/Dogs%27-Expectation-about-Signalers%27-Body-Size-by-Virtue-of-Their-Growls-pone.0015175.s005.ogg/Dogs%27-Expectation-about-Signalers%27-Body-Size-by-Virtue-of-Their-Growls-pone.0015175.s005.ogg.mp3', 'BY25', 'Faragó, Pongrácz, Miklósi, Huber', "Dogs'-Expectation-about-Signalers'-Body-Size-by-Virtue-of-Their-Growls-pone.0015175.s005.ogg"],
+  crow: ['8/8b/Corvus_corone_-_Carrion_Crow_XC511982.mp3', '', 'SA4', 'Marie-Lan Taÿ Pamart', 'Corvus corone - Carrion Crow XC511982.mp3'],
+  raven: ['9/91/Yellowstone_sound_library_-_Common_Raven_-_001.mp3', '', 'PD', 'NPS / David Restivo', 'Yellowstone sound library - Common Raven - 001.mp3'],
+  owl: ['d/d8/Joseph_SARDIN_-_Chouette_hulotte_2.ogg', 'transcoded/d/d8/Joseph_SARDIN_-_Chouette_hulotte_2.ogg/Joseph_SARDIN_-_Chouette_hulotte_2.ogg.mp3', 'CC0', 'Joseph SARDIN', 'Joseph SARDIN - Chouette hulotte 2.ogg'],
+  barnowl: ['c/ca/American_Barn_Owl_Screech.flac', 'transcoded/c/ca/American_Barn_Owl_Screech.flac/American_Barn_Owl_Screech.flac.mp3', 'BY4', 'Daniel Polin', 'American Barn Owl Screech.flac'],
+  bats: ['2/2e/Thanvannispen_-_2_takes_bats_%28cc-by%29_%28freesound%29.mp3', '', 'BY3', 'thanvannispen', 'Thanvannispen - 2 takes bats (cc-by) (freesound).mp3'],
+  cat: ['5/56/Cat_hissing_-_Zabuhailo.wav', 'transcoded/5/56/Cat_hissing_-_Zabuhailo.wav/Cat_hissing_-_Zabuhailo.wav.mp3', 'CC0', 'Zabuhailo', 'Cat hissing - Zabuhailo.wav'],
+  snake: ['2/22/Rattlesnake.ogg', 'transcoded/2/22/Rattlesnake.ogg/Rattlesnake.ogg.mp3', 'PD', 'NPS', 'Rattlesnake.ogg'],
+  horse: ['d/db/Wiehern.ogg', 'transcoded/d/db/Wiehern.ogg/Wiehern.ogg.mp3', 'PD', 'Hü.', 'Wiehern.ogg'],
+  flies: ['8/87/Zumbido_de_mosca_dom%C3%A9stica.ogg', 'transcoded/8/87/Zumbido_de_mosca_dom%C3%A9stica.ogg/Zumbido_de_mosca_dom%C3%A9stica.ogg.mp3', 'SA4', 'Luisalvaz', 'Zumbido de mosca doméstica.ogg'],
+  bear: ['4/4e/Bear_growl.ogg', 'transcoded/4/4e/Bear_growl.ogg/Bear_growl.ogg.mp3', 'BY3', 'Shizhao', 'Bear growl.ogg'],
+  lion: ['7/7d/Lion_raring-sound1TamilNadu178.ogg', 'transcoded/7/7d/Lion_raring-sound1TamilNadu178.ogg/Lion_raring-sound1TamilNadu178.ogg.mp3', 'PD', 'த*உழவன்', 'Lion raring-sound1TamilNadu178.ogg'],
+  lynx: ['c/cd/Joseph_SARDIN_-_Recul%2C_Le_Cri_du_Lynx.ogg', 'transcoded/c/cd/Joseph_SARDIN_-_Recul%2C_Le_Cri_du_Lynx.ogg/Joseph_SARDIN_-_Recul%2C_Le_Cri_du_Lynx.ogg.mp3', 'CC0', 'Joseph SARDIN', 'Joseph SARDIN - Recul, Le Cri du Lynx.ogg'],
+  pig: ['a/ac/Pig_grunt_-_Erdie.ogg', 'transcoded/a/ac/Pig_grunt_-_Erdie.ogg/Pig_grunt_-_Erdie.ogg.mp3', 'BY3', 'erdie', 'Pig grunt - Erdie.ogg'],
+  hall2: ['d/d0/Joseph_SARDIN_-_Ambiance_halloween_2.ogg', 'transcoded/d/d0/Joseph_SARDIN_-_Ambiance_halloween_2.ogg/Joseph_SARDIN_-_Ambiance_halloween_2.ogg.mp3', 'CC0', 'Joseph SARDIN', 'Joseph SARDIN - Ambiance halloween 2.ogg'],
+  hall1: ['4/4b/Joseph_SARDIN_-_Ambiance_halloween_1.ogg', 'transcoded/4/4b/Joseph_SARDIN_-_Ambiance_halloween_1.ogg/Joseph_SARDIN_-_Ambiance_halloween_1.ogg.mp3', 'CC0', 'Joseph SARDIN', 'Joseph SARDIN - Ambiance halloween 1.ogg'],
+  rain: ['4/41/Rain_against_the_window.ogg', 'transcoded/4/41/Rain_against_the_window.ogg/Rain_against_the_window.ogg.mp3', 'PD', 'cori', 'Rain against the window.ogg'],
+  storm: ['f/f3/Rain_thunder_and_other_noises.ogg', 'transcoded/f/f3/Rain_thunder_and_other_noises.ogg/Rain_thunder_and_other_noises.ogg.mp3', 'PD', 'ezwa', 'Rain thunder and other noises.ogg'],
+  hrain: ['c/cb/Heavy_rain_in_Glenshaw%2C_PA.ogg', 'transcoded/c/cb/Heavy_rain_in_Glenshaw%2C_PA.ogg/Heavy_rain_in_Glenshaw%2C_PA.ogg.mp3', 'SA3', 'Sage Ross', 'Heavy rain in Glenshaw, PA.ogg'],
+  wind: ['2/2d/Howling_wind.ogg', 'transcoded/2/2d/Howling_wind.ogg/Howling_wind.ogg.mp3', 'CC0', 'Tvabutzku1234', 'Howling wind.ogg'],
+  forest: ['6/6b/For%C3%AAt_%28Joseph_SARDIN%29.wav', 'transcoded/6/6b/For%C3%AAt_%28Joseph_SARDIN%29.wav/For%C3%AAt_%28Joseph_SARDIN%29.wav.mp3', 'CC0', 'Joseph SARDIN', 'Forêt (Joseph SARDIN).wav'],
+  night: ['5/5f/Night_original_format.wav', 'transcoded/5/5f/Night_original_format.wav/Night_original_format.wav.mp3', 'SA4', 'Fortunamarco2003', 'Night original format.wav'],
+  frogs: ['5/51/Frogs_croak_calling_chorus_at_night.ogg', 'transcoded/5/51/Frogs_croak_calling_chorus_at_night.ogg/Frogs_croak_calling_chorus_at_night.ogg.mp3', 'SA4', 'JogiAsad', 'Frogs croak calling chorus at night.ogg'],
+  camp: ['b/b1/Campfire_sound_ambience.ogg', 'transcoded/b/b1/Campfire_sound_ambience.ogg/Campfire_sound_ambience.ogg.mp3', 'BY3', 'Glaneur de sons', 'Campfire sound ambience.ogg'],
+  sea: ['5/5d/DenisChardonnet_-_Vagues_et_Sternes.ogg', 'transcoded/5/5d/DenisChardonnet_-_Vagues_et_Sternes.ogg/DenisChardonnet_-_Vagues_et_Sternes.ogg.mp3', 'CC0', 'DenisChardonnet', 'DenisChardonnet - Vagues et Sternes.ogg'],
+  city: ['6/63/Sagetyrtle_-_citystreet3_%28cc0%29_%28freesound%29.mp3', '', 'CC0', 'sagetyrtle', 'Sagetyrtle - citystreet3 (cc0) (freesound).mp3'],
+  vent: ['1/1e/Air_vent_%28Gravity_Sound%29.wav', 'transcoded/1/1e/Air_vent_%28Gravity_Sound%29.wav/Air_vent_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Air vent (Gravity Sound).wav'],
+  water: ['4/4f/Water_flowing_pouring_trickling.ogg', 'transcoded/4/4f/Water_flowing_pouring_trickling.ogg/Water_flowing_pouring_trickling.ogg.mp3', 'PD', 'stephan', 'Water flowing pouring trickling.ogg'],
+  fire: ['8/80/Bones_breaking_wood_fire_ice_crackling.ogg', 'transcoded/8/80/Bones_breaking_wood_fire_ice_crackling.ogg/Bones_breaking_wood_fire_ice_crackling.ogg.mp3', 'PD', 'stephan', 'Bones breaking wood fire ice crackling.ogg'],
+  achum: ['9/99/Air_conditioner_hum_%28Gravity_Sound%29.wav', 'transcoded/9/99/Air_conditioner_hum_%28Gravity_Sound%29.wav/Air_conditioner_hum_%28Gravity_Sound%29.wav.mp3', 'BY4', GS, 'Air conditioner hum (Gravity Sound).wav']
+};
+const LIC = {PD: 'Domínio público', CC0: 'CC0', BY4: 'CC BY 4.0', BY3: 'CC BY 3.0', BY25: 'CC BY 2.5', SA4: 'CC BY-SA 4.0', SA3: 'CC BY-SA 3.0'};
+const fileUrl = f => WM + (f[1] || f[0]);
+const SND_CACHE = 'mesa-sons-v1';
+const bufs = new Map(), bufReq = new Map(), segN = new Map();
+async function fetchAB(url) {
+  try {
+    if (window.caches && location.protocol === 'https:') {
+      const c = await caches.open(SND_CACHE);
+      let r = await c.match(url);
+      if (!r) { r = await fetch(url, {mode: 'cors'}); if (r.ok) { try { await c.put(url, r.clone()); } catch (e) {} } }
+      if (r.ok) return await r.arrayBuffer();
+    }
+  } catch (e) {}
+  const r = await fetch(url, {mode: 'cors'}); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.arrayBuffer();
+}
+function loadBuf(key) {
+  if (bufs.has(key)) return Promise.resolve(bufs.get(key));
+  if (bufReq.has(key)) return bufReq.get(key);
+  const p = (async () => {
+    await audioInit();
+    let ab;
+    if (key.startsWith('my:')) { const it = await myGet(key.slice(3)); if (!it) throw new Error('arquivo sumiu'); ab = await it.blob.arrayBuffer(); }
+    else { const f = FILES[key]; if (!f) throw new Error('sem arquivo ' + key); ab = await fetchAB(fileUrl(f)); }
+    let b = await new Promise((res, rej) => { const pr = ctx.decodeAudioData(ab, res, rej); if (pr && pr.then) pr.then(res, rej); });
+    const u = USE[key];
+    if (u && b.duration > 3) {
+      const sr = b.sampleRate, i0 = Math.max(0, Math.floor((u[0] - .05) * sr)), i1 = Math.min(b.length, Math.ceil((u[1] + .3) * sr));
+      if (i1 - i0 > sr * .2 && i1 - i0 < b.length * .9) { const nb = ctx.createBuffer(b.numberOfChannels, i1 - i0, sr); for (let c = 0; c < b.numberOfChannels; c++) nb.copyToChannel(b.getChannelData(c).subarray(i0, i1), c); nb._off = i0 / sr; b = nb; }
+    }
+    bufs.set(key, b); return b;
+  })();
+  bufReq.set(key, p); p.catch(() => bufReq.delete(key));
+  return p;
+}
+function revBuf(key) {
+  const k = key + '#rev'; if (bufs.has(k)) return bufs.get(k);
+  const b = bufs.get(key); if (!b) return null;
+  const r = ctx.createBuffer(b.numberOfChannels, b.length, b.sampleRate);
+  for (let c = 0; c < b.numberOfChannels; c++) { const s = b.getChannelData(c), d = r.getChannelData(c), n = s.length; for (let i = 0; i < n; i++) d[i] = s[n - 1 - i]; }
+  r._off = b._off; bufs.set(k, r); return r;
+}
+// loudness match of the part we actually play (peak-safe)
+function segNorm(key, b, s, d) {
+  const id = key + '|' + s + '|' + d; if (segN.has(id)) return segN.get(id);
+  const sr = b.sampleRate, i0 = Math.max(0, Math.floor(s * sr)), i1 = Math.min(b.length, Math.floor((s + d) * sr));
+  let pk = 0, ss = 0, n = 0;
+  for (let c = 0; c < b.numberOfChannels; c++) { const x = b.getChannelData(c); for (let i = i0; i < i1; i += 2) { const a = Math.abs(x[i]); if (a > pk) pk = a; ss += x[i] * x[i]; n++; } }
+  const rms = Math.sqrt(ss / Math.max(1, n));
+  const k = Math.min(.92 / Math.max(pk, 1e-4), .16 / Math.max(rms, 1e-5), 40);
+  segN.set(id, k); return k;
+}
+// o: {k, s, d, r, v, rev, lp, hp, dist, rv, pan, fade, at}
+function playFile(o, t, out) {
+  const base = bufs.get(o.k), b = o.rev ? revBuf(o.k) : base; if (!b) return 0;
+  const r = o.r || 1, s0 = Math.min(Math.max(0, (o.s || 0) - (base._off || 0)), Math.max(0, b.duration - .05)), d = Math.max(.05, Math.min(o.d || b.duration, b.duration - s0)), s = o.rev ? Math.max(0, b.duration - s0 - d) : s0;
+  const src = ctx.createBufferSource(); src.buffer = b; src.playbackRate.value = r;
+  let node = src; const chain = n => { node.connect(n); node = n; };
+  if (o.hp) chain(filt('highpass', o.hp, .7));
+  if (o.lp) chain(filt('lowpass', o.lp, .7));
+  if (o.dist) chain(shaper(tanhCurve(o.dist)));
+  if (o.pan != null && ctx.createStereoPanner) { const p = ctx.createStereoPanner(); p.pan.value = o.pan; chain(p); }
+  const g = gain(0); chain(g); g.connect(out);
+  const k = segNorm(o.k + (o.rev ? '#r' : ''), b, s, d) * (o.v ?? 1), len = d / r, f = Math.min(o.fade ?? .25, len / 3), tt = t + (o.at || 0);
+  g.gain.setValueAtTime(0, tt); g.gain.linearRampToValueAtTime(k, tt + .008); g.gain.setValueAtTime(k, Math.max(tt + .01, tt + len - f)); g.gain.linearRampToValueAtTime(0, tt + len);
+  if (o.rv) send(g, o.rv);
+  src.start(tt, s, d); src.stop(tt + len + .1);
+  return len;
+}
+
+/* ---------- streamed audio (library music, ambiences, your own files) ---------- */
+function streamEl(url) {
+  const a = new Audio(); a.crossOrigin = 'anonymous'; a.preload = 'auto'; a.src = url; a.loop = true;
+  return a;
+}
+function startStream(url, out, vol = 1, fadeIn = 1.2, loop = true) {
+  const el = streamEl(url); el.loop = loop;
+  const src = ctx.createMediaElementSource(el), g = gain(0, out); src.connect(g);
+  g.gain.setValueAtTime(0.0001, T()); g.gain.setTargetAtTime(vol, T(), fadeIn / 3);
+  const h = {el, g, src, stop(t = T(), fade = 1) { g.gain.cancelScheduledValues(t); g.gain.setTargetAtTime(.0001, t, fade / 3); setTimeout(() => { try { el.pause(); el.removeAttribute('src'); el.load(); } catch (e) {} try { src.disconnect(); g.disconnect(); } catch (e) {} }, fade * 1000 + 600); }};
+  el.play().catch(e => { console.warn('stream', e); });
+  return h;
+}
+
+/* ---------- library music (Kevin MacLeod & others) ---------- */
+const KM = 'Kevin MacLeod';
+const LIB_CATS = [['inv', '🔎 Investigação'], ['sus', '😰 Suspense'], ['ter', '👹 Terror'], ['per', '🏃 Perseguição'], ['rit', '🕯️ Ritual'], ['calm', '🌧️ Calmaria']];
+// [id, name, cat, path, mp3, licence, author]
+const LIB = [
+  ['darkwalk', 'Dark Walk', 'inv', 'c/ce/Dark_Walk_%28ISRC_USUAN1100468%29.mp3', '', 'BY3', KM],
+  ['midnight', 'Midnight Meeting', 'inv', '8/85/Midnight_Meeting_%28ISRC_USUAN1100159%29.mp3', '', 'BY3', KM],
+  ['nightbreak', 'Night Break', 'inv', 'd/d4/Night_Break_%28ISRC_USUAN1100380%29.mp3', '', 'BY3', KM],
+  ['investig', 'Investigation 2', 'inv', '7/70/PeriTune_-_Investigation2%28Suspense-Royalty_Free_Music%29.opus', 'transcoded/7/70/PeriTune_-_Investigation2%28Suspense-Royalty_Free_Music%29.opus/PeriTune_-_Investigation2%28Suspense-Royalty_Free_Music%29.opus.mp3', 'BY3', 'PeriTune'],
+  ['smoking', 'Smoking Gun', 'inv', '9/98/Smoking_Gun_%28ISRC_USUAN1100345%29.mp3', '', 'BY3', KM],
+  ['mysterioso', 'Mysterioso March', 'inv', 'a/a1/Mysterioso_March_%28ISRC_USUAN1100143%29.mp3', '', 'BY3', KM],
+  ['darkalley', 'A Really Dark Alley', 'inv', 'd/d2/Loyalty_Freak_Music_-_07_-_A_really_dark_alley.ogg', 'transcoded/d/d2/Loyalty_Freak_Music_-_07_-_A_really_dark_alley.ogg/Loyalty_Freak_Music_-_07_-_A_really_dark_alley.ogg.mp3', 'CC0', 'Loyalty Freak Music'],
+  ['unseen', 'Unseen Horrors', 'sus', 'e/e7/Unseen_Horrors_%28ISRC_USUAN1400043%29.mp3', '', 'BY3', KM],
+  ['ghoststory', 'Ghost Story', 'sus', 'a/a5/Ghost_Story_%28ISRC_USUAN1300034%29.mp3', '', 'BY3', KM],
+  ['echoes', 'Echoes of Time', 'sus', 'f/f9/Echoes_of_Time_%28ISRC_USUAN1300029%29.mp3', '', 'BY3', KM],
+  ['phantoms', 'Land of Phantoms', 'sus', 'f/ff/Land_of_Phantoms_%28ISRC_USUAN1100180%29.mp3', '', 'BY3', KM],
+  ['hush', 'Hush', 'sus', '4/48/Hush_%28ISRC_USUAN1400004%29.mp3', '', 'BY3', KM],
+  ['presence', 'Unseen Presence', 'sus', 'e/ec/Spc_X2x_%28Unseen_Presence%29_by_Kevin_MacLeod.ogg', 'transcoded/e/ec/Spc_X2x_%28Unseen_Presence%29_by_Kevin_MacLeod.ogg/Spc_X2x_%28Unseen_Presence%29_by_Kevin_MacLeod.ogg.mp3', 'BY4', KM],
+  ['krux', 'Horror Suspense', 'sus', '0/03/Rafael_Krux_-_Horror_Suspense.ogg', 'transcoded/0/03/Rafael_Krux_-_Horror_Suspense.ogg/Rafael_Krux_-_Horror_Suspense.ogg.mp3', 'CC0', 'Rafael Krux'],
+  ['lights', 'Lights (Creepy Ambient)', 'sus', 'c/c9/Rafael_Krux_-_Lights_-_Creepy_Ambient_Suspense_%28cc-by%29_%28filmmusic%29.mp3', '', 'BY4', 'Rafael Krux'],
+  ['breath', 'Shadowlands 4 · Breath', 'sus', '8/81/Shadowlands_4_-_Breath_%28ISRC_USUAN1700037%29.mp3', '', 'BY3', KM],
+  ['horizon', 'Shadowlands 1 · Horizon', 'sus', '0/0b/Shadowlands_1_-_Horizon_%28ISRC_USUAN1700034%29.mp3', '', 'BY3', KM],
+  ['classic1', 'Classic Horror 1', 'ter', 'd/df/Classic_Horror_1_%28ISRC_USUAN1100471%29.mp3', '', 'BY3', KM],
+  ['classic2', 'Classic Horror 2', 'ter', '7/7d/Classic_Horror_2_%28ISRC_USUAN1100470%29.mp3', '', 'BY3', KM],
+  ['classic3', 'Classic Horror 3', 'ter', '2/26/Classic_Horror_3_%28ISRC_USUAN1100469%29.mp3', '', 'BY3', KM],
+  ['wyrm', 'Giant Wyrm', 'ter', 'b/b6/Giant_Wyrm_%28ISRC_USUAN1600035%29.mp3', '', 'BY3', KM],
+  ['icedemon', 'Ice Demon', 'ter', '0/01/Ice_Demon_%28ISRC_USUAN1200061%29.mp3', '', 'BY3', KM],
+  ['redletter', 'Redletter', 'ter', '7/78/Redletter_%28ISRC_USUAN1100714%29.mp3', '', 'BY3', KM],
+  ['hell', 'Gateway to Hell', 'ter', '0/0c/Scp_x1x_%28Gateway_to_Hell%29_by_Kevin_MacLeod.ogg', 'transcoded/0/0c/Scp_x1x_%28Gateway_to_Hell%29_by_Kevin_MacLeod.ogg/Scp_x1x_%28Gateway_to_Hell%29_by_Kevin_MacLeod.ogg.mp3', 'BY4', KM],
+  ['leech', 'Mind Leech', 'ter', '9/98/SCP-x4x_%28Mind_Leech%29_by_Kevin_MacLeod.ogg', 'transcoded/9/98/SCP-x4x_%28Mind_Leech%29_by_Kevin_MacLeod.ogg/SCP-x4x_%28Mind_Leech%29_by_Kevin_MacLeod.ogg.mp3', 'BY4', KM],
+  ['unnatural', 'Unnatural Situation', 'ter', '6/65/Unnatural_Situation_%28ISRC_USUAN1100464%29.mp3', '', 'BY3', KM],
+  ['dead', 'Land of the Dead', 'ter', '4/48/Land_of_the_Dead_%28ISRC_USUAN1100179%29.mp3', '', 'BY3', KM],
+  ['darktimes', 'Dark Times', 'ter', '9/93/Dark_Times_%28ISRC_USUAN1100747%29.mp3', '', 'BY3', KM],
+  ['horrorland', 'Welcome to HorrorLand', 'ter', '8/8c/Welcome_to_HorrorLand_%28ISRC_USUAN1500070%29.mp3', '', 'BY3', KM],
+  ['pulse', 'Chase Pulse', 'per', '7/77/Chase_Pulse_%28ISRC_USUAN1100383%29.mp3', '', 'BY3', KM],
+  ['pulsefast', 'Chase Pulse Faster', 'per', '0/05/Chase_Pulse_Faster_%28ISRC_USUAN1100384%29.mp3', '', 'BY3', KM],
+  ['zombiechase', 'Zombie Chase', 'per', '3/30/Zombie_Chase_%28ISRC_USUAN1100005%29.mp3', '', 'BY3', KM],
+  ['feral', 'Feral Chase', 'per', '2/2c/Feral_Chase_%28ISRC_USUAN1100229%29.mp3', '', 'BY3', KM],
+  ['thechase', 'The Chase', 'per', '1/18/The_Chase_%28ISRC_USUAN1100049%29.mp3', '', 'BY3', KM],
+  ['escalation', 'The Escalation', 'per', '8/81/The_Escalation_%28ISRC_USUAN1400041%29.mp3', '', 'BY3', KM],
+  ['chaos', 'Day of Chaos', 'per', '3/3a/Day_of_Chaos_%28ISRC_USUAN1300040%29.mp3', '', 'BY3', KM],
+  ['processional', 'Ghost Processional', 'rit', '7/74/Ghost_Processional_%28ISRC_USUAN1100219%29.mp3', '', 'BY3', KM],
+  ['pit', 'Shadowlands 6 · The Pit', 'rit', 'b/b5/Shadowlands_6_-_The_Pit_%28ISRC_USUAN1700039%29.mp3', '', 'BY3', KM],
+  ['codex', 'Shadowlands 7 · Codex', 'rit', '2/2e/Shadowlands_7_-_Codex_%28ISRC_USUAN1700040%29.mp3', '', 'BY3', KM],
+  ['thishouse', 'This House', 'rit', '6/69/This_House_%28ISRC_USUAN1500055%29.mp3', '', 'BY3', KM],
+  ['comeplay', 'Come Play with Me', 'rit', '4/40/Come_Play_with_Me_%28ISRC_USUAN1400042%29.mp3', '', 'BY3', KM],
+  ['ghostdance', 'Ghost Dance', 'rit', '3/34/Ghost_Dance_%28ISRC_USUAN1100573%29.mp3', '', 'BY3', KM],
+  ['desolation', 'Peaceful Desolation', 'calm', '4/48/Peaceful_Desolation_%28Kevin_MacLeod%29_%28ISRC_USUAN1200017%29.oga', 'transcoded/4/48/Peaceful_Desolation_%28Kevin_MacLeod%29_%28ISRC_USUAN1200017%29.oga/Peaceful_Desolation_%28Kevin_MacLeod%29_%28ISRC_USUAN1200017%29.oga.mp3', 'BY3', KM],
+  ['longdark', 'The Long Dark', 'calm', '9/95/Scott_Buckley_%E2%80%93_The_Long_Dark_%28Ambient_Neoclassical_Piano%29.ogg', 'transcoded/9/95/Scott_Buckley_%E2%80%93_The_Long_Dark_%28Ambient_Neoclassical_Piano%29.ogg/Scott_Buckley_%E2%80%93_The_Long_Dark_%28Ambient_Neoclassical_Piano%29.ogg.mp3', 'BY3', 'Scott Buckley']
+];
+const LIBM = Object.fromEntries(LIB.map(x => [x[0], x]));
+const libUrl = x => WM + (x[4] || x[3]);
+const commonsPage = path => 'https://commons.wikimedia.org/wiki/File:' + decodeURIComponent(path.split('/').pop());
+
+/* ---------- ambiences (layer under the music) ---------- */
+const AMBS = {
+  casa: {n: 'Casa assombrada', e: '🏚️', k: ['hall2'], v: .8},
+  pesadelo: {n: 'Pesadelo', e: '🌀', k: ['hall1'], v: .8},
+  chuva: {n: 'Chuva na janela', e: '🌧️', k: ['rain'], v: .7},
+  tempestade: {n: 'Tempestade', e: '⛈️', k: ['storm'], v: .8},
+  chuvaForte: {n: 'Chuva forte', e: '☔', k: ['hrain'], v: .7},
+  vento: {n: 'Vento uivando', e: '🌬️', k: ['wind'], v: .7},
+  floresta: {n: 'Floresta', e: '🌲', k: ['forest'], v: .7},
+  noite: {n: 'Noite (insetos)', e: '🌙', k: ['night'], v: .7},
+  pantano: {n: 'Pântano', e: '🐸', k: ['frogs'], v: .6},
+  fogueira: {n: 'Fogueira', e: '🔥', k: ['camp'], v: .7},
+  incendio: {n: 'Incêndio', e: '🧯', k: ['fire'], v: .7},
+  mar: {n: 'Mar', e: '🌊', k: ['sea'], v: .7},
+  cidade: {n: 'Cidade à noite', e: '🌃', k: ['city'], v: .6},
+  ventilacao: {n: 'Instalação / dutos', e: '🏭', k: ['vent'], v: .6},
+  esgoto: {n: 'Esgoto / água', e: '🚰', k: ['water'], v: .6},
+  hospital: {n: 'Hospital', e: '🏥', k: ['achum', 'ecg'], v: .55},
+  relogio: {n: 'Relógio', e: '🕰️', k: ['clock'], v: .6}
+};
+let ambBus = null; const ambOn = new Map();
+function ambEnsure() { if (!ambBus) { ambBus = gain(S.ambVol); const c = ctx.createDynamicsCompressor(); c.threshold.value = -22; c.ratio.value = 4; c.attack.value = .02; c.release.value = .4; ambBus.connect(c); c.connect(masterComp); } }
+function toggleAmb(id) {
+  ambEnsure();
+  if (ambOn.has(id)) { ambOn.get(id).forEach(h => h.stop(T(), 2)); ambOn.delete(id); renderSide(); return; }
+  const a = AMBS[id]; if (!a) return;
+  ambOn.set(id, a.k.map(k => startStream(fileUrl(FILES[k]), ambBus, a.v, 2.5)));
+  renderSide();
+}
+function stopAllAmb() { ambOn.forEach(hs => hs.forEach(h => h.stop(T(), 1.5))); ambOn.clear(); }
+
+/* ---------- your own files (stored in this browser) ---------- */
+let myDb = null; let myList = [];
+function myOpen() {
+  if (myDb) return Promise.resolve(myDb);
+  return new Promise(res => { try { const r = indexedDB.open('mesa-meus', 1); r.onupgradeneeded = () => r.result.createObjectStore('f', {keyPath: 'id'}); r.onsuccess = () => { myDb = r.result; res(myDb); }; r.onerror = () => res(null); } catch (e) { res(null); } });
+}
+function myTx(mode, fn) { return myOpen().then(d => new Promise((res, rej) => { if (!d) return rej(new Error('sem armazenamento')); const tx = d.transaction('f', mode), st = tx.objectStore('f'); const r = fn(st); tx.oncomplete = () => res(r && r.result); tx.onerror = () => rej(tx.error); })); }
+const myGet = id => myTx('readonly', st => st.get(id));
+async function myRefresh() { try { const all = await myTx('readonly', st => st.getAll()); myList = (all || []).map(({id, name, kind, size}) => ({id, name, kind, size})).sort((a, b) => a.name.localeCompare(b.name)); } catch (e) { myList = []; } }
+async function myAdd(files, kind) {
+  let n = 0;
+  for (const f of files) {
+    if (!/^audio\//.test(f.type) && !/\.(mp3|ogg|oga|wav|m4a|aac|flac|opus|webm)$/i.test(f.name)) continue;
+    if (f.size > 60e6) { toast('“' + f.name + '” é grande demais (máx. 60 MB).'); continue; }
+    const id = Math.random().toString(36).slice(2, 10);
+    try { await myTx('readwrite', st => st.put({id, name: f.name.replace(/\.[^.]+$/, '').slice(0, 60), kind, size: f.size, blob: f})); n++; } catch (e) { toast('Não consegui guardar ' + f.name); }
+  }
+  await myRefresh(); renderSide(); if (n) toast(n + (n === 1 ? ' arquivo adicionado' : ' arquivos adicionados'));
+}
+async function myDel(id) { try { await myTx('readwrite', st => st.delete(id)); } catch (e) {} bufs.delete('my:' + id); if (curTrack === 'my:' + id) playTrack(null); await myRefresh(); renderSide(); }
+const myUrls = new Map();
+async function myUrl(id) { if (myUrls.has(id)) return myUrls.get(id); const it = await myGet(id); if (!it) return null; const u = URL.createObjectURL(it.blob); myUrls.set(id, u); return u; }
+
+/* ---------- sound effects (real recordings + a few synthesized classics) ---------- */
+const SFX_GROUPS = [['sustos', '😱 Sustos'], ['casa', '🏚️ Casa'], ['acao', '💥 Ação'], ['sobre', '👻 Sobrenatural'], ['animais', '🐺 Animais'], ['criaturas', '👹 Criaturas'], ['meus', '📁 Meus']];
+const SFX = {
+  jumpscare: {g: 'sustos', n: 'Jumpscare', e: '😱', syn: 'jumpscare'},
+  braam: {g: 'sustos', n: 'Braam', e: '📯', syn: 'braam', L: [{k: 'braam', d: 9, rv: .2}]},
+  riser: {g: 'sustos', n: 'Subida + impacto', e: '📈', syn: 'riser', fx: 'flash', fxDelay: 6.3, L: [{k: 'swell', s: 1, d: 6.3, fade: .05}, {k: 'boom', at: 6.3, lp: 1100, rv: .5}, {k: 'braam', at: 6.3, d: 6, v: .8}]},
+  impacto: {g: 'sustos', n: 'Impacto', e: '💥', syn: 'impacto', fx: 'flashw', L: [{k: 'boom', lp: 1400, rv: .5}, {k: 'braam', d: 5, v: .55}]},
+  grito: {g: 'sustos', n: 'Grito de mulher', e: '🗣️', syn: 'grito', fx: 'blood', L: [{k: 'scrW', rv: .35}]},
+  gritoH: {g: 'sustos', n: 'Grito de homem', e: '😫', syn: 'grito', L: [{k: 'scrM', rv: .3}]},
+  coracao: {g: 'sustos', n: 'Coração acelerando', e: '🫀', syn: 'coracao', fx: 'blood'},
+  cena: {g: 'sustos', n: 'Cena: algo te pega', e: '🎬', L: [{k: 'scene', rv: .2}]},
+
+  batidas: {g: 'casa', n: 'Batidas na porta', e: '🚪', syn: 'batidas', L: [{k: 'knock', rv: .3}]},
+  porta: {g: 'casa', n: 'Porta rangendo', e: '🗝️', syn: 'porta', L: [{k: 'creak', d: 5, r: .8, rv: .35}]},
+  portao: {g: 'casa', n: 'Portão de ferro', e: '⛓️', L: [{k: 'mdoor', s: 8.5, d: 6, rv: .3}]},
+  bate: {g: 'casa', n: 'Porta batendo', e: '💨', L: [{k: 'slam', s: .55, d: 1.4, rv: .45}]},
+  fechadura: {g: 'casa', n: 'Fechadura', e: '🔒', L: [{k: 'lock', rv: .2}]},
+  passos: {g: 'casa', n: 'Passos na escada', e: '👣', syn: 'passos', L: [{k: 'stairs', s: 9, d: 8, rv: .3}]},
+  passosMata: {g: 'casa', n: 'Passos na mata', e: '🍂', L: [{k: 'leaves', s: 2, d: 9}]},
+  correndo: {g: 'casa', n: 'Correndo na mata', e: '🏃', syn: 'correndo', L: [{k: 'leaves', s: 20, d: 9, r: 1.8}]},
+  arrastar: {g: 'casa', n: 'Algo sendo arrastado', e: '🪑', L: [{k: 'drag', s: .5, d: 1.4, r: .75, rv: .4}]},
+  respiracao: {g: 'casa', n: 'Respiração', e: '😮‍💨', syn: 'respiracao', L: [{k: 'breath', d: 9, rv: .15}]},
+  relogio: {g: 'casa', n: 'Relógio', e: '🕰️', L: [{k: 'clock', d: 8}]},
+  goteira: {g: 'casa', n: 'Goteira', e: '💧', L: [{k: 'drip', d: 10, rv: .55}]},
+  correntes: {g: 'casa', n: 'Correntes', e: '⛓️', syn: 'correntes', L: [{k: 'keys', r: .55, rv: .5, lp: 5000}]},
+  sino: {g: 'casa', n: 'Sino de igreja', e: '🔔', syn: 'sino', L: [{k: 'bell', d: 12, rv: .3}]},
+  caixinha: {g: 'casa', n: 'Caixinha de música', e: '🎶', L: [{k: 'mbox', r: .9, rv: .6}, {k: 'mbox', r: .84, at: 2.25, rv: .7, v: .8}]},
+  maquina: {g: 'casa', n: 'Máquina de escrever', e: '⌨️', L: [{k: 'typew', s: 2, d: 6}]},
+  monitor: {g: 'casa', n: 'Monitor cardíaco (parada)', e: '📟', L: [{k: 'ecg', s: 14, d: 13.5}]},
+
+  tiro: {g: 'acao', n: 'Tiro', e: '🔫', syn: 'tiro', fx: 'flashw', L: [{k: 'gun', rv: .45}]},
+  tiros: {g: 'acao', n: 'Rajada de tiros', e: '💥', L: [{k: 'guns', rv: .3}]},
+  trovao: {g: 'acao', n: 'Trovão', e: '⛈️', syn: 'trovao', fx: 'flashw', L: [{k: 'thunder', s: 2.5, d: 12}]},
+  vidro: {g: 'acao', n: 'Vidro quebrando', e: '🪟', syn: 'vidro', L: [{k: 'glass', rv: .35}]},
+  soco: {g: 'acao', n: 'Soco', e: '👊', L: [{k: 'punch', rv: .15}]},
+  explosao: {g: 'acao', n: 'Explosão', e: '🧨', fx: 'flashw', L: [{k: 'boom', rv: .35}, {k: 'boom', r: .6, lp: 500, v: .7}]},
+  devorando: {g: 'acao', n: 'Devorando (ossos)', e: '🦴', fx: 'blood', L: [{k: 'bite'}, {k: 'crunch', s: .8, d: 3.5, r: .72, at: .3, rv: .2}]},
+
+  sussurros: {g: 'sobre', n: 'Sussurros', e: '👁️', syn: 'sussurros', L: [{k: 'ghostv', s: 4, d: 12, v: .85, rv: .45}]},
+  fantasma: {g: 'sobre', n: 'Fantasma', e: '👻', L: [{k: 'ghost', rv: .45}]},
+  risada: {g: 'sobre', n: 'Risada horrível', e: '😈', L: [{k: 'laughH', rv: .5}]},
+  risadaMal: {g: 'sobre', n: 'Risada maligna', e: '🦹', L: [{k: 'laughE', s: 5, d: 5.5, rv: .45}]},
+  gargalhada: {g: 'sobre', n: 'Gargalhada insana', e: '🤪', L: [{k: 'laughI', d: 9}]},
+  crianca: {g: 'sobre', n: 'Criança rindo', e: '🧸', L: [{k: 'child', d: 8, r: .86, rv: .7}]},
+  risoInv: {g: 'sobre', n: 'Riso ao contrário', e: '🔄', L: [{k: 'child', d: 6, rev: 1, r: .8, rv: .85}]},
+  choro: {g: 'sobre', n: 'Choro distante', e: '😢', L: [{k: 'cry', s: 2, d: 12, lp: 2600, rv: .65}]},
+  estatica: {g: 'sobre', n: 'Estática', e: '📺', syn: 'estatica', fx: 'static'},
+  glitch: {g: 'sobre', n: 'Glitch', e: '⚡', syn: 'glitch', fx: 'glitch'},
+
+  lobo: {g: 'animais', n: 'Lobo uivando', e: '🐺', L: [{k: 'wolf', d: 14, rv: .35}]},
+  cachorro: {g: 'animais', n: 'Cão latindo', e: '🐕', L: [{k: 'dog', rv: .25}]},
+  rosnado: {g: 'animais', n: 'Cão rosnando', e: '🐶', L: [{k: 'dgrowl'}]},
+  corvo: {g: 'animais', n: 'Corvo', e: '🐦‍⬛', L: [{k: 'crow', s: .2, d: 2, rv: .4}]},
+  corvos: {g: 'animais', n: 'Corvos', e: '🪶', L: [{k: 'raven', s: 4, d: 8, rv: .3}]},
+  coruja: {g: 'animais', n: 'Coruja', e: '🦉', L: [{k: 'owl', rv: .45}]},
+  rasga: {g: 'animais', n: 'Rasga-mortalha', e: '🤍', L: [{k: 'barnowl', d: 7.5, rv: .45}]},
+  morcegos: {g: 'animais', n: 'Morcegos', e: '🦇', L: [{k: 'bats', s: 1, d: 9}]},
+  gato: {g: 'animais', n: 'Gato sibilando', e: '🐈‍⬛', L: [{k: 'cat', s: .8, d: 1.5}]},
+  cascavel: {g: 'animais', n: 'Cascavel', e: '🐍', L: [{k: 'snake', d: 6}]},
+  cavalo: {g: 'animais', n: 'Cavalo relinchando', e: '🐴', L: [{k: 'horse', rv: .3}]},
+  moscas: {g: 'animais', n: 'Moscas', e: '🪰', L: [{k: 'flies', s: 8, d: 8}]},
+  urso: {g: 'animais', n: 'Urso', e: '🐻', L: [{k: 'bear', d: 6}]},
+  fera: {g: 'animais', n: 'Rugido de fera', e: '🦁', L: [{k: 'lion', s: .5, d: 6, rv: .3}]},
+  lince: {g: 'animais', n: 'Grito do lince', e: '🐆', L: [{k: 'lynx', d: 6, rv: .3}]},
+  porco: {g: 'animais', n: 'Porco', e: '🐖', L: [{k: 'pig'}, {k: 'pig', r: .9, at: .75}, {k: 'pig', r: 1.12, at: 1.45}]},
+
+  monstro: {g: 'criaturas', n: 'Monstro', e: '👾', L: [{k: 'monster', rv: .45}]},
+  crSangue: {g: 'criaturas', n: 'Criatura de Sangue', e: '🩸', fx: 'blood', L: [{k: 'mgrowl', d: 5, r: .8, dist: 2, rv: .3}, {k: 'dgrowl', r: .6, lp: 900, v: .6}]},
+  abissal: {g: 'criaturas', n: 'Rosnado abissal', e: '🕳️', L: [{k: 'mgrowl2', s: 16, d: 7, r: .62, lp: 2500, rv: .6}]},
+  zumbi: {g: 'criaturas', n: 'Morto-vivo', e: '🧟', L: [{k: 'zombie', r: .85, rv: .4}, {k: 'zombie', r: .7, v: .6, at: .18, pan: -.5}]},
+  ecos: {g: 'criaturas', n: 'Ecos da Morte', e: '💀', L: [{k: 'ghostv', s: 20, d: 10, r: .6, rev: 1, lp: 3000, rv: .85}]},
+  lamento: {g: 'criaturas', n: 'Lamento do Outro Lado', e: '🌀', L: [{k: 'orca', s: 2, d: 8, r: .5, rv: .9}]},
+  enxame: {g: 'criaturas', n: 'Enxame', e: '🐝', L: [{k: 'flies', s: 2, d: 8, r: .5, pan: -.6}, {k: 'flies', s: 12, d: 8, r: .7, v: .8, pan: .6}]},
+  uivoDist: {g: 'criaturas', n: 'Uivo distorcido', e: '🌕', L: [{k: 'wolf', d: 10, r: .7, rv: .6}, {k: 'mgrowl', s: 10, d: 4, r: .7, v: .5, at: 1}]},
+  colossal: {g: 'criaturas', n: 'Urro colossal', e: '🦖', fx: 'flashw', L: [{k: 'lion', s: .5, d: 6, r: .55, dist: 1.8, rv: .7}]},
+  demoniaco: {g: 'criaturas', n: 'Grito demoníaco', e: '😈', fx: 'flash', L: [{k: 'scrW', r: .72, dist: 2.5, rv: .6}, {k: 'scrW', r: .5, lp: 1200, v: .6}]},
+  presenca: {g: 'criaturas', n: 'Presença', e: '🫥', L: [{k: 'laughH', rev: 1, r: .7, rv: .8}, {k: 'ghost', r: .8, at: .5, rv: .6}]},
+  devorador: {g: 'criaturas', n: 'Devorador', e: '🦷', fx: 'blood', L: [{k: 'mgrowl', s: 30, d: 4, r: .75, rv: .3}, {k: 'crunch', s: .8, d: 3.5, r: .6, at: .6}, {k: 'bite', at: .4, r: .8}]}
+};
+// keep only the part of each recording we use (saves memory)
+const USE = {};
+Object.values(SFX).forEach(s => (s.L || []).forEach(l => { const u = USE[l.k] || (USE[l.k] = [1e9, 0]); u[0] = Math.min(u[0], l.s || 0); u[1] = Math.max(u[1], (l.s || 0) + (l.d || 600)); }));
+USE.drip = [0, 600]; USE.typew = [0, 600];
+let preloaded = false;
+function preloadSfx() {
+  if (preloaded) return; preloaded = true;
+  const keys = Object.keys(USE); let i = 0;
+  const next = () => { if (i >= keys.length) return; const k = keys[i++]; loadBuf(k).then(markSfxReady).catch(() => {}).finally(next); };
+  next(); next(); next();
+}
+async function playSfx(id, btn) {
+  await audioInit();
+  if (id.startsWith('my:')) {
+    const k = id; if (!bufs.has(k)) { btn && btn.classList.add('ld'); try { await loadBuf(k); } catch (e) { btn && btn.classList.remove('ld'); toast('Não consegui tocar este arquivo.'); return; } btn && btn.classList.remove('ld'); }
+    playFile({k, fade: .05}, T() + .02, sfxBus); return;
+  }
+  const s = SFX[id]; if (!s) return;
+  let ok = true;
+  if (s.L) {
+    const keys = [...new Set(s.L.map(l => l.k))];
+    if (!keys.every(k => bufs.has(k))) {
+      btn && btn.classList.add('ld');
+      try { await Promise.all(keys.map(loadBuf)); } catch (e) { ok = false; }
+      btn && btn.classList.remove('ld');
+    }
+  }
+  const t = T() + .03;
+  if (s.L && ok) {
+    s.L.forEach(l => { try { playFile(l, t, sfxBus); } catch (e) { console.warn(e); } });
+  } else if (s.syn && SYN[s.syn]) { SYN[s.syn].play(t, sfxBus); if (s.L) toast('Som real indisponível agora: tocando a versão sintetizada'); }
+  else if (s.L) { toast('Não consegui carregar este som. Verifique a internet.'); return; }
+  const fx = s.fx || (s.syn && SYN[s.syn] && SYN[s.syn].fx), dl = s.fxDelay || (s.syn && SYN[s.syn] && !s.L && SYN[s.syn].fxDelay);
+  if (fx) { if (dl) setTimeout(() => doFx(fx, true), dl * 1000); else doFx(fx, true); }
 }
 
 /* ---------- voice effects ---------- */
@@ -873,7 +1427,8 @@ const avCalls = new Map();     // id -> media call (voice/cam)
 const stageCalls = new Map();  // host: id -> stage call
 const remotes = new Map();     // id -> {stream, el, an, localMute}
 let stageCall = null, gotStage = false;
-let state = {cover: {on: false, style: 'intervalo', title: '', sub: ''}, sharing: false};
+let state = {cover: {on: false, style: 'intervalo', title: '', sub: ''}, sharing: false, theme: {id: 'ordem', acc: ''}, clima: [], timer: null, live: {title: '', sub: ''}, layout: '', layoutTs: 0};
+function normState(x) { const d = {cover: {on: false, style: 'intervalo', title: '', sub: ''}, sharing: false, theme: {id: 'ordem', acc: ''}, clima: [], timer: null, live: {title: '', sub: ''}, layout: '', layoutTs: 0}; x = Object.assign(d, x || {}); x.cover = Object.assign(d.cover, x.cover || {}); if (!Array.isArray(x.clima)) x.clima = []; x.theme = x.theme || {id: 'ordem'}; x.live = x.live || {title: '', sub: ''}; return x; }
 let chat = [];
 let screenStream = null, screenAudioSrc = null, stagePh = null;
 function opusTune(sdp, stereo, br) {
@@ -936,7 +1491,7 @@ function attachRemote(id, stream) {
   r.stream = stream;
   if (!r.el) { r.el = document.createElement('audio'); r.el.autoplay = true; $('#audios').appendChild(r.el); }
   r.el.srcObject = stream; r.el.muted = deaf || !!r.localMute;
-  const p = roster.get(id); r.el.volume = clamp((S.vols[p ? p.name : id] ?? 100) / 100, 0, 1);
+  const p = roster.get(id); r.el.volume = clamp((S.vols[p ? p.name : id] ?? 100) / 100 * S.voiceVol, 0, 1);
   if (S.outId && r.el.setSinkId) r.el.setSinkId(S.outId).catch(() => {});
   r.el.play().catch(() => $('#unmute').classList.remove('hide'));
   try { const src = ctx.createMediaStreamSource(stream); r.an = ctx.createAnalyser(); r.an.fftSize = 512; src.connect(r.an); } catch (e) {}
@@ -962,7 +1517,7 @@ function startHost() {
   isHost = true; me.role = 'mestre';
   peer = new Peer(PREFIX + code, {config: ICE, debug: 0});
   setNet(null, 'abrindo sala…');
-  peer.on('open', id => { hostTries = 0; me.id = id; roster.set(id, {...me}); setNet(true, 'sala aberta'); lsSet('mesa-host', {code, name: me.name}); renderAll(); });
+  peer.on('open', id => { hostTries = 0; me.id = id; roster.set(id, {...me}); chars[id] = {...myCh}; setNet(true, 'sala aberta'); lsSet('mesa-host', {code, name: me.name}); renderAll(); });
   peer.on('error', e => {
     if (e.type === 'unavailable-id') { if (hostTries++ < 6) { setNet(null, 'reabrindo sala…'); try { peer.destroy(); } catch (x) {} setTimeout(startHost, 4000); } else setNet(false, 'código em uso'); }
     else if (['network', 'server-error', 'socket-error', 'socket-closed'].includes(e.type)) setNet(false, 'sem conexão');
@@ -977,7 +1532,9 @@ function startHost() {
       const old = conns.get(id); if (old && old !== conn) try { old.close(); } catch (e) {}
       conns.set(id, conn);
       roster.set(id, {id, name: cleanName(md.name), role: 'agente', mic: !!md.mic, cam: !!md.cam, deaf: false});
-      conn.send({t: 'hello', state, roster: [...roster.values()], chat: chat.slice(-80)});
+      refreshTimerState();
+      conn.send({t: 'hello', state, roster: [...roster.values()], chat: chat.slice(-80), chars, reveal: curReveal});
+      if (roomImg) conn.send({t: 'roomimg', img: roomImg});
       callStage(id); sys(cleanName(md.name) + ' entrou na sala'); broadcastRoster(); syncAV();
     });
     conn.on('close', () => { if (conns.get(conn.peer) === conn) dropPlayer(conn.peer); });
@@ -985,13 +1542,14 @@ function startHost() {
   });
 }
 function dropPlayer(id) {
-  const p = roster.get(id); conns.delete(id); roster.delete(id);
+  const p = roster.get(id); conns.delete(id); roster.delete(id); if (chars[id]) { delete chars[id]; sendAll({t: 'chars', chars}); }
   const sc = stageCalls.get(id); if (sc) { stageCalls.delete(id); try { sc.close(); } catch (e) {} }
   if (p) sys(p.name + ' saiu'); broadcastRoster(); syncAV();
 }
 function sendAll(m) { conns.forEach(c => { try { if (c.open) c.send(m); } catch (e) {} }); }
 function broadcastRoster() { if (me.id) roster.set(me.id, {...me}); sendAll({t: 'roster', roster: [...roster.values()]}); renderAll(); }
-function pushState() { sendAll({t: 'state', state}); }
+function pushState() { refreshTimerState(); sendAll({t: 'state', state}); }
+function saveRoom() { lsSet('mesa-room', {theme: state.theme, live: state.live, img: roomImg}); }
 function stageVideoTrack() { if (screenStream) return screenStream.getVideoTracks()[0]; if (!stagePh || stagePh.readyState !== 'live') { const c = document.createElement('canvas'); c.width = 320; c.height = 180; const g = c.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, 320, 180); setInterval(() => { g.fillStyle = '#000'; g.fillRect(0, 0, 320, 180); }, 1000); stagePh = c.captureStream(1).getVideoTracks()[0]; } return stagePh; }
 function callStage(id) {
   if (!peer || !conns.has(id)) return;
@@ -1009,6 +1567,7 @@ function onHostData(conn, d) {
   if (d.t === 'roll' && d.r) addChat({k: 'roll', from: name, r: sanitizeRoll(d.r)}, true);
   if (d.t === 'status' && p) { p.mic = !!d.mic; p.cam = !!d.cam; p.deaf = !!d.deaf; broadcastRoster(); }
   if (d.t === 'recall') callStage(id);
+  if (d.t === 'mych' && p) { chars[id] = sanCh(d.ch); broadcastChars(); }
   if (d.t === 'bye') { if (conns.get(id) === conn) dropPlayer(id); try { conn.close(); } catch (e) {} }
 }
 function kick(id) { const c = conns.get(id); if (!c) return; try { c.send({t: 'kicked'}); } catch (e) {} setTimeout(() => { try { c.close(); } catch (e) {} dropPlayer(id); }, 300); }
@@ -1032,22 +1591,28 @@ function connectHost() {
   try { if (hostConn) hostConn.close(); } catch (e) {}
   const c = peer.connect(PREFIX + code, {metadata: {name: me.name, mic: me.mic, cam: me.cam}, reliable: true});
   hostConn = c;
-  c.on('open', () => { setNet(true, 'conectado'); renderStage(); setTimeout(() => { if (!gotStage && c.open) c.send({t: 'recall'}); }, 7000); });
+  c.on('open', () => { setNet(true, 'conectado'); renderStage(); try { c.send({t: 'mych', ch: myCh}); } catch (e) {} setTimeout(() => { if (!gotStage && c.open) c.send({t: 'recall'}); }, 7000); });
   c.on('data', d => { c._seen = Date.now(); onPlayerData(d); });
   c.on('close', () => { if (hostConn !== c) return; setNet(false, 'Mestre desconectou'); state.sharing = false; state.cover.on = false; renderCover(null); renderStage(); gotStage = false; scheduleRetry(3000); });
   c.on('error', () => {});
 }
 function onPlayerData(d) {
   if (!d || typeof d !== 'object') return;
-  if (d.t === 'hello') { state = d.state || state; setRoster(d.roster); chat = []; (d.chat || []).forEach(m => chat.push(m)); renderCover(state.cover); renderAll(); syncAV(); }
+  if (d.t === 'hello') { state = normState(d.state); setRoster(d.roster); chat = []; (d.chat || []).forEach(m => chat.push(m)); chars = {}; Object.entries(d.chars || {}).forEach(([k, v]) => { chars[k] = sanCh(v); }); curReveal = d.reveal && okImg(d.reveal.img) ? d.reveal : null; revealHidden = false; onRoomState(); renderAll(); syncAV(); }
   if (d.t === 'roster') { setRoster(d.roster); renderAll(); syncAV(); }
-  if (d.t === 'state') { state = d.state || state; renderCover(state.cover); renderStage(); }
+  if (d.t === 'state') { state = normState(d.state); onRoomState(); renderStage(); }
+  if (d.t === 'chars') { chars = {}; Object.entries(d.chars || {}).forEach(([k, v]) => { chars[k] = sanCh(v); }); renderTiles(); }
+  if (d.t === 'yourch') { Object.assign(myCh, sanCh(d.ch)); lsSet('mesa-ch', myCh); renderTiles(); renderSide(); }
+  if (d.t === 'roomimg') { roomImg = okImg(d.img) ? d.img : ''; applyTheme(); }
+  if (d.t === 'reveal') { curReveal = d.r && okImg(d.r.img) ? {id: String(d.r.id || Date.now()), img: d.r.img, cap: String(d.r.cap || '').slice(0, 120)} : null; revealHidden = false; renderReveal(); }
+  if (d.t === 'whisper' && typeof d.text === 'string') showWhisper(d.text.slice(0, 200));
   if (d.t === 'chat') addChat(d.m, false);
   if (d.t === 'fx' && typeof d.name === 'string') doFx(d.name, false);
   if (d.t === 'ping' && hostConn && hostConn.open) { try { hostConn.send({t: 'pong'}); } catch (e) {} }
   if (d.t === 'bye') { setNet(false, 'O Mestre encerrou a sala'); }
   if (d.t === 'kicked') { kicked = true; toast('O Mestre removeu você da sala.', 5000); setNet(false, 'removido'); clearTimeout(retryT); try { peer.destroy(); } catch (e) {} }
 }
+function onRoomState() { renderCover(state.cover); applyTheme(); renderClima(); syncTimerFromState(); if (state.layoutTs && state.layoutTs !== roomLayoutTs) { roomLayoutTs = state.layoutTs; if (state.layout) setLayout(state.layout); } renderLive(); }
 function setRoster(list) { roster.clear(); (list || []).forEach(p => { if (p && p.id) roster.set(p.id, {id: p.id, name: cleanName(p.name), role: p.role === 'mestre' ? 'mestre' : 'agente', mic: !!p.mic, cam: !!p.cam, deaf: !!p.deaf}); }); if (me.id) roster.set(me.id, {...me}); }
 function pushStatus() {
   if (me.id) roster.set(me.id, {...me});
@@ -1118,23 +1683,383 @@ function renderCover(c) {
   let inner = '';
   if (c.style === 'estatica') inner = `<canvas></canvas><div class="scan"></div><div class="scanroll"></div><div><div class="tt glt" data-t="${title}">${title}</div><div class="st">${sub}</div></div>`;
   else if (c.style === 'ritual') inner = `${sigilSVG()}<div class="vign"></div><div><div class="tt">${title}</div><div class="st">${sub}</div></div>`;
-  else if (c.style === 'sangue') { let d = ''; for (let i = 0; i < 14; i++) d += `<i class="drip" style="--x:${rand(0, 98)}%;--w:${rand(4, 14)}px;--h:${rand(15, 60)}%;--d:${rand(4, 9)}s;--dl:${rand(0, 5)}s"></i>`; inner = `${d}<div><div class="tt glt" data-t="${title}">${title}</div><div class="st">${sub}</div></div>`; }
+  else if (c.style === 'sangue') inner = `<canvas class="bloodC"></canvas><div class="bvign"></div><div style="position:relative;z-index:3"><div class="tt bloodT">${title}</div><div class="st">${sub}</div></div>`;
   else if (c.style === 'dossie') inner = `<div class="paper"><div class="stamp">CONFIDENCIAL</div><div class="tt">${title}</div><div class="st">${sub}</div></div>`;
   else if (c.style === 'outro') inner = `<div class="swirl"></div><div class="vign"></div><div><div class="tt glt" data-t="${title}">${title}</div><div class="st">${sub}</div></div>`;
   else if (c.style === 'corra') inner = `<div class="vign"></div><div><div class="tt">${title}</div><div class="st">${sub}</div></div>`;
   else inner = `<div class="fog"></div><div class="fog b"></div><div class="vign"></div><div><div class="tt">${title}</div><div class="st">${sub}</div></div>`;
   el.innerHTML = `<div class="cv cv-${esc(c.style)}">${inner}</div>`;
-  const cvs = el.querySelector('canvas'); if (cvs) noiseCanvas(cvs);
+  const cvs = el.querySelector('canvas:not(.bloodC)'); if (cvs) noiseCanvas(cvs);
+  const bc = el.querySelector('.bloodC'); if (bc) bloodCanvas(bc, 'cover');
 }
 function doFx(name, broadcast) {
   const fx = $('#fx'), st = $('#stage');
   if (broadcast && isHost) sendAll({t: 'fx', name});
   if (name === 'glitch') { st.classList.add('glitchOn'); setTimeout(() => st.classList.remove('glitchOn'), 1300); return; }
+  if (name === 'blood') { const c = document.createElement('canvas'); c.className = 'fx-bloodC'; fx.appendChild(c); bloodCanvas(c, 'fx'); setTimeout(() => c.remove(), 3500); const d = document.createElement('div'); d.style.cssText = 'position:absolute;inset:0'; d.className = 'fx-blood'; fx.appendChild(d); setTimeout(() => d.remove(), 3200); return; }
   if (name === 'static') { const c = document.createElement('canvas'); fx.appendChild(c); noiseCanvas(c, 30); setTimeout(() => c.remove(), 1700); return; }
   const d = document.createElement('div'); d.style.cssText = 'position:absolute;inset:0'; d.className = 'fx-' + name; fx.appendChild(d); setTimeout(() => d.remove(), 3200);
   if (name === 'flash' || name === 'flashw') { st.classList.remove('shake'); void st.offsetWidth; st.classList.add('shake'); }
 }
-function setCover(patch) { Object.assign(state.cover, patch); coverKey = ''; renderCover(state.cover); pushState(); renderControls(); renderSide(); }
+function setCover(patch) { Object.assign(state.cover, patch); coverKey = ''; renderCover(state.cover); pushState(); syncCoverSound(); renderControls(); renderSide(); }
+
+/* =====================================================================
+   ROOM THEMES
+   ===================================================================== */
+const THEMES = {
+  ordem: {n: 'Ordem', red: '#c3161f', red2: '#ff3b3b', bg: '#09090b', p1: '#111114', p2: '#18181c', p3: '#202026', line: '#27272e', ink: '#ecebe8', mut: '#8e8b93', tint: '#3a0a0e'},
+  sangue: {n: 'Sangue', red: '#a3000d', red2: '#ff2a3a', bg: '#0b0405', p1: '#140809', p2: '#1c0b0d', p3: '#261012', line: '#3a1418', ink: '#f3e6e6', mut: '#a08487', tint: '#5a0008'},
+  morte: {n: 'Morte', red: '#7d7d7d', red2: '#e2e2e2', bg: '#050505', p1: '#0e0e0e', p2: '#151515', p3: '#1d1d1d', line: '#2a2a2a', ink: '#e9e9e9', mut: '#8a8a8a', tint: '#202020'},
+  conhecimento: {n: 'Conhecimento', red: '#b8862b', red2: '#f5c75b', bg: '#0b0906', p1: '#14110b', p2: '#1b170f', p3: '#241e13', line: '#3a3020', ink: '#f2ead8', mut: '#a79a7d', tint: '#3d2c08'},
+  energia: {n: 'Energia', red: '#7b2cf5', red2: '#b98bff', bg: '#07050c', p1: '#100c18', p2: '#161021', p3: '#1e162c', line: '#2e2342', ink: '#eee8fb', mut: '#9a8fb3', tint: '#2c0b5a'},
+  medo: {n: 'Medo', red: '#cfcfd8', red2: '#ffffff', bg: '#0a0a0d', p1: '#121216', p2: '#19191e', p3: '#222228', line: '#33333b', ink: '#f4f4f6', mut: '#9a9aa6', tint: '#2c2c36', on: '#111'},
+  oeste: {n: 'Velho Oeste', red: '#b5121b', red2: '#ff5a3d', bg: '#160f09', p1: '#20160d', p2: '#291d12', p3: '#332418', line: '#4a3624', ink: '#f2e3c6', mut: '#b39c7b', tint: '#6b4524'},
+  floresta: {n: 'Floresta', red: '#2f8a46', red2: '#7fe08f', bg: '#050a06', p1: '#0b130d', p2: '#101a12', p3: '#162318', line: '#223525', ink: '#e6f2e7', mut: '#86a08a', tint: '#0d2e16'},
+  hospital: {n: 'Hospital', red: '#2ea0b3', red2: '#8eeaf6', bg: '#060b0c', p1: '#0c1415', p2: '#111b1d', p3: '#172426', line: '#22383b', ink: '#e7f4f5', mut: '#86a4a8', tint: '#0b3036'},
+  neve: {n: 'Neve', red: '#6fa6df', red2: '#dbeeff', bg: '#0a0d12', p1: '#10151c', p2: '#161d26', p3: '#1d2631', line: '#2b3847', ink: '#eef4fb', mut: '#94a6ba', tint: '#1d3350', on: '#0a1320'},
+  neon: {n: 'Neon', red: '#ff2bd6', red2: '#2ef2ff', bg: '#07050d', p1: '#0f0b18', p2: '#150f22', p3: '#1c142d', line: '#2c1f45', ink: '#f6ecff', mut: '#9e8fbc', tint: '#3a0a4a'},
+  abismo: {n: 'Abismo', red: '#1f6feb', red2: '#61b3ff', bg: '#03060d', p1: '#080e19', p2: '#0c1424', p3: '#111b30', line: '#1c2b48', ink: '#e8f0ff', mut: '#8597b8', tint: '#08204a'},
+  pantano: {n: 'Pântano', red: '#7a8f2a', red2: '#cfe55e', bg: '#080a05', p1: '#10140b', p2: '#161b10', p3: '#1d2416', line: '#2c3620', ink: '#eef2e1', mut: '#9aa486', tint: '#253010'}
+};
+let roomImg = '';
+function mixHex(a, b, t) { const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); const x = p(a), y = p(b); return '#' + x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, '0')).join(''); }
+function applyTheme() {
+  const st = state.theme || {}, th = THEMES[st.id] || THEMES.ordem, r = document.documentElement.style;
+  const acc = /^#[0-9a-f]{6}$/i.test(st.acc || '') ? st.acc : th.red, acc2 = st.acc ? mixHex(st.acc, '#ffffff', .35) : th.red2;
+  const v = {red: acc, red2: acc2, bg: th.bg, p1: th.p1, p2: th.p2, p3: th.p3, line: th.line, ink: th.ink, mut: th.mut, tint: th.tint, on: th.on || '#fff'};
+  for (const k in v) r.setProperty('--' + k, v[k]);
+  r.setProperty('--roomImg', roomImg ? `url("${roomImg}")` : 'none');
+  const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = th.bg;
+}
+async function imgToDataURL(file, max, q = .86, square = false) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image(); await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+    let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
+    if (square) { const m = Math.min(sw, sh); sx = (sw - m) / 2; sy = (sh - m) / 2; sw = sh = m; }
+    const k = Math.min(1, max / Math.max(sw, sh)), c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(sw * k)); c.height = Math.max(1, Math.round(sh * k));
+    const g = c.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, sx, sy, sw, sh, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', q);
+  } finally { URL.revokeObjectURL(url); }
+}
+function pickFile(accept, multiple) { return new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.accept = accept; i.multiple = !!multiple; i.onchange = () => res([...(i.files || [])]); i.click(); }); }
+const okImg = s => typeof s === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(s) && s.length < 900000;
+
+/* =====================================================================
+   COVER SOUNDTRACKS (play while the screen is covered)
+   ===================================================================== */
+function coverStatic(out) {
+  const ns = gain(0, out); ns.gain.setTargetAtTime(.05, T(), 1); const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true; const bp = filt('bandpass', 2400, .5, ns); src.connect(bp); src.start();
+  const s1 = seq(.09, t => ns.gain.setTargetAtTime(Math.random() < .15 ? .11 : rand(.03, .06), t, .02));
+  const tune = [76, 74, 71, 72, 69, 71, 67, 64]; let i = 0;
+  const s2 = every(1.1, 1.8, t => { const g = gain(.6, out), lp = filt('lowpass', 1800, 1, g); const f = NOTE(tune[i++ % tune.length]) * (1 + rand(-.012, .012)); piano(t, lp, f, .05, 2.4); });
+  const s3 = every(9, 16, t => { const g = gain(0, out); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.06, t + .4); g.gain.exponentialRampToValueAtTime(.0001, t + 1.6); const o = osc('sine', 300, t, 1.7, filt('bandpass', 1200, 4, g)); o.frequency.exponentialRampToValueAtTime(2600, t + 1.5); });
+  return t => { ns.gain.setTargetAtTime(.0001, t, .4); src.stop(t + 3); s1(); s2(); s3(); };
+}
+function coverBlood(out) {
+  const dr = drone([26, 33, 34], 'sawtooth', 160, .12, out, .05);
+  const hb = seq(60 / 54, t => heartbeat(t, out, .55));
+  let s3 = () => {};
+  loadBuf('drip').then(() => { if (!coverSnd || coverSnd.style !== 'sangue') return; s3 = every(2.5, 5, t => playFile({k: 'drip', s: rand(0, 8), d: 1.6, v: .7, rv: .7, fade: .1}, t, out)); }).catch(() => {});
+  const s4 = every(16, 26, t => whispers(t, out, .12, 2.5, 2));
+  return t => { dr.stop(t); hb(); s3(); s4(); };
+}
+function coverDossie(out) {
+  const pad = strings(out, [45, 48, 52], {vol: .02, cutoff: 900, attack: 5});
+  const tick = seq(1, (t, i) => { const g = gain(0, out); env(g, t, .001, i % 2 ? .035 : .05, .05); noise(t, .06, filt('bandpass', i % 2 ? 2600 : 3400, 9, g)); });
+  let s2 = () => {};
+  loadBuf('typew').then(() => { if (!coverSnd || coverSnd.style !== 'dossie') return; s2 = every(5, 9, t => playFile({k: 'typew', s: rand(2, 7), d: rand(1.2, 2.4), v: .55, fade: .08}, t, out), 1.5); }).catch(() => {});
+  return t => { pad.stop(t); tick(); s2(); };
+}
+const COVER_SND = {
+  intervalo: out => TRACKS.calmaria.make(out),
+  estatica: coverStatic,
+  ritual: out => TRACKS.ritual.make(out),
+  sangue: coverBlood,
+  corra: out => TRACKS.fuga.make(out),
+  dossie: coverDossie,
+  outro: out => TRACKS.outro.make(out)
+};
+let coverSnd = null;
+function duckLevel() { return coverSnd ? .12 : 1; }
+function syncCoverSound() {
+  if (!isHost || !ctx || !musicBus) return;
+  const want = state.cover.on && S.coverMusic ? state.cover.style : null;
+  if (coverSnd && coverSnd.style === want) return;
+  if (coverSnd) { const c = coverSnd; coverSnd = null; c.bus.gain.setTargetAtTime(.0001, T(), .6); setTimeout(() => { try { c.stop(T()); } catch (e) {} setTimeout(() => { try { c.bus.disconnect(); } catch (e) {} }, 6000); }, 2600); }
+  if (want && COVER_SND[want]) {
+    const bus = gain(.0001); bus.connect(masterComp); bus.gain.setTargetAtTime(S.coverVol, T(), .8);
+    coverSnd = {style: want, bus, stop: () => {}};
+    try { coverSnd.stop = COVER_SND[want](bus) || (() => {}); } catch (e) { console.warn(e); }
+  }
+  musicBus.gain.setTargetAtTime(S.musicVol * duckLevel(), T(), .8);
+  if (ambBus) ambBus.gain.setTargetAtTime(S.ambVol * (coverSnd ? .3 : 1), T(), .8);
+}
+
+/* =====================================================================
+   LIQUID BLOOD (cover + effect)
+   ===================================================================== */
+function bloodCanvas(cv, mode = 'cover') {
+  const g = cv.getContext('2d'); let W = 0, H = 0, lastT = 0, lastSz = 0, pool = 0, born = performance.now();
+  const drips = [], spots = [];
+  const size = () => { const r = cv.getBoundingClientRect(); const w = Math.max(40, Math.round(r.width * .5)), h = Math.max(30, Math.round(r.height * .5)); if (w !== W || h !== H) { W = cv.width = w; H = cv.height = h; return true; } return false; };
+  size();
+  const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+  const spawn = (x, y0) => drips.push({x: x ?? rand(.01, .99), w: rand(.006, .02), y: y0 ?? rand(0, .03), y0: y0 ?? 0, v: rand(.02, .1), max: rand(.22, 1.15), seed: rand(0, 99)});
+  const splat = (cx, cy, sz, delay) => {
+    const n = 14 + (Math.random() * 18 | 0);
+    spots.push({x: cx, y: cy, r: sz, a: 0, d: delay});
+    for (let i = 0; i < n; i++) { const a = rand(0, 6.28), dist = Math.abs(gauss()) * sz * rand(2, 5); spots.push({x: cx + Math.cos(a) * dist, y: cy + Math.sin(a) * dist * 1.6, r: sz * rand(.06, .35), a: 0, d: delay + rand(0, .08)}); }
+    for (let i = 0; i < 3 + (Math.random() * 4 | 0); i++) drips.push({x: cx + rand(-sz, sz) * .8, w: sz * rand(.12, .3), y: cy, y0: cy, v: rand(.03, .09), max: Math.min(1.1, cy + rand(.15, .6)), seed: rand(0, 99), d: delay + .3});
+  };
+  if (mode === 'cover') { for (let i = 0; i < 20; i++) spawn(); for (let i = 0; i < 4; i++) splat(rand(.08, .92), rand(.2, .8), rand(.02, .045), rand(.6, 4)); }
+  else { for (let i = 0; i < 3; i++) splat(rand(.1, .9), rand(.15, .7), rand(.035, .07), i * .12); }
+  const mkGrad = () => { const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#3a0004'); gr.addColorStop(.45, '#82000b'); gr.addColorStop(1, '#b3000f'); return gr; };
+  let gr = mkGrad();
+  const rim = Array.from({length: 48}, (_, i) => ({x: i / 47 + rand(-.01, .01), r: rand(.01, .045)}));
+  const loop = now => {
+    if (!cv.isConnected) return;
+    requestAnimationFrame(loop);
+    if (now - lastT < 33) return;
+    const dt = Math.min(.1, (now - (lastT || now)) / 1000); lastT = now;
+    if (now - lastSz > 800) { lastSz = now; if (size()) gr = mkGrad(); }
+    const age = (now - born) / 1000;
+    g.clearRect(0, 0, W, H); g.fillStyle = gr;
+    if (mode === 'cover') { g.beginPath(); g.rect(0, 0, W, H * .018); rim.forEach(b => { const r = b.r * W * Math.min(1, age / 2 + .3); g.moveTo(b.x * W + r, 0); g.arc(b.x * W, 0, r, 0, Math.PI); }); g.fill(); }
+    for (const d of drips) {
+      if (d.d > 0) { d.d -= dt; continue; }
+      if (d.y < d.max) d.y += d.v * (.3 + .7 * Math.abs(Math.sin(now / 900 + d.seed))) * dt;
+      else if (mode === 'cover' && d.y >= 1) pool = Math.min(.09, pool + dt * .0012);
+      const x = d.x * W, w = Math.max(1.5, d.w * W), y0 = d.y0 * H, y = Math.min(d.y, 1.04) * H;
+      g.fillStyle = gr; g.fillRect(x - w * .3, y0, w * .6, y - y0); g.beginPath(); g.arc(x, y, w * .55, 0, 6.283); g.fill();
+      g.fillStyle = 'rgba(255,90,100,.28)'; g.fillRect(x - w * .2, y0, w * .1, Math.max(0, y - y0 - w * .4)); g.beginPath(); g.arc(x - w * .18, y - w * .12, w * .13, 0, 6.283); g.fill();
+    }
+    g.fillStyle = gr;
+    if (pool > 0) { g.beginPath(); g.rect(0, H * (1 - pool), W, H * pool + 2); g.fill(); }
+    for (const s of spots) { if (s.d > 0) { s.d -= dt; continue; } s.a = Math.min(1, s.a + dt * 9); g.globalAlpha = s.a; g.beginPath(); g.arc(s.x * W, s.y * H, Math.max(.8, s.r * W), 0, 6.283); g.fill(); }
+    g.globalAlpha = 1;
+    if (mode === 'cover' && drips.length < 70 && Math.random() < dt * 1.1) spawn();
+  };
+  requestAnimationFrame(loop);
+}
+
+/* =====================================================================
+   CHARACTERS · LIVE LAYOUT · OBS MODE
+   ===================================================================== */
+let chars = {};
+const myCh = Object.assign({char: '', sub: '', handle: '', img: ''}, lsGet('mesa-ch', {}));
+const sanCh = c => ({char: String((c && c.char) || '').slice(0, 30), sub: String((c && c.sub) || '').slice(0, 40), handle: String((c && c.handle) || '').slice(0, 30), img: okImg(c && c.img) ? c.img : ''});
+function broadcastChars() { if (!isHost) return; sendAll({t: 'chars', chars}); renderLive(); renderTiles(); }
+function setMyChar(ch) {
+  Object.assign(myCh, sanCh(ch)); lsSet('mesa-ch', myCh);
+  if (isHost) { if (me.id) { chars[me.id] = {...myCh}; broadcastChars(); } }
+  else if (hostConn && hostConn.open) hostConn.send({t: 'mych', ch: myCh});
+  renderLive(); renderTiles(); renderSide();
+}
+function openCharEditor(id) {
+  const isMe = !id || id === me.id, p = roster.get(id || me.id) || me;
+  const ch = sanCh(isMe ? myCh : (chars[id] || {}));
+  let img = ch.img;
+  openModal(`<div class="mhead"><h3>🎭 ${isMe ? 'Meu personagem' : 'Personagem de ' + esc(p.name)}</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
+    <div class="chEd"><button class="chPic" id="chPic" title="Trocar imagem"></button><div style="flex:1;min-width:0">
+      <label class="lab">Nome do personagem</label><input class="in" id="chName" maxlength="30" value="${esc(ch.char)}" placeholder="Ex.: Henry">
+      <label class="lab">Título / classe</label><input class="in" id="chSub" maxlength="40" value="${esc(ch.sub)}" placeholder="Ex.: Ocultista · NEX 35%">
+      <label class="lab">Seu @ (aparece no modo live)</label><input class="in" id="chHandle" maxlength="30" value="${esc(ch.handle)}" placeholder="@seunome">
+    </div></div>
+    <div class="row" style="margin-top:12px"><button class="btn sm" id="chUp">🖼️ Escolher imagem</button><button class="btn sm" id="chRm">Remover imagem</button></div>
+    <div class="hint">A imagem aparece no círculo do personagem e no fundo do quadro quando a câmera está desligada (como nas lives de RPG).</div>
+    <button class="btn red wide" id="chSave" style="margin-top:14px">Salvar</button></div>`);
+  const pic = () => { const b = $('#chPic'); b.style.backgroundImage = img ? `url("${img}")` : ''; b.textContent = img ? '' : '+'; };
+  pic();
+  const up = async () => { const [f] = await pickFile('image/*'); if (!f) return; try { img = await imgToDataURL(f, 360, .85, true); pic(); } catch (e) { toast('Não consegui abrir essa imagem.'); } };
+  $('#chPic').onclick = up; $('#chUp').onclick = up; $('#chRm').onclick = () => { img = ''; pic(); };
+  $('#chSave').onclick = () => {
+    const nc = sanCh({char: $('#chName').value.trim(), sub: $('#chSub').value.trim(), handle: $('#chHandle').value.trim(), img});
+    if (isMe) setMyChar(nc);
+    else if (isHost) { chars[id] = nc; broadcastChars(); const c = conns.get(id); if (c && c.open) c.send({t: 'yourch', ch: nc}); }
+    closeModal('x'); toast('Personagem salvo');
+  };
+}
+let layout = lsGet('mesa-layout', 'stage'), roomLayoutTs = 0;
+const LAYOUTS = [['stage', '🎬 Palco', 'tela grande e câmeras embaixo'], ['grid', '🔲 Grade', 'só as câmeras, todas iguais'], ['live', '📺 Live', 'quadros com personagem, estilo stream'], ['livestage', '🎥 Live + palco', 'tela do Mestre e quadros ao lado']];
+function setLayout(l) {
+  if (!LAYOUTS.some(x => x[0] === l)) l = 'stage';
+  layout = l; lsSet('mesa-layout', l);
+  document.body.classList.toggle('gridMode', l === 'grid');
+  document.body.classList.toggle('lay-live', l === 'live');
+  document.body.classList.toggle('lay-livestage', l === 'livestage');
+  renderLive(); renderTiles(); if ($('#layoutBtn')) renderTop();
+}
+function openLayoutMenu(anchor) {
+  const pop = $('#pop');
+  pop.innerHTML = `<h4>Visualização</h4><div class="lmenu">${LAYOUTS.map(([k, n, d]) => `<button data-lay="${k}" class="${layout === k ? 'on' : ''}"><b>${n}</b><small>${d}</small></button>`).join('')}<button data-lay="obs"><b>🙈 Esconder interface</b><small>para capturar no OBS · aperte H para voltar</small></button></div>`;
+  pop.classList.remove('hide');
+  const rc = anchor.getBoundingClientRect(); pop.style.left = clamp(rc.right - pop.offsetWidth, 8, innerWidth - pop.offsetWidth - 8) + 'px'; pop.style.top = (rc.bottom + 6) + 'px';
+  pop.onclick = e => { const b = e.target.closest('[data-lay]'); if (!b) return; closePop(); if (b.dataset.lay === 'obs') setObs(true); else setLayout(b.dataset.lay); };
+  pop.oninput = null; pop.onchange = null;
+}
+function setObs(on) { document.body.classList.toggle('obs', on); if (on) toast('Interface escondida · aperte H (ou Esc) para voltar', 3500); }
+function liveCh(p) { const c = p.id === me.id ? myCh : (chars[p.id] || {}); return c; }
+function renderLive() {
+  const box = $('#live'); if (!box) return;
+  const on = layout === 'live' || layout === 'livestage';
+  box.classList.toggle('hide', !on); if (!on) return;
+  const L = state.live || {};
+  $('#lvTitle').textContent = L.title || ''; $('#lvSub').textContent = L.sub || '';
+  $('#lvHead').classList.toggle('hide', !L.title && !L.sub);
+  const list = [...roster.values()];
+  const master = list.find(p => p.role === 'mestre'), agents = list.filter(p => p !== master);
+  const grid = $('#lvGrid'), mBox = $('#lvMaster');
+  grid.style.setProperty('--cols', agents.length <= 1 ? 1 : agents.length <= 4 ? 2 : 3);
+  const seen = new Set();
+  const put = (p, parent) => {
+    seen.add(p.id);
+    let f = box.querySelector(`.lf[data-id="${CSS.escape(p.id)}"]`);
+    if (!f) { f = document.createElement('div'); f.className = 'lf'; f.dataset.id = p.id; f.innerHTML = '<div class="lart"></div><video playsinline autoplay muted></video><div class="lbd"></div><div class="np"><span class="pt"></span><div class="tx"><b></b><i></i><s></s></div></div>'; }
+    if (f.parentElement !== parent) parent.appendChild(f);
+    const ch = liveCh(p), isMe = p.id === me.id, cam = isMe ? me.cam : p.cam, mic = isMe ? me.mic : p.mic;
+    f.classList.toggle('master', p.role === 'mestre'); f.classList.toggle('me', isMe);
+    const key = JSON.stringify([ch.char, ch.sub, ch.handle, (ch.img || '').length, p.name, p.role, mic]);
+    if (f._k !== key) {
+      f._k = key;
+      f.querySelector('.lart').style.backgroundImage = ch.img ? `url("${ch.img}")` : '';
+      const pt = f.querySelector('.pt'); pt.style.backgroundImage = ch.img ? `url("${ch.img}")` : ''; pt.textContent = ch.img ? '' : (String(ch.char || p.name || '?').trim()[0] || '?').toUpperCase(); pt.style.setProperty('--c', colorOf(p.name));
+      f.querySelector('.tx b').textContent = ch.char || p.name;
+      f.querySelector('.tx i').textContent = ch.sub || (p.role === 'mestre' ? 'O Mestre' : 'Agente');
+      f.querySelector('.tx s').textContent = [ch.char ? p.name : '', ch.handle].filter(Boolean).join(' · ');
+      f.querySelector('.lbd').innerHTML = !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : '';
+    }
+    const v = f.querySelector('video'); let src = null;
+    if (cam) { if (isMe) src = camTrack ? (f._ms && f._ms.getVideoTracks()[0] === camTrack ? f._ms : new MediaStream([camTrack])) : null; else { const r = remotes.get(p.id); src = r && r.stream ? r.stream : null; } }
+    if (v.srcObject !== src) { v.srcObject = src; f._ms = src; if (src) v.play().catch(() => {}); }
+    v.style.display = cam && src ? '' : 'none'; f.classList.toggle('nocam', !(cam && src));
+  };
+  if (master) put(master, mBox);
+  agents.forEach(p => put(p, grid));
+  $$('.lf', box).forEach(f => { if (!seen.has(f.dataset.id)) f.remove(); });
+}
+
+/* =====================================================================
+   SCREEN CLIMATES · TIMER · REVEAL · WHISPER
+   ===================================================================== */
+const CLIMAS = {chuva: ['🌧️', 'Chuva na tela'], nevoa: ['🌫️', 'Névoa'], pulso: ['💓', 'Pulsação'], lanterna: ['🔦', 'Lanterna'], sangue: ['🩸', 'Sangue nas bordas'], vhs: ['📼', 'Fita VHS'], tremor: ['🫨', 'Tremor'], escuro: ['🌑', 'Escuridão']};
+let climaKey = '';
+function rainCanvas(cv) {
+  const g = cv.getContext('2d'); let W = 0, H = 0, last = 0; const drops = [];
+  const loop = now => {
+    if (!cv.isConnected) return; requestAnimationFrame(loop); if (now - last < 33) return; last = now;
+    const r = cv.getBoundingClientRect(); if (Math.round(r.width) !== W || Math.round(r.height) !== H) { W = cv.width = Math.max(10, Math.round(r.width)); H = cv.height = Math.max(10, Math.round(r.height)); }
+    while (drops.length < W / 6) drops.push({x: rand(0, W), y: rand(-H, H), l: rand(10, 28), v: rand(14, 26)});
+    g.clearRect(0, 0, W, H); g.strokeStyle = 'rgba(190,210,230,.35)'; g.lineWidth = 1; g.beginPath();
+    for (const d of drops) { d.y += d.v; d.x -= d.v * .12; if (d.y > H) { d.y = rand(-60, 0); d.x = rand(0, W * 1.1); } g.moveTo(d.x, d.y); g.lineTo(d.x + d.l * .12, d.y - d.l); }
+    g.stroke();
+  };
+  requestAnimationFrame(loop);
+}
+function renderClima() {
+  const box = $('#clima'); if (!box) return;
+  const list = (state.clima || []).filter(k => CLIMAS[k]), key = list.join(',');
+  if (key === climaKey) return; climaKey = key;
+  box.innerHTML = list.map(k => k === 'chuva' ? '<canvas class="cl-chuva"></canvas>' : k === 'nevoa' ? '<div class="cl-nevoa"><div class="fog"></div><div class="fog b"></div></div>' : `<div class="cl-${k}"></div>`).join('');
+  const c = box.querySelector('.cl-chuva'); if (c) rainCanvas(c);
+  document.body.classList.toggle('cl-tremorOn', list.includes('tremor'));
+}
+document.addEventListener('pointermove', e => { const l = document.querySelector('.cl-lanterna'); if (!l) return; const r = l.getBoundingClientRect(); l.style.setProperty('--x', (e.clientX - r.left) + 'px'); l.style.setProperty('--y', (e.clientY - r.top) + 'px'); }, {passive: true});
+let timerEnd = 0, timerLeft = 0, timerDone = false;
+function syncTimerFromState() {
+  const tm = state.timer;
+  if (!tm) { timerEnd = 0; timerLeft = 0; }
+  else if (tm.run) { timerEnd = Date.now() + Math.max(0, tm.left); timerLeft = 0; if (tm.left > 0) timerDone = false; }
+  else { timerEnd = 0; timerLeft = Math.max(0, tm.left); }
+  renderTimer();
+}
+function timerRemaining() { const tm = state.timer; if (!tm) return 0; return tm.run ? Math.max(0, timerEnd - Date.now()) : timerLeft; }
+function refreshTimerState() { if (isHost && state.timer && state.timer.run) state.timer.left = Math.max(0, timerEnd - Date.now()); }
+function renderTimer() {
+  const el = $('#timerOv'); if (!el) return;
+  const tm = state.timer; if (!tm) { el.classList.add('hide'); return; }
+  const ms = timerRemaining(), s = Math.ceil(ms / 1000), mm = Math.floor(s / 60), ss = s % 60;
+  el.classList.remove('hide');
+  el.classList.toggle('low', tm.run && s <= 10 && s > 0); el.classList.toggle('done', s <= 0); el.classList.toggle('paused', !tm.run && s > 0);
+  el.innerHTML = `<small>${esc(tm.label || 'Tempo')}</small><b>${s <= 0 ? 'ESGOTADO' : String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0')}</b>`;
+  if (s <= 0 && tm.run && !timerDone) { timerDone = true; if (isHost) { playSfx('sino'); doFx('flash', true); } }
+}
+setInterval(() => { if (state.timer) renderTimer(); }, 250);
+function timerStart(min, label) { const ms = Math.max(1, Math.round(min * 60)) * 1000; timerEnd = Date.now() + ms; timerDone = false; state.timer = {label: String(label || '').slice(0, 40), left: ms, run: true}; pushState(); renderTimer(); renderSide(); }
+function timerPause() { const tm = state.timer; if (!tm) return; if (tm.run) { tm.left = Math.max(0, timerEnd - Date.now()); tm.run = false; timerLeft = tm.left; } else { tm.run = true; timerEnd = Date.now() + tm.left; } pushState(); renderTimer(); renderSide(); }
+function timerClear() { state.timer = null; pushState(); renderTimer(); renderSide(); }
+let curReveal = null, revealHidden = false;
+function renderReveal() {
+  const el = $('#revealOv'); if (!el) return;
+  if (!curReveal || revealHidden) { el.classList.add('hide'); el.innerHTML = ''; return; }
+  if (el.dataset.id === curReveal.id && !el.classList.contains('hide')) return;
+  el.dataset.id = curReveal.id; el.classList.remove('hide');
+  el.innerHTML = `<div class="rvCard"><img alt="" src="${curReveal.img}">${curReveal.cap ? `<div class="rvCap">${esc(curReveal.cap)}</div>` : ''}<button class="rvX" title="${isHost ? 'Esconder para todos' : 'Fechar'}">✕</button></div>`;
+  el.querySelector('.rvX').onclick = () => { if (isHost) revealHide(); else { revealHidden = true; renderReveal(); } };
+}
+async function revealPick() {
+  const [f] = await pickFile('image/*'); if (!f) return;
+  try { const img = await imgToDataURL(f, 1600, .85); const cap = ($('#rvCapIn') && $('#rvCapIn').value.trim()) || ''; curReveal = {id: Math.random().toString(36).slice(2, 8), img, cap: cap.slice(0, 120)}; revealHidden = false; sendAll({t: 'reveal', r: curReveal}); renderReveal(); renderSide(); toast('Imagem revelada para os agentes'); }
+  catch (e) { toast('Não consegui abrir essa imagem.'); }
+}
+function revealHide() { curReveal = null; sendAll({t: 'reveal', r: null}); renderReveal(); renderSide(); }
+function showWhisper(text) {
+  const el = $('#whisperOv'); if (!el) return;
+  el.innerHTML = `<div class="wsp">${[...String(text)].map((ch, i) => `<span style="animation-delay:${(i * .055).toFixed(2)}s">${esc(ch)}</span>`).join('')}</div><small>só você está vendo isto</small>`;
+  el.classList.remove('hide'); el.classList.remove('out'); void el.offsetWidth;
+  try { audioInit().then(() => whispers(T() + .05, sfxBus, .3, Math.min(6, 1.5 + text.length * .05), 3)); } catch (e) {}
+  clearTimeout(el._t); el._t = setTimeout(() => { el.classList.add('out'); setTimeout(() => el.classList.add('hide'), 1200); }, 3500 + text.length * 70);
+  el.onclick = () => { el.classList.add('out'); setTimeout(() => el.classList.add('hide'), 600); };
+}
+function openWhisper(id) {
+  const p = roster.get(id); if (!p) return;
+  openModal(`<div class="mhead"><h3>🤫 Sussurrar para ${esc(p.name)}</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
+    <div class="hint">Só ${esc(p.name)} vê a mensagem, que aparece na tela com sussurros. Ótimo para visões, segredos e o Medo falando com alguém.</div>
+    <textarea class="in" id="wspIn" rows="3" maxlength="200" placeholder="Você sente que algo está te observando…" style="margin-top:10px"></textarea>
+    <button class="btn red wide" id="wspGo" style="margin-top:12px">Sussurrar</button></div>`);
+  setTimeout(() => $('#wspIn') && $('#wspIn').focus(), 50);
+  $('#wspGo').onclick = () => { const t = $('#wspIn').value.trim(); if (!t) return; const c = conns.get(id); if (c && c.open) { c.send({t: 'whisper', text: t.slice(0, 200)}); toast('Sussurro enviado para ' + p.name); } else toast('Agente desconectado.'); closeModal('x'); };
+}
+function openVolPop(anchor) {
+  const pop = $('#pop');
+  pop.innerHTML = `<h4>🔊 Volume para você</h4>
+    <label class="lab">${isHost ? 'Trilha e efeitos (o que você ouve)' : 'Transmissão do Mestre (trilha, efeitos, tela)'}</label><input type="range" min="0" max="100" value="${Math.round((isHost ? S.monVol : S.stageVol) * 100)}" data-pv="stage">
+    <label class="lab">Vozes de todos</label><input type="range" min="0" max="100" value="${Math.round(S.voiceVol * 100)}" data-pv="voice">
+    <div class="hint">Só muda o que <b>você</b> ouve. Para ajustar uma pessoa, toque no quadro dela.</div>`;
+  pop.classList.remove('hide');
+  const rc = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+  pop.style.left = clamp(rc.left + rc.width / 2 - pw / 2, 8, innerWidth - pw - 8) + 'px'; pop.style.top = clamp(rc.top - ph - 8, 8, innerHeight - ph - 8) + 'px';
+  pop.onclick = null; pop.onchange = null;
+  pop.oninput = e => { const k = e.target.dataset.pv; if (!k) return; const v = +e.target.value / 100; if (k === 'stage') setStageVol(v); else setVoiceVol(v); };
+}
+function setStageVol(v) {
+  if (isHost) { S.monVol = v; if (monitor && !deaf) monitor.gain.setTargetAtTime(v, T(), .05); }
+  else { S.stageVol = v; $('#vid').volume = v; }
+  saveS(); const r = $('#volR'); if (r && +r.value !== Math.round(v * 100)) r.value = Math.round(v * 100); updVolIcon();
+}
+function setVoiceVol(v) { S.voiceVol = v; saveS(); remotes.forEach((r, id) => { if (r.el) { const p = roster.get(id); r.el.volume = clamp((S.vols[p ? p.name : id] ?? 100) / 100 * v, 0, 1); } }); }
+function updVolIcon() { const b = $('#volB'); if (!b) return; const v = isHost ? S.monVol : S.stageVol; b.innerHTML = ic(v <= .001 ? 'volx' : 'vol'); }
+
+/* ---------- side-panel helpers (music / sounds) ---------- */
+let musicMode = 'lib', libCat = 'all', sfxGroup = 'all', sfxQ = '';
+function sfxReady(s) { return !s.L || s.L.every(l => bufs.has(l.k)); }
+function sfxGridHTML() {
+  if (sfxGroup === 'meus') {
+    const mine = myList.filter(x => x.kind === 'sfx');
+    return `<label class="btn sm red wide" style="cursor:pointer">+ Adicionar efeitos do seu PC<input type="file" accept="audio/*" multiple hidden data-myin="sfx"></label>
+      ${mine.length ? `<div class="grid" style="margin-top:10px">${mine.map(x => `<button class="tile2" data-sfx="my:${x.id}"><span class="e">🔊</span>${esc(x.name)}</button>`).join('')}</div><div class="sec">Gerenciar</div>${mine.map(x => `<div class="trk"><span class="nm">${esc(x.name)}</span><button class="x" data-mydel="${x.id}" title="Remover">🗑</button></div>`).join('')}` : ''}
+      <div class="hint">Sons curtos seus (mp3, wav, ogg). Ficam salvos só neste navegador.</div>`;
+  }
+  const q = norm(sfxQ.trim());
+  const list = Object.entries(SFX).filter(([k, s]) => (sfxGroup === 'all' || s.g === sfxGroup) && (!q || norm(s.n).includes(q) || norm(k).includes(q)));
+  if (!list.length) return '<div class="hint">Nenhum som com esse nome.</div>';
+  const one = ([k, s]) => `<button class="tile2${sfxReady(s) ? '' : ' nl'}" data-sfx="${k}"><span class="e">${s.e}</span>${esc(s.n)}</button>`;
+  if (sfxGroup !== 'all' || q) return `<div class="grid">${list.map(one).join('')}</div>`;
+  return SFX_GROUPS.filter(g => g[0] !== 'meus').map(([g, l]) => { const its = list.filter(([, s]) => s.g === g); return its.length ? `<div class="sec">${l}</div><div class="grid">${its.map(one).join('')}</div>` : ''; }).join('');
+}
+function renderSfxGrid() { const g = $('#sfxGrid'); if (g) g.innerHTML = sfxGridHTML(); }
+function markSfxReady() { if (curTab !== 'sfx') return; $$('#sfxGrid [data-sfx]').forEach(b => { const s = SFX[b.dataset.sfx]; if (s && sfxReady(s)) b.classList.remove('nl'); }); }
 
 /* =====================================================================
    CHAT & DICE
@@ -1191,10 +2116,10 @@ function doRoll(r) {
    UI
    ===================================================================== */
 let curTab = 'chat';
-function renderAll() { renderTiles(); renderControls(); renderStage(); renderSide(); renderTop(); }
+function renderAll() { renderTiles(); renderControls(); renderStage(); renderSide(); renderTop(); renderClima(); renderTimer(); renderReveal(); updVolIcon(); }
 function renderTop() {
   $('#rCode').textContent = code;
-  $('#layoutBtn').innerHTML = ic(document.body.classList.contains('gridMode') ? 'stage' : 'grid');
+  $('#layoutBtn').innerHTML = ic('layout');
   $('#setBtn').innerHTML = ic('gear');
   $('#fsBtn').innerHTML = ic('full');
 }
@@ -1210,7 +2135,7 @@ function renderStage() {
 }
 function tileHTML(p) {
   const isMe = p.id === me.id, cam = isMe ? me.cam : p.cam, mic = isMe ? me.mic : p.mic, dfn = isMe ? deaf : p.deaf;
-  return `<div class="av"${cam ? ' style="display:none"' : ''}><i style="--c:${colorOf(p.name)}">${initial(p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}<div class="bd">${!mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(p.name)}${isMe ? ' (você)' : ''}</span></div>`;
+  return `<div class="av"${cam ? ' style="display:none"' : ''}><i style="--c:${colorOf(p.name)}">${initial(p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}<div class="bd">${!mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <em>' + esc(p.name) + '</em>' : ''}${isMe ? ' (você)' : ''}</span></div>`;
 }
 function renderTiles() {
   const box = $('#tiles'); if (!box) return;
@@ -1221,7 +2146,7 @@ function renderTiles() {
     let t = box.querySelector(`.tile[data-id="${CSS.escape(p.id)}"]`);
     if (!t) { t = document.createElement('div'); t.className = 'tile'; t.dataset.id = p.id; t.innerHTML = '<video playsinline autoplay muted></video><div class="lay"></div>'; box.appendChild(t); }
     t.classList.toggle('me', p.id === me.id);
-    const key = JSON.stringify([p.name, p.role, p.id === me.id ? [me.mic, me.cam, deaf] : [p.mic, p.cam, p.deaf]]);
+    const key = JSON.stringify([p.name, p.role, liveCh(p).char, p.id === me.id ? [me.mic, me.cam, deaf] : [p.mic, p.cam, p.deaf]]);
     if (t._k !== key) { t._k = key; t.querySelector('.lay').innerHTML = tileHTML(p); }
     const v = t.querySelector('video'), cam = p.id === me.id ? me.cam : p.cam;
     let src = null;
@@ -1231,6 +2156,7 @@ function renderTiles() {
   });
   $$('.tile', box).forEach(t => { if (!seen.has(t.dataset.id)) t.remove(); });
   [...box.children].sort((a, b) => list.findIndex(p => p.id === a.dataset.id) - list.findIndex(p => p.id === b.dataset.id)).forEach(t => box.appendChild(t));
+  renderLive();
 }
 function cbw(id, icon, label, cls = '', extra = '') { return `<div class="cbw ${extra}"><button class="cb ${cls}" data-c="${id}" title="${esc(label)}">${icon}</button>${esc(label)}</div>`; }
 function renderControls() {
@@ -1240,6 +2166,7 @@ function renderControls() {
   h += cbw('cam', ic('cam', !me.cam), 'Câmera', me.cam ? '' : 'off');
   if (isHost) h += cbw('share', ic('screen'), screenStream ? 'Parar tela' : 'Tela', screenStream ? 'act' : '');
   h += cbw('deaf', ic('head', deaf), deaf ? 'Surdo' : 'Ouvir', deaf ? 'off' : '');
+  h += cbw('vol', ic('vol'), 'Volume', '', 'deskOnly');
   if (isHost) h += cbw('cover', ic('mask'), state.cover.on ? 'Destampar' : 'Tampar', state.cover.on ? 'act' : '');
   h += '<span class="cbgap"></span>';
   h += cbw('chat', ic('chat') + (unread ? '<i class="dot"></i>' : ''), 'Chat', '', 'mobOnly');
@@ -1259,11 +2186,12 @@ $('#ctl').addEventListener('click', async e => {
   if (k === 'chat') openSide('chat');
   if (k === 'panel') openSide(curTab === 'chat' || curTab === 'people' ? 'music' : curTab);
   if (k === 'settings') openSettings('audio');
+  if (k === 'vol') { openVolPop(b); return; }
   if (k === 'leave') { if (await confirmBox(isHost ? 'Encerrar a sala? Todos os agentes serão desconectados.' : 'Sair da sala?', isHost ? 'Encerrar' : 'Sair')) leave(); }
 });
 function openSide(tab) { const s = $('#side'); if (innerWidth <= 900 && s.classList.contains('open') && curTab === tab) { s.classList.remove('open'); return; } curTab = tab; if (tab === 'chat') unread = 0; s.classList.add('open'); renderSide(); renderControls(); }
 document.addEventListener('pointerdown', e => { const s = $('#side'); if (innerWidth <= 900 && s.classList.contains('open') && !s.contains(e.target) && !e.target.closest('.ctl') && !e.target.closest('#shade') && !e.target.closest('#pop')) s.classList.remove('open'); });
-const HOST_TABS = [['chat', 'chat', 'Chat'], ['music', 'music', 'Trilha'], ['sfx', 'bolt', 'Efeitos'], ['cover', 'mask', 'Capa'], ['voice', 'voice', 'Voz'], ['people', 'people', 'Pessoas']];
+const HOST_TABS = [['chat', 'chat', 'Chat'], ['music', 'music', 'Trilha'], ['sfx', 'bolt', 'Sons'], ['cover', 'mask', 'Capa'], ['voice', 'voice', 'Voz'], ['room', 'palette', 'Sala'], ['people', 'people', 'Pessoas']];
 const PLAYER_TABS = [['chat', 'chat', 'Chat'], ['people', 'people', 'Pessoas']];
 function renderTabs() {
   const tabs = isHost ? HOST_TABS : PLAYER_TABS;
@@ -1284,15 +2212,35 @@ function renderSide() {
         <form id="chatF" class="row"><input class="in" id="chatIn" maxlength="600" placeholder="Mensagem para a mesa…" autocomplete="off"><button class="btn red" type="submit">Enviar</button></form>
       </div>`;
   } else if (curTab === 'music' && isHost) {
-    h = (curTrack ? `<div class="now"><span class="eq"><i></i><i></i><i></i></span><span style="flex:1">Tocando: <b>${esc(TRACKS[curTrack].name)}</b></span><button class="btn sm" data-track="">Parar</button></div>` : '')
-      + `<div class="grid g2">${Object.entries(TRACKS).map(([k, t]) => `<button class="tile2 ${curTrack === k ? 'on' : ''}" data-track="${k}"><span class="e">${t.e}</span>${t.name}<small>${t.d}</small></button>`).join('')}</div>
+    const np = trackLabel(curTrack);
+    h = (np ? `<div class="now"><span class="eq"><i></i><i></i><i></i></span><span style="flex:1;min-width:0"><span style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Tocando: <b>${esc(np.n)}</b></span><small style="color:var(--mut)">${esc(np.src)}</small>${np.stream ? '<div class="prog"><b id="npProg"></b></div>' : ''}</span>${np.stream ? `<button class="btn sm ${S.loop ? 'on' : ''}" data-a="loop" title="Repetir a música">🔁</button>` : ''}<button class="btn sm" data-track="">Parar</button></div>` : '')
+      + `<div class="seg">${[['lib', '📚 Biblioteca'], ['gen', '🎛️ Geradas'], ['my', '📁 Minhas']].map(([k, l]) => `<button data-mm="${k}" class="${musicMode === k ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+    if (musicMode === 'gen') {
+      h += `<div class="grid g2">${Object.entries(TRACKS).map(([k, t]) => `<button class="tile2 ${curTrack === k ? 'on' : ''}" data-track="${k}"><span class="e">${t.e}</span>${t.name}<small>${t.d}</small></button>`).join('')}</div>
+        <div class="hint">Geradas ao vivo pelo site: nunca repetem igual e funcionam até sem internet.</div>`;
+    } else if (musicMode === 'my') {
+      const mine = myList.filter(x => x.kind === 'music');
+      h += `<label class="btn sm red wide" style="cursor:pointer">+ Adicionar músicas do seu PC<input type="file" accept="audio/*" multiple hidden data-myin="music"></label>
+        ${mine.length ? '<div style="margin-top:10px">' + mine.map(x => `<div class="trk ${curTrack === 'my:' + x.id ? 'on' : ''}"><button class="pl" data-track="my:${x.id}">${curTrack === 'my:' + x.id ? '■' : '▶'}</button><button class="nm" data-track="my:${x.id}" style="text-align:left">${esc(x.name)}<br><small>${(x.size / 1048576).toFixed(1)} MB</small></button><button class="x" data-mydel="${x.id}" title="Remover">🗑</button></div>`).join('') + '</div>' : ''}
+        <div class="hint">Coloque aqui as trilhas que você tem no computador, como as músicas oficiais de Ordem Paranormal que você baixou. Elas ficam salvas só neste navegador, tocam para todos os agentes com o mesmo volume e passam pela troca suave de faixa.</div>`;
+    } else {
+      h += `<div class="chips">${[['all', 'Todas'], ...LIB_CATS].map(([k, l]) => `<button class="chip ${libCat === k ? 'on' : ''}" data-lc="${k}">${l}</button>`).join('')}</div>`
+        + LIB.filter(x => libCat === 'all' || x[2] === libCat).map(x => { const on = curTrack === 'lib:' + x[0]; return `<button class="trk ${on ? 'on' : ''}" data-track="lib:${x[0]}"><span class="pl">${on ? '■' : '▶'}</span><span class="nm">${esc(x[1])}<br><small>${esc(x[6])} · ${(LIB_CATS.find(c => c[0] === x[2]) || ['', ''])[1]}</small></span></button>`; }).join('')
+        + `<div class="hint">Músicas de verdade com licença livre (Kevin MacLeod e outros compositores). Carregam da internet na hora em que você toca. Créditos em Ajustes → Créditos.</div>`;
+    }
+    h += `<div class="sec">Ambiente (toca junto com a música)</div><div class="grid">${Object.entries(AMBS).map(([k, a]) => `<button class="tile2 ${ambOn.has(k) ? 'on' : ''}" data-amb="${k}"><span class="e">${a.e}</span>${a.n}</button>`).join('')}</div>${ambOn.size ? '<button class="btn sm wide" data-a="ambstop" style="margin-top:8px">Parar todos os ambientes</button>' : ''}
       <div class="sec">Volume da trilha</div><input type="range" min="0" max="100" value="${Math.round(S.musicVol * 100)}" data-a="mvol">
+      <div class="sec">Volume do ambiente</div><input type="range" min="0" max="100" value="${Math.round(S.ambVol * 100)}" data-a="avol">
       <div class="sec">O que você ouve (só para você)</div><input type="range" min="0" max="100" value="${Math.round(S.monVol * 100)}" data-a="monvol">
-      <div class="hint">As músicas são geradas ao vivo, sem direitos autorais, e chegam aos agentes em som estéreo de alta qualidade. Trocar de faixa faz transição suave.</div>`;
+      <div class="hint">Os ambientes são gravações reais e podem tocar vários ao mesmo tempo, por exemplo chuva com casa assombrada.</div>`;
   } else if (curTab === 'sfx' && isHost) {
-    h = SFX_GROUPS.map(([g, ids]) => `<div class="sec">${g}</div><div class="grid">${ids.map(k => `<button class="tile2" data-sfx="${k}"><span class="e">${SFX[k].e}</span>${SFX[k].name}</button>`).join('')}</div>`).join('')
-      + `<div class="sec">Só visual na tela dos agentes</div><div class="grid">${[['flash', '⚡', 'Susto'], ['glitch', '👾', 'Glitch'], ['static', '📺', 'Estática'], ['blood', '🩸', 'Sangue'], ['dark', '🌑', 'Apagão'], ['flashw', '🌩️', 'Relâmpago']].map(([k, e, n]) => `<button class="tile2" data-fx="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
-      <div class="sec">Volume dos efeitos</div><input type="range" min="0" max="100" value="${Math.round(S.sfxVol * 100)}" data-a="svol">`;
+    preloadSfx();
+    h = `<input class="in srch" id="sfxQ" placeholder="🔎 Buscar som… (lobo, porta, grito)" value="${esc(sfxQ)}" autocomplete="off">
+      <div class="chips">${[['all', 'Todos'], ...SFX_GROUPS].map(([k, l]) => `<button class="chip ${sfxGroup === k ? 'on' : ''}" data-sg="${k}">${l}</button>`).join('')}</div>
+      <div id="sfxGrid">${sfxGridHTML()}</div>
+      <div class="sec">Só visual na tela dos agentes</div><div class="grid">${[['flash', '⚡', 'Susto'], ['glitch', '👾', 'Glitch'], ['static', '📺', 'Estática'], ['blood', '🩸', 'Sangue'], ['dark', '🌑', 'Apagão'], ['flashw', '🌩️', 'Relâmpago']].map(([k, e, n]) => `<button class="tile2" data-fx="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
+      <div class="sec">Volume dos efeitos</div><input type="range" min="0" max="100" value="${Math.round(S.sfxVol * 100)}" data-a="svol">
+      <div class="hint">Os sons são gravações reais. Na primeira vez eles carregam da internet (o pontinho some quando o som está pronto) e depois ficam guardados no seu navegador. As criaturas são gravações de animais e vozes deformadas na hora.</div>`;
   } else if (curTab === 'cover' && isHost) {
     const c = state.cover, def = COVERS[c.style] || COVERS.intervalo;
     h = `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
@@ -1300,7 +2248,32 @@ function renderSide() {
       <label class="lab">Título</label><input class="in" id="cT" maxlength="60" placeholder="${esc(def.t)}" value="${esc(c.title)}">
       <label class="lab">Subtítulo</label><input class="in" id="cS" maxlength="90" placeholder="${esc(def.s)}" value="${esc(c.sub)}">
       <div class="row" style="margin-top:10px"><button class="btn sm" data-a="capply">Aplicar texto</button><span class="hint" style="margin:0">vazio = texto padrão</span></div>
+      <div class="sec">Trilha da capa</div><label class="sw"><input type="checkbox" data-a2="covmus" ${S.coverMusic ? 'checked' : ''}><i></i><span>Tocar trilha enquanto a tela está tampada <small>Cada capa tem sua trilha curta. A música e o ambiente abaixam sozinhos e voltam quando você destampa.</small></span></label>
+      <input type="range" min="0" max="100" value="${Math.round(S.coverVol * 100)}" data-a="cvol">
       <div class="hint">A capa cobre a transmissão para os agentes com animação. Você continua vendo sua tela por baixo. Atalho: botão “Tampar” na barra de baixo.</div>`;
+  } else if (curTab === 'room' && isHost) {
+    const th = state.theme || {}, curId = th.id || 'ordem', tm = state.timer;
+    h = `<div class="sec">Tema da sala</div><div class="thm">${Object.entries(THEMES).map(([k, t]) => `<button data-theme="${k}" class="${curId === k && !th.acc ? 'on' : ''}" style="--c:${t.red2};--c2:${t.p3}"><i></i>${t.n}</button>`).join('')}</div>
+      <div class="row" style="margin-top:10px"><span class="hint" style="margin:0;flex:1">Cor personalizada</span><input type="color" data-a="acc" value="${th.acc || (THEMES[curId] || THEMES.ordem).red}">${th.acc ? '<button class="btn sm" data-a="accrm">Usar a do tema</button>' : ''}</div>
+      <div class="row" style="margin-top:8px"><button class="btn sm" data-a="bgup">🖼️ Imagem de fundo</button>${roomImg ? '<button class="btn sm" data-a="bgrm">Remover fundo</button>' : ''}</div>
+      <div class="hint">Todos os agentes veem o tema e a imagem de fundo (aparece atrás da tela e no modo live).</div>
+      <div class="sec">Modo live (para stream)</div>
+      <label class="lab" style="margin-top:0">Linha de cima</label><input class="in" id="lvS" maxlength="50" value="${esc((state.live || {}).sub || '')}" placeholder="Ex.: Ordem Paranormal apresenta">
+      <label class="lab">Título</label><input class="in" id="lvT" maxlength="40" value="${esc((state.live || {}).title || '')}" placeholder="Ex.: O ÚLTIMO ADEUS">
+      <div class="row" style="margin-top:8px"><button class="btn sm" data-a="lvsave">Salvar título</button></div>
+      <label class="lab">Visualização de todos</label>
+      <div class="row"><select class="in" id="lvLay" style="flex:1">${LAYOUTS.map(([k, n]) => `<option value="${k}"${(state.layout || layout) === k ? ' selected' : ''}>${n}</option>`).join('')}</select><button class="btn sm red" data-a="lvall">Aplicar a todos</button></div>
+      <div class="hint">No modo live cada pessoa aparece num quadro com a foto, o nome e o título do personagem, como nas lives de RPG. Os agentes configuram em Pessoas → Meu personagem (você também pode editar tocando no quadro deles). Para capturar no OBS: botão de visualização lá em cima → Esconder interface (tecla H).</div>
+      <div class="sec">Clima da tela</div><div class="grid">${Object.entries(CLIMAS).map(([k, [e, n]]) => `<button class="tile2 ${(state.clima || []).includes(k) ? 'on' : ''}" data-clima="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
+      <div class="hint">Fica por cima da tela de todos até você desligar. Dá para combinar (ex.: chuva + escuridão + lanterna). Na lanterna, cada agente ilumina com o próprio mouse ou dedo.</div>
+      <div class="sec">Cronômetro na tela</div>
+      <div class="row"><input class="in" id="tmL" maxlength="40" placeholder="Ex.: O ritual se completa em" value="${esc(tm ? tm.label : lsGet('mesa-tmL', ''))}" style="flex:1"><input class="in" id="tmM" type="number" min="0.1" step="0.5" value="${lsGet('mesa-tmM', 3)}" style="width:72px"><span class="hint" style="margin:0">min</span></div>
+      <div class="row" style="margin-top:8px"><button class="btn sm red" data-a="tstart">▶ ${tm ? 'Reiniciar' : 'Iniciar'}</button>${tm ? `<button class="btn sm" data-a="tpause">${tm.run ? '⏸ Pausar' : '▶ Continuar'}</button><button class="btn sm" data-a="tclear">Remover</button>` : ''}</div>
+      <div class="sec">Revelar imagem (pista)</div>
+      <input class="in" id="rvCapIn" maxlength="120" placeholder="Legenda (opcional), ex.: Foto encontrada no bolso da vítima">
+      <div class="row" style="margin-top:8px"><button class="btn sm red" data-a="rvpick">🖼️ Escolher e mostrar</button>${curReveal ? '<button class="btn sm" data-a="rvhide">Esconder dos agentes</button>' : ''}</div>
+      <div class="hint">A imagem aparece por cima da tela de todos, como uma foto ou documento entregue aos agentes. Para mandar uma mensagem secreta a um agente, toque no quadro dele → Sussurrar.</div>`;
+
   } else if (curTab === 'voice' && isHost) {
     h = `<div class="row"><button class="btn ${me.mic ? 'grn' : ''}" data-c2="mic" style="flex:1">${ic('mic', !me.mic)} ${me.mic ? 'Microfone ligado' : 'Microfone mudo'}</button><button class="btn ${hearSelf ? 'on' : ''}" data-a="hear" style="flex:1">🎧 ${hearSelf ? 'Me escutando' : 'Me escutar'}</button></div>
       <div class="meter" id="voxMeter"><b></b></div>
@@ -1312,8 +2285,8 @@ function renderSide() {
   } else {
     curTab = 'people';
     const list = [...roster.values()];
-    h = `<div class="sec">Na sala (${list.length})</div><div class="plist">${list.map(p => { const isMe = p.id === me.id, mic = isMe ? me.mic : p.mic, cam = isMe ? me.cam : p.cam;
-      return `<div class="pl" data-p="${esc(p.id)}"><span class="av"><i style="--c:${colorOf(p.name)}">${initial(p.name)}</i></span><span class="n">${esc(p.name)}${isMe ? ' (você)' : ''}</span>${p.role === 'mestre' ? '<span class="role">Mestre</span>' : ''}<span class="st">${mic ? ic('mic') : `<span class="m">${ic('mic', 1)}</span>`}${cam ? ic('cam') : ''}</span></div>`; }).join('')}</div>
+    h = `<button class="btn wide" data-a="mych" style="margin-bottom:6px">🎭 ${myCh.char ? 'Meu personagem: ' + esc(myCh.char) : 'Criar meu personagem'}</button><div class="sec">Na sala (${list.length})</div><div class="plist">${list.map(p => { const isMe = p.id === me.id, mic = isMe ? me.mic : p.mic, cam = isMe ? me.cam : p.cam;
+      return `<div class="pl" data-p="${esc(p.id)}"><span class="av"><i style="--c:${colorOf(p.name)}">${initial(p.name)}</i></span><span class="n">${esc(p.name)}${liveCh(p).char ? ' <small style="color:var(--mut)">· ' + esc(liveCh(p).char) + '</small>' : ''}${isMe ? ' (você)' : ''}</span>${p.role === 'mestre' ? '<span class="role">Mestre</span>' : ''}<span class="st">${mic ? ic('mic') : `<span class="m">${ic('mic', 1)}</span>`}${cam ? ic('cam') : ''}</span></div>`; }).join('')}</div>
       <div class="hint">Toque em alguém (aqui ou nos quadros) para ajustar o volume${isHost ? ' ou remover da sala' : ''}.</div>
       <div class="sec">Volume da transmissão do Mestre</div><input type="range" min="0" max="100" value="${Math.round(S.stageVol * 100)}" data-a="stagevol"${isHost ? ' disabled' : ''}>`;
   }
@@ -1324,9 +2297,32 @@ function renderSide() {
 $('#pane').addEventListener('click', e => {
   const b = e.target.closest('button,[data-p]'); if (!b) return;
   if (b.dataset.p) return openPop(b.dataset.p, b);
+  if (b.dataset.mm) { musicMode = b.dataset.mm; if (musicMode === 'my') myRefresh().then(renderSide); renderSide(); return; }
+  if (b.dataset.lc) { libCat = b.dataset.lc; renderSide(); return; }
+  if (b.dataset.sg) { sfxGroup = b.dataset.sg; if (sfxGroup === 'meus') myRefresh().then(renderSfxGrid); $$('[data-sg]').forEach(x => x.classList.toggle('on', x === b)); renderSfxGrid(); return; }
+  if (b.dataset.amb) { toggleAmb(b.dataset.amb); return; }
+  if (b.dataset.mydel) { const id = b.dataset.mydel; confirmBox('Remover este arquivo do navegador?', 'Remover').then(ok => { if (ok) myDel(id).then(renderSfxGrid); }); return; }
+  if (b.dataset.theme) { state.theme = {id: b.dataset.theme, acc: ''}; applyTheme(); pushState(); saveRoom(); renderSide(); return; }
+  if (b.dataset.clima) { const k = b.dataset.clima, l = state.clima || (state.clima = []); const i = l.indexOf(k); if (i >= 0) l.splice(i, 1); else l.push(k); renderClima(); pushState(); renderSide(); return; }
+  {
+    const a0 = b.dataset.a;
+    if (a0 === 'loop') { S.loop = !S.loop; saveS(); if (curEl) curEl.loop = S.loop; renderSide(); return; }
+    if (a0 === 'ambstop') { stopAllAmb(); renderSide(); return; }
+    if (a0 === 'mych') { openCharEditor(me.id); return; }
+    if (a0 === 'accrm') { state.theme = {id: (state.theme || {}).id || 'ordem', acc: ''}; applyTheme(); pushState(); saveRoom(); renderSide(); return; }
+    if (a0 === 'bgup') { pickFile('image/*').then(async ([f]) => { if (!f) return; try { roomImg = await imgToDataURL(f, 1600, .8); applyTheme(); sendAll({t: 'roomimg', img: roomImg}); saveRoom(); renderSide(); toast('Imagem de fundo aplicada'); } catch (e) { toast('Não consegui abrir essa imagem.'); } }); return; }
+    if (a0 === 'bgrm') { roomImg = ''; applyTheme(); sendAll({t: 'roomimg', img: ''}); saveRoom(); renderSide(); return; }
+    if (a0 === 'lvsave') { state.live = {title: $('#lvT').value.trim().slice(0, 40), sub: $('#lvS').value.trim().slice(0, 50)}; pushState(); saveRoom(); renderLive(); toast('Título salvo'); return; }
+    if (a0 === 'lvall') { state.live = {title: $('#lvT').value.trim().slice(0, 40), sub: $('#lvS').value.trim().slice(0, 50)}; state.layout = $('#lvLay').value; state.layoutTs = Date.now(); roomLayoutTs = state.layoutTs; setLayout(state.layout); pushState(); saveRoom(); toast('Visualização aplicada para todos'); return; }
+    if (a0 === 'tstart') { const m = parseFloat(String($('#tmM').value).replace(',', '.')); if (!(m > 0)) { toast('Digite os minutos.'); return; } const lb = $('#tmL').value.trim(); lsSet('mesa-tmM', m); lsSet('mesa-tmL', lb); timerStart(m, lb); return; }
+    if (a0 === 'tpause') { timerPause(); return; }
+    if (a0 === 'tclear') { timerClear(); return; }
+    if (a0 === 'rvpick') { revealPick(); return; }
+    if (a0 === 'rvhide') { revealHide(); return; }
+  }
   if (b.hasAttribute('data-track')) return playTrack(b.dataset.track);
   if (b.dataset.voice) { applyVoice(b.dataset.voice); renderSide(); toast('Voz: ' + VOICES[voiceId].name + (me.mic ? '' : ' · ligue o microfone ou use “Me escutar”')); return; }
-  if (b.dataset.sfx) { playSfx(b.dataset.sfx); b.classList.add('flash'); setTimeout(() => b.classList.remove('flash'), 250); return; }
+  if (b.dataset.sfx) { playSfx(b.dataset.sfx, b); b.classList.add('flash'); setTimeout(() => b.classList.remove('flash'), 250); return; }
   if (b.dataset.fx) return doFx(b.dataset.fx, true);
   if (b.dataset.cs) return setCover({style: b.dataset.cs, title: '', sub: ''});
   if (b.dataset.c2 === 'mic') { toggleMic().then(renderSide); return; }
@@ -1338,13 +2334,23 @@ $('#pane').addEventListener('click', e => {
   if (a === 'rollop') { const A = +$('#dA').value, B = +$('#dB').value; lsSet('mesa-dA', A); lsSet('mesa-dB', B); doRoll(rollOP(A, B)); }
   if (a === 'rollex') { const ex = $('#dE').value; lsSet('mesa-dE', ex); doRoll(rollExpr(ex)); }
 });
+$('#pane').addEventListener('change', e => {
+  const a2 = e.target.dataset.a2;
+  if (a2 === 'covmus') { S.coverMusic = e.target.checked; saveS(); syncCoverSound(); }
+  if (e.target.dataset.myin) { myAdd([...(e.target.files || [])], e.target.dataset.myin); e.target.value = ''; }
+});
+$('#pane').addEventListener('input', e => { if (e.target.id === 'sfxQ') { sfxQ = e.target.value; renderSfxGrid(); } });
 $('#pane').addEventListener('input', e => {
   const a = e.target.dataset.a; if (!a) return; const v = +e.target.value / 100;
-  if (a === 'mvol') { S.musicVol = v; if (musicBus) musicBus.gain.setTargetAtTime(v, T(), .05); }
+  if (a === 'mvol') { S.musicVol = v; if (musicBus) musicBus.gain.setTargetAtTime(v * duckLevel(), T(), .05); }
+  if (a === 'avol') { S.ambVol = v; if (ambBus) ambBus.gain.setTargetAtTime(v * (coverSnd ? .3 : 1), T(), .05); }
+  if (a === 'cvol') { S.coverVol = v; if (coverSnd) coverSnd.bus.gain.setTargetAtTime(v, T(), .05); }
+  if (a === 'acc') { state.theme = {id: state.theme.id || 'ordem', acc: e.target.value}; applyTheme(); clearTimeout(window._accT); window._accT = setTimeout(() => { pushState(); saveRoom(); }, 250); return; }
+  if (e.target.id === 'sfxQ') return;
   if (a === 'svol') { S.sfxVol = v; if (sfxBus) sfxBus.gain.setTargetAtTime(v, T(), .05); }
   if (a === 'monvol') { S.monVol = v; if (monitor && !deaf) monitor.gain.setTargetAtTime(v, T(), .05); }
   if (a === 'selfvol') { S.selfVol = v; setSelfMon(hearSelf); }
-  if (a === 'stagevol') { S.stageVol = v; $('#vid').volume = v; }
+  if (a === 'stagevol') { setStageVol(v); }
   saveS();
 });
 /* popover */
@@ -1352,22 +2358,23 @@ function openPop(id, anchor) {
   const p = roster.get(id); if (!p) return;
   const pop = $('#pop'), isMe = id === me.id, r = remotes.get(id);
   let h = `<h4><span class="av"><i style="--c:${colorOf(p.name)};width:28px;height:28px;font-size:12px">${initial(p.name)}</i></span>${esc(p.name)}${p.role === 'mestre' ? ' <span class="role">Mestre</span>' : ''}</h4>`;
-  if (isMe) h += `<button class="btn sm wide" data-pa="settings" style="margin-top:6px">⚙️ Meus ajustes de áudio e vídeo</button>`;
+  if (isMe) h += `<button class="btn sm wide" data-pa="mych" style="margin-top:6px">🎭 Meu personagem</button><button class="btn sm wide" data-pa="settings" style="margin-top:6px">⚙️ Meus ajustes de áudio e vídeo</button>`;
   else {
     h += `<label class="lab">Volume para você</label><input type="range" min="0" max="100" value="${S.vols[p.name] ?? 100}" data-pa="vol">
       <label class="sw"><input type="checkbox" data-pa="lmute" ${r && r.localMute ? 'checked' : ''}><i></i><span>Silenciar só para mim</span></label>`;
-    if (isHost) h += `<button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">Remover da sala</button>`;
+    if (isHost) h += `<button class="btn sm wide" data-pa="ech" style="margin-top:6px">🎭 Editar personagem</button><button class="btn sm wide" data-pa="wsp" style="margin-top:6px">🤫 Sussurrar</button><button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">Remover da sala</button>`;
   }
   pop.innerHTML = h; pop.classList.remove('hide');
   const rc = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
   let x = rc.left + rc.width / 2 - pw / 2, y = rc.top - ph - 8; if (y < 8) y = rc.bottom + 8;
   pop.style.left = clamp(x, 8, innerWidth - pw - 8) + 'px'; pop.style.top = clamp(y, 8, innerHeight - ph - 8) + 'px';
-  pop.oninput = e => { if (e.target.dataset.pa === 'vol') { S.vols[p.name] = +e.target.value; saveS(); const rr = remotes.get(id); if (rr && rr.el) rr.el.volume = +e.target.value / 100; } };
+  pop.oninput = e => { if (e.target.dataset.pa === 'vol') { S.vols[p.name] = +e.target.value; saveS(); const rr = remotes.get(id); if (rr && rr.el) rr.el.volume = clamp(+e.target.value / 100 * S.voiceVol, 0, 1); } };
   pop.onchange = e => { if (e.target.dataset.pa === 'lmute') { const rr = remotes.get(id); if (rr) { rr.localMute = e.target.checked; if (rr.el) rr.el.muted = deaf || rr.localMute; } } };
-  pop.onclick = async e => { const b = e.target.closest('[data-pa]'); if (!b) return; if (b.dataset.pa === 'settings') { closePop(); openSettings('audio'); } if (b.dataset.pa === 'kick') { closePop(); if (await confirmBox('Remover ' + esc(p.name) + ' da sala?', 'Remover')) kick(id); } };
+  pop.onclick = async e => { const b = e.target.closest('[data-pa]'); if (!b) return; if (b.dataset.pa === 'settings') { closePop(); openSettings('audio'); } if (b.dataset.pa === 'mych') { closePop(); openCharEditor(me.id); } if (b.dataset.pa === 'ech') { closePop(); openCharEditor(id); } if (b.dataset.pa === 'wsp') { closePop(); openWhisper(id); } if (b.dataset.pa === 'kick') { closePop(); if (await confirmBox('Remover ' + esc(p.name) + ' da sala?', 'Remover')) kick(id); } };
 }
 function closePop() { $('#pop').classList.add('hide'); }
-document.addEventListener('pointerdown', e => { if (!$('#pop').classList.contains('hide') && !e.target.closest('#pop') && !e.target.closest('.tile') && !e.target.closest('[data-p]')) closePop(); });
+document.addEventListener('pointerdown', e => { if (!$('#pop').classList.contains('hide') && !e.target.closest('#pop') && !e.target.closest('.tile') && !e.target.closest('.lf') && !e.target.closest('[data-p]') && !e.target.closest('#layoutBtn') && !e.target.closest('[data-c="vol"]')) closePop(); });
+$('#live').addEventListener('click', e => { const f = e.target.closest('.lf'); if (f) openPop(f.dataset.id, f); });
 $('#tiles').addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) openPop(t.dataset.id, t); });
 /* modal */
 let modalClose = null;
@@ -1375,11 +2382,12 @@ function openModal(html, onClose) { $('#mbox').innerHTML = html; $('#shade').cla
 function closeModal(r) { $('#shade').classList.add('hide'); const f = modalClose; modalClose = null; $('#mbox').innerHTML = ''; if (f) f(r); }
 $('#shade').addEventListener('pointerdown', e => { if (e.target.id === 'shade') closeModal('x'); });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (!$('#shade').classList.contains('hide')) closeModal('x'); closePop(); }
+  if (e.key === 'Escape') { if (!$('#shade').classList.contains('hide')) closeModal('x'); closePop(); if (document.body.classList.contains('obs')) setObs(false); }
   const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement && document.activeElement.tagName);
   if (!typing && !$('#room').classList.contains('hide') && $('#shade').classList.contains('hide')) {
     if (e.key === 'm' || e.key === 'M') toggleMic();
     if (e.key === 'd' || e.key === 'D') setDeaf(!deaf);
+    if (e.key === 'h' || e.key === 'H') setObs(!document.body.classList.contains('obs'));
   }
 });
 function confirmBox(msg, yes) {
@@ -1421,9 +2429,17 @@ const HELP_HTML = `<div class="help"><p><b>Seu som fica abafado quando conecta o
   <li>No Windows: <b>Configurações de som → Mais configurações de som → aba Comunicações</b> → marque <b>“Não fazer nada”</b>. Isso impede o Windows de baixar o volume dos outros sons durante a chamada.</li>
   <li>Se o fone tem fio, não acontece. Se mesmo assim abafar, desative o microfone do fone em <b>Painel de som → Gravação</b>.</li></ol>
   <p><b>Atalhos:</b> <b>M</b> liga/desliga o microfone · <b>D</b> ensurdecer.</p></div>`;
+function creditsHTML() {
+  const lic = l => LIC[l] || l;
+  const used = Object.keys(FILES);
+  return `<div class="help"><p>As músicas da Biblioteca, os sons reais e os ambientes são gravações com licença livre hospedadas no <b>Wikimedia Commons</b>. Eles carregam da internet quando você usa e ficam guardados no seu navegador.</p>
+    <p><b>Músicas</b></p><ul class="credits">${LIB.map(x => `<li>“${esc(x[1])}” — ${esc(x[6])}${x[6] === KM ? ' (incompetech.com)' : ''} · ${lic(x[5])} · <a href="${commonsPage(x[3])}" target="_blank" rel="noopener">fonte</a></li>`).join('')}</ul>
+    <p><b>Sons e ambientes</b></p><ul class="credits">${used.map(k => { const f = FILES[k]; return `<li>${esc(f[4].replace(/\.[a-z0-9]+$/i, ''))} — ${esc(f[3])} · ${lic(f[2])} · <a href="${commonsPage(f[0])}" target="_blank" rel="noopener">fonte</a></li>`; }).join('')}</ul>
+    <p>Licenças: <a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-SA</a> · CC0 / domínio público. As trilhas “Geradas” são criadas pelo próprio site.</p></div>`;
+}
 function fillDevPanel(root) {
   const t = root.dataset.tab;
-  root.innerHTML = t === 'video' ? videoPanelHTML() : t === 'stream' ? streamPanelHTML() : t === 'help' ? HELP_HTML : audioPanelHTML();
+  root.innerHTML = t === 'video' ? videoPanelHTML() : t === 'stream' ? streamPanelHTML() : t === 'help' ? HELP_HTML : t === 'credits' ? creditsHTML() : audioPanelHTML();
   updBt();
   const cv = $('#setCamV'); if (cv) { cv.srcObject = me.cam && camTrack ? new MediaStream([camTrack]) : null; }
 }
@@ -1446,14 +2462,16 @@ function applySink() {
 }
 async function openSettings(tab = 'audio') {
   await refreshDevices();
-  const tabs = [['audio', '🎙️ Áudio'], ['video', '📷 Vídeo'], ...(isHost ? [['stream', '📡 Transmissão']] : []), ['help', '🎧 Som abafado?']];
+  const tabs = [['audio', '🎙️ Áudio'], ['video', '📷 Vídeo'], ...(isHost ? [['stream', '📡 Transmissão']] : []), ['help', '🎧 Som abafado?'], ['credits', '📜 Créditos']];
   openModal(`<div class="mhead"><h3>Ajustes</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mtabs">${tabs.map(([k, l]) => `<button data-st="${k}" class="${k === tab ? 'on' : ''}">${l}</button>`).join('')}</div><div class="mbody"><div id="devPanel" data-tab="${tab}"></div></div>`);
   const root = $('#mbox #devPanel'); fillDevPanel(root);
   $('#mbox').onclick = e => { const b = e.target.closest('[data-st]'); if (b) { $$('[data-st]').forEach(x => x.classList.toggle('on', x === b)); root.dataset.tab = b.dataset.st; fillDevPanel(root); } const m = e.target.closest('[data-m]'); if (m) closeModal('x'); };
   $('#mbox').onchange = onDevChange; $('#mbox').oninput = onDevInput;
 }
 $('#setBtn').onclick = () => openSettings('audio');
-$('#layoutBtn').onclick = () => { document.body.classList.toggle('gridMode'); renderTop(); };
+$('#layoutBtn').onclick = e => { e.stopPropagation(); openLayoutMenu($('#layoutBtn')); };
+$('#volB').onclick = () => { const cur = isHost ? S.monVol : S.stageVol; if (cur > .001) { window._lastVol = cur; setStageVol(0); } else setStageVol(window._lastVol || .8); };
+$('#volR').addEventListener('input', e => setStageVol(+e.target.value / 100));
 $('#fsBtn').onclick = () => { const s = $('#stage'); if (document.fullscreenElement) document.exitFullscreen(); else (s.requestFullscreen || s.webkitRequestFullscreen || (() => {})).call(s); };
 $('#copyLink').onclick = () => { const url = location.origin + location.pathname + '#' + code; (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast('Link copiado! Mande para os agentes.')).catch(() => prompt('Copie o link:', url)); };
 $('#unmute').onclick = () => { remotes.forEach(r => r.el && r.el.play().catch(() => {})); const v = $('#vid'); v.play().catch(() => {}); if (ctx) ctx.resume(); $('#unmute').classList.add('hide'); };
@@ -1466,7 +2484,7 @@ setInterval(() => {
   const sp = new Set();
   if (outAn && me.mic && !deaf && rms(outAn) > .018) sp.add(me.id);
   remotes.forEach((r, id) => { if (r.an && rms(r.an) > .012) sp.add(id); });
-  $$('#tiles .tile').forEach(t => t.classList.toggle('speaking', sp.has(t.dataset.id)));
+  $$('#tiles .tile, #live .lf').forEach(t => t.classList.toggle('speaking', sp.has(t.dataset.id)));
   const lv = rawAn ? rms(rawAn) : 0, db = lv > 0 ? 20 * Math.log10(lv) : -100, pct = clamp((db + 90) / 70 * 100, 0, 100);
   ['#setMeter', '#pjMeter', '#voxMeter'].forEach(sel => { const m = $(sel); if (!m) return; m.querySelector('b').style.width = pct + '%'; const s = m.querySelector('s'); if (s) s.style.left = clamp((S.gate + 90) / 70 * 100, 0, 100) + '%'; });
 }, 90);
@@ -1509,6 +2527,10 @@ $('#pjGo').onclick = () => {
   document.title = (isHost ? 'Mestre · ' : '') + 'Sala ' + code + ' · Mesa Paranormal';
   setMuted(!(pjWantMic && micStream));
   curTab = 'chat';
+  if (isHost) { const R = lsGet('mesa-room', null); if (R) { if (R.theme) state.theme = R.theme; if (R.live) state.live = R.live; roomImg = okImg(R.img) ? R.img : ''; } }
+  applyTheme(); setLayout(layout); myRefresh();
+  $('#volR').value = Math.round((isHost ? S.monVol : S.stageVol) * 100); updVolIcon();
+  if (isHost) setTimeout(() => { if (ctx) preloadSfx(); }, 6000);
   if (isHost) startHost(); else startPlayer();
   const v = $('#vid'); v.volume = S.stageVol; if (!isHost) { v.muted = false; v.play().catch(() => {}); }
   applySink(); renderAll();
@@ -1549,6 +2571,7 @@ setInterval(() => {
 }, 5000);
 addEventListener('beforeunload', e => { if (!leaving && !$('#room').classList.contains('hide') && (isHost ? conns.size : true)) { e.preventDefault(); e.returnValue = ''; } });
 addEventListener('resize', () => { if (innerWidth > 900) $('#side').classList.remove('open'); });
+applyTheme();
 })();
 </script>
 </body>
