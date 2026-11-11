@@ -501,13 +501,14 @@ const VOICES = {
   medo: {name: 'Medo', e: '👁️', c: '#f2f2f2', d: 'duas vozes, eco infinito'},
   radio: {name: 'Rádio', e: '📻', c: '#3ddc84', d: 'rádio velho com chiado'}
 };
-let mic = null, micSrc = null, voiceId = 'normal', voiceNodes = [], voiceIn = null, voiceOut = null, micOn = false, hearSelf = false, selfMon = null, analyser = null;
+let mic = null, micSrc = null, voiceId = 'normal', voiceNodes = [], voiceIn = null, voiceOut = null, micOn = false, hearSelf = false, selfMon = null, analyser = null, txGain = null, monGain = null, selfVol = .8;
 function buildVoice() {
   if (!micSrc) return;
   voiceNodes.forEach(n => { try { n.stop ? n.stop() : 0; } catch (e) {} try { n.disconnect && n.disconnect(); } catch (e) {} });
   voiceNodes = [];
   if (voiceIn) try { micSrc.disconnect(voiceIn); } catch (e) {}
-  voiceIn = gain(1); voiceOut = gain(micOn ? 1 : 0); voiceOut.connect(voiceBus); voiceOut.connect(analyser); if (hearSelf) voiceOut.connect(selfMon);
+  voiceIn = gain(1); voiceOut = gain(1); voiceOut.connect(txGain); voiceOut.connect(monGain); voiceOut.connect(analyser);
+  txGain.gain.setTargetAtTime(micOn ? 1 : 0, T(), .02); monGain.gain.setTargetAtTime(hearSelf ? 1 : 0, T(), .02);
   micSrc.connect(voiceIn);
   const keep = (...n) => { voiceNodes.push(...n); return n[0]; };
   const rv = (amt, len = 3, dec = 2) => { const c = ctx.createConvolver(); c.buffer = impulse(len, dec); const g = gain(amt); c.connect(g); g.connect(voiceOut); keep(c, g); return c; };
@@ -525,18 +526,26 @@ function buildVoice() {
     default: i.connect(voiceOut);
   }
 }
-async function toggleMic() {
+async function ensureMic() {
   audioInit();
-  if (!mic) {
-    try { mic = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true, autoGainControl: true}}); }
-    catch (e) { toast('Não consegui acessar o microfone.'); return; }
-    micSrc = ctx.createMediaStreamSource(mic);
-    analyser = ctx.createAnalyser(); analyser.fftSize = 512;
-    selfMon = gain(.9, ctx.destination);
-    meterLoop();
-  }
+  if (mic) return true;
+  try { mic = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true, autoGainControl: true}}); }
+  catch (e) { toast('Não consegui acessar o microfone.'); return false; }
+  micSrc = ctx.createMediaStreamSource(mic);
+  analyser = ctx.createAnalyser(); analyser.fftSize = 512;
+  txGain = gain(0, voiceBus); selfMon = gain(selfVol, ctx.destination); monGain = gain(0, selfMon);
+  meterLoop();
+  return true;
+}
+async function toggleMic() {
+  if (!await ensureMic()) return;
   micOn = !micOn; buildVoice(); renderPane();
-  toast(micOn ? '🎙️ Microfone transmitindo' : 'Microfone mudo');
+  toast(micOn ? '🎙️ Microfone transmitindo' : 'Microfone mudo para os agentes');
+}
+async function toggleHear() {
+  if (!await ensureMic()) return;
+  hearSelf = !hearSelf; buildVoice(); renderPane();
+  toast(hearSelf ? '🎧 Você está se escutando' + (micOn ? '' : ' (teste: os agentes não ouvem)') : 'Retorno desligado');
 }
 function meterLoop() {
   const data = new Uint8Array(256);
@@ -810,11 +819,12 @@ function renderPane() {
     h += `<div class="sec">Tela</div><button class="btn big ${screenStream ? 'on' : 'red'}" data-a="share">${screenStream ? '■ PARAR TRANSMISSÃO' : '▶ COMPARTILHAR TELA'}</button>
       <div class="hint">Escolha uma janela, aba ou a tela inteira. Marque “compartilhar áudio” para os agentes ouvirem o som do vídeo/aba.</div>
       <div class="sec">Sua voz</div>
-      <button class="btn ${micOn ? 'on' : ''}" data-a="mic" style="width:100%">${micOn ? '🎙️ Microfone LIGADO (clique para mutar)' : '🎙️ Ligar microfone'}</button>
+      <div class="row"><button class="btn ${micOn ? 'on' : ''}" data-a="mic" style="flex:1">${micOn ? '🎙️ Transmitindo voz' : '🎙️ Ligar microfone'}</button><button class="btn ${hearSelf ? 'on' : ''}" data-a="hearbtn" style="flex:1">${hearSelf ? '🎧 Me escutando' : '🎧 Me escutar'}</button></div>
       <div class="meter"><i id="meter"></i></div>
       <div class="grid" style="margin-top:10px">${Object.entries(VOICES).map(([k, v]) => `<button class="tile vp ${voiceId === k ? 'on' : ''}" style="--c:${v.c}" data-voice="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>
       <div class="hint">${esc(VOICES[voiceId].d)}. Use fone de ouvido. Se estiver também no Discord, deixe o microfone de lá mudo enquanto fala por aqui.</div>
-      <label class="row hint" style="gap:8px;margin-top:10px"><input type="checkbox" data-a="hear" ${hearSelf ? 'checked' : ''}> Me ouvir com o efeito (só com fone)</label>
+      ${hearSelf ? `<div class="vol" style="margin-top:10px">🎧 Volume do retorno <input type="range" min="0" max="150" value="${Math.round(selfVol * 100)}" data-a="selfvol" style="flex:1"></div>` : ''}
+      <div class="hint">🎧 <b>Me escutar</b> toca sua voz com o efeito só para você. Com o microfone desligado vira modo de teste: ninguém mais ouve. Use fone para não dar microfonia.</div>
       <div class="sec">Agentes na sala (${players.size})</div>${playerList()}`;
   } else if (curTab === 'trilha' && isHost) {
     h += `<div class="sec">Trilha sonora</div><div class="grid g2">${Object.entries(TRACKS).map(([k, t]) => `<button class="tile ${curTrack === k ? 'on' : ''}" data-track="${k}"><span class="e">${t.e}</span>${t.name}<span style="font-weight:400;color:var(--mut);font-size:11px">${t.d}</span></button>`).join('')}<button class="tile" data-track=""><span class="e">🔇</span>Silêncio</button></div>
@@ -865,6 +875,7 @@ $('#pane').addEventListener('click', e => {
   const a = b.dataset.a;
   if (a === 'share') toggleShare();
   if (a === 'mic') toggleMic();
+  if (a === 'hearbtn') toggleHear();
   if (a === 'cover') { state.cover.on = !state.cover.on; const t = $('#cT'), s = $('#cS'); if (t) { state.cover.title = t.value.trim(); state.cover.sub = s.value.trim(); } coverKey = ''; renderCover(state.cover); pushState(); renderPane(); }
   if (a === 'capply') { state.cover.title = $('#cT').value.trim(); state.cover.sub = $('#cS').value.trim(); coverKey = ''; renderCover(state.cover); pushState(); toast('Texto da capa atualizado'); }
   if (a === 'rollop') { const A = +$('#dA').value, B = +$('#dB').value; lsSet('mesa-dA', A); lsSet('mesa-dB', B); doRoll(rollOP(A, B, 'Teste (' + A + ' dado' + (Math.abs(A) === 1 ? '' : 's') + (B ? ', +' + B : '') + ')')); }
@@ -875,9 +886,9 @@ $('#pane').addEventListener('input', e => {
   if (a === 'mvol' && musicBus) musicBus.gain.setTargetAtTime(v, T(), .05);
   if (a === 'svol' && sfxBus) sfxBus.gain.setTargetAtTime(v, T(), .05);
   if (a === 'monvol' && monitor) monitor.gain.setTargetAtTime(v, T(), .05);
+  if (a === 'selfvol') { selfVol = v; if (selfMon) selfMon.gain.setTargetAtTime(v, T(), .05); }
   if (a === 'pvol') { $('#vol').value = e.target.value; $('#vid').volume = v; lsSet('mesa-vol', e.target.value); }
 });
-$('#pane').addEventListener('change', e => { if (e.target.dataset.a === 'hear') { hearSelf = e.target.checked; buildVoice(); } });
 $('#vol').oninput = e => { $('#vid').volume = +e.target.value / 100; lsSet('mesa-vol', e.target.value); };
 $('#unmute').onclick = () => { const v = $('#vid'); v.muted = false; v.play().then(() => $('#unmute').classList.add('hide')).catch(() => {}); };
 $('#fsBtn').onclick = () => { const s = $('#stage'); if (document.fullscreenElement) document.exitFullscreen(); else if (s.requestFullscreen) s.requestFullscreen().catch(() => {}); else if (s.webkitRequestFullscreen) s.webkitRequestFullscreen(); };
