@@ -446,7 +446,7 @@ body.obs #ytBox{bottom:12px}body.obs.ytTop #ytBox{top:12px}
 .dTh i{position:absolute;left:3px;bottom:2px;font-style:normal;font-size:16px;filter:drop-shadow(0 1px 2px #000)}
 .dTh em{position:absolute;right:3px;top:3px;font-style:normal;font-size:9px;font-weight:800;background:#7b2cff;color:#e9ff8a;border-radius:4px;padding:1px 4px;box-shadow:0 0 8px #9b5cff}
 .dIn{flex:1;min-width:0}.dIn b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dIn small{display:block;color:var(--mut);font-size:12px;margin:2px 0 6px}
-.dIn .row{gap:6px}
+.dIn .row{gap:6px;flex-wrap:wrap}
 .dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .dCard{position:relative;border:1px solid var(--line);background:var(--p2);border-radius:12px;overflow:hidden;padding:0;cursor:pointer;color:var(--ink);text-align:left}
 .dCard img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
@@ -2674,6 +2674,7 @@ $('#pane').addEventListener('click', e => {
   if (b.dataset.ytp) { ytPlay(b.dataset.ytp); return; }
   if (b.dataset.ytdel) { ytSaved = ytSaved.filter(x => x.id !== b.dataset.ytdel); lsSet('mesa-yt', ytSaved); renderSide(); return; }
   if (b.dataset.dgive) { docGiveMenu(b.dataset.dgive, b); return; }
+  if (b.dataset.dall) { docShowAll(b.dataset.dall); return; }
   if (b.dataset.dedit) { openDocEditor(b.dataset.dedit); return; }
   if (b.dataset.ddel) { docDelete(b.dataset.ddel); return; }
   if (b.dataset.dprev) { docOpen(b.dataset.dprev, true); return; }
@@ -3135,11 +3136,17 @@ function openDocEditor(id, draft) {
   };
 }
 async function docDelete(id) { if (!await confirmBox('Apagar este documento da sua lista? (quem já recebeu continua com ele, a não ser que você recolha)', 'Apagar')) return; try { await docTx('lib', 'readwrite', st => st.delete(id)); } catch (e) {} await docLoadLib(); renderSide(); }
+function docShowAll(id) {
+  const d = docLib.find(x => x.id === id); if (!d) return;
+  const names = new Set(docSent[id] || []);
+  conns.forEach((c, pid) => { if (c.open) { try { c.send({t: 'doc', doc: d, show: true}); const p = roster.get(pid); if (p) names.add(p.name); } catch (err) {} } });
+  docSent[id] = [...names]; docOpen(id, true, true);
+}
 function docGiveMenu(id, anchor) {
   const d = docLib.find(x => x.id === id); if (!d) return;
   const ags = [...roster.values()].filter(p => p.id !== me.id);
   const pop = $('#pop');
-  pop.innerHTML = `<h4>📨 Entregar “${esc(d.name)}”</h4>${ags.length ? `<button class="btn sm red wide" data-dg="!" style="margin-top:6px">🌐 Mostrar na tela de todos agora</button><button class="btn sm wide" data-dg="*" style="margin-top:6px">📨 Entregar para todos (cada um abre)</button>` + ags.map(p => `<button class="btn sm wide" data-dg="${esc(p.id)}" style="margin-top:6px">Só para ${esc(p.name)}</button>`).join('') : '<div class="hint">Nenhum agente na sala ainda.</div>'}
+  pop.innerHTML = `<h4>📨 Entregar “${esc(d.name)}”</h4><button class="btn sm red wide" data-dg="!" style="margin-top:6px">🌐 Mostrar na tela de todos agora</button>${ags.length ? `<button class="btn sm wide" data-dg="*" style="margin-top:6px">📨 Entregar para todos (cada um abre)</button>` + ags.map(p => `<button class="btn sm wide" data-dg="${esc(p.id)}" style="margin-top:6px">Só para ${esc(p.name)}</button>`).join('') : '<div class="hint">Nenhum agente na sala ainda.</div>'}
     ${(docSent[id] || []).length ? `<div class="hint">Já entregue para: ${esc(docSent[id].join(', '))}</div><button class="btn sm wide" data-dg="-" style="margin-top:6px">Recolher de todos</button>` : ''}`;
   pop.classList.remove('hide');
   const rc = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
@@ -3151,7 +3158,7 @@ function docGiveMenu(id, anchor) {
     const msg = {t: 'doc', doc: d, show: to === '!'}; let n = 0; const names = new Set(docSent[id] || []);
     conns.forEach((c, pid) => { if ((to === '*' || to === '!' || to === pid) && c.open) { try { c.send(msg); n++; const p = roster.get(pid); if (p) names.add(p.name); } catch (err) {} } });
     docSent[id] = [...names];
-    if (to === '!') { docOpen(id, true, true); return; }
+    if (to === '!') { docShowAll(id); return; }
     toast(n ? `“${d.name}” entregue${to === '*' ? ' para todos' : ' para ' + (roster.get(to) || {}).name}` : 'Ninguém conectado para receber.'); renderSide();
   };
 }
@@ -3161,8 +3168,8 @@ function docPaneHost() {
     <div class="sec">Seus documentos (${docLib.length})</div>
     ${docLib.length ? `<div class="dlist">${docLib.map(d => `<div class="dItem"><button class="dTh" data-dprev="${d.id}" title="Prévia (só você vê)"><img alt="" src="${d.img}"><i>${DOC_KINDS[d.kind][0]}</i>${d.uvText || d.uvImg ? '<em title="Tem algo escondido na luz UV">UV</em>' : ''}</button>
       <div class="dIn"><b>${esc(d.name)}</b><small>${DOC_KINDS[d.kind][1]}${d.back ? ' · com verso' : ''}${(docSent[d.id] || []).length ? ' · com ' + esc(docSent[d.id].join(', ')) : ''}</small>
-      <div class="row"><button class="btn sm red" data-dgive="${d.id}">📨 Entregar</button><button class="btn sm" data-dedit="${d.id}" title="Editar">✏️</button><button class="btn sm" data-ddel="${d.id}" title="Apagar">🗑</button></div></div></div>`).join('')}</div>` : '<div class="hint">Nenhum documento ainda. Crie cartas, fotos, arquivos, evidências e itens antes da sessão e entregue na hora certa.</div>'}
-    <div class="hint">Miniatura = prévia só pra você. 📨 Entregar: escolha <b>mostrar na tela de todos</b> (abre junto pra todo mundo) ou entregar para cada um abrir quando quiser.</div>`;
+      <div class="row"><button class="btn sm red" data-dall="${d.id}" title="Abre com animação na tela de todos ao mesmo tempo">🌐 Todos</button><button class="btn sm" data-dgive="${d.id}" title="Entregar para cada um abrir quando quiser">📨 Entregar</button><button class="btn sm" data-dedit="${d.id}" title="Editar">✏️</button><button class="btn sm" data-ddel="${d.id}" title="Apagar">🗑</button></div></div></div>`).join('')}</div>` : '<div class="hint">Nenhum documento ainda. Crie cartas, fotos, arquivos, evidências e itens antes da sessão e entregue na hora certa.</div>'}
+    <div class="hint"><b>🌐 Todos</b>: abre na tela de todo mundo ao mesmo tempo. <b>📨 Entregar</b>: cada agente recebe e abre quando quiser. Tocar na miniatura mostra a prévia só pra você.</div>`;
 }
 function docPanePlayer() {
   return `<div class="sec" style="margin-top:0">Pistas encontradas (${docGot.length})</div>
