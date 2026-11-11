@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060606">
+<title>Mesa Paranormal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+:root{--bg:#060606;--p1:#111;--p2:#181818;--line:#2a2a2a;--ink:#ece6d9;--mut:#8f887c;--red:#c3161f;--red2:#ff3b3b;--gold:#d8a74a;--pur:#8b4cff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+.grain{position:fixed;inset:-50%;pointer-events:none;z-index:999;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-5%,3%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-3%,5%)}80%{transform:translate(6%,2%)}100%{transform:translate(0,0)}}
+.hide{display:none!important}
+.ti{font-family:'Bebas Neue',Impact,sans-serif;letter-spacing:.06em}
+.ty{font-family:'Special Elite',monospace}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;background:var(--p2);border:1px solid var(--line);font-weight:700;font-size:14px}
+.btn:hover{border-color:#444}
+.btn.red{background:linear-gradient(180deg,#d61d27,#9c0f17);border-color:#e1323a;color:#fff}
+.btn.on{background:var(--red);border-color:var(--red2);color:#fff;box-shadow:0 0 18px #c3161f88}
+.btn.sm{padding:7px 10px;font-size:12.5px;border-radius:8px}
+.in{width:100%;background:#0b0b0b;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:16px;outline:none}
+.in:focus{border-color:var(--red)}
+.lab{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:12px 0 6px;font-weight:800}
+
+/* ---------- lobby ---------- */
+#lobby{min-height:100vh;display:grid;place-items:center;padding:28px 16px;background:radial-gradient(800px 500px at 50% -10%,#3a0a0e55,transparent 70%),var(--bg)}
+.lw{width:100%;max-width:880px}
+.brand{text-align:center;margin-bottom:26px}
+.brand h1{font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(46px,10vw,88px);margin:0;letter-spacing:.08em;line-height:.9;text-shadow:0 0 30px #c3161f66}
+.brand h1 span{color:var(--red2)}
+.brand p{font-family:'Special Elite',monospace;color:var(--mut);margin:10px 0 0}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.cards{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,#121212,#0c0c0c);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card h2{font-family:'Bebas Neue',Impact,sans-serif;font-size:30px;margin:0 0 2px;letter-spacing:.06em}
+.card .d{color:var(--mut);font-size:13.5px;line-height:1.45;margin:0 0 6px}
+.card .btn{width:100%;margin-top:16px;padding:13px}
+.reopen{margin-top:14px;text-align:center;color:var(--mut);font-size:13.5px}
+.reopen button{color:var(--red2);font-weight:800;text-decoration:underline}
+.foot{margin-top:22px;text-align:center;color:#5d574f;font-size:12px;line-height:1.5}
+
+/* ---------- room ---------- */
+#room{min-height:100vh;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:#0a0a0a;position:sticky;top:0;z-index:30;padding-top:calc(env(safe-area-inset-top) + 10px)}
+.top .lg{font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.08em;white-space:nowrap}
+.top .lg span{color:var(--red2)}
+.code{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px dashed #3a3a3a;border-radius:10px;font-family:'Special Elite',monospace;font-size:15px}
+.code b{color:var(--red2);letter-spacing:.15em}
+.role{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:#2a0b0e;color:#ff8a8a;border:1px solid #5a1a1f}
+.role.pl{background:#14161c;color:#a9b6d6;border-color:#2a3142}
+.stat{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--mut);white-space:nowrap}
+.stat i{width:8px;height:8px;border-radius:50%;background:#777}
+.stat.ok i{background:#3ddc84;box-shadow:0 0 8px #3ddc84}
+.stat.bad i{background:var(--red2);box-shadow:0 0 8px var(--red2)}
+.main{flex:1;display:flex;gap:14px;padding:14px;min-height:0}
+@media(max-width:980px){.main{flex-direction:column;padding:10px}.top .lg{display:none}}
+.stageW{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+#stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+#stage:fullscreen{border-radius:0;border:0}
+#vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+#vid.off{opacity:0}
+#idle{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 45%,#1a0507,#000 70%)}
+#idle .eye{width:min(26%,180px);aspect-ratio:1;margin:0 auto 12px;opacity:.85;animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.06);opacity:1}}
+#idle .t1{font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,4vw,44px);letter-spacing:.12em}
+#idle .t2{font-family:'Special Elite',monospace;color:var(--mut);font-size:clamp(11px,1.6vw,15px);margin-top:4px}
+.sbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sbar .sp{flex:1}
+.vol{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut)}
+input[type=range]{accent-color:var(--red);width:120px}
+#unmute{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:8}
+
+/* ---------- cover ---------- */
+#cover,#fx{position:absolute;inset:0;pointer-events:none}
+#cover{z-index:5;opacity:0;transition:opacity .9s ease}
+#cover.show{opacity:1}
+.masterView #cover.show{opacity:.92}
+#coverTag{position:absolute;top:10px;left:10px;z-index:9;font-size:11px;font-weight:800;letter-spacing:.1em;padding:4px 8px;border-radius:6px;background:#c3161fdd;color:#fff;display:none}
+.masterView #cover.show~#coverTag{display:block}
+.cv{position:absolute;inset:0;overflow:hidden;display:grid;place-items:center;text-align:center}
+.cv .tt{position:relative;z-index:3;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(30px,7.5vw,110px);letter-spacing:.1em;line-height:.95;padding:0 4%}
+.cv .st{position:relative;z-index:3;font-family:'Special Elite',monospace;font-size:clamp(12px,2vw,24px);color:#cfc6b6;margin-top:.6em;padding:0 6%}
+.glt{position:relative;display:inline-block}
+.glt::before,.glt::after{content:attr(data-t);position:absolute;left:0;top:0;width:100%;overflow:hidden}
+.glt::before{color:#ff2a3a;transform:translate(-2px,0);clip-path:inset(0 0 60% 0);animation:g1 2.6s infinite steps(1)}
+.glt::after{color:#33e3ff;transform:translate(2px,0);clip-path:inset(55% 0 0 0);animation:g2 3.1s infinite steps(1)}
+@keyframes g1{0%,90%,100%{transform:translate(0,0);opacity:0}91%{transform:translate(-6px,-2px);opacity:.9}94%{transform:translate(5px,1px);opacity:.9}97%{transform:translate(-3px,2px);opacity:.9}}
+@keyframes g2{0%,85%,100%{transform:translate(0,0);opacity:0}86%{transform:translate(6px,2px);opacity:.8}90%{transform:translate(-5px,-1px);opacity:.8}}
+/* intervalo */
+.cv-intervalo{background:radial-gradient(circle at 50% 50%,#1b1b1b,#030303 75%)}
+.fog{position:absolute;inset:-30%;background:radial-gradient(closest-side,#ffffff14,transparent),radial-gradient(closest-side,#ffffff10,transparent);background-size:60% 50%,45% 40%;background-position:20% 30%,80% 70%;background-repeat:no-repeat;filter:blur(20px);animation:fog 22s linear infinite alternate}
+.fog.b{animation-duration:31s;animation-direction:alternate-reverse;opacity:.8}
+@keyframes fog{0%{transform:translate(-8%,0) scale(1)}100%{transform:translate(8%,-4%) scale(1.2)}}
+.cv-intervalo .tt{animation:pulse 5s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.55;letter-spacing:.14em}}
+/* estatica */
+.cv-estatica{background:#111}
+.cv-estatica canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55;image-rendering:pixelated}
+.scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0000 0 2px,#0006 2px 4px);z-index:2}
+.scanroll{position:absolute;left:0;right:0;height:18%;background:linear-gradient(#fff0,#ffffff1a,#fff0);z-index:2;animation:rollb 4s linear infinite}
+@keyframes rollb{from{top:-20%}to{top:110%}}
+.cv-estatica .tt{text-shadow:0 0 12px #fff8}
+/* ritual */
+.cv-ritual{background:radial-gradient(circle at 50% 50%,#2a0204,#000 70%)}
+.sig{position:absolute;width:min(78vh,62%);aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%);opacity:.75;filter:drop-shadow(0 0 14px #ff1a2a)}
+.sig .r1{animation:spin 40s linear infinite;transform-origin:50% 50%}
+.sig .r2{animation:spin 26s linear infinite reverse;transform-origin:50% 50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cv-ritual .tt{color:#ffd9d9;text-shadow:0 0 22px #ff1a2a}
+/* sangue */
+.cv-sangue{background:radial-gradient(circle at 50% 50%,#000 30%,#3d0004 85%,#6a0008);animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{filter:brightness(1)}12%{filter:brightness(1.5)}24%{filter:brightness(1)}36%{filter:brightness(1.3)}}
+.drip{position:absolute;top:0;width:var(--w);left:var(--x);height:0;background:linear-gradient(#5b0006,#a3000d);border-radius:0 0 50% 50%;animation:drip var(--d) ease-in infinite;animation-delay:var(--dl)}
+@keyframes drip{0%{height:0;opacity:1}70%{height:var(--h);opacity:1}100%{height:var(--h);opacity:0}}
+.cv-sangue .tt{color:#ff2636;text-shadow:0 0 24px #a3000d}
+/* dossie */
+.cv-dossie{background:#0d0c0a}
+.paper{position:relative;z-index:1;width:min(78%,820px);aspect-ratio:1.5;background:linear-gradient(135deg,#d8ccb2,#c4b593);color:#2a2219;border-radius:4px;box-shadow:0 30px 80px #000;display:flex;flex-direction:column;justify-content:center;align-items:center;transform:rotate(-1.5deg);padding:4%}
+.paper::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0000 0 26px,#0000000d 26px 27px);border-radius:4px}
+.paper .tt{color:#1d1711;font-family:'Special Elite',monospace;font-size:clamp(20px,4.6vw,64px);letter-spacing:.02em;overflow:hidden;white-space:nowrap;border-right:3px solid #1d1711;animation:type 2.6s steps(30,end) both,caret .8s step-end infinite;max-width:100%}
+@keyframes type{from{width:0}to{width:100%}}
+@keyframes caret{50%{border-color:transparent}}
+.paper .st{color:#4a3d2c}
+.stamp{position:absolute;right:6%;top:10%;border:4px solid #b3121b;color:#b3121b;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(16px,3vw,40px);padding:2px 12px;transform:rotate(12deg);opacity:.85;letter-spacing:.1em;animation:stampIn .5s 2.4s both cubic-bezier(.2,2,.4,1)}
+@keyframes stampIn{from{transform:rotate(12deg) scale(2.4);opacity:0}}
+/* outro */
+.cv-outro{background:#000}
+.swirl{position:absolute;inset:-40%;background:conic-gradient(from 0deg,#000,#2b0a52,#000,#3d0613,#000,#1a1033,#000);filter:blur(30px);animation:spin 30s linear infinite;opacity:.9}
+.cv-outro .tt{color:#e9dcff;text-shadow:0 0 30px #8b4cff;animation:wob 6s ease-in-out infinite}
+@keyframes wob{50%{transform:skewX(-4deg) scale(1.03);filter:blur(.6px)}}
+.vign{position:absolute;inset:0;z-index:2;background:radial-gradient(circle,#0000 45%,#000c 100%)}
+
+/* ---------- fx ---------- */
+#fx{z-index:7}
+.fx-flash{animation:flash .9s ease-out both}
+@keyframes flash{0%{background:#fff}12%{background:#ff1a2a}100%{background:#0000}}
+.fx-flashw{animation:flashw 1.2s ease-out both}
+@keyframes flashw{0%,8%{background:#fffd}4%,14%{background:#0000}10%{background:#fff8}100%{background:#0000}}
+.fx-blood{animation:blood 2.6s ease-in-out both;background:radial-gradient(circle,#0000 35%,#b0000a 100%)}
+@keyframes blood{0%,100%{opacity:0}20%,60%{opacity:1}40%{opacity:.6}}
+.fx-dark{animation:dark 3s ease-in-out both;background:#000}
+@keyframes dark{0%,100%{opacity:0}25%,70%{opacity:1}}
+.shake{animation:shake .5s linear}
+@keyframes shake{10%,90%{transform:translate(-2px,1px)}20%,80%{transform:translate(4px,-2px)}30%,50%,70%{transform:translate(-6px,3px)}40%,60%{transform:translate(6px,-3px)}}
+.glitchOn #vid,.glitchOn #idle{animation:vg .12s steps(2) infinite}
+@keyframes vg{0%{transform:translate(0);filter:hue-rotate(0)}50%{transform:translate(-8px,2px) skewX(6deg);filter:hue-rotate(90deg) saturate(3)}100%{transform:translate(6px,-3px);filter:invert(.2)}}
+#fx canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.6}
+
+/* ---------- panel ---------- */
+.panel{width:390px;flex:none;display:flex;flex-direction:column;background:var(--p1);border:1px solid var(--line);border-radius:14px;min-height:0;max-height:calc(100vh - 90px)}
+@media(max-width:980px){.panel{width:100%;max-height:none}}
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:1 0 auto;padding:12px 12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);border-bottom:2px solid transparent}
+.tabs button.on{color:var(--ink);border-color:var(--red)}
+.pane{padding:14px;overflow-y:auto;flex:1}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid.g2{grid-template-columns:repeat(2,1fr)}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:68px;padding:8px 4px;border-radius:12px;background:var(--p2);border:1px solid var(--line);font-size:12px;font-weight:700;text-align:center;transition:transform .08s}
+.tile:active{transform:scale(.95)}
+.tile .e{font-size:22px}
+.tile.on{border-color:var(--red2);background:#2a0b0e;box-shadow:inset 0 0 0 1px var(--red2)}
+.vp{position:relative;overflow:hidden}
+.vp::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--c)}
+.big{width:100%;padding:15px;font-size:16px;letter-spacing:.08em;font-family:'Bebas Neue',Impact,sans-serif;font-size:22px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:7px 11px;border-radius:99px;background:var(--p2);border:1px solid var(--line);font-size:12.5px;font-weight:700}
+.chip.on{border-color:var(--red2);color:#fff;background:#2a0b0e}
+.row{display:flex;gap:8px;align-items:center}
+.hint{font-size:12px;color:var(--mut);line-height:1.45;margin-top:8px}
+.sec{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-weight:800;margin:16px 0 8px}
+.sec:first-child{margin-top:0}
+.plist{display:flex;flex-direction:column;gap:6px}
+.pl{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--p2);border:1px solid var(--line);font-size:14px}
+.pl .av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#2a0b0e;color:#ff8a8a;font-weight:800;font-size:13px}
+.pl .n{flex:1}
+.pl .x{color:var(--mut);font-size:12px}
+#log{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto;padding-right:4px;margin-bottom:10px}
+.msg{font-size:13.5px;line-height:1.4;padding:8px 10px;border-radius:10px;background:var(--p2);border:1px solid var(--line)}
+.msg b{color:#ffb3b3}
+.msg.sys{background:none;border:0;color:var(--mut);font-size:12px;padding:2px 4px;font-style:italic}
+.msg.rmsg{border-color:#4a1a1f;background:#160809}
+.msg .res{font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;letter-spacing:.04em;color:#fff;line-height:1.1}
+.msg .res.crit{color:var(--red2);text-shadow:0 0 12px #ff3b3b88}
+.msg .det{font-size:12px;color:var(--mut)}
+.dice{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+.mini{font-size:11px;color:var(--mut);margin-bottom:4px;font-weight:700}
+.meter{height:6px;border-radius:3px;background:#222;overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3ddc84,#e8d24a,#ff3b3b);transition:width .08s}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;z-index:100;background:var(--ink);color:#111;font-weight:800;font-size:14px;padding:10px 16px;border-radius:10px;transition:.2s;pointer-events:none;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- ================= LOBBY ================= -->
+<section id="lobby">
+  <div class="lw">
+    <div class="brand">
+      <h1>MESA <span>PARANORMAL</span></h1>
+      <p>transmissão de sessões · o Outro Lado está ouvindo</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <h2>🕯️ Criar sala</h2>
+        <p class="d">Você será o <b>Mestre</b>: compartilha a tela, controla trilha, efeitos, voz e a capa que os agentes veem.</p>
+        <label class="lab" for="hName">Seu nome</label>
+        <input class="in" id="hName" maxlength="24" placeholder="Mestre">
+        <button class="btn red" id="hGo">Abrir sala</button>
+        <div class="reopen hide" id="reopen">ou <button id="reopenBtn"></button></div>
+      </div>
+      <div class="card">
+        <h2>🔎 Entrar como agente</h2>
+        <p class="d">Use o código ou o link que o Mestre mandou.</p>
+        <label class="lab" for="jCode">Código da sala</label>
+        <input class="in ty" id="jCode" maxlength="8" placeholder="EX: K7Q2X" style="text-transform:uppercase;letter-spacing:.2em">
+        <label class="lab" for="jName">Nome do seu agente</label>
+        <input class="in" id="jName" maxlength="24" placeholder="Agente">
+        <button class="btn red" id="jGo">Entrar na sala</button>
+      </div>
+    </div>
+    <div class="foot">A transmissão vai direto do computador do Mestre para os agentes (sem servidor de vídeo).<br>Compartilhar tela funciona no computador (Chrome/Edge). Agentes podem entrar pelo celular.</div>
+  </div>
+</section>
+
+<!-- ================= ROOM ================= -->
+<section id="room" class="hide">
+  <div class="top">
+    <div class="lg">MESA <span>PARANORMAL</span></div>
+    <div class="code">SALA <b id="rCode">-----</b> <button class="btn sm" id="copyLink">Copiar link</button></div>
+    <span class="role" id="rRole">Mestre</span>
+    <div class="stat" id="stat"><i></i><span id="statTxt">conectando…</span></div>
+  </div>
+  <div class="main">
+    <div class="stageW">
+      <div id="stage">
+        <video id="vid" class="off" playsinline autoplay></video>
+        <div id="idle"><div>
+          <svg class="eye" viewBox="0 0 100 100" fill="none" stroke="#c3161f" stroke-width="2"><circle cx="50" cy="50" r="46" opacity=".5"/><circle cx="50" cy="50" r="38" stroke-dasharray="3 5"/><path d="M14 50 Q50 18 86 50 Q50 82 14 50Z"/><circle cx="50" cy="50" r="11" fill="#c3161f"/><path d="M50 4v10M50 86v10M4 50h10M86 50h10" opacity=".6"/></svg>
+          <div class="t1" id="idleT">AGUARDANDO TRANSMISSÃO</div>
+          <div class="t2" id="idleS">o Mestre ainda não compartilhou a tela</div>
+        </div></div>
+        <div id="cover"></div>
+        <div id="coverTag">CAPA ATIVA · agentes estão vendo isto</div>
+        <div id="fx"></div>
+        <button class="btn red hide" id="unmute">🔊 Toque para ativar o som</button>
+      </div>
+      <div class="sbar">
+        <div class="vol" id="volWrap">🔊 <input type="range" id="vol" min="0" max="100" value="90"></div>
+        <span class="sp"></span>
+        <button class="btn sm" id="fsBtn">⛶ Tela cheia</button>
+      </div>
+    </div>
+    <aside class="panel">
+      <div class="tabs" id="tabs"></div>
+      <div class="pane" id="pane"></div>
+    </aside>
+  </div>
+</section>
+<div id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+let toastT;
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2600); }
+
+/* =====================================================================
+   AUDIO ENGINE (all sounds are generated in the browser — no files)
+   ===================================================================== */
+let ctx = null, master = null, monitor = null, streamDest = null, musicBus = null, sfxBus = null, voiceBus = null, reverb = null, noiseBuf = null;
+function audioInit() {
+  if (ctx) { ctx.resume(); return; }
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  master = ctx.createGain();                 // music + sfx
+  monitor = ctx.createGain(); monitor.gain.value = .8;  // what the mestre hears
+  streamDest = ctx.createMediaStreamDestination();      // what agents hear
+  musicBus = ctx.createGain(); musicBus.gain.value = .6;
+  sfxBus = ctx.createGain(); sfxBus.gain.value = .9;
+  voiceBus = ctx.createGain();
+  const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4;
+  musicBus.connect(master); sfxBus.connect(master);
+  master.connect(comp); comp.connect(monitor); monitor.connect(ctx.destination); comp.connect(streamDest);
+  voiceBus.connect(streamDest);
+  // shared resources
+  noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+  const nd = noiseBuf.getChannelData(0); for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+  reverb = ctx.createConvolver(); reverb.buffer = impulse(3.2, 2.4);
+  const rvOut = ctx.createGain(); rvOut.gain.value = .9; reverb.connect(rvOut); rvOut.connect(master);
+  startTicker();
+}
+function impulse(sec, decay) {
+  const len = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay); }
+  return b;
+}
+function distCurve(k) { const n = 2048, c = new Float32Array(n); for (let i = 0; i < n; i++) { const x = i * 2 / n - 1; c[i] = (3 + k) * x * 20 * Math.PI / 180 / (Math.PI + k * Math.abs(x)); } return c; }
+function crushCurve(steps) { const n = 2048, c = new Float32Array(n); for (let i = 0; i < n; i++) { const x = i * 2 / n - 1; c[i] = Math.round(x * steps) / steps; } return c; }
+const T = () => ctx.currentTime;
+function env(g, t, a, peak, d, end = 0.0001) { g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(end, t + a + d); }
+function noise(t, dur, out) { const s = ctx.createBufferSource(); s.buffer = noiseBuf; s.loop = true; s.connect(out); s.start(t, Math.random()); s.stop(t + dur + .05); return s; }
+function osc(type, f, t, dur, out) { const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); o.connect(out); o.start(t); o.stop(t + dur + .05); return o; }
+function filt(type, f, q, out) { const b = ctx.createBiquadFilter(); b.type = type; b.frequency.value = f; if (q != null) b.Q.value = q; if (out) b.connect(out); return b; }
+function gain(v, out) { const g = ctx.createGain(); g.gain.value = v; if (out) g.connect(out); return g; }
+function send(node, amt) { const g = gain(amt); node.connect(g); g.connect(reverb); return g; }
+
+/* ---- ticker in a worker (keeps rhythm when the tab is in the background) ---- */
+let tickers = new Set();
+function startTicker() {
+  try {
+    const w = new Worker(URL.createObjectURL(new Blob(['setInterval(()=>postMessage(0),50)'], {type: 'text/javascript'})));
+    w.onmessage = () => tickers.forEach(f => f());
+  } catch (e) { setInterval(() => tickers.forEach(f => f()), 50); }
+}
+// step sequencer helper: calls fn(time, step) every `sec` seconds, scheduled slightly ahead
+function seq(sec, fn) {
+  let next = T() + .1, step = 0;
+  const tick = () => { while (next < T() + .25) { fn(next, step++); next += typeof sec === 'function' ? sec() : sec; } };
+  tickers.add(tick); return () => tickers.delete(tick);
+}
+
+/* ---- music ---- */
+const NOTE = n => 440 * Math.pow(2, (n - 69) / 12);
+function drone(notes, type, cutoff, vol, out, lfoRate = .07) {
+  const g = gain(0, out), f = filt('lowpass', cutoff, 2, g), nodes = [];
+  notes.forEach((n, i) => { [-6, 6].forEach(det => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = NOTE(n); o.detune.value = det + i * 2; o.connect(f); o.start(); nodes.push(o); }); });
+  const l = ctx.createOscillator(), lg = gain(cutoff * .45); l.frequency.value = lfoRate; l.connect(lg); lg.connect(f.frequency); l.start(); nodes.push(l);
+  g.gain.setTargetAtTime(vol, T(), 2);
+  return {g, stop: (t) => { g.gain.setTargetAtTime(0.0001, t, .6); nodes.forEach(n => n.stop(t + 4)); }};
+}
+function pluck(f, t, vol, out, dec = 2.2, type = 'triangle') {
+  const g = gain(0, out); env(g, t, .005, vol, dec);
+  osc(type, f, t, dec + .1, g); osc('sine', f * 2.005, t, dec * .6, gain(.3, g));
+  send(g, .5);
+}
+function kick(t, out, v = 1) { const g = gain(0, out); env(g, t, .002, v, .45); const o = osc('sine', 120, t, .5, g); o.frequency.exponentialRampToValueAtTime(38, t + .35); }
+function hat(t, out, v = .15) { const g = gain(0, out); env(g, t, .001, v, .06); noise(t, .08, filt('highpass', 7000, null, g)); }
+function tom(t, out, f = 90, v = .8) { const g = gain(0, out); env(g, t, .004, v, .7); const o = osc('sine', f, t, .8, g); o.frequency.exponentialRampToValueAtTime(f * .55, t + .6); const ng = gain(0, out); env(ng, t, .002, v * .25, .15); noise(t, .2, filt('lowpass', 900, null, ng)); send(g, .4); }
+function heartbeat(t, out, v = 1) { [0, .26].forEach((d, i) => { const g = gain(0, out); env(g, t + d, .01, v * (i ? .7 : 1), .22); const o = osc('sine', 62, t + d, .3, g); o.frequency.exponentialRampToValueAtTime(38, t + d + .2); }); }
+
+const TRACKS = {
+  investigacao: {name: 'Investigação', e: '🔎', d: 'drone grave, relógio e notas soltas', make(out) {
+    const dr = drone([33, 40], 'sawtooth', 260, .22, out, .05);
+    const scale = [57, 60, 62, 63, 65, 67, 68, 72];
+    const s1 = seq(1, (t, i) => { const g = gain(0, out); env(g, t, .001, i % 2 ? .05 : .08, .05); noise(t, .06, filt('bandpass', i % 2 ? 2600 : 3400, 8, g)); });
+    let nextN = 0;
+    const s2 = seq(.5, (t) => { if (t > nextN) { nextN = t + rand(2.5, 6); pluck(NOTE(pick(scale)), t, .12, out, 3); if (Math.random() < .35) pluck(NOTE(pick(scale) - 12), t + .02, .08, out, 3); } });
+    return t => { dr.stop(t); s1(); s2(); };
+  }},
+  tensao: {name: 'Tensão', e: '😰', d: 'cluster dissonante e coração', make(out) {
+    const dr = drone([45, 46, 52], 'triangle', 900, .16, out, .11);
+    const hi = gain(0, out), bp = filt('bandpass', 1400, 6, hi), so = ctx.createOscillator(); so.type = 'sawtooth'; so.frequency.value = NOTE(81); so.connect(bp); so.start();
+    const trem = ctx.createOscillator(), tg = gain(.03); trem.frequency.value = 11; trem.connect(tg); tg.connect(hi.gain); trem.start(); hi.gain.setTargetAtTime(.035, T(), 4);
+    const s = seq(.95, t => heartbeat(t, out, .55));
+    return t => { dr.stop(t); hi.gain.setTargetAtTime(.0001, t, .5); so.stop(t + 3); trem.stop(t + 3); s(); };
+  }},
+  perseguicao: {name: 'Perseguição', e: '🏃', d: 'pulso rápido, baixo e percussão', make(out) {
+    const bass = [33, 33, 36, 33, 34, 33, 31, 32], st = 60 / 150 / 2;
+    const s = seq(st, (t, i) => {
+      if (i % 4 === 0) kick(t, out, .9);
+      if (i % 8 === 4) { const g = gain(0, out); env(g, t, .002, .35, .18); noise(t, .2, filt('bandpass', 1800, 1, g)); }
+      hat(t, out, i % 2 ? .06 : .12);
+      const g = gain(0, out); env(g, t, .005, .22, st * .9); const f = filt('lowpass', 500, 4, g); osc('sawtooth', NOTE(bass[i % 8]), t, st, f);
+      if (i % 32 === 0) { const sg = gain(0, out); env(sg, t, .01, .12, 1.4); [69, 70, 75].forEach(n => osc('sawtooth', NOTE(n), t, 1.5, filt('lowpass', 2500, 1, sg))); send(sg, .4); }
+    });
+    return () => s();
+  }},
+  ritual: {name: 'Ritual', e: '🕯️', d: 'tambores lentos e canto', make(out) {
+    const dr = drone([28, 35], 'sawtooth', 180, .25, out, .04);
+    const ch = gain(0, out); ch.gain.setTargetAtTime(.07, T(), 3);
+    const f1 = filt('bandpass', 700, 9, ch), f2 = filt('bandpass', 1150, 11, ch);
+    const v = ctx.createOscillator(); v.type = 'sawtooth'; v.frequency.value = NOTE(45); v.connect(f1); v.connect(f2); v.start(); send(ch, .8);
+    const chant = [45, 48, 45, 44, 45, 41, 43, 45];
+    const s1 = seq(2.4, (t, i) => { v.frequency.setTargetAtTime(NOTE(chant[i % 8]), t, .25); f1.frequency.setTargetAtTime(pick([600, 700, 450]), t, .3); f2.frequency.setTargetAtTime(pick([1100, 900, 1300]), t, .3); });
+    const pat = [1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0];
+    const s2 = seq(.3, (t, i) => { if (pat[i % 16]) tom(t, out, i % 16 === 0 ? 70 : 95, i % 16 === 0 ? .9 : .55); });
+    return t => { dr.stop(t); ch.gain.setTargetAtTime(.0001, t, .5); v.stop(t + 3); s1(); s2(); };
+  }},
+  outro: {name: 'O Outro Lado', e: '🌀', d: 'texturas etéreas e sussurros', make(out) {
+    const pad = gain(0, out), lp = filt('lowpass', 2400, 1, pad), oss = [];
+    [57, 64, 68, 71, 75, 82].forEach(n => { const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = NOTE(n); const vib = ctx.createOscillator(), vg = gain(rand(2, 6)); vib.frequency.value = rand(.05, .3); vib.connect(vg); vg.connect(o.detune); o.connect(lp); o.start(); vib.start(); oss.push(o, vib); });
+    pad.gain.setTargetAtTime(.05, T(), 3); send(pad, 1.2);
+    const s = seq(7, t => { const g = gain(0, out); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.12, t + 2.5); g.gain.exponentialRampToValueAtTime(.0001, t + 2.6); noise(t, 2.7, filt('bandpass', rand(400, 1600), 3, g)); send(g, .8); if (Math.random() < .5) pluck(NOTE(pick([81, 84, 88, 87])), t + 3, .05, out, 5, 'sine'); });
+    return t => { pad.gain.setTargetAtTime(.0001, t, .6); oss.forEach(o => o.stop(t + 4)); s(); };
+  }},
+  calmaria: {name: 'Calmaria', e: '🌧️', d: 'pad suave e chuva', make(out) {
+    const dr = drone([45, 52, 60, 64, 71], 'triangle', 1100, .07, out, .03);
+    const rg = gain(0, out); rg.gain.setTargetAtTime(.05, T(), 3); const rs = ctx.createBufferSource(); rs.buffer = noiseBuf; rs.loop = true; rs.connect(filt('lowpass', 3500, null, filt('highpass', 600, null, rg))); rs.start();
+    return t => { dr.stop(t); rg.gain.setTargetAtTime(.0001, t, .6); rs.stop(t + 3); };
+  }}
+};
+let curTrack = null, curStop = null, trackBus = null;
+function playTrack(id) {
+  audioInit();
+  const t = T();
+  if (curStop) { const old = trackBus, st = curStop; old.gain.setTargetAtTime(.0001, t, .8); setTimeout(() => { try { st(T()); } catch (e) {} setTimeout(() => old.disconnect(), 5000); }, 2500); }
+  curStop = null; curTrack = null;
+  if (!id || !TRACKS[id]) { renderPane(); return; }
+  trackBus = gain(0.0001, musicBus); trackBus.gain.setTargetAtTime(1, t, 1.2);
+  curStop = TRACKS[id].make(trackBus); curTrack = id;
+  renderPane();
+}
+
+/* ---- sound effects ---- */
+const SFX = {
+  jumpscare: {name: 'Jumpscare', e: '😱', fx: 'flash', play(t, o) {
+    const g = gain(0, o); env(g, t, .005, .55, 1.4); const ds = ctx.createWaveShaper(); ds.curve = distCurve(60); ds.connect(g);
+    for (let i = 0; i < 5; i++) { const x = osc('sawtooth', rand(700, 2300), t, 1.5, ds); x.frequency.exponentialRampToValueAtTime(rand(300, 900), t + 1.4); }
+    noise(t, 1.2, filt('bandpass', 2500, .7, ds));
+    const b = gain(0, o); env(b, t, .005, 1, 1.2); const bo = osc('sine', 90, t, 1.3, b); bo.frequency.exponentialRampToValueAtTime(30, t + 1); send(g, .6);
+  }},
+  grito: {name: 'Grito', e: '🗣️', fx: 'blood', play(t, o) {
+    const g = gain(0, o); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.35, t + .15); g.gain.exponentialRampToValueAtTime(.0001, t + 1.8);
+    const ds = ctx.createWaveShaper(); ds.curve = distCurve(30); const f1 = filt('bandpass', 900, 5, ds), f2 = filt('bandpass', 1500, 6, ds); ds.connect(g);
+    const s = osc('sawtooth', 520, t, 1.9, f1); s.connect(f2); s.frequency.linearRampToValueAtTime(820, t + .5); s.frequency.linearRampToValueAtTime(380, t + 1.8);
+    const v = ctx.createOscillator(), vg = gain(40); v.frequency.value = 9; v.connect(vg); vg.connect(s.frequency); v.start(t); v.stop(t + 2);
+    noise(t, 1.6, filt('bandpass', 3000, 2, gain(.2, g))); send(g, .7);
+  }},
+  estatica: {name: 'Estática', e: '📺', fx: 'static', play(t, o) {
+    const g = gain(0, o), bp = filt('bandpass', 2600, .6, g); noise(t, 1.8, bp);
+    for (let i = 0; i < 24; i++) g.gain.setValueAtTime(Math.random() < .3 ? .02 : rand(.12, .3), t + i * .07);
+    g.gain.setValueAtTime(.0001, t + 1.75);
+  }},
+  glitch: {name: 'Glitch', e: '⚡', fx: 'glitch', play(t, o) {
+    const ds = ctx.createWaveShaper(); ds.curve = crushCurve(6); const g = gain(.18, o); ds.connect(g);
+    for (let i = 0; i < 16; i++) { const tt = t + i * rand(.04, .09); const bg = gain(0, ds); env(bg, tt, .001, .9, .05); osc(pick(['square', 'sawtooth']), rand(80, 2400), tt, .06, bg); }
+  }},
+  coracao: {name: 'Coração', e: '🫀', fx: 'blood', play(t, o) { for (let i = 0; i < 5; i++) heartbeat(t + i * (.85 - i * .08), o, .9); }},
+  batidas: {name: 'Batidas', e: '🚪', play(t, o) {
+    [0, .28, .56, 1.5, 1.72].forEach(d => { const g = gain(0, o); env(g, t + d, .002, .7, .18); noise(t + d, .2, filt('lowpass', 700, 1, g)); const tg = gain(0, o); env(tg, t + d, .002, .6, .15); osc('sine', 110, t + d, .2, tg); send(g, .25); });
+  }},
+  porta: {name: 'Porta rangendo', e: '🗝️', play(t, o) {
+    const g = gain(0, o); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.25, t + .2); g.gain.setValueAtTime(.25, t + 2); g.gain.exponentialRampToValueAtTime(.0001, t + 2.5);
+    const bp = filt('bandpass', 700, 6, g); bp.frequency.linearRampToValueAtTime(1300, t + 2.4);
+    const s = osc('sawtooth', 70, t, 2.6, bp); const l = ctx.createOscillator(), lg = gain(30); l.frequency.value = 13; l.connect(lg); lg.connect(s.frequency); l.start(t); l.stop(t + 2.6); s.frequency.linearRampToValueAtTime(110, t + 2.4); send(g, .4);
+  }},
+  passos: {name: 'Passos', e: '👣', play(t, o) {
+    for (let i = 0; i < 7; i++) { const tt = t + i * .52; const g = gain(0, o); env(g, tt, .004, .5 - i * .04, .16); noise(tt, .18, filt('lowpass', 420, 1, g)); const tg = gain(0, o); env(tg, tt, .003, .35, .12); osc('sine', 68, tt, .15, tg); send(g, .3); }
+  }},
+  sussurros: {name: 'Sussurros', e: '👁️', play(t, o) {
+    for (let k = 0; k < 3; k++) {
+      const p = ctx.createStereoPanner ? ctx.createStereoPanner() : gain(1); if (p.pan) p.pan.value = rand(-.9, .9); p.connect(o);
+      const g = gain(0, p), f1 = filt('bandpass', 800, 8, g), f2 = filt('bandpass', 1800, 9, g), f3 = filt('bandpass', 3000, 6, g); const src = noise(t, 3.6, f1); src.connect(f2); src.connect(f3);
+      for (let i = 0; i < 40; i++) { const tt = t + k * .3 + i * .085; g.gain.setTargetAtTime(Math.random() < .35 ? .0001 : rand(.15, .45), tt, .03); f1.frequency.setTargetAtTime(rand(400, 1000), tt, .03); f2.frequency.setTargetAtTime(rand(1100, 2300), tt, .03); }
+      g.gain.setTargetAtTime(.0001, t + 3.5, .1); send(g, .9);
+    }
+  }},
+  respiracao: {name: 'Respiração', e: '😮‍💨', play(t, o) {
+    [0, 2.6].forEach(d => { const g = gain(0, o), bp = filt('bandpass', 900, 1.5, g); g.gain.setValueAtTime(.0001, t + d); g.gain.exponentialRampToValueAtTime(.3, t + d + 1.1); g.gain.exponentialRampToValueAtTime(.0001, t + d + 2.3); bp.frequency.setValueAtTime(600, t + d); bp.frequency.linearRampToValueAtTime(1300, t + d + 1.1); bp.frequency.linearRampToValueAtTime(500, t + d + 2.3); noise(t + d, 2.4, bp); });
+  }},
+  tiro: {name: 'Tiro', e: '🔫', fx: 'flashw', play(t, o) {
+    const g = gain(0, o); env(g, t, .001, 1, .35); noise(t, .4, filt('highpass', 300, null, g)); const b = gain(0, o); env(b, t, .001, .9, .5); const bo = osc('sine', 140, t, .6, b); bo.frequency.exponentialRampToValueAtTime(40, t + .4); send(g, 1.2);
+  }},
+  trovao: {name: 'Trovão', e: '⛈️', fx: 'flashw', play(t, o) {
+    const c = gain(0, o); env(c, t, .002, .6, .3); noise(t, .35, filt('highpass', 1500, null, c));
+    const g = gain(0, o), lp = filt('lowpass', 260, 1, g); noise(t, 5, lp);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.9, t + .3); for (let i = 0; i < 12; i++) g.gain.setTargetAtTime(rand(.3, .9) * (1 - i / 13), t + .3 + i * .25, .08); g.gain.setTargetAtTime(.0001, t + 3.4, .5); send(g, .5);
+  }},
+  sino: {name: 'Sino', e: '🔔', play(t, o) {
+    [[220, .3], [220 * 2.76, .15], [220 * 5.4, .08], [220 * 1.5, .1]].forEach(([f, v]) => { const g = gain(0, o); env(g, t, .002, v, 6); osc('sine', f, t, 6.2, g); send(g, .8); });
+  }}
+};
+function playSfx(id) { audioInit(); const s = SFX[id]; if (!s) return; try { s.play(T() + .02, sfxBus); } catch (e) { console.warn(e); } if (s.fx) doFx(s.fx, true); }
+
+/* ---- voice changer ---- */
+function pitchShifter() {
+  // delay-line pitch shifter (two crossfaded modulated delays)
+  const bufT = .1, fadeT = .05, sr = ctx.sampleRate;
+  const mk = (up) => { const l1 = Math.floor(bufT * sr), l2 = Math.floor((bufT - 2 * fadeT) * sr), b = ctx.createBuffer(1, l1 + l2, sr), p = b.getChannelData(0); for (let i = 0; i < l1; i++) p[i] = up ? (l1 - i) / (l1 + l2) : i / l1; return b; };
+  const fadeB = (() => { const l1 = Math.floor(bufT * sr), l2 = Math.floor((bufT - 2 * fadeT) * sr), b = ctx.createBuffer(1, l1 + l2, sr), p = b.getChannelData(0), fl = fadeT * sr, i2 = l1 - fl; for (let i = 0; i < l1; i++) p[i] = i < fl ? Math.sqrt(i / fl) : i >= i2 ? Math.sqrt(1 - (i - i2) / fl) : 1; return b; })();
+  const input = gain(1), output = gain(1), down = mk(false), up = mk(true);
+  const src = b => { const s = ctx.createBufferSource(); s.buffer = b; s.loop = true; return s; };
+  const m1 = src(down), m2 = src(down), m3 = src(up), m4 = src(up);
+  const g1 = gain(1), g2 = gain(1), g3 = gain(0), g4 = gain(0); m1.connect(g1); m2.connect(g2); m3.connect(g3); m4.connect(g4);
+  const mg1 = gain(1), mg2 = gain(1); g1.connect(mg1); g3.connect(mg1); g2.connect(mg2); g4.connect(mg2);
+  const d1 = ctx.createDelay(1), d2 = ctx.createDelay(1); mg1.connect(d1.delayTime); mg2.connect(d2.delayTime);
+  const f1 = src(fadeB), f2 = src(fadeB), x1 = gain(0), x2 = gain(0); f1.connect(x1.gain); f2.connect(x2.gain);
+  input.connect(d1); input.connect(d2); d1.connect(x1); d2.connect(x2); x1.connect(output); x2.connect(output);
+  const t = T() + .05, t2 = t + bufT - fadeT; m1.start(t); m2.start(t2); m3.start(t); m4.start(t2); f1.start(t); f2.start(t2);
+  return {input, output, set(mult) { const upw = mult > 0; g1.gain.value = g2.gain.value = upw ? 0 : 1; g3.gain.value = g4.gain.value = upw ? 1 : 0; const dl = .1 * Math.abs(mult) * .5; mg1.gain.value = mg2.gain.value = dl; }, stop() { [m1, m2, m3, m4, f1, f2].forEach(s => { try { s.stop(); } catch (e) {} }); }};
+}
+const VOICES = {
+  normal: {name: 'Normal', e: '🎙️', c: '#777', d: 'sem efeito'},
+  entidade: {name: 'Entidade', e: '👤', c: '#c3161f', d: 'grave com eco'},
+  sangue: {name: 'Sangue', e: '🩸', c: '#e0101c', d: 'rosnado distorcido'},
+  morte: {name: 'Morte', e: '💀', c: '#9a9a9a', d: 'profunda e lenta'},
+  conhecimento: {name: 'Conhecimento', e: '📜', c: '#d8a74a', d: 'várias vozes sussurradas'},
+  energia: {name: 'Energia', e: '⚡', c: '#8b4cff', d: 'elétrica, instável'},
+  medo: {name: 'Medo', e: '👁️', c: '#f2f2f2', d: 'duas vozes, eco infinito'},
+  radio: {name: 'Rádio', e: '📻', c: '#3ddc84', d: 'rádio velho com chiado'}
+};
+let mic = null, micSrc = null, voiceId = 'normal', voiceNodes = [], voiceIn = null, voiceOut = null, micOn = false, hearSelf = false, selfMon = null, analyser = null;
+function buildVoice() {
+  if (!micSrc) return;
+  voiceNodes.forEach(n => { try { n.stop ? n.stop() : 0; } catch (e) {} try { n.disconnect && n.disconnect(); } catch (e) {} });
+  voiceNodes = [];
+  if (voiceIn) try { micSrc.disconnect(voiceIn); } catch (e) {}
+  voiceIn = gain(1); voiceOut = gain(micOn ? 1 : 0); voiceOut.connect(voiceBus); voiceOut.connect(analyser); if (hearSelf) voiceOut.connect(selfMon);
+  micSrc.connect(voiceIn);
+  const keep = (...n) => { voiceNodes.push(...n); return n[0]; };
+  const rv = (amt, len = 3, dec = 2) => { const c = ctx.createConvolver(); c.buffer = impulse(len, dec); const g = gain(amt); c.connect(g); g.connect(voiceOut); keep(c, g); return c; };
+  const ps = (m) => { const p = pitchShifter(); p.set(m); voiceNodes.push(p, p.input, p.output); return p; };
+  const i = voiceIn;
+  keep(voiceIn, voiceOut);
+  switch (voiceId) {
+    case 'entidade': { const p = ps(-.45); i.connect(p.input); const lp = keep(filt('lowpass', 3000, .7, voiceOut)); p.output.connect(lp); p.output.connect(rv(.55)); break; }
+    case 'sangue': { const p = ps(-.7); i.connect(p.input); const ds = keep(ctx.createWaveShaper()); ds.curve = distCurve(45); const lp = keep(filt('lowpass', 2200, 1, gain(.7, voiceOut))); p.output.connect(ds); ds.connect(lp); const p2 = ps(-.95); i.connect(p2.input); p2.output.connect(keep(gain(.5, voiceOut))); p.output.connect(rv(.25, 1.5)); break; }
+    case 'morte': { const p = ps(-.85); i.connect(p.input); const lp = keep(filt('lowpass', 1300, .7, voiceOut)); p.output.connect(lp); const d = keep(ctx.createDelay(2)); d.delayTime.value = .42; const fb = keep(gain(.42)); p.output.connect(d); d.connect(fb); fb.connect(d); d.connect(keep(gain(.35, voiceOut))); p.output.connect(rv(.8, 5, 1.6)); break; }
+    case 'conhecimento': { const hp = keep(filt('highpass', 900, .7)); i.connect(hp); hp.connect(keep(gain(.8, voiceOut))); const p = ps(.35), p2 = ps(-.3); hp.connect(p.input); hp.connect(p2.input); p.output.connect(keep(gain(.45, voiceOut))); p2.output.connect(keep(gain(.45, voiceOut))); const r = rv(.9, 4); hp.connect(r); break; }
+    case 'energia': { const rm = keep(gain(0)); const o = keep(ctx.createOscillator()); o.frequency.value = 38; o.connect(rm.gain); o.start(); i.connect(rm); const cr = keep(ctx.createWaveShaper()); cr.curve = crushCurve(10); rm.connect(cr); cr.connect(keep(gain(.9, voiceOut))); const lf = keep(ctx.createOscillator()); lf.type = 'square'; lf.frequency.value = 3.3; const lg = keep(gain(25)); lf.connect(lg); lg.connect(o.frequency); lf.start(); i.connect(keep(gain(.35, voiceOut))); break; }
+    case 'medo': { const p = ps(.45), p2 = ps(-.55); i.connect(p.input); i.connect(p2.input); i.connect(keep(gain(.3, voiceOut))); p.output.connect(keep(gain(.6, voiceOut))); p2.output.connect(keep(gain(.75, voiceOut))); const d = keep(ctx.createDelay(2)); d.delayTime.value = .33; const fb = keep(gain(.58)); p2.output.connect(d); d.connect(fb); fb.connect(d); d.connect(keep(gain(.4, voiceOut))); break; }
+    case 'radio': { const hp = keep(filt('highpass', 500, .8)), lp = keep(filt('lowpass', 2800, .8)); const ds = keep(ctx.createWaveShaper()); ds.curve = distCurve(18); i.connect(hp); hp.connect(lp); lp.connect(ds); ds.connect(keep(gain(.9, voiceOut))); const ns = keep(ctx.createBufferSource()); ns.buffer = noiseBuf; ns.loop = true; ns.connect(keep(filt('bandpass', 4000, .8, keep(gain(.025, voiceOut))))); ns.start(); break; }
+    default: i.connect(voiceOut);
+  }
+}
+async function toggleMic() {
+  audioInit();
+  if (!mic) {
+    try { mic = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true, autoGainControl: true}}); }
+    catch (e) { toast('Não consegui acessar o microfone.'); return; }
+    micSrc = ctx.createMediaStreamSource(mic);
+    analyser = ctx.createAnalyser(); analyser.fftSize = 512;
+    selfMon = gain(.9, ctx.destination);
+    meterLoop();
+  }
+  micOn = !micOn; buildVoice(); renderPane();
+  toast(micOn ? '🎙️ Microfone transmitindo' : 'Microfone mudo');
+}
+function meterLoop() {
+  const data = new Uint8Array(256);
+  const loop = () => { if (analyser) { analyser.getByteTimeDomainData(data); let m = 0; for (const v of data) m = Math.max(m, Math.abs(v - 128)); const el = $('#meter'); if (el) el.style.width = Math.min(100, m / 1.1) + '%'; } requestAnimationFrame(loop); };
+  loop();
+}
+function setVoice(id) { voiceId = id; audioInit(); buildVoice(); renderPane(); toast('Voz: ' + VOICES[id].name); }
+
+/* =====================================================================
+   COVERS & VISUAL FX
+   ===================================================================== */
+const COVERS = {
+  intervalo: {name: 'Intervalo', e: '☕', t: 'INTERVALO', s: 'a investigação continua em instantes'},
+  estatica: {name: 'Estática', e: '📺', t: 'SINAL PERDIDO', s: 'aguarde · reconectando com a realidade'},
+  ritual: {name: 'Ritual', e: '🕯️', t: 'O RITUAL COMEÇOU', s: 'não quebre o círculo'},
+  sangue: {name: 'Sangue', e: '🩸', t: 'ALGO SE APROXIMA', s: 'vocês ouvem passos'},
+  dossie: {name: 'Dossiê', e: '🗂️', t: 'ARQUIVO CONFIDENCIAL', s: 'Caso nº 0013 · acesso restrito'},
+  outro: {name: 'Outro Lado', e: '🌀', t: 'O OUTRO LADO', s: 'a membrana está fina esta noite'}
+};
+function sigilSVG() {
+  let ticks = ''; for (let i = 0; i < 72; i++) { const a = i * 5 * Math.PI / 180, r1 = 44, r2 = i % 6 ? 42 : 39; ticks += `<line x1="${50 + r1 * Math.cos(a)}" y1="${50 + r1 * Math.sin(a)}" x2="${50 + r2 * Math.cos(a)}" y2="${50 + r2 * Math.sin(a)}"/>`; }
+  let glyphs = ''; for (let i = 0; i < 6; i++) { const a = i * 60 * Math.PI / 180, x = 50 + 33 * Math.cos(a), y = 50 + 33 * Math.sin(a); glyphs += `<g transform="translate(${x} ${y}) rotate(${i * 60 + 90})"><path d="M-3 -3 L0 3 L3 -3 M-3 0 H3"/></g>`; }
+  return `<svg class="sig" viewBox="0 0 100 100" fill="none" stroke="#ff2a3a" stroke-width=".7"><g class="r1"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="44"/>${ticks}</g><g class="r2"><circle cx="50" cy="50" r="30"/>${glyphs}<path d="M50 22 L74 64 L26 64 Z"/><path d="M50 78 L26 36 L74 36 Z" opacity=".55"/></g><circle cx="50" cy="50" r="6" fill="#ff2a3a" opacity=".8"/></svg>`;
+}
+let noiseRAF = null;
+function noiseCanvas(cv, fps = 24) {
+  const g = cv.getContext('2d'); cv.width = 160; cv.height = 90; const im = g.createImageData(160, 90); let last = 0;
+  const loop = (ts) => { if (!cv.isConnected) return; if (ts - last > 1000 / fps) { last = ts; for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() * 255 | 0; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; } g.putImageData(im, 0, 0); } requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+let coverKey = '';
+function renderCover(c) {
+  const el = $('#cover');
+  el.classList.toggle('show', !!(c && c.on));
+  if (!c || !c.on) return;
+  const key = c.style + '|' + c.title + '|' + c.sub;
+  if (key === coverKey) return; coverKey = key;
+  const def = COVERS[c.style] || COVERS.intervalo, title = esc(c.title || def.t), sub = esc(c.sub != null && c.sub !== '' ? c.sub : def.s);
+  let inner = '';
+  if (c.style === 'intervalo') inner = `<div class="fog"></div><div class="fog b"></div><div class="vign"></div><div><div class="tt">${title}</div><div class="st">${sub}</div></div>`;
+  else if (c.style === 'estatica') inner = `<canvas></canvas><div class="scan"></div><div class="scanroll"></div><div><div class="tt glt" data-t="${title}">${title}</div><div class="st">${sub}</div></div>`;
+  else if (c.style === 'ritual') inner = `${sigilSVG()}<div class="vign"></div><div><div class="tt">${title}</div><div class="st">${sub}</div></div>`;
+  else if (c.style === 'sangue') { let d = ''; for (let i = 0; i < 14; i++) d += `<i class="drip" style="--x:${rand(0, 98)}%;--w:${rand(4, 14)}px;--h:${rand(15, 60)}%;--d:${rand(4, 9)}s;--dl:${rand(0, 5)}s"></i>`; inner = `${d}<div><div class="tt glt" data-t="${title}">${title}</div><div class="st">${sub}</div></div>`; }
+  else if (c.style === 'dossie') inner = `<div class="paper"><div class="stamp">CONFIDENCIAL</div><div class="tt">${title}</div><div class="st">${sub}</div></div>`;
+  else inner = `<div class="swirl"></div><div class="vign"></div><div><div class="tt glt" data-t="${title}">${title}</div><div class="st">${sub}</div></div>`;
+  el.innerHTML = `<div class="cv cv-${esc(c.style)}">${inner}</div>`;
+  const cvs = el.querySelector('canvas'); if (cvs) noiseCanvas(cvs);
+}
+function doFx(name, broadcast) {
+  const fx = $('#fx'), st = $('#stage');
+  if (broadcast && isHost) sendAll({t: 'fx', name});
+  if (name === 'glitch') { st.classList.add('glitchOn'); setTimeout(() => st.classList.remove('glitchOn'), 1300); return; }
+  if (name === 'static') { const c = document.createElement('canvas'); fx.appendChild(c); noiseCanvas(c, 30); setTimeout(() => c.remove(), 1700); return; }
+  const d = document.createElement('div'); d.style.cssText = 'position:absolute;inset:0'; d.className = 'fx-' + name; fx.appendChild(d); setTimeout(() => d.remove(), 3200);
+  if (name === 'flash' || name === 'flashw') { st.classList.remove('shake'); void st.offsetWidth; st.classList.add('shake'); }
+}
+
+/* =====================================================================
+   NETWORK (PeerJS / WebRTC)
+   ===================================================================== */
+const PREFIX = 'mesaparanormal-v1-';
+const PEER_OPTS = {debug: 0, config: {iceServers: [{urls: 'stun:stun.l.google.com:19302'}, {urls: 'stun:stun1.l.google.com:19302'}, {urls: 'stun:global.stun.twilio.com:3478'}]}};
+let peer = null, isHost = false, code = '', myName = '', hostConn = null;
+const players = new Map();   // peerId -> {conn, name, call}
+let state = {cover: {on: false, style: 'intervalo', title: '', sub: ''}, sharing: false, track: null, mestre: ''};
+let chat = [];
+let outStream = null, placeholderTrack = null, screenStream = null, screenAudioSrc = null;
+function setStat(ok, txt) { const s = $('#stat'); s.className = 'stat ' + (ok === true ? 'ok' : ok === false ? 'bad' : ''); $('#statTxt').textContent = txt; }
+function genCode() { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = ''; for (let i = 0; i < 5; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
+function sendAll(m) { players.forEach(p => { try { if (p.conn.open) p.conn.send(m); } catch (e) {} }); }
+function roster() { return [{name: myName, mestre: true}, ...[...players.values()].map(p => ({name: p.name}))]; }
+function pushState() { state.mestre = myName; sendAll({t: 'state', state, roster: roster()}); }
+function placeholder() {
+  const c = document.createElement('canvas'); c.width = 640; c.height = 360; const g = c.getContext('2d');
+  const draw = () => { g.fillStyle = '#000'; g.fillRect(0, 0, 640, 360); g.fillStyle = '#c3161f'; g.font = '28px sans-serif'; g.textAlign = 'center'; g.fillText('MESA PARANORMAL', 320, 185); };
+  draw(); setInterval(draw, 1000);
+  return c.captureStream(1).getVideoTracks()[0];
+}
+function buildOutStream() {
+  audioInit();
+  placeholderTrack = placeholderTrack || placeholder();
+  outStream = new MediaStream([placeholderTrack, streamDest.stream.getAudioTracks()[0]]);
+}
+function currentVideoTrack() { return screenStream ? screenStream.getVideoTracks()[0] : placeholderTrack; }
+function callPlayer(pid) {
+  const p = players.get(pid); if (!p) return;
+  try { if (p.call) p.call.close(); } catch (e) {}
+  const call = peer.call(pid, new MediaStream([currentVideoTrack(), streamDest.stream.getAudioTracks()[0]]));
+  p.call = call;
+  call.on('error', () => {});
+}
+function replaceVideoAll(track) {
+  players.forEach(p => {
+    const pc = p.call && p.call.peerConnection; if (!pc) return;
+    const s = pc.getSenders().find(x => x.track && x.track.kind === 'video') || pc.getSenders().find(x => !x.track);
+    if (s) s.replaceTrack(track).catch(() => callPlayer(p.conn.peer));
+  });
+}
+async function toggleShare() {
+  audioInit();
+  if (screenStream) { stopShare(); return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { toast('Este navegador não compartilha tela. Use Chrome ou Edge no computador.'); return; }
+  try { screenStream = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: 30, width: {ideal: 1920}}, audio: true}); }
+  catch (e) { screenStream = null; return; }
+  const vt = screenStream.getVideoTracks()[0];
+  try { vt.contentHint = 'detail'; } catch (e) {}
+  vt.onended = () => stopShare();
+  const at = screenStream.getAudioTracks()[0];
+  if (at) { screenAudioSrc = ctx.createMediaStreamSource(new MediaStream([at])); screenAudioSrc.connect(streamDest); }
+  replaceVideoAll(vt);
+  $('#vid').srcObject = new MediaStream([vt]); $('#vid').muted = true; $('#vid').play().catch(() => {});
+  state.sharing = true; pushState(); updateStageVisibility(); renderPane();
+  toast(at ? '📡 Transmitindo tela com áudio' : '📡 Transmitindo tela');
+}
+function stopShare() {
+  if (!screenStream) return;
+  screenStream.getTracks().forEach(t => t.stop()); screenStream = null;
+  if (screenAudioSrc) { try { screenAudioSrc.disconnect(); } catch (e) {} screenAudioSrc = null; }
+  replaceVideoAll(placeholderTrack);
+  $('#vid').srcObject = null;
+  state.sharing = false; pushState(); updateStageVisibility(); renderPane();
+}
+function updateStageVisibility() {
+  const on = state.sharing && (isHost ? !!screenStream : true);
+  $('#vid').classList.toggle('off', !on);
+  $('#idle').classList.toggle('hide', on);
+  if (!isHost) { $('#idleT').textContent = hostConn && hostConn.open ? 'AGUARDANDO TRANSMISSÃO' : 'PROCURANDO O MESTRE…'; $('#idleS').textContent = hostConn && hostConn.open ? 'o Mestre ainda não compartilhou a tela' : 'verifique o código da sala'; }
+  else { $('#idleT').textContent = 'SALA ABERTA'; $('#idleS').textContent = 'compartilhe a tela na aba Transmissão'; }
+}
+
+/* ---- host ---- */
+let hostTries = 0;
+function startHost() {
+  isHost = true; buildOutStream();
+  peer = new Peer(PREFIX + code, PEER_OPTS);
+  setStat(null, 'abrindo sala…');
+  peer.on('open', () => { hostTries = 0; setStat(true, 'sala aberta'); lsSet('mesa-host', {code, name: myName}); });
+  peer.on('error', e => {
+    if (e.type === 'unavailable-id') { if (hostTries++ < 6) { setStat(null, 'reabrindo sala…'); try { peer.destroy(); } catch (x) {} setTimeout(startHostPeerOnly, 4000); } else setStat(false, 'código em uso: crie outra sala'); }
+    else if (e.type === 'network' || e.type === 'server-error' || e.type === 'socket-error' || e.type === 'socket-closed') setStat(false, 'sem conexão com o servidor');
+    else console.warn(e);
+  });
+  peer.on('disconnected', () => { setStat(null, 'reconectando…'); setTimeout(() => { try { peer.reconnect(); } catch (e) {} }, 1500); });
+  peer.on('connection', conn => {
+    conn.on('open', () => {
+      const name = String((conn.metadata && conn.metadata.name) || 'Agente').slice(0, 24);
+      const old = players.get(conn.peer); if (old) try { old.conn.close(); } catch (e) {}
+      players.set(conn.peer, {conn, name, call: null});
+      conn.send({t: 'hello', state: {...state, mestre: myName}, roster: roster(), chat: chat.slice(-60)});
+      callPlayer(conn.peer);
+      sys(name + ' entrou na sala'); pushState(); renderPane();
+    });
+    conn.on('data', d => onHostData(conn, d));
+    conn.on('close', () => { const p = players.get(conn.peer); if (p && p.conn === conn) { players.delete(conn.peer); try { p.call && p.call.close(); } catch (e) {} sys(p.name + ' saiu'); pushState(); renderPane(); } });
+  });
+}
+function startHostPeerOnly() { startHost(); }
+function onHostData(conn, d) {
+  if (!d || typeof d !== 'object') return;
+  const p = players.get(conn.peer); const name = p ? p.name : 'Agente';
+  if (d.t === 'chat' && typeof d.text === 'string') addChat({k: 'chat', from: name, text: d.text.slice(0, 500)}, true);
+  if (d.t === 'roll' && d.r) addChat({k: 'roll', from: name, r: sanitizeRoll(d.r)}, true);
+  if (d.t === 'recall') callPlayer(conn.peer);
+}
+function kick(pid) { const p = players.get(pid); if (!p) return; try { p.conn.send({t: 'kicked'}); } catch (e) {} setTimeout(() => { try { p.conn.close(); } catch (e) {} }, 300); }
+
+/* ---- player ---- */
+let retryT = null, gotStream = false;
+function startPlayer() {
+  isHost = false;
+  peer = new Peer(undefined, PEER_OPTS);
+  setStat(null, 'conectando…');
+  peer.on('open', () => connectHost());
+  peer.on('call', call => {
+    call.answer();
+    call.on('stream', s => { gotStream = true; const v = $('#vid'); v.srcObject = s; v.muted = false; v.volume = +$('#vol').value / 100; v.play().then(() => $('#unmute').classList.add('hide')).catch(() => $('#unmute').classList.remove('hide')); updateStageVisibility(); });
+  });
+  peer.on('error', e => {
+    if (e.type === 'peer-unavailable') { setStat(false, 'sala não encontrada'); updateStageVisibility(); scheduleRetry(5000); }
+    else if (e.type === 'network' || e.type === 'server-error' || e.type === 'socket-error' || e.type === 'socket-closed') { setStat(false, 'sem conexão'); scheduleRetry(5000); }
+  });
+  peer.on('disconnected', () => setTimeout(() => { try { peer.reconnect(); } catch (e) {} }, 1500));
+}
+function scheduleRetry(ms) { clearTimeout(retryT); retryT = setTimeout(() => { if (!hostConn || !hostConn.open) connectHost(); }, ms); }
+function connectHost() {
+  if (!peer || peer.destroyed || !peer.open) return;
+  try { if (hostConn) hostConn.close(); } catch (e) {}
+  hostConn = peer.connect(PREFIX + code, {metadata: {name: myName}, reliable: true});
+  hostConn.on('open', () => { setStat(true, 'conectado'); updateStageVisibility(); setTimeout(() => { if (!gotStream && hostConn.open) hostConn.send({t: 'recall'}); }, 6000); });
+  hostConn.on('data', onPlayerData);
+  hostConn.on('close', () => { setStat(false, 'mestre desconectou'); state.sharing = false; updateStageVisibility(); renderCover(null); gotStream = false; scheduleRetry(3000); });
+  hostConn.on('error', () => {});
+}
+let kicked = false;
+function onPlayerData(d) {
+  if (!d || typeof d !== 'object') return;
+  if (d.t === 'hello') { state = d.state || state; rosterCache = d.roster || []; chat = []; $('#log') && ($('#log').innerHTML = ''); (d.chat || []).forEach(m => addChat(m, false)); applyState(); renderPane(); }
+  if (d.t === 'state') { state = d.state || state; rosterCache = d.roster || rosterCache; applyState(); if (curTab === 'mesa') renderPane(); }
+  if (d.t === 'chat') addChat(d.m, false);
+  if (d.t === 'fx' && typeof d.name === 'string') doFx(d.name, false);
+  if (d.t === 'kicked') { kicked = true; toast('O Mestre removeu você da sala.'); setStat(false, 'removido'); clearTimeout(retryT); try { peer.destroy(); } catch (e) {} }
+}
+let rosterCache = [];
+function applyState() { renderCover(state.cover); updateStageVisibility(); }
+
+/* ---- chat & dice ---- */
+function sanitizeRoll(r) { return {label: String(r.label || '').slice(0, 60), dice: (r.dice || []).slice(0, 40).map(n => +n || 0), keep: +r.keep || 0, total: +r.total || 0, bonus: +r.bonus || 0, crit: !!r.crit, mode: String(r.mode || '').slice(0, 20), expr: String(r.expr || '').slice(0, 40)}; }
+function addChat(m, fromHost) {
+  if (!m) return;
+  m.ts = m.ts || Date.now();
+  chat.push(m); if (chat.length > 200) chat.shift();
+  if (isHost && fromHost) sendAll({t: 'chat', m});
+  const log = $('#log'); if (log) { log.insertAdjacentHTML('beforeend', msgHTML(m)); log.scrollTop = log.scrollHeight; }
+  else if (m.k !== 'sys') unread++, renderTabs();
+}
+let unread = 0;
+function sys(text) { addChat({k: 'sys', text}, true); }
+function msgHTML(m) {
+  if (m.k === 'sys') return `<div class="msg sys">${esc(m.text)}</div>`;
+  if (m.k === 'roll') { const r = m.r; const dice = r.dice.map((d, i) => i === r.keep && r.mode !== 'soma' ? `<b style="color:#fff">${d}</b>` : d).join(', ');
+    return `<div class="msg rmsg"><b>${esc(m.from)}</b> · ${esc(r.label || 'Rolagem')}<div class="res${r.crit ? ' crit' : ''}">${r.total}${r.crit ? ' · CRÍTICO!' : ''}</div><div class="det">${esc(r.expr)} → [${dice}]${r.bonus ? (r.bonus > 0 ? ' + ' : ' − ') + Math.abs(r.bonus) : ''}${r.mode === 'menor' ? ' (pega o menor)' : r.mode === 'maior' ? ' (pega o maior)' : ''}</div></div>`; }
+  return `<div class="msg"><b>${esc(m.from)}:</b> ${esc(m.text)}</div>`;
+}
+function sendChat(text) {
+  text = text.trim(); if (!text) return;
+  if (isHost) addChat({k: 'chat', from: myName + ' (Mestre)', text}, true);
+  else if (hostConn && hostConn.open) hostConn.send({t: 'chat', text}); else toast('Sem conexão com o Mestre.');
+}
+const d = n => 1 + Math.floor(Math.random() * n);
+function rollOP(attr, bonus, label) {
+  attr = Math.max(-3, Math.min(10, attr | 0)); bonus = bonus | 0;
+  const n = attr <= 0 ? 2 - attr : attr, mode = attr <= 0 ? 'menor' : 'maior';
+  const dice = Array.from({length: n}, () => d(20));
+  const best = mode === 'menor' ? Math.min(...dice) : Math.max(...dice), keep = dice.indexOf(best);
+  return {label: label || 'Teste', dice, keep, bonus, total: best + bonus, crit: best === 20, mode, expr: n + 'd20'};
+}
+function rollExpr(expr, label) {
+  const s = expr.replace(/\s+/g, '').toLowerCase(); if (!/^[0-9d+\-]+$/.test(s)) return null;
+  const terms = s.match(/[+\-]?[^+\-]+/g); if (!terms) return null;
+  let total = 0, dice = [], bonus = 0;
+  for (const t of terms) {
+    const sg = t[0] === '-' ? -1 : 1, b = t.replace(/^[+\-]/, '');
+    const m = b.match(/^(\d*)d(\d+)$/);
+    if (m) { const k = Math.min(40, +(m[1] || 1)), f = Math.min(1000, +m[2]); if (!f) return null; for (let i = 0; i < k; i++) { const r = d(f); dice.push(r); total += sg * r; } }
+    else if (/^\d+$/.test(b)) { bonus += sg * +b; total += sg * +b; } else return null;
+  }
+  return {label: label || 'Dano', dice, keep: -1, bonus, total, crit: false, mode: 'soma', expr: s.replace(/[+\-]?\d+$/, '') || s};
+}
+function doRoll(r) {
+  if (!r) { toast('Fórmula inválida. Ex.: 2d6+3'); return; }
+  if (isHost) addChat({k: 'roll', from: myName + ' (Mestre)', r}, true);
+  else if (hostConn && hostConn.open) hostConn.send({t: 'roll', r}); else toast('Sem conexão com o Mestre.');
+}
+
+/* =====================================================================
+   UI
+   ===================================================================== */
+let curTab = 'trans';
+const HOST_TABS = [['trans', '📡 Transmissão'], ['trilha', '🎵 Trilha'], ['sfx', '💥 Efeitos'], ['capa', '🎭 Capa'], ['mesa', '🎲 Mesa']];
+const PLAYER_TABS = [['mesa', '🎲 Mesa'], ['som', '🔊 Som']];
+function renderTabs() {
+  const tabs = isHost ? HOST_TABS : PLAYER_TABS;
+  $('#tabs').innerHTML = tabs.map(([k, l]) => `<button data-tab="${k}" class="${k === curTab ? 'on' : ''}">${l}${k === 'mesa' && unread && curTab !== 'mesa' ? ' •' : ''}</button>`).join('');
+}
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; curTab = b.dataset.tab; if (curTab === 'mesa') unread = 0; renderTabs(); renderPane(); });
+function renderPane() {
+  if (!$('#room') || $('#room').classList.contains('hide')) return;
+  renderTabs();
+  const P = $('#pane'); let h = '';
+  if (curTab === 'trans' && isHost) {
+    h += `<div class="sec">Tela</div><button class="btn big ${screenStream ? 'on' : 'red'}" data-a="share">${screenStream ? '■ PARAR TRANSMISSÃO' : '▶ COMPARTILHAR TELA'}</button>
+      <div class="hint">Escolha uma janela, aba ou a tela inteira. Marque “compartilhar áudio” para os agentes ouvirem o som do vídeo/aba.</div>
+      <div class="sec">Sua voz</div>
+      <button class="btn ${micOn ? 'on' : ''}" data-a="mic" style="width:100%">${micOn ? '🎙️ Microfone LIGADO (clique para mutar)' : '🎙️ Ligar microfone'}</button>
+      <div class="meter"><i id="meter"></i></div>
+      <div class="grid" style="margin-top:10px">${Object.entries(VOICES).map(([k, v]) => `<button class="tile vp ${voiceId === k ? 'on' : ''}" style="--c:${v.c}" data-voice="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>
+      <div class="hint">${esc(VOICES[voiceId].d)}. Use fone de ouvido. Se estiver também no Discord, deixe o microfone de lá mudo enquanto fala por aqui.</div>
+      <label class="row hint" style="gap:8px;margin-top:10px"><input type="checkbox" data-a="hear" ${hearSelf ? 'checked' : ''}> Me ouvir com o efeito (só com fone)</label>
+      <div class="sec">Agentes na sala (${players.size})</div>${playerList()}`;
+  } else if (curTab === 'trilha' && isHost) {
+    h += `<div class="sec">Trilha sonora</div><div class="grid g2">${Object.entries(TRACKS).map(([k, t]) => `<button class="tile ${curTrack === k ? 'on' : ''}" data-track="${k}"><span class="e">${t.e}</span>${t.name}<span style="font-weight:400;color:var(--mut);font-size:11px">${t.d}</span></button>`).join('')}<button class="tile" data-track=""><span class="e">🔇</span>Silêncio</button></div>
+      <div class="sec">Volume da trilha</div><input type="range" min="0" max="100" value="${Math.round((musicBus ? musicBus.gain.value : .6) * 100)}" data-a="mvol" style="width:100%">
+      <div class="hint">Músicas geradas ao vivo pelo navegador, sem direitos autorais. Trocar de trilha faz uma transição suave.</div>`;
+  } else if (curTab === 'sfx' && isHost) {
+    h += `<div class="sec">Efeitos sonoros</div><div class="grid">${Object.entries(SFX).map(([k, s]) => `<button class="tile" data-sfx="${k}"><span class="e">${s.e}</span>${s.name}</button>`).join('')}</div>
+      <div class="sec">Efeitos na tela dos agentes</div><div class="grid">${[['flash', '⚡', 'Susto'], ['glitch', '👾', 'Glitch'], ['static', '📺', 'Estática'], ['blood', '🩸', 'Sangue'], ['dark', '🌑', 'Apagão'], ['flashw', '🌩️', 'Relâmpago']].map(([k, e, n]) => `<button class="tile" data-fx="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
+      <div class="sec">Volume dos efeitos</div><input type="range" min="0" max="100" value="${Math.round((sfxBus ? sfxBus.gain.value : .9) * 100)}" data-a="svol" style="width:100%">
+      <div class="sec">O que você ouve</div><input type="range" min="0" max="100" value="${Math.round((monitor ? monitor.gain.value : .8) * 100)}" data-a="monvol" style="width:100%"><div class="hint">Só muda o volume para você, não para os agentes.</div>`;
+  } else if (curTab === 'capa' && isHost) {
+    const c = state.cover;
+    h += `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
+      <div class="sec">Estilo</div><div class="grid">${Object.entries(COVERS).map(([k, v]) => `<button class="tile ${c.style === k ? 'on' : ''}" data-cs="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>
+      <label class="lab">Título</label><input class="in" id="cT" maxlength="60" placeholder="${esc((COVERS[c.style] || COVERS.intervalo).t)}" value="${esc(c.title)}">
+      <label class="lab">Subtítulo</label><input class="in" id="cS" maxlength="90" placeholder="${esc((COVERS[c.style] || COVERS.intervalo).s)}" value="${esc(c.sub)}">
+      <div class="row" style="margin-top:10px"><button class="btn sm" data-a="capply">Atualizar texto</button><span class="hint" style="margin:0">Deixe vazio para usar o texto padrão.</span></div>
+      <div class="hint">A capa cobre a transmissão para todos os agentes, com animação. Você continua vendo sua tela por baixo.</div>`;
+  } else if (curTab === 'som') {
+    h += `<div class="sec">Volume da transmissão</div><input type="range" min="0" max="100" value="${$('#vol').value}" data-a="pvol" style="width:100%">
+      <div class="hint">Se não ouvir nada, toque em “ativar som” na tela da transmissão. No celular, desative o modo silencioso.</div>
+      <div class="sec">Na sala</div>${rosterList()}`;
+  } else {
+    curTab = 'mesa';
+    h += `<div class="sec">Rolagem · Ordem Paranormal</div>
+      <div class="dice"><div><div class="mini">Atributo (dados)</div><input class="in" id="dA" type="number" min="-3" max="10" value="${lsGet('mesa-dA', 2)}"></div><div><div class="mini">Bônus de perícia</div><input class="in" id="dB" type="number" value="${lsGet('mesa-dB', 0)}"></div><button class="btn red" data-a="rollop" style="height:46px">🎲 Teste</button></div>
+      <div class="dice" style="grid-template-columns:1fr auto;margin-top:8px"><div><div class="mini">Livre (ex.: 2d6+3, 1d8+1d6)</div><input class="in" id="dE" value="${esc(lsGet('mesa-dE', '1d6'))}"></div><button class="btn" data-a="rollex" style="height:46px">Rolar</button></div>
+      <div class="hint">Atributo 0 rola 2d20 e pega o menor.</div>
+      <div class="sec">Chat da mesa</div><div id="log">${chat.map(msgHTML).join('')}</div>
+      <form id="chatF" class="row"><input class="in" id="chatIn" maxlength="500" placeholder="Mensagem…" autocomplete="off"><button class="btn red" type="submit">Enviar</button></form>
+      ${isHost ? '' : `<div class="sec">Na sala</div>${rosterList()}`}`;
+    unread = 0;
+  }
+  P.innerHTML = h;
+  const log = $('#log'); if (log) log.scrollTop = log.scrollHeight;
+  const f = $('#chatF'); if (f) f.onsubmit = e => { e.preventDefault(); sendChat($('#chatIn').value); $('#chatIn').value = ''; };
+}
+function playerList() { return players.size ? `<div class="plist">${[...players.entries()].map(([id, p]) => `<div class="pl"><span class="av">${esc(p.name[0] || '?').toUpperCase()}</span><span class="n">${esc(p.name)}</span><button class="x" data-kick="${esc(id)}">remover</button></div>`).join('')}</div>` : `<div class="hint">Ninguém ainda. Mande o link da sala para os agentes.</div>`; }
+function rosterList() { return `<div class="plist">${rosterCache.map(r => `<div class="pl"><span class="av">${esc((r.name || '?')[0]).toUpperCase()}</span><span class="n">${esc(r.name)}</span>${r.mestre ? '<span class="role">Mestre</span>' : ''}</div>`).join('')}</div>`; }
+$('#pane').addEventListener('click', e => {
+  const b = e.target.closest('button,[data-a]'); if (!b) return;
+  if (b.dataset.voice) return setVoice(b.dataset.voice);
+  if (b.dataset.track !== undefined && b.dataset.track !== null && b.hasAttribute('data-track')) { playTrack(b.dataset.track); return; }
+  if (b.dataset.sfx) { playSfx(b.dataset.sfx); b.classList.add('on'); setTimeout(() => b.classList.remove('on'), 300); return; }
+  if (b.dataset.fx) return doFx(b.dataset.fx, true);
+  if (b.dataset.cs) { state.cover.style = b.dataset.cs; state.cover.title = ''; state.cover.sub = ''; coverKey = ''; renderCover(state.cover); pushState(); renderPane(); return; }
+  if (b.dataset.kick) return kick(b.dataset.kick);
+  const a = b.dataset.a;
+  if (a === 'share') toggleShare();
+  if (a === 'mic') toggleMic();
+  if (a === 'cover') { state.cover.on = !state.cover.on; const t = $('#cT'), s = $('#cS'); if (t) { state.cover.title = t.value.trim(); state.cover.sub = s.value.trim(); } coverKey = ''; renderCover(state.cover); pushState(); renderPane(); }
+  if (a === 'capply') { state.cover.title = $('#cT').value.trim(); state.cover.sub = $('#cS').value.trim(); coverKey = ''; renderCover(state.cover); pushState(); toast('Texto da capa atualizado'); }
+  if (a === 'rollop') { const A = +$('#dA').value, B = +$('#dB').value; lsSet('mesa-dA', A); lsSet('mesa-dB', B); doRoll(rollOP(A, B, 'Teste (' + A + ' dado' + (Math.abs(A) === 1 ? '' : 's') + (B ? ', +' + B : '') + ')')); }
+  if (a === 'rollex') { const ex = $('#dE').value; lsSet('mesa-dE', ex); doRoll(rollExpr(ex, ex)); }
+});
+$('#pane').addEventListener('input', e => {
+  const a = e.target.dataset.a, v = +e.target.value / 100;
+  if (a === 'mvol' && musicBus) musicBus.gain.setTargetAtTime(v, T(), .05);
+  if (a === 'svol' && sfxBus) sfxBus.gain.setTargetAtTime(v, T(), .05);
+  if (a === 'monvol' && monitor) monitor.gain.setTargetAtTime(v, T(), .05);
+  if (a === 'pvol') { $('#vol').value = e.target.value; $('#vid').volume = v; lsSet('mesa-vol', e.target.value); }
+});
+$('#pane').addEventListener('change', e => { if (e.target.dataset.a === 'hear') { hearSelf = e.target.checked; buildVoice(); } });
+$('#vol').oninput = e => { $('#vid').volume = +e.target.value / 100; lsSet('mesa-vol', e.target.value); };
+$('#unmute').onclick = () => { const v = $('#vid'); v.muted = false; v.play().then(() => $('#unmute').classList.add('hide')).catch(() => {}); };
+$('#fsBtn').onclick = () => { const s = $('#stage'); if (document.fullscreenElement) document.exitFullscreen(); else if (s.requestFullscreen) s.requestFullscreen().catch(() => {}); else if (s.webkitRequestFullscreen) s.webkitRequestFullscreen(); };
+$('#copyLink').onclick = () => { const url = location.origin + location.pathname + '#' + code; (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast('Link copiado! Mande para os agentes.')).catch(() => prompt('Copie o link:', url)); };
+
+/* ---------- lobby ---------- */
+function enterRoom(host) {
+  $('#lobby').classList.add('hide'); $('#room').classList.remove('hide');
+  $('#rCode').textContent = code; $('#rRole').textContent = host ? 'Mestre' : 'Agente'; $('#rRole').classList.toggle('pl', !host);
+  document.body.classList.toggle('masterView', host);
+  $('#volWrap').classList.toggle('hide', host);
+  curTab = host ? 'trans' : 'mesa';
+  history.replaceState(null, '', '#' + code);
+  document.title = (host ? 'Mestre · ' : '') + 'Sala ' + code + ' · Mesa Paranormal';
+  updateStageVisibility(); renderPane();
+}
+$('#hGo').onclick = () => {
+  myName = $('#hName').value.trim() || 'Mestre'; lsSet('mesa-name', myName);
+  code = genCode(); isHost = true; audioInit(); enterRoom(true); startHost();
+};
+$('#jGo').onclick = () => {
+  const c = $('#jCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (c.length < 4) { toast('Digite o código da sala.'); return; }
+  myName = $('#jName').value.trim() || 'Agente'; lsSet('mesa-name', myName);
+  code = c; enterRoom(false); startPlayer();
+  const v = $('#vid'); v.muted = false; v.play().catch(() => {});
+};
+(() => {
+  const n = lsGet('mesa-name', ''); $('#hName').value = n; $('#jName').value = n;
+  $('#vol').value = lsGet('mesa-vol', 90);
+  const h = location.hash.slice(1).toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (h) { $('#jCode').value = h; setTimeout(() => $('#jName').focus(), 100); }
+  const last = lsGet('mesa-host', null);
+  if (last && last.code) { $('#reopen').classList.remove('hide'); $('#reopenBtn').textContent = 'reabrir a sala ' + last.code; $('#reopenBtn').onclick = () => { myName = $('#hName').value.trim() || last.name || 'Mestre'; code = last.code; isHost = true; audioInit(); enterRoom(true); startHost(); }; }
+  if (typeof Peer === 'undefined') toast('Não consegui carregar a conexão. Verifique a internet e recarregue.');
+})();
+addEventListener('beforeunload', e => { if (isHost && players.size) { e.preventDefault(); e.returnValue = ''; } });
+})();
+</script>
+</body>
+</html>
