@@ -1409,13 +1409,6 @@ body.lay-invest #tiles .tile{border:7px solid #f3eee2;border-bottom-width:22px;b
 body.lay-invest #tiles .tile .nm{bottom:-19px;left:4px}
 body.lay-invest #tiles .tile .nm span{background:none;color:#2a2418;font-family:'Special Elite',monospace;padding:0}
 body.lay-invest #tiles .tile .tBars{bottom:-1px}
-.tile.hl{border-color:var(--red2)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--red2) 60%,transparent),0 0 46px color-mix(in srgb,var(--red2) 55%,transparent)!important;z-index:4}
-.tile.hl::before{content:"⚔️ TURNO";position:absolute;top:0;right:0;z-index:5;font:800 8.5px Inter,sans-serif;letter-spacing:.14em;color:#fff;background:var(--red2);padding:3px 8px;border-radius:0 0 0 8px;white-space:nowrap}
-body.lay-invest .tile.hl::before{content:"🔎 AGINDO"}
-body:not(.lay-combat) .tile.hl::before{content:"⭐ DESTAQUE"}
-body.lay-combat .tile.hl::before{content:"⚔️ TURNO"}
-body.lay-ring #tiles .tile.hl.rL{transform:scale(1.32) rotate(0deg);transform-origin:0 50%}
-body.lay-ring #tiles .tile.hl.rR{transform:scale(1.32) rotate(0deg);transform-origin:100% 50%}
 .lf.hl{outline:3px solid var(--red2);outline-offset:-3px;box-shadow:0 0 40px color-mix(in srgb,var(--red2) 50%,transparent)}
 @media(max-width:759px){body.lay-ring #stageW{position:relative;left:auto;right:auto;top:auto;bottom:auto}body.lay-ring #tiles{position:relative;display:grid;pointer-events:auto}body.lay-ring #tiles .tile{position:relative;transform:none!important}}
 /* turno */
@@ -1617,6 +1610,95 @@ body.lay-ring #clkW{left:calc(var(--tw,0px) + 44px)}
 .uvStamp{position:absolute;z-index:5;aspect-ratio:1;cursor:move;touch-action:none;display:grid;place-items:center;outline:1px dashed #ffffff66}
 .uvStamp svg{width:100%;height:100%;pointer-events:none}
 .uvStamp span{font:400 clamp(14px,3vw,30px) 'Special Elite',monospace;white-space:nowrap;pointer-events:none}
+/* ===== v14 ===== */
+/* destaque */
+@property --hang{syntax:'<angle>';inherits:false;initial-value:0deg}
+.tile.hl{--hc:#ffd75e;z-index:4;border-color:transparent!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--hc) 80%,transparent),0 0 34px color-mix(in srgb,var(--hc) 55%,transparent),0 18px 40px #000c!important;animation:hlGlow 1.8s ease-in-out infinite}
+body.lay-combat .tile.hl{--hc:#ff3b3b}
+body.lay-invest .tile.hl{--hc:#ffc35a}
+.tile.hl::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:3px;z-index:6;pointer-events:none;background:conic-gradient(from var(--hang),var(--hc),transparent 25%,transparent 50%,var(--hc) 62%,transparent 85%,var(--hc));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:hlSpin 2.6s linear infinite}
+.tile.hl::before{content:"⭐ DESTAQUE";position:absolute;top:7px;left:50%;transform:translateX(-50%);z-index:7;font:800 9.5px Inter,sans-serif;letter-spacing:.16em;color:#111;background:var(--hc);padding:3px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px #0008}
+body.lay-combat .tile.hl::before{content:"⚔️ TURNO";color:#fff}
+body.lay-invest .tile.hl::before{content:"🔎 AGINDO"}
+.tile.hl .nm span{background:var(--hc)!important;color:#111!important}
+body.lay-combat .tile.hl .nm span{color:#fff!important}
+@keyframes hlSpin{to{--hang:360deg}}
+@keyframes hlGlow{50%{box-shadow:0 0 0 2px var(--hc),0 0 56px color-mix(in srgb,var(--hc) 75%,transparent),0 18px 40px #000c}}
+.tile.hlPop{animation:hlPop .8s cubic-bezier(.3,1.6,.4,1),hlGlow 1.8s ease-in-out .8s infinite}
+@keyframes hlPop{0%{transform:scale(.82) rotate(0);filter:brightness(2.2)}55%{transform:scale(1.06) rotate(0)}100%{transform:scale(1) rotate(0);filter:none}}
+body.lay-ring.hasHl #tiles .tile:not(.hl){filter:brightness(.5) saturate(.55);opacity:.85}
+body.lay-ring #tiles .tile{transition:left .5s cubic-bezier(.3,.9,.3,1),top .5s cubic-bezier(.3,.9,.3,1),width .5s cubic-bezier(.3,.9,.3,1),transform .35s,filter .4s,opacity .4s,box-shadow .35s}
+body.lay-ring #tiles .tile.hl{--rot:0deg}
+.lf.hl{outline:3px solid var(--red2);outline-offset:-3px;box-shadow:0 0 40px color-mix(in srgb,var(--red2) 50%,transparent)}
+/* entrada nos layouts */
+body.ringIn #tiles .tile{animation:tIn .75s cubic-bezier(.2,1.35,.4,1) calc(var(--i,0) * 90ms + 300ms) backwards}
+body.ringIn #tiles .tile.rL{--fx:-160px}body.ringIn #tiles .tile.rR{--fx:160px}
+@keyframes tIn{from{opacity:0;transform:translateX(var(--fx,0)) scale(.45) rotate(-10deg)}}
+body.ringIn.lay-combat #stageW{animation:sInC .9s cubic-bezier(.2,1,.3,1) both}
+@keyframes sInC{0%{transform:scale(.8);filter:brightness(2.6) saturate(0);opacity:0}45%{filter:brightness(1.4) saturate(.6);opacity:1}100%{transform:none;filter:none}}
+body.ringIn.lay-invest #board.on{animation:bIn .9s cubic-bezier(.2,1.2,.4,1) .15s both}
+@keyframes bIn{from{opacity:0;transform:translateY(40px) rotate(-2deg) scale(.92)}}
+.lyTr{position:absolute;inset:0;z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.lyTr b{position:relative;z-index:2;font:400 clamp(48px,9vw,130px)/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.12em;color:#fff;animation:lyTx 1.8s cubic-bezier(.2,.9,.3,1) both}
+.lyTr small{position:relative;z-index:2;font:800 clamp(11px,1.2vw,15px) Inter,sans-serif;letter-spacing:.35em;text-transform:uppercase;color:#fff;opacity:.8;animation:lyTx 1.8s cubic-bezier(.2,.9,.3,1) .08s both}
+@keyframes lyTx{0%{opacity:0;transform:scale(1.6);letter-spacing:.5em;filter:blur(8px)}18%{opacity:1;transform:scale(1);letter-spacing:.12em;filter:none}72%{opacity:1;transform:scale(1.03)}100%{opacity:0;transform:scale(.96);filter:blur(4px)}}
+.lyTr.cmb b{text-shadow:0 0 30px #ff2a2a,0 0 80px #b0000a,4px 4px 0 #6a0008}
+.lyTr.cmb .fl{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,#ff2a2a66,#3a0004cc 60%,#000e);animation:lyFl 1.8s ease both}
+@keyframes lyFl{0%{opacity:0}12%{opacity:1}70%{opacity:.85}100%{opacity:0}}
+.lyTr.cmb .s1,.lyTr.cmb .s2{position:absolute;left:-30%;width:160%;height:7px;background:linear-gradient(90deg,transparent,#fff 45%,#ff3b3b 55%,transparent);box-shadow:0 0 24px #ff2a2a;transform:rotate(-14deg) translateX(-100%);animation:lySl .55s cubic-bezier(.6,0,.3,1) .1s both}
+.lyTr.cmb .s1{top:44%}.lyTr.cmb .s2{top:58%;animation-delay:.24s;transform:rotate(-14deg) translateX(100%);animation-name:lySl2}
+@keyframes lySl{0%{transform:rotate(-14deg) translateX(-100%);opacity:1}100%{transform:rotate(-14deg) translateX(100%);opacity:0}}
+@keyframes lySl2{0%{transform:rotate(-14deg) translateX(100%);opacity:1}100%{transform:rotate(-14deg) translateX(-100%);opacity:0}}
+.lyTr.inv b{font-family:'Special Elite',monospace;font-size:clamp(36px,6vw,86px);letter-spacing:.06em;color:#f3eee2;text-shadow:0 0 22px #000,0 0 40px #ffc35a66}
+.lyTr.inv .lv{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,#2a1a0a99,#000e 70%);animation:lyFl 1.8s ease both}
+.lyTr.inv .sw{position:absolute;inset:0;background:radial-gradient(circle 22vmin at var(--sx,0%) 50%,#fff3c866,transparent 70%);mix-blend-mode:screen;animation:lySw 1.6s ease-in-out both}
+@property --sx{syntax:'<percentage>';inherits:false;initial-value:0%}
+@keyframes lySw{from{--sx:-10%}to{--sx:110%}}
+/* cronômetro novo */
+#timerOv{display:flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:999px;background:#0b0b0feb;border:1px solid #ffffff24;box-shadow:0 12px 34px #000b;text-align:left;transition:top .4s,right .4s,left .4s,border-color .3s;--tc:#e9f2ff}
+#timerOv.host{pointer-events:auto}
+#timerOv .tmR{position:relative;width:48px;height:48px;flex:none}
+#timerOv svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+#timerOv circle{fill:none;stroke-width:9}
+#timerOv .bg{stroke:#ffffff16}
+#timerOv .fg{stroke:var(--tc);stroke-dasharray:100;stroke-linecap:round;transition:stroke-dashoffset .3s linear,stroke .4s;filter:drop-shadow(0 0 4px var(--tc))}
+#timerOv .tmI{position:absolute;inset:0;display:grid;place-items:center;font-size:17px}
+#timerOv .tmT{display:flex;flex-direction:column;gap:2px}
+#timerOv .tmT small{font-size:10px;letter-spacing:.14em;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#timerOv .tmT b{font-size:clamp(24px,2.6vw,36px);color:var(--tc);transition:color .4s}
+#timerOv .tmC{display:flex;gap:4px;max-width:0;overflow:hidden;opacity:0;transition:max-width .35s,opacity .25s,margin .35s}
+#timerOv.host:hover .tmC,#timerOv.host:focus-within .tmC{max-width:300px;opacity:1;margin-left:4px}
+#timerOv .tmC button{border:1px solid #ffffff26;background:#ffffff12;color:#fff;border-radius:9px;padding:5px 8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+#timerOv .tmC button:hover{background:#ffffff26}
+#timerOv.low{border-color:#ff3b3b;animation:tmLow 1s ease-in-out infinite}
+#timerOv.low .tmI{animation:tmShk .3s linear infinite}
+#timerOv.low b{animation:none}
+#timerOv.paused{opacity:.85}
+#timerOv.paused .tmT b{opacity:.55}
+#timerOv.turn{border-color:color-mix(in srgb,var(--red2) 60%,transparent)}
+#timerOv.boom{animation:tmBoom 1.2s cubic-bezier(.3,1.4,.4,1)}
+@keyframes tmLow{50%{box-shadow:0 12px 34px #000b,0 0 30px #ff2a2a99}}
+@keyframes tmShk{25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+@keyframes tmBoom{0%{scale:1}15%{scale:1.3}30%{scale:.94}45%{scale:1.12}65%{scale:.98}100%{scale:1}}
+body.lay-ring #timerOv{left:auto;right:calc(var(--tw,160px) + 44px);top:12px;transform:none}
+body.lay-ring.cbOn #timerOv{top:68px}
+body.lay-invest #tiles .tile.hl{border-color:#f6f1e4!important}
+body.lay-invest #tiles .tile.hl::after{inset:-7px -7px -22px}
+body.cbOn:not(.lay-ring):not(.lay-live):not(.lay-livestage) #timerOv{top:72px}
+/* relógio de pressão clicável */
+body.isHost #clkW{pointer-events:auto;cursor:pointer}
+#clkW:active{scale:.96}
+/* painel de dados mais simples */
+.fdBox{gap:5px}
+.fdAttr{grid-template-columns:repeat(5,minmax(0,1fr)) 34px;gap:4px}
+.fdAttr button{flex-direction:row;justify-content:center;gap:5px;padding:5px 0;border-radius:9px}
+.fdAttr b{font-size:17px}
+.fdAttr .fdEd{margin:0;padding:0;border-radius:9px;font-size:14px}
+.fdPer{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.fdPer::-webkit-scrollbar{display:none}
+.fdPer button{flex:none}
+.fdPer select{flex:1 0 130px}
+.fdNo{justify-content:space-between}
 </style>
 </head>
 <body>
@@ -3347,7 +3429,8 @@ let layout = lsGet('mesa-layout', 'stage'), roomLayoutTs = 0;
 const LAYOUTS = [['combat', '⚔️ Combate', 'palco no centro, câmeras em volta e turnos'], ['invest', '🔎 Investigação', 'quadro de pistas e câmeras em polaroid'], ['stage', '🎬 Palco', 'tela grande e câmeras embaixo'], ['grid', '🔲 Grade', 'só as câmeras, todas iguais'], ['live', '📺 Live', 'quadros com personagem, estilo stream'], ['livestage', '🎥 Live + palco', 'tela do Mestre e quadros ao lado']];
 function setLayout(l) {
   if (!LAYOUTS.some(x => x[0] === l)) l = 'stage';
-  layout = l; lsSet('mesa-layout', l);
+  const lyPrev = layout; layout = l; lsSet('mesa-layout', l);
+  if (lyPrev && lyPrev !== l && (l === 'combat' || l === 'invest')) setTimeout(() => lyTrans(l), 0);
   document.body.classList.toggle('gridMode', l === 'grid');
   document.body.classList.toggle('lay-live', l === 'live');
   document.body.classList.toggle('lay-livestage', l === 'livestage');
@@ -3465,18 +3548,7 @@ function syncTimerFromState() {
 }
 function timerRemaining() { const tm = state.timer; if (!tm) return 0; return tm.run ? Math.max(0, timerEnd - Date.now()) : timerLeft; }
 function refreshTimerState() { if (isHost && state.timer && state.timer.run) state.timer.left = Math.max(0, timerEnd - Date.now()); }
-function renderTimer() {
-  const el = $('#timerOv'); if (!el) return;
-  const tm = state.timer; if (!tm) { el.classList.add('hide'); return; }
-  const ms = timerRemaining(), s = Math.ceil(ms / 1000), mm = Math.floor(s / 60), ss = s % 60;
-  el.classList.remove('hide');
-  el.classList.toggle('low', tm.run && s <= 10 && s > 0); el.classList.toggle('done', s <= 0); el.classList.toggle('paused', !tm.run && s > 0);
-  el.innerHTML = `<small>${esc(tm.label || 'Tempo')}</small><b>${s <= 0 ? 'ESGOTADO' : String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0')}</b>`;
-  if (s <= 0 && tm.run && !timerDone) { timerDone = true; if (isHost) { playSfx('sino'); doFx('flash', true); } }
-}
 setInterval(() => { if (state.timer) renderTimer(); }, 250);
-function timerStart(min, label) { const ms = Math.max(1, Math.round(min * 60)) * 1000; timerEnd = Date.now() + ms; timerDone = false; state.timer = {label: String(label || '').slice(0, 40), left: ms, run: true}; pushState(); renderTimer(); renderSide(); }
-function timerPause() { const tm = state.timer; if (!tm) return; if (tm.run) { tm.left = Math.max(0, timerEnd - Date.now()); tm.run = false; timerLeft = tm.left; } else { tm.run = true; timerEnd = Date.now() + tm.left; } pushState(); renderTimer(); renderSide(); }
 function timerClear() { state.timer = null; pushState(); renderTimer(); renderSide(); }
 let curReveal = null, revealHidden = false, docLibLoaded = false;
 function renderReveal() {
@@ -3750,7 +3822,7 @@ function renderSide() {
       <div id="log">${chat.map((m, i) => msgHTML(m, chat[i - 1])).join('') || '<div class="msg sys empty">Nenhuma mensagem ainda. Role dados ou converse aqui.</div>'}</div>
       <div class="chatBot">
         <div class="dicePanel ${S.diceOpen ? '' : 'hide'}" id="diceP">${fxDiceHTML()}
-          <div class="diceBar"><label>Atributo</label><input class="in" id="dA" type="number" min="-3" max="10" value="${lsGet('mesa-dA', 2)}"><label>Bônus</label><input class="in" id="dB" type="number" value="${lsGet('mesa-dB', 0)}"><button class="btn red sm" data-a="rollop">🎲 Teste</button></div>
+          <div class="diceBar${myCh.eq ? ' hide' : ''}"><label>Atributo</label><input class="in" id="dA" type="number" min="-3" max="10" value="${lsGet('mesa-dA', 2)}"><label>Bônus</label><input class="in" id="dB" type="number" value="${lsGet('mesa-dB', 0)}"><button class="btn red sm" data-a="rollop">🎲 Teste</button></div>
           <div class="diceBar"><input class="in wide" id="dE" value="${esc(lsGet('mesa-dE', '1d6'))}" placeholder="2d6+3"><button class="btn sm" data-a="rollex">Rolar</button></div>
         </div>
         <div class="quickD"><button class="dq dqT ${S.diceOpen ? 'on' : ''}" data-a="dicetog">🎲 Teste ${S.diceOpen ? '▾' : '▸'}</button>${['1d4', '1d6', '1d8', '1d10', '1d12', '1d20'].map(x => `<button class="dq" data-q="${x}">${x.slice(1)}</button>`).join('')}</div>
@@ -3788,7 +3860,7 @@ function renderSide() {
       + grp('svol', '🔊 Volume dos efeitos', `<input type="range" min="0" max="100" value="${Math.round(S.sfxVol * 100)}" data-a="svol"><div class="hint">Toque de novo num efeito tocando para parar só ele.</div>`, false);
   } else if (curTab === 'cover' && isHost) {
     const c = state.cover, def = COVERS[c.style] || COVERS.intervalo;
-    h = cutPaneHTML() + v13PaneHTML() + `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
+    h = cutPaneHTML() + v14PaneHTML() + v13PaneHTML() + `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
       <div class="sec">Estilo</div><div class="grid">${Object.entries(COVERS).map(([k, v]) => `<button class="tile2 ${c.style === k ? 'on' : ''}" data-cs="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>`
       + grp('ctext', `✏️ Texto da capa <small>${c.title ? esc(c.title) : 'padrão'}</small>`, `<label class="lab" style="margin-top:0">Título</label><input class="in" id="cT" maxlength="60" placeholder="${esc(def.t)}" value="${esc(c.title)}">
       <label class="lab">Subtítulo</label><input class="in" id="cS" maxlength="90" placeholder="${esc(def.s)}" value="${esc(c.sub)}">
@@ -3804,8 +3876,6 @@ function renderSide() {
       + grp('clima', `🌧️ Clima da tela <small>${nCl ? nCl + ' ligado' + (nCl > 1 ? 's' : '') : 'desligado'}</small>`, `<div class="grid">${Object.entries(CLIMAS).map(([k, [e, n]]) => `<button class="tile2 ${(state.clima || []).includes(k) ? 'on' : ''}" data-clima="${k}"><span class="e">${e}</span>${n}</button>`).join('')}</div>
       <label class="sw"><input type="checkbox" data-a2="climasnd" ${S.climaSnd !== false ? 'checked' : ''}><i></i><span>Som do clima <small>Chuva, vento, coração, chiado de fita, tremor… Usa o volume do ambiente.</small></span></label>
       <div class="hint">Dá para combinar, ex.: chuva + escuridão + lanterna.</div>`, nCl > 0)
-      + grp('timer', `⏱️ Cronômetro <small>${tm ? (tm.run ? 'rodando' : 'pausado') : 'desligado'}</small>`, `<div class="row"><input class="in" id="tmL" maxlength="40" placeholder="Ex.: O ritual se completa em" value="${esc(tm ? tm.label : lsGet('mesa-tmL', ''))}" style="flex:1"><input class="in" id="tmM" type="number" min="0.1" step="0.5" value="${lsGet('mesa-tmM', 3)}" style="width:72px"><span class="hint" style="margin:0">min</span></div>
-      <div class="row" style="margin-top:8px"><button class="btn sm red" data-a="tstart">▶ ${tm ? 'Reiniciar' : 'Iniciar'}</button>${tm ? `<button class="btn sm" data-a="tpause">${tm.run ? '⏸ Pausar' : '▶ Continuar'}</button><button class="btn sm" data-a="tclear">Remover</button>` : ''}</div>`, !!tm)
       + grp('live', '📺 Modo live (stream)', `<label class="lab" style="margin-top:0">Linha de cima</label><input class="in" id="lvS" maxlength="50" value="${esc((state.live || {}).sub || '')}" placeholder="Ex.: Ordem Paranormal apresenta">
       <label class="lab">Título</label><input class="in" id="lvT" maxlength="40" value="${esc((state.live || {}).title || '')}" placeholder="Ex.: O ÚLTIMO ADEUS">
       <div class="row" style="margin-top:8px"><button class="btn sm" data-a="lvsave">Salvar título</button></div>
@@ -4564,7 +4634,7 @@ function cutRun(c, preview) {
   Promise.resolve(audioInit()).then(() => { if (!k.alive || !ctx) return; const o = docOut(); if (!o) return; k.bus = gain(1, o); k.t0 = T() + .03; try { CUT_AUD[c.type](k, c, plan); } catch (e) { console.warn(e); } try { const f = CUT_EL_AUD[c.mood]; if (f) f(k, dur, [0, .6, 1, 1.4][c.int || 2]); } catch (e) { console.warn(e); } }).catch(() => {});
   if (isHost && !preview && musicBus) { cutDuck = true; try { musicBus.gain.setTargetAtTime(S.musicVol * duckLevel(), T(), .6); } catch (e) {} }
   at(dur, () => cutStop(true));
-  if (isHost && !preview && ['combate', 'chefe', 'emboscada', 'investigacao'].includes(c.type)) at(dur + 400, () => cbOffer(c.type === 'investigacao' ? 'invest' : 'combat'));
+  if (isHost && !preview && ['combate', 'chefe', 'emboscada', 'investigacao'].includes(c.type)) { k.lyKind = c.type === 'investigacao' ? 'invest' : 'combat'; at(Math.max(0, dur - .45), () => { if (k.lyKind) { const x = k.lyKind; k.lyKind = ''; lyAuto(x); } }); }
 }
 /* imagem da cena mantendo a transparência (PNG recortado) */
 async function cutImgLoad(file) {
@@ -4708,6 +4778,7 @@ const CUT_AUD = {
 };
 function cutStop(fromNet) {
   const k = cutCur; if (!k) return; cutCur = null; k.alive = false;
+  if (k.lyKind) { const x = k.lyKind; k.lyKind = ''; setTimeout(() => lyAuto(x), 200); }
   k.timers.forEach(clearTimeout);
   try { if (k.bus) { k.bus.gain.setTargetAtTime(.0001, T(), .25); setTimeout(() => { try { k.bus.disconnect(); } catch (e) {} }, 1600); } } catch (e) {}
   k.stopFns.forEach(f => { try { f(T() + .3); } catch (e) {} });
@@ -5633,15 +5704,6 @@ function fxPostRoll(pid, r) {
   else { const p = roster.get(pid); if (p) addChat({k: 'roll', from: p.name, pid, cn: (chars[pid] || {}).char || '', r}, true); }
 }
 /* ---- painel de dados ligado ao personagem equipado ---- */
-function fxDiceHTML() {
-  const f = myCh.eq ? sanFx(myCh.fx) : null;
-  if (!f) return `<div class="fdNo">🎭 Equipe um personagem para rolar direto da ficha. <button class="btn sm" data-fxd="chars">Personagens</button></div>`;
-  const tr = FX_PER.filter(([k]) => (f.per[k] || [0])[0]), pick = tr.length ? tr : FX_PER.filter(([k]) => ['percepcao', 'iniciativa', 'luta', 'pontaria', 'reflexos', 'vontade', 'fortitude', 'investigacao'].includes(k));
-  return `<div class="fdBox"><div class="fdHead">🎲 Rolando como <b>${esc(myCh.char || 'personagem')}</b><button class="fdEd" data-fxd="sheet" title="Abrir ficha">📋</button></div>
-    <div class="fdAttr">${FX_ATTR.map(([k, n]) => `<button data-fxd="a:${k}" title="${n}"><b>${f.attr[k]}</b><small>${k}</small></button>`).join('')}</div>
-    <div class="fdPer">${pick.map(([k, n]) => { const t = fxPerTot(f, k); return `<button data-fxd="p:${k}">${n} <b>${fxSig(t.bonus)}</b></button>`; }).join('')}<select class="in" data-fxd="sel"><option value="">Outra perícia…</option>${FX_PER.map(([k, n]) => `<option value="${k}">${n} (${fxSig(fxPerTot(f, k).bonus)})</option>`).join('')}</select></div>
-    ${(f.combos || []).length ? `<div class="fdCmb">${f.combos.map((c, i) => `<button data-fxd="c:${i}" title="${esc(c.p)}">⚡ ${esc(c.n || 'Combo')}</button>`).join('')}</div>` : ''}</div>`;
-}
 function fxDiceAct(v) {
   const f = myCh.eq ? sanFx(myCh.fx) : null;
   if (v === 'chars') { openChars(); return; }
@@ -5665,31 +5727,13 @@ function tileBars(st) {
    PISTAS, CENAS DE BUSCA E RELÓGIO DE PRESSÃO
    ===================================================================== */
 function v13SetLayoutAll(l) { setLayout(l); if (isHost) { state.layout = layout; state.layoutTs = Date.now(); roomLayoutTs = state.layoutTs; pushState(); } }
-function ringPlace() {
-  const box = $('#tiles'), main = $('.mainA'); if (!box || !main) return;
-  const ring = layout === 'combat' || layout === 'invest', tiles = [...box.querySelectorAll('.tile')];
-  const W = main.clientWidth, H = main.clientHeight, hl = state.hl || '';
-  tiles.forEach(t => t.classList.toggle('hl', !!hl && t.dataset.id === hl));
-  $$('#live .lf').forEach(f => f.classList.toggle('hl', !!hl && f.dataset.id === hl));
-  if (!ring || W < 760) { tiles.forEach(t => { t.style.left = t.style.top = t.style.width = ''; t.classList.remove('rL', 'rR'); t.style.removeProperty('--rot'); }); main.style.removeProperty('--tw'); return; }
-  const n = tiles.length, per = Math.max(1, Math.ceil(n / 2)), gap = 12;
-  let tw = clamp(W * .15, 120, 220); const maxH = (H - 24 - gap * (per - 1)) / per;
-  if (tw * 9 / 16 > maxH) tw = Math.max(96, maxH * 16 / 9);
-  const th = tw * 9 / 16; main.style.setProperty('--tw', Math.round(tw) + 'px');
-  tiles.forEach((t, i) => {
-    const right = i % 2 === 1, row = Math.floor(i / 2), cnt = right ? Math.floor(n / 2) : Math.ceil(n / 2), tot = cnt * th + (cnt - 1) * gap, y0 = (H - tot) / 2;
-    t.style.width = Math.round(tw) + 'px'; t.style.left = (right ? W - tw - 12 : 12) + 'px'; t.style.top = Math.round(y0 + row * (th + gap)) + 'px';
-    t.classList.toggle('rL', !right); t.classList.toggle('rR', right);
-    t.style.setProperty('--rot', layout === 'invest' ? (((i * 37) % 7) - 3) + 'deg' : '0deg');
-  });
-}
 addEventListener('resize', () => { clearTimeout(ringPlace._t); ringPlace._t = setTimeout(() => { ringPlace(); boardRender(); }, 120); });
 function hlSet(id) { if (!isHost) return; state.hl = state.hl === id ? '' : id; pushState(); v13State(); }
 document.addEventListener('click', e => { const b = e.target.closest('#pop [data-pa="hl"]'); if (!b) return; e.stopPropagation(); closePop(); hlSet(b.dataset.hid); }, true);
 /* ---- turnos de combate ---- */
-const cbOf = () => { const c = state.cb || {}; return {on: !!c.on, list: Array.isArray(c.list) ? c.list.slice(0, 30) : [], cur: c.cur | 0, rnd: Math.max(1, c.rnd | 0)}; };
+const cbOf = () => { const c = state.cb || {}; return {on: !!c.on, list: Array.isArray(c.list) ? c.list.slice(0, 30) : [], cur: c.cur | 0, rnd: Math.max(1, c.rnd | 0), tt: [30, 60, 90, 120].includes(+c.tt) ? +c.tt : 0}; };
 let cbPrev = '';
-function cbPush(c) { state.cb = c; const it = c.list[c.cur]; state.hl = c.on && it && roster.has(it.k) ? it.k : (c.on ? '' : state.hl); pushState(); v13State(); }
+function cbPush(c) { const prev = cbOf(); state.cb = c; cbTurnTimer(cbOf(), prev); const it = c.list[c.cur]; state.hl = c.on && it && roster.has(it.k) ? it.k : (c.on ? '' : state.hl); pushState(); v13State(); }
 function cbRollAll() {
   const c = cbOf(), ags = [...roster.values()].filter(p => p.role !== 'mestre' && eqOf(p.id)), keep = c.list.filter(x => !roster.has(x.k));
   if (!ags.length && !keep.length) { toast('Nenhum agente com personagem equipado. Adicione inimigos ou peça para equiparem uma ficha.', 4500); }
@@ -5708,29 +5752,21 @@ function cbAddEnemy() {
   setTimeout(() => { const i = $('#ceN'); if (i) i.focus(); }, 50);
 }
 function cbStep(d) { const c = cbOf(); if (!c.list.length) return; let i = c.cur + d; if (i >= c.list.length) { i = 0; c.rnd++; } if (i < 0) { i = c.list.length - 1; c.rnd = Math.max(1, c.rnd - 1); } c.cur = i; cbPush(c); }
-function cbEnd() { state.cb = {on: false, list: [], cur: 0, rnd: 1}; state.hl = ''; pushState(); v13State(); toast('Combate encerrado'); }
+function cbEnd() { state.cb = {on: false, list: [], cur: 0, rnd: 1}; state.hl = ''; if (state.timer && state.timer.turn) state.timer = null; pushState(); v13State(); toast('Combate encerrado'); }
 function cbRender() {
   const main = $('.mainA'); if (!main) return; const c = cbOf(), it = c.list[c.cur];
+  document.body.classList.toggle('cbOn', !!(c.on && it)); document.body.classList.toggle('isHost', !!isHost);
   let ban = $('#cbBan'); if (!ban) { ban = document.createElement('div'); ban.id = 'cbBan'; main.appendChild(ban); }
   const showBan = c.on && it && (layout === 'combat' || layout === 'stage' || layout === 'livestage' || layout === 'grid');
   ban.classList.toggle('on', !!showBan);
   if (showBan) { const p = roster.get(it.k), ch = p ? liveCh(p) : {}; ban.innerHTML = `<small>RODADA ${c.rnd}</small><span class="pic" style="${ch.img ? `background-image:url('${ch.img}')` : ''}">${ch.img ? '' : '⚔️'}</span><b>${it.k === me.id ? 'SEU TURNO' : 'TURNO DE ' + esc(it.n).toUpperCase()}</b>${c.list[(c.cur + 1) % c.list.length] && c.list.length > 1 ? `<i>a seguir: ${esc(c.list[(c.cur + 1) % c.list.length].n)}</i>` : ''}`; }
   let bar = $('#cbBar');
   if (!isHost) { if (bar) bar.remove(); return; }
-  if (!bar) { bar = document.createElement('div'); bar.id = 'cbBar'; main.appendChild(bar); bar.addEventListener('click', e => { const b = e.target.closest('[data-cb]'); if (!b) return; const v = b.dataset.cb; if (v === 'roll') cbRollAll(); if (v === 'add') cbAddEnemy(); if (v === 'next') cbStep(1); if (v === 'prev') cbStep(-1); if (v === 'end') cbEnd(); if (v === 'min') { bar.classList.toggle('min'); } if (v.startsWith('go:')) { const c2 = cbOf(); c2.cur = +v.slice(3); cbPush(c2); } if (v.startsWith('rm:')) { const c2 = cbOf(), cur = c2.list[c2.cur]; c2.list.splice(+v.slice(3), 1); c2.cur = Math.max(0, cur ? c2.list.indexOf(cur) : 0); cbPush(c2); } }); }
+  if (!bar) { bar = document.createElement('div'); bar.id = 'cbBar'; main.appendChild(bar); bar.addEventListener('click', e => { const b = e.target.closest('[data-cb]'); if (!b) return; const v = b.dataset.cb; if (v === 'roll') cbRollAll(); if (v === 'add') cbAddEnemy(); if (v === 'next') cbStep(1); if (v === 'prev') cbStep(-1); if (v === 'end') cbEnd(); if (v === 'tt') { const c2 = cbOf(); c2.tt = TT_OPTS[(TT_OPTS.indexOf(c2.tt) + 1) % TT_OPTS.length]; cbPush(c2); toast(c2.tt ? '⏱️ Cada turno terá ' + c2.tt + ' segundos' : 'Tempo de turno desligado'); } if (v === 'min') { bar.classList.toggle('min'); } if (v.startsWith('go:')) { const c2 = cbOf(); c2.cur = +v.slice(3); cbPush(c2); } if (v.startsWith('rm:')) { const c2 = cbOf(), cur = c2.list[c2.cur]; c2.list.splice(+v.slice(3), 1); c2.cur = Math.max(0, cur ? c2.list.indexOf(cur) : 0); cbPush(c2); } }); }
   const show = layout === 'combat' || c.on; bar.classList.toggle('hide', !show); if (!show) return;
   bar.innerHTML = `<div class="cbT"><b>⚔️ ${c.on ? 'Rodada ' + c.rnd : 'Combate'}</b><button data-cb="min" title="Minimizar">▾</button></div>
     <div class="cbL">${c.list.map((x, i) => `<span class="cbC${i === c.cur ? ' on' : ''}${roster.has(x.k) ? '' : ' foe'}"><button data-cb="go:${i}">${esc(x.n)} <small>${x.ini}</small></button>${roster.has(x.k) ? '' : `<button class="x" data-cb="rm:${i}" title="Tirar">×</button>`}</span>`).join('') || '<span class="hint" style="margin:0">Role a iniciativa para montar a ordem.</span>'}</div>
-    <div class="cbB"><button class="btn sm red" data-cb="roll">⚡ Iniciativa</button><button class="btn sm" data-cb="add">👹 Inimigo</button><button class="btn sm" data-cb="prev" title="Turno anterior">⏮</button><button class="btn sm red" data-cb="next">⏭ Próximo turno</button>${c.on ? '<button class="btn sm" data-cb="end">✕ Encerrar</button>' : ''}</div>`;
-}
-function cbOffer(kind) {
-  if (!isHost) return; const old = $('#lyOffer'); if (old) old.remove();
-  const inv = kind === 'investigacao', el = document.createElement('div'); el.id = 'lyOffer';
-  el.innerHTML = `<b>${inv ? '🔎 Ativar o layout de investigação?' : '⚔️ Ativar o layout de combate?'}</b><small>${inv ? 'quadro de pistas no centro e câmeras em volta' : 'tela no centro, câmeras em volta e destaque no turno'}</small><div><button class="btn sm red" data-ly="yes">Ativar</button>${inv ? '' : '<button class="btn sm red" data-ly="roll">Ativar e rolar iniciativa</button>'}<button class="btn sm" data-ly="no">Agora não</button></div>`;
-  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
-  const kill = () => { el.classList.remove('on'); setTimeout(() => el.remove(), 400); };
-  el.onclick = e => { const b = e.target.closest('[data-ly]'); if (!b) return; if (b.dataset.ly !== 'no') { v13SetLayoutAll(inv ? 'invest' : 'combat'); if (!inv) { const c = cbOf(); c.on = true; cbPush(c); } if (b.dataset.ly === 'roll') cbRollAll(); } kill(); };
-  setTimeout(kill, 15000);
+    <div class="cbB"><button class="btn sm red" data-cb="roll">⚡ Iniciativa</button><button class="btn sm" data-cb="add">👹 Inimigo</button><button class="btn sm${c.tt ? ' on' : ''}" data-cb="tt" title="Cronômetro automático a cada turno">⏱ ${c.tt ? c.tt + 's por turno' : 'Tempo de turno'}</button><button class="btn sm" data-cb="prev" title="Turno anterior">⏮</button><button class="btn sm red" data-cb="next">⏭ Próximo turno</button>${c.on ? '<button class="btn sm" data-cb="end">✕ Encerrar</button>' : ''}</div>`;
 }
 /* ---- relógio de pressão ---- */
 const ckOf = () => { const k = state.clk || {}; return {on: !!k.on, n: clamp(k.n | 0 || 6, 2, 12), v: clamp(k.v | 0, 0, 12), name: String(k.name || '').slice(0, 40), cut: String(k.cut || '').slice(0, 20)}; };
@@ -6092,6 +6128,137 @@ function uvStampsInit() {
   };
 }
 function openUvDraw(exId) { openUvDraw0(exId); let n = 0; const t = setInterval(() => { if ($('#uvdC') || ++n > 60) { clearInterval(t); uvStampsInit(); } }, 50); }
+/* =====================================================================
+   v14: TRANSIÇÃO DOS LAYOUTS, DESTAQUE NOVO, CRONÔMETRO NOVO, DADOS MAIS SIMPLES
+   ===================================================================== */
+function ringPlace() {
+  const box = $('#tiles'), main = $('.mainA'); if (!box || !main) return;
+  const ring = layout === 'combat' || layout === 'invest', tiles = [...box.querySelectorAll('.tile')];
+  const W = main.clientWidth, H = main.clientHeight, hl = state.hl || '';
+  document.body.classList.toggle('hasHl', !!hl && tiles.some(t => t.dataset.id === hl));
+  tiles.forEach((t, i) => {
+    const on = !!hl && t.dataset.id === hl;
+    if (on && !t.classList.contains('hl')) { t.classList.remove('hlPop'); void t.offsetWidth; t.classList.add('hlPop'); setTimeout(() => t.classList.remove('hlPop'), 1000); }
+    t.classList.toggle('hl', on); t.style.setProperty('--i', i);
+  });
+  $$('#live .lf').forEach(f => f.classList.toggle('hl', !!hl && f.dataset.id === hl));
+  if (!ring || W < 760) { tiles.forEach(t => { t.style.left = t.style.top = t.style.width = ''; t.classList.remove('rL', 'rR'); t.style.removeProperty('--rot'); }); main.style.removeProperty('--tw'); return; }
+  const L = [], R = []; tiles.forEach((t, i) => (i % 2 ? R : L).push(t));
+  const gap = 12, F = 1.45, fOf = t => (hl && t.dataset.id === hl ? F : 1);
+  const colH = (col, th) => col.reduce((s, t) => s + th * fOf(t), 0) + gap * Math.max(0, col.length - 1);
+  let tw = clamp(W * .15, 120, 220);
+  while (tw > 84 && Math.max(colH(L, tw * 9 / 16), colH(R, tw * 9 / 16)) > H - 24) tw -= 4;
+  const th = tw * 9 / 16; main.style.setProperty('--tw', Math.round(tw) + 'px');
+  [[L, false], [R, true]].forEach(([col, right]) => {
+    let y = (H - colH(col, th)) / 2;
+    col.forEach(t => {
+      const f = fOf(t), w = tw * f, i = tiles.indexOf(t);
+      t.style.width = Math.round(w) + 'px'; t.style.left = Math.round(right ? W - w - 12 : 12) + 'px'; t.style.top = Math.round(y) + 'px'; y += th * f + gap;
+      t.classList.toggle('rL', !right); t.classList.toggle('rR', right);
+      t.style.setProperty('--rot', layout === 'invest' && f === 1 ? (((i * 37) % 7) - 3) + 'deg' : '0deg');
+    });
+  });
+}
+/* ---- transição ao entrar em combate / investigação ---- */
+function lyTrans(l) {
+  const main = $('.mainA'); if (!main) return; const inv = l === 'invest';
+  document.body.classList.remove('ringIn'); void document.body.offsetWidth; document.body.classList.add('ringIn');
+  clearTimeout(lyTrans._t); lyTrans._t = setTimeout(() => document.body.classList.remove('ringIn'), 2200);
+  $$('.lyTr').forEach(x => x.remove());
+  const o = document.createElement('div'); o.className = 'lyTr ' + (inv ? 'inv' : 'cmb');
+  o.innerHTML = inv ? '<i class="lv"></i><i class="sw"></i><b>INVESTIGAÇÃO</b><small>pistas na mesa</small>' : '<i class="fl"></i><i class="s1"></i><i class="s2"></i><b>COMBATE</b><small>rolem iniciativa</small>';
+  main.appendChild(o); setTimeout(() => o.remove(), 1900);
+  try { docSnd(inv ? 'paper' : 'whoosh'); setTimeout(() => docSnd(inv ? 'stamp' : 'hit'), inv ? 520 : 420); } catch (e) {}
+}
+function lyAuto(kind) { if (!isHost) return; v13SetLayoutAll(kind); if (kind === 'combat') { const c = cbOf(); if (!c.on) { c.on = true; cbPush(c); } } renderSide(); setTimeout(() => cbOffer(kind), 1500); }
+function cbOffer(kind) {
+  if (!isHost) return; const old = $('#lyOffer'); if (old) old.remove();
+  const inv = kind === 'invest', el = document.createElement('div'); el.id = 'lyOffer';
+  el.innerHTML = inv ? '<b>🔎 Mesa em modo investigação</b><small>prenda pistas no quadro e ligue com o fio vermelho</small><div><button class="btn sm red" data-ly="pin">📌 Prender pistas</button><button class="btn sm" data-ly="back">↩ Voltar ao palco</button><button class="btn sm" data-ly="no">OK</button></div>'
+    : '<b>⚔️ Mesa em modo combate</b><small>role a iniciativa para montar a ordem de turnos</small><div><button class="btn sm red" data-ly="roll">⚡ Rolar iniciativa</button><button class="btn sm" data-ly="back">↩ Voltar ao palco</button><button class="btn sm" data-ly="no">OK</button></div>';
+  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
+  const kill = () => { el.classList.remove('on'); setTimeout(() => el.remove(), 400); };
+  el.onclick = e => { const b = e.target.closest('[data-ly]'); if (!b) return; const v = b.dataset.ly; if (v === 'roll') cbRollAll(); if (v === 'pin') boardPick(); if (v === 'back') { v13SetLayoutAll('stage'); if (!inv && !cbOf().list.length) cbEnd(); renderSide(); } kill(); };
+  setTimeout(kill, 15000);
+}
+/* ---- cronômetro ---- */
+let tmKey = '', tmLastS = -1;
+function tmSnd(k) {
+  try { Promise.resolve(audioInit()).then(() => { const o = docOut(); if (!o) return; const t = T() + .01;
+    const beep = (at, f, v, d) => { const g = gain(0, o); env(g, at, .003, v, d); osc('sine', f, at, d + .02, g); };
+    if (k === 'tick') beep(t, 1500, .12, .05);
+    if (k === 'tock') beep(t, 950, .16, .07);
+    if (k === 'done') { [0, .18, .36].forEach((d, i) => beep(t + d, i === 2 ? 660 : 880, .22, .14)); const g = gain(0, o); env(g, t + .36, .004, .5, .6); const b = osc('sine', 80, t + .36, .7, g); b.frequency.exponentialRampToValueAtTime(38, t + .9); }
+  }); } catch (e) {}
+}
+function renderTimer() {
+  const el = $('#timerOv'); if (!el) return;
+  const tm = state.timer; if (!tm) { el.classList.add('hide'); tmKey = ''; tmLastS = -1; return; }
+  const ms = timerRemaining(), tot = Math.max(tm.tot || 0, tm.left || 0, ms, 1000), s = Math.ceil(ms / 1000), mm = Math.floor(s / 60), ss = s % 60, p = clamp(ms / tot, 0, 1);
+  const key = (tm.label || '') + '|' + isHost + '|' + !!tm.turn;
+  if (key !== tmKey) {
+    tmKey = key;
+    el.innerHTML = `<div class="tmR"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="42"/><circle class="fg" cx="50" cy="50" r="42" pathLength="100"/></svg><span class="tmI">⏱</span></div><div class="tmT"><small>${esc(tm.label || (tm.turn ? 'Tempo do turno' : 'Tempo'))}</small><b>--:--</b></div>${isHost ? '<div class="tmC"><button data-tm="p" title="Pausar / continuar">⏯</button><button data-tm="-" title="Tirar 30 segundos">−30s</button><button data-tm="+" title="Dar mais 30 segundos">+30s</button><button data-tm="r" title="Recomeçar">↺</button><button data-tm="x" title="Desligar">✕</button></div>' : ''}`;
+  }
+  el.classList.remove('hide'); el.classList.toggle('host', isHost); el.classList.toggle('turn', !!tm.turn);
+  const low = tm.run && s <= 10 && s > 0;
+  el.classList.toggle('low', low); el.classList.toggle('done', s <= 0); el.classList.toggle('paused', !tm.run && s > 0);
+  el.style.setProperty('--tc', s <= 0 || p <= .2 ? '#ff3b3b' : p <= .5 ? '#ffc35a' : '#e9f2ff');
+  const fg = el.querySelector('.fg'); if (fg) fg.style.strokeDashoffset = String(100 - p * 100);
+  const b = el.querySelector('.tmT b'); if (b) b.textContent = s <= 0 ? 'ESGOTADO' : String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0');
+  const ic = el.querySelector('.tmI'); if (ic) ic.textContent = s <= 0 ? '⌛' : !tm.run ? '⏸' : tm.turn ? '⚔️' : '⏱';
+  if (tm.run && s > 0 && s <= 10 && s !== tmLastS && tmLastS !== -1) tmSnd(s <= 3 ? 'tock' : 'tick');
+  tmLastS = s;
+  if (s <= 0 && tm.run && !timerDone) {
+    timerDone = true; tmSnd('done'); el.classList.remove('boom'); void el.offsetWidth; el.classList.add('boom'); setTimeout(() => el.classList.remove('boom'), 1300);
+    if (isHost) { try { doFx('flash', true); } catch (e) {} if (tm.turn) toast('⏱️ Acabou o tempo do turno!'); }
+  }
+}
+function timerStart(min, label, turn) { const ms = Math.max(1, Math.round(min * 60)) * 1000; timerEnd = Date.now() + ms; timerDone = false; tmLastS = -1; state.timer = {label: String(label || '').slice(0, 40), left: ms, tot: ms, run: true, turn: !!turn}; pushState(); renderTimer(); renderSide(); }
+function timerPause() { const tm = state.timer; if (!tm) return; if (tm.run) { tm.left = Math.max(0, timerEnd - Date.now()); tm.run = false; timerLeft = tm.left; } else { if (tm.left <= 0) { timerReset(); return; } tm.run = true; timerEnd = Date.now() + tm.left; } pushState(); renderTimer(); renderSide(); }
+function timerAdj(sec) { const tm = state.timer; if (!tm) return; const left = Math.max(1000, timerRemaining() + sec * 1000); tm.left = left; tm.tot = Math.max(tm.tot || 0, left); if (tm.run) timerEnd = Date.now() + left; else timerLeft = left; timerDone = false; pushState(); renderTimer(); }
+function timerReset() { const tm = state.timer; if (!tm) return; tm.left = tm.tot || tm.left || 60000; tm.run = true; timerEnd = Date.now() + tm.left; timerDone = false; tmLastS = -1; pushState(); renderTimer(); renderSide(); }
+document.addEventListener('click', e => { const b = e.target.closest('#timerOv [data-tm]'); if (!b || !isHost) return; e.stopPropagation(); const v = b.dataset.tm; if (v === 'p') timerPause(); if (v === '+') timerAdj(30); if (v === '-') timerAdj(-30); if (v === 'r') timerReset(); if (v === 'x') timerClear(); });
+/* tempo de turno no combate */
+const TT_OPTS = [0, 30, 60, 90, 120];
+function cbTurnTimer(c, prev) {
+  const it = c.list[c.cur];
+  if (!c.on || !it) { if (state.timer && state.timer.turn) { state.timer = null; renderTimer(); } return; }
+  if (c.tt && (!prev.on || prev.cur !== c.cur || prev.rnd !== c.rnd || prev.tt !== c.tt || !(state.timer && state.timer.turn))) {
+    const ms = c.tt * 1000; timerEnd = Date.now() + ms; timerDone = false; tmLastS = -1; state.timer = {label: 'Turno de ' + it.n, left: ms, tot: ms, run: true, turn: true}; renderTimer();
+  } else if (!c.tt && state.timer && state.timer.turn) { state.timer = null; renderTimer(); }
+}
+/* relógio de pressão clicável na mesa (mestre) */
+document.addEventListener('click', e => { const w = e.target.closest('#clkW'); if (!w || !isHost) return; const k = ckOf(); ckSet({v: k.v + 1}); renderSide(); });
+document.addEventListener('contextmenu', e => { const w = e.target.closest('#clkW'); if (!w || !isHost) return; e.preventDefault(); const k = ckOf(); ckSet({v: k.v - 1}); renderSide(); });
+/* cronômetro na aba Cenas */
+function v14PaneHTML() {
+  const tm = state.timer;
+  return `<div class="sec">⏱️ Cronômetro <small style="font-weight:500;text-transform:none;letter-spacing:0">${tm ? (tm.run ? 'rodando' : 'pausado') : 'aparece para todos na mesa'}</small></div>
+    <input class="in" id="t14L" maxlength="40" placeholder="Ex.: O ritual se completa em" value="${esc(tm && !tm.turn ? tm.label : lsGet('mesa-tmL', ''))}">
+    <div class="row tmPre" style="gap:6px;margin-top:6px;flex-wrap:wrap">${[[.5, '30s'], [1, '1 min'], [3, '3 min'], [5, '5 min'], [10, '10 min']].map(([m, n]) => `<button class="btn sm" data-v14="tm:${m}">${n}</button>`).join('')}<input class="in" id="t14M" type="number" min="0.1" step="0.5" placeholder="min" style="width:70px"><button class="btn sm red" data-v14="tm:c">▶</button></div>
+    ${tm ? `<div class="row" style="gap:6px;margin-top:6px;flex-wrap:wrap"><button class="btn sm" data-v14="tp">${tm.run ? '⏸ Pausar' : '▶ Continuar'}</button><button class="btn sm" data-v14="ta:-30">−30s</button><button class="btn sm" data-v14="ta:30">+30s</button><button class="btn sm" data-v14="tr">↺ Recomeçar</button><button class="btn sm" data-v14="tx">✕ Desligar</button></div>` : ''}
+    <div class="hint">Passe o mouse no cronômetro da tela para pausar, somar tempo ou recomeçar. No combate, use “⏱ Tempo de turno” na barra de turnos.</div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-v14]'); if (!b || !isHost) return; const [a, x] = b.dataset.v14.split(':');
+  if (a === 'tm') { const m = x === 'c' ? parseFloat(String(($('#t14M') || {}).value || '').replace(',', '.')) : +x; if (!(m > 0)) { toast('Digite os minutos.'); return; } const lb = (($('#t14L') || {}).value || '').trim(); lsSet('mesa-tmL', lb); timerStart(m, lb); }
+  if (a === 'tp') timerPause(); if (a === 'ta') timerAdj(+x); if (a === 'tr') timerReset(); if (a === 'tx') timerClear();
+  renderSide();
+});
+/* ---- painel de dados mais simples (com cache) ---- */
+let fxDiceMemo = {k: '', h: ''};
+function fxDiceHTML() {
+  const f = myCh.eq ? sanFx(myCh.fx) : null;
+  if (!f) return `<div class="fdNo"><span>🎭 Equipe um personagem para rolar pela ficha</span><button class="btn sm" data-fxd="chars">Personagens</button></div>`;
+  const k = myCh.eq + '|' + myCh.char + '|' + JSON.stringify(f.attr) + JSON.stringify(f.per) + JSON.stringify(f.combos || []) + f.prof;
+  if (fxDiceMemo.k === k) return fxDiceMemo.h;
+  const tr = FX_PER.filter(([pk]) => (f.per[pk] || [0])[0]).slice(0, 6);
+  const h = `<div class="fdBox"><div class="fdAttr">${FX_ATTR.map(([ak, n]) => `<button data-fxd="a:${ak}" title="Rolar ${n}"><small>${ak}</small><b>${f.attr[ak]}</b></button>`).join('')}<button class="fdEd" data-fxd="sheet" title="Ficha de ${esc(myCh.char || 'personagem')}">📋</button></div>
+    <div class="fdPer">${tr.map(([pk, n]) => `<button data-fxd="p:${pk}">${n} <b>${fxSig(fxPerTot(f, pk).bonus)}</b></button>`).join('')}<select class="in" data-fxd="sel"><option value="">${tr.length ? 'Outra perícia…' : 'Rolar perícia…'}</option>${FX_PER.map(([pk, n]) => `<option value="${pk}">${n} (${fxSig(fxPerTot(f, pk).bonus)})</option>`).join('')}</select></div>
+    ${(f.combos || []).length ? `<div class="fdCmb">${f.combos.map((c, i) => `<button data-fxd="c:${i}" title="${esc(c.p)}">⚡ ${esc(c.n || 'Combo')}</button>`).join('')}</div>` : ''}</div>`;
+  fxDiceMemo = {k, h}; return h;
+}
 document.addEventListener('click', e => { if (e.target.closest('[data-chars]')) { try { closePop(); } catch (er) {} openChars(); } });
 libLoad(); srchLoad();
 applyTheme();
