@@ -1914,6 +1914,100 @@ body.noDice .quickD,body.noDice .dicePanel{display:none!important}
 #foeCard .fcRow label{font-size:10.5px}
 #foeCard .fcRev{font-size:10.5px;color:#ffb3b3;margin-top:2px}
 #foeCard{max-height:calc(100% - 180px)}
+/* ===== v17 ===== */
+/* campanhas na tela inicial */
+.campBox{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px;text-align:left}
+.campH{font-weight:800;font-size:13px}.campH small{font-weight:500;color:var(--mut);margin-left:6px}
+.campI{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:7px 8px;border:1px solid var(--line);border-radius:12px;background:var(--p2)}
+.campI .tx{flex:1 1 100%;min-width:0;display:flex;flex-direction:column}
+.campI .tx b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.campI .tx small{color:var(--mut);font-size:11.5px}
+.campN{display:flex;gap:5px;margin-top:2px}.campN .in{flex:1;padding:7px 10px}
+/* cartão da criatura recolhível */
+#foeCard .fcTgl{position:absolute;right:6px;top:6px;display:flex;gap:3px;z-index:3}
+#foeCard .fcTgl button{width:22px;height:22px;border-radius:7px;border:1px solid #ffffff22;background:#0008;color:#fff;font-size:11px;cursor:pointer;display:grid;place-items:center;padding:0}
+#foeCard.min{width:auto;max-width:min(300px,calc(100% - 32px));padding:5px 64px 5px 6px;border-radius:999px;cursor:pointer;max-height:none;overflow:visible}
+#foeCard.min .fcTag,#foeCard.min .fcRoll,#foeCard.min .fcAct,#foeCard.min .fcSub{display:none}
+#foeCard.min .fcTop{margin:0}
+#foeCard.min .fcPic{width:26px;height:26px;font-size:14px;border-radius:50%}
+#foeCard.min .fcNm b{font-size:15px}
+#foeCard.min .fcHp{margin:2px 0 0;height:3px}
+#foeCard.min .fcTgl{top:50%;transform:translateY(-50%)}
+#foeCard.min.peek .fcRoll{display:block}
+#foeCard.min.peek{border-radius:14px;padding-bottom:8px}
+#foeCard.hid{display:none}
+/* livro do mestre */
+#bookW{position:fixed;left:18px;top:60px;z-index:160;width:min(560px,calc(100vw - 36px));height:min(78vh,820px);display:flex;flex-direction:column;background:#0d0d12f8;border:1px solid var(--line);border-radius:16px;box-shadow:0 30px 80px #000c;resize:both;overflow:hidden;min-width:320px;min-height:300px;animation:fcIn .3s ease}
+#bookW.hide{display:none}
+#bookW.big{width:min(1100px,calc(100vw - 36px));height:calc(100vh - 90px)}
+.bkHd{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
+.bkHd b{font-size:14px}
+.bkHd>button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--p2);color:var(--ink);cursor:pointer}
+.bkTabs{display:flex;gap:2px;background:var(--p2);border-radius:9px;padding:2px}
+.bkTabs button{border:0;background:none;color:var(--mut);font-size:12px;font-weight:700;padding:4px 10px;border-radius:7px;cursor:pointer}
+.bkTabs button.on{background:var(--p3);color:var(--ink)}
+.bkBody{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto}
+.bkBar{display:flex;gap:6px;padding:8px 10px;align-items:center;flex-wrap:wrap}
+.bkBar select{flex:1;min-width:140px;padding:6px 8px}
+.bkMarks{display:flex;gap:4px;flex-wrap:wrap;padding:0 10px 8px}
+.bkMarks .chip i{font-style:normal;margin-left:6px;opacity:.5}
+.bkView{flex:1;min-height:0;display:flex}
+.bkView iframe{flex:1;border:0;background:#fff;width:100%;height:100%}
+.bkEmpty{margin:auto;text-align:center;color:var(--mut);padding:30px;font-size:14px;line-height:1.6}
+.bkSh{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;padding:10px}
+.bkC{border:1px solid var(--line);border-radius:12px;padding:9px;background:var(--p2);display:flex;flex-direction:column;gap:6px}
+.bkC.off{opacity:.6}.bkC.off small{color:var(--mut)}
+.bkCh{display:flex;align-items:center;gap:8px}
+.bkCh .pic{width:34px;height:34px;border-radius:50%;background:var(--p3) center/cover;display:grid;place-items:center;font-weight:800;flex:none}
+.bkCh>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column}
+.bkCh b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bkCh small{color:var(--mut);font-size:11px}
+.bkSt{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:700}
+.bkSt .v{color:#ff7a7a}.bkSt .e{color:#7ab8ff}.bkSt .s{color:#c9a8ff}
+.bkAt{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.bkAt button{border:1px solid var(--line);background:var(--p1);color:var(--ink);border-radius:8px;padding:3px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.bkAt small{font-size:9px;color:var(--mut);font-weight:800}.bkAt b{font-size:15px}
+.bkPe{display:flex;flex-wrap:wrap;gap:3px}
+.bkPe button{border:1px solid var(--line);background:var(--p1);color:var(--ink);border-radius:999px;padding:2px 8px;font-size:11.5px;cursor:pointer}
+.bkPe b{color:var(--mut)}
+.bkAt button:hover,.bkPe button:hover{border-color:var(--red2)}
+.bkMore summary{cursor:pointer;font-size:12px;color:var(--mut)}
+.bkMore pre{white-space:pre-wrap;font:12px/1.45 Inter,sans-serif;margin:4px 0;color:var(--ink)}
+body:not(.isHost) [data-v17="book"]{display:none!important}
+/* transição leve entre layouts */
+body.lySw #stageW,body.lySw #tiles,body.lySw #live{animation:lySw .65s cubic-bezier(.2,.9,.3,1)}
+@keyframes lySw{from{opacity:0;transform:scale(.975);filter:blur(5px)}}
+.lySoft{position:absolute;inset:0;z-index:25;pointer-events:none;overflow:hidden}
+.lySoft::before{content:"";position:absolute;top:0;bottom:0;width:30%;left:-30%;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--red2) 22%,transparent),transparent);animation:lySoftS .75s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes lySoftS{to{left:100%}}
+/* ===== HUD mais limpo ===== */
+@media(min-width:901px){
+  #room{grid-template-rows:48px minmax(0,1fr) 64px}
+  .ctl{border-top:0;background:transparent;gap:8px;padding:6px 12px 10px}
+  .cbw{font-size:0;gap:0;min-width:0}
+  .cb{width:44px;height:44px;border-radius:50%;background:#ffffff0d;border:1px solid #ffffff10}
+  .cb:hover{background:#ffffff1c}
+  .cb.off{background:#3a1216;border-color:#ff6b6b33}
+  .cb.act{background:#1f5a34;border-color:#2bd66a44}
+  .cb.redb{background:color-mix(in srgb,var(--red) 85%,transparent);border-color:transparent}
+  .cbgap{height:24px;opacity:.6}
+}
+.tb{border-bottom:0;background:transparent;gap:8px}
+.tb .lg{font-size:20px;opacity:.9}
+.code{border:0;background:#ffffff0a;font-size:13px;padding:4px 5px 4px 10px}
+.tbb{width:34px;height:34px;border-radius:50%}
+.side{border-left:1px solid #ffffff0d;background:color-mix(in srgb,var(--p1) 92%,transparent)}
+.tabs{border-bottom:1px solid #ffffff0d}
+.tabs button{font-size:0;gap:0;padding:12px 0 10px;border-bottom-width:2px}
+.tabs button .ic{width:18px;height:18px;opacity:.75}
+.tabs button.on .ic{opacity:1}
+.tabs button.on{font-size:9.5px;gap:3px;padding:8px 0 6px}
+.pane{padding:12px}
+.sec{margin:16px 0 7px;font-size:10.5px;opacity:.85}
+#cbBar{padding:6px 8px;border-radius:14px}
+#cbBar .cbB .btn.sm{padding:4px 9px;font-size:11.5px}
+#cbBan{padding:4px 14px 4px 6px}
+#cbBan b{font-size:18px}
+.tile.hl{animation:none}
 </style>
 </head>
 <body>
@@ -1931,7 +2025,7 @@ body.noDice .quickD,body.noDice .dicePanel{display:none!important}
         <label class="lab" for="hName">Seu nome</label>
         <input class="in" id="hName" maxlength="24" placeholder="Mestre">
         <button class="btn red" id="hGo">Abrir sala</button>
-        <div class="reopen hide" id="reopen">ou <button id="reopenBtn"></button></div>
+        <div class="reopen hide" id="reopen">ou <button id="reopenBtn"></button></div><div id="campBox" class="campBox"></div>
       </div>
       <div class="card">
         <h2>🔎 Entrar como agente</h2>
@@ -1977,7 +2071,7 @@ body.noDice .quickD,body.noDice .dicePanel{display:none!important}
     <div class="code">SALA <b id="rCode">-----</b><button class="btn sm" id="copyLink">Convidar ▾</button></div>
     <span class="sp"></span>
     <div class="net" id="net"><i></i><span id="netTxt">conectando…</span></div>
-    <button class="tbb" id="layoutBtn" title="Visualização: palco, grade, live"></button>
+    <button class="tbb" data-v17="book" title="Livro do Mestre">📖</button><button class="tbb" id="layoutBtn" title="Visualização: palco, grade, live"></button>
     <button class="tbb" id="bfsBtn" title="Tela cheia"></button>
     <button class="tbb" id="setBtn" title="Configurações"></button>
   </header>
@@ -2025,7 +2119,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-(() => { try { const keep = k => k === 'mesa-lib' || k === 'mesa-cuts' || k === 'mesa-yt' || k === 'mesa-bst' || k.startsWith('mesa-tpl:'); for (let i = localStorage.length - 1; i >= 0; i--) { const k = localStorage.key(i); if (k && (k.startsWith('mesa-') || k.startsWith('mesa2-')) && !keep(k)) localStorage.removeItem(k); } } catch (e) {} })();
+(() => { try { const J = k => { try { const v = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }; const codes = new Set(J('mesa-camp').map(c => c && c.code).concat(J('mesa-pcodes'))); const keep = k => k === 'mesa-lib' || k === 'mesa-cuts' || k === 'mesa-yt' || k === 'mesa-bst' || k === 'mesa-camp' || k === 'mesa-pcodes' || k.startsWith('mesa-tpl:') || k.startsWith('mesa-campdata:') || (/^mesa-(items|uvown|board|pcamp):/.test(k) && codes.has(k.split(':')[1])); for (let i = localStorage.length - 1; i >= 0; i--) { const k = localStorage.key(i); if (k && (k.startsWith('mesa-') || k.startsWith('mesa2-')) && !keep(k)) localStorage.removeItem(k); } } catch (e) {} })();
 const rand = (a, b) => a + Math.random() * (b - a);
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -3097,7 +3191,7 @@ function startHost() {
   isHost = true; me.role = 'mestre';
   peer = new Peer(PREFIX + code, {config: ICE, debug: 0});
   setNet(null, 'abrindo sala…');
-  peer.on('open', id => { hostTries = 0; me.id = id; roster.set(id, {...me}); chars[id] = {...myCh}; setNet(true, 'sala aberta'); lsSet('mesa-host', {code, name: me.name}); renderAll(); });
+  peer.on('open', id => { hostTries = 0; me.id = id; roster.set(id, {...me}); chars[id] = {...myCh}; setNet(true, 'sala aberta'); campRestore(); renderAll(); });
   peer.on('error', e => {
     if (e.type === 'unavailable-id') { if (hostTries++ < 6) { setNet(null, 'reabrindo sala…'); try { peer.destroy(); } catch (x) {} setTimeout(startHost, 4000); } else setNet(false, 'código em uso'); }
     else if (['network', 'server-error', 'socket-error', 'socket-closed'].includes(e.type)) setNet(false, 'sem conexão');
@@ -3120,7 +3214,7 @@ function startHost() {
       if (fdNames.has(cleanName(md.name).toLowerCase())) { roster.get(id).fd = true; try { conn.send({t: 'forcedeaf', on: true}); } catch (e) {} }
       if (uvOwners.has(cleanName(md.name).toLowerCase())) { roster.get(id).uv = true; try { conn.send({t: 'item', k: 'uv', on: true, quiet: true}); } catch (e) {} }
       refreshTimerState();
-      conn.send({t: 'hello', now: Date.now(), state, roster: [...roster.values()], chat: chat.slice(-80), chars, reveal: curReveal}); v13Hello(conn);
+      conn.send({t: 'hello', now: Date.now(), state, roster: [...roster.values()], chat: chat.slice(-80), chars, reveal: curReveal}); v13Hello(conn); v17Hello(conn);
       if (roomImg) conn.send({t: 'roomimg', img: roomImg});
       callStage(id); sys(cleanName(md.name) + ' entrou na sala'); broadcastRoster(); syncAV();
     });
@@ -3227,7 +3321,7 @@ function onPlayerData(d) {
   if (d.t === 'roster') { setRoster(d.roster); renderAll(); syncAV(); }
   if (d.t === 'state') { state = normState(d.state); onRoomState(); renderStage(); }
   if (d.t === 'chars') { chars = {}; Object.entries(d.chars || {}).forEach(([k, v]) => { chars[k] = sanCh(v); }); renderTiles(); }
-  v13Msg(d); v15Msg(d); v16Msg(d);
+  v13Msg(d); v15Msg(d); v16Msg(d); v17Msg(d);
   if (d.t === 'yourch') { Object.assign(myCh, sanCh(Object.assign({eq: myCh.eq}, d.ch))); lsSet('mesa-ch', myCh); libSave(); renderTiles(); renderSide(); }
   if (d.t === 'roomimg') { roomImg = okImg(d.img) ? d.img : ''; applyTheme(); }
   if (d.t === 'reveal') { curReveal = d.r && okImg(d.r.img) ? {id: String(d.r.id || Date.now()), img: d.r.img, cap: String(d.r.cap || '').slice(0, 120)} : null; revealHidden = false; renderReveal(); }
@@ -3646,7 +3740,7 @@ const LAYOUTS = [['combat', '⚔️ Combate', 'palco no centro, câmeras em volt
 function setLayout(l) {
   if (!LAYOUTS.some(x => x[0] === l)) l = 'stage';
   const lyPrev = layout; layout = l; lsSet('mesa-layout', l);
-  if (lyPrev && lyPrev !== l && (l === 'combat' || l === 'invest')) setTimeout(() => lyTrans(l), 0);
+  if (lyPrev && lyPrev !== l && (l === 'combat' || l === 'invest')) setTimeout(() => lyTrans(l), 0); else if (lyPrev && lyPrev !== l) setTimeout(lySoft, 0);
   document.body.classList.toggle('gridMode', l === 'grid');
   document.body.classList.toggle('lay-live', l === 'live');
   document.body.classList.toggle('lay-livestage', l === 'livestage');
@@ -4021,7 +4115,7 @@ const HOST_TABS = [['chat', 'chat', 'Chat'], ['music', 'music', 'Trilha'], ['sfx
 const PLAYER_TABS = [['chat', 'chat', 'Chat'], ['docs', 'bag', 'Inventário'], ['people', 'people', 'Pessoas']];
 function renderTabs() {
   const tabs = isHost ? HOST_TABS : PLAYER_TABS;
-  $('#tabs').innerHTML = tabs.map(([k, i, l]) => `<button data-tab="${k}" class="${k === curTab ? 'on' : ''}">${ic(i)}${l}${k === 'chat' && unread && curTab !== 'chat' ? '<i class="dot"></i>' : ''}</button>`).join('');
+  $('#tabs').innerHTML = tabs.map(([k, i, l]) => `<button data-tab="${k}" title="${esc(l)}" class="${k === curTab ? 'on' : ''}">${ic(i)}${l}${k === 'chat' && unread && curTab !== 'chat' ? '<i class="dot"></i>' : ''}</button>`).join('');
 }
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; curTab = b.dataset.tab; if (curTab === 'chat') unread = 0; renderSide(); renderControls(); });
 const grpOpen = lsGet('mesa-grp', {});
@@ -4419,9 +4513,7 @@ $('#jGo').onclick = () => {
 let leaving = false, paused = false;
 function hostLeaveMenu() {
   openModal(`<div class="mhead"><h3>Sair da sala ${esc(code)}</h3><button class="btn sm" data-m="x">Cancelar</button></div><div class="mbody"><div class="leaveOpts">
-    <button class="btn" id="lvPause"><span class="e">⏸️</span><span><b>Pausar a sala</b><small>Os agentes esperam numa tela de pausa e voltam sozinhos quando você reabrir. Pistas, itens e lanterna continuam com eles.</small></span></button>
-    <button class="btn red" id="lvEnd"><span class="e">⏹️</span><span><b>Encerrar a sala</b><small>Fim da sessão: todos são desconectados.</small></span></button></div></div>`);
-  $('#lvPause').onclick = () => { closeModal('x'); pauseRoom(); };
+    <button class="btn red" id="lvEnd"><span class="e">⏹️</span><span><b>Encerrar a sessão</b><small>${campCur ? 'A campanha “' + esc(campCur.name) + '” fica salva: na próxima vez, abra a sessão por ela e tudo volta.' : 'Fim da sessão: todos são desconectados.'}</small></span></button></div></div>`);
   $('#lvEnd').onclick = () => { closeModal('x'); leave(); };
 }
 function pauseRoom() {
@@ -4432,7 +4524,7 @@ function pauseRoom() {
   setTimeout(() => { try { peer && peer.destroy(); } catch (e) {} [micStream, camStream, screenStream].forEach(st => st && st.getTracks().forEach(t => t.stop())); location.href = location.pathname; }, 600);
 }
 function leave() {
-  leaving = true;
+  leaving = true; try { campSave(); } catch (e) {}
   sayBye();
   try { if (isHost) sendAll({t: 'chat', m: {k: 'sys', text: 'O Mestre encerrou a sala.', ts: Date.now()}}); } catch (e) {}
   setTimeout(() => {
@@ -5951,9 +6043,9 @@ const cbOf = () => { const c = state.cb || {}; return {on: !!c.on, list: Array.i
 let cbPrev = '';
 function cbPush(c) { const prev = cbOf(); state.cb = c; cbTurnTimer(cbOf(), prev); const it = c.list[c.cur]; state.hl = c.on && it && roster.has(it.k) ? it.k : (c.on ? '' : state.hl); pushState(); v13State(); }
 function cbRollAll() {
-  const c = cbOf(), ags = [...roster.values()].filter(p => p.role !== 'mestre' && eqOf(p.id)), keep = c.list.filter(x => !roster.has(x.k));
+  const c = cbOf(), ags = [...roster.values()].filter(p => p.role !== 'mestre' && eqOf(p.id)), keep = c.list.filter(x => !roster.has(x.k) && !x.pc);
   if (!ags.length && !keep.length) { toast('Nenhum agente com personagem equipado. Adicione inimigos ou peça para equiparem uma ficha.', 4500); }
-  const rolled = ags.map(p => { const t = fxPerTot(fxOf(p.id), 'iniciativa'), r = fxRollFor(p.id, 'Iniciativa', t.attr, t.bonus), ch = liveCh(p); return {k: p.id, n: ch.char || p.name, ini: r.total, img: ''}; });
+  const rolled = ags.map(p => { const t = fxPerTot(fxOf(p.id), 'iniciativa'), r = fxRollFor(p.id, 'Iniciativa', t.attr, t.bonus), ch = liveCh(p); return {k: p.id, n: ch.char || p.name, ini: r.total, img: '', pc: 1}; });
   const list = rolled.concat(keep).sort((a, b) => b.ini - a.ini);
   cbPush({on: true, list, cur: 0, rnd: 1});
   setTimeout(() => sys('⚡ Ordem de iniciativa: ' + list.map((x, i) => (i + 1) + 'º ' + x.n + (roster.has(x.k) ? ' (' + x.ini + ')' : '')).join(' · ')), 500);
@@ -6199,7 +6291,7 @@ function v13State() {
   const c = cbOf(), it = c.list[c.cur], sig = c.on && it ? it.k + ':' + c.rnd + ':' + c.cur : '';
   if (sig && sig !== cbPrev && cbPrev !== '') { docSnd('thump'); if (it.k === me.id) { toast('⚔️ É o seu turno!', 3500); try { navigator.vibrate && navigator.vibrate([80, 60, 80]); } catch (e) {} } }
   cbPrev = sig || (c.on ? cbPrev : '');
-  ringPlace(); cbRender(); ckRender(); boardRender(); tqRender(); foeRender();
+  ringPlace(); cbRender(); ckRender(); boardRender(); tqRender(); foeRender(); campRemap();
 }
 /* =====================================================================
    v13: OLHOS NA COR DO ELEMENTO, CUTSCENE DE INVESTIGAÇÃO, CARTA E PASTA
@@ -6701,7 +6793,7 @@ document.addEventListener('click', e => {
 /* ---------- aba Cenas organizada ---------- */
 function v15PaneHTML() {
   const k = ckOf(), tm = state.timer, q = tqOf(), inRing = layout === 'combat' || layout === 'invest';
-  const quick = `<div class="qk"><button class="qkB red" data-v15="tq"><span>🎯</span>Pedir teste</button><button class="qkB" data-v15="hl"><span>⭐</span>Destacar</button>${layout === 'combat' ? '<button class="qkB on" data-v13="ly:stage"><span>↩️</span>Sair do combate</button>' : '<button class="qkB" data-v13="ly:combat"><span>⚔️</span>Combate</button>'}${layout === 'invest' ? '<button class="qkB on" data-v13="ly:stage"><span>↩️</span>Sair da investigação</button>' : '<button class="qkB" data-v13="ly:invest"><span>🔎</span>Investigação</button>'}<button class="qkB${tm ? ' on' : ''}" data-v15="${tm ? 'tmp' : 'tm1'}"><span>⏱</span>${tm ? (tm.run ? 'Pausar' : 'Continuar') : '1 min'}</button>${k.on ? '<button class="qkB" data-v13="ck:+"><span>⏳</span>Relógio +1</button>' : ''}</div>`;
+  const quick = `<div class="qk"><button class="qkB red" data-v15="tq"><span>🎯</span>Pedir teste</button><button class="qkB" data-v17="book"><span>📖</span>Livro</button><button class="qkB" data-v15="hl"><span>⭐</span>Destacar</button>${layout === 'combat' ? '<button class="qkB on" data-v13="ly:stage"><span>↩️</span>Sair do combate</button>' : '<button class="qkB" data-v13="ly:combat"><span>⚔️</span>Combate</button>'}${layout === 'invest' ? '<button class="qkB on" data-v13="ly:stage"><span>↩️</span>Sair da investigação</button>' : '<button class="qkB" data-v13="ly:invest"><span>🔎</span>Investigação</button>'}<button class="qkB${tm ? ' on' : ''}" data-v15="${tm ? 'tmp' : 'tm1'}"><span>⏱</span>${tm ? (tm.run ? 'Pausar' : 'Continuar') : '1 min'}</button>${k.on ? '<button class="qkB" data-v13="ck:+"><span>⏳</span>Relógio +1</button>' : ''}</div>`;
   const tq = `${q ? `<div class="srNow">🎯 Em andamento: <b>${esc(q.lab)}</b> · ${q.to.filter(x => q.res[x]).length}/${q.to.length}<button class="btn sm red" data-v15="tqend">Encerrar</button></div>` : ''}
     <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn sm red" data-v15="tq">🎯 Pedir teste…</button><button class="btn sm" data-v15="tq:percepcao">👁 Percepção de todos</button><button class="btn sm" data-v15="tq:vontade">😱 Vontade (medo)</button><button class="btn sm" data-v15="tq:investigacao">🔎 Investigação</button></div>
     <div class="hint">Na tela de quem rola, os dados giram grandes no centro; os outros acompanham ao lado.</div>`;
@@ -6816,7 +6908,7 @@ function bstEdit(id) {
 }
 /* ---------- turno do inimigo ---------- */
 let foeKey = '', foeTgt = '', foeLast = null;
-function foeCur() { const c = cbOf(), it = c.list[c.cur]; return c.on && it && !roster.has(it.k) ? it : null; }
+function foeCur() { const c = cbOf(), it = c.list[c.cur]; return c.on && it && !it.pc && !roster.has(it.k) ? it : null; }
 function foeRender() {
   const main = $('.mainA'); if (!main) return; const it = foeCur();
   document.body.classList.toggle('foeTurn', !!it);
@@ -6834,6 +6926,7 @@ function foeRender() {
   el.querySelector('.fcHp i').style.width = hasHp ? clamp(it.pv / it.pvMax * 100, 0, 100) + '%' : '0';
   el.classList.toggle('dead', hasHp && it.pv <= 0);
   el.querySelector('.fcSub').textContent = isHost ? (hasHp ? `${it.pv}/${it.pvMax} PV` : 'sem ficha') + (b ? ' · Defesa ' + b.def : '') : (hasHp && it.pv <= 0 ? 'caído' : '');
+  foeMinApply();
   if (!isHost) return;
   const key = it.k + '|' + (b ? JSON.stringify(b.atk) : '') + '|' + [...roster.keys()].join(',');
   if (key === foeKey) return; foeKey = key;
@@ -6878,13 +6971,170 @@ function foeAnim(real, lab, who, r, dmg, n, nd, info) {
   }, 1500 + Math.max(dice.length, dd.length) * 140);
 }
 function v16Msg(d) {
-  if (d.t === 'foeRev') { foeRender(); const box = $('#fcRoll'); if (!box) return; const L = {def: d.def, tgtN: String(d.tgtN || ''), hit: d.hit}; const d1 = (d.d || []).map(x => clamp(+x || 1, 1, 20)); foeAnim(true, String(d.lab || ''), String(d.who || ''), {dice: d1, keep: d.k | 0, total: +d.tot || 0, mode: d.mode || 'maior'}, d.dt != null ? {dice: (d.dd || []).map(x => +x || 1), faces: (d.df || []).map(x => +x || 6), total: +d.dt || 0, label: String(d.dl || '')} : null, 0, 0, L); try { docSnd('stamp'); } catch (e) {} }
-  if (d.t === 'foeRoll') { foeRender(); foeAnim(false, d.lab || '', d.who || '', null, null, d.n | 0, d.nd | 0); } }
+  if (d.t === 'foeRev') { foeRender(); foePeek(); const box = $('#fcRoll'); if (!box) return; const L = {def: d.def, tgtN: String(d.tgtN || ''), hit: d.hit}; const d1 = (d.d || []).map(x => clamp(+x || 1, 1, 20)); foeAnim(true, String(d.lab || ''), String(d.who || ''), {dice: d1, keep: d.k | 0, total: +d.tot || 0, mode: d.mode || 'maior'}, d.dt != null ? {dice: (d.dd || []).map(x => +x || 1), faces: (d.df || []).map(x => +x || 6), total: +d.dt || 0, label: String(d.dl || '')} : null, 0, 0, L); try { docSnd('stamp'); } catch (e) {} }
+  if (d.t === 'foeRoll') { foeRender(); foePeek(); foeAnim(false, d.lab || '', d.who || '', null, null, d.n | 0, d.nd | 0); } }
 /* ---------- chat: esconder os dados ---------- */
 let diceHidden = false;
 document.addEventListener('click', e => { const b = e.target.closest('[data-dtg]'); if (!b) return; e.preventDefault(); diceHidden = !diceHidden; document.body.classList.toggle('noDice', diceHidden); b.classList.toggle('on', !diceHidden); });
+/* =====================================================================
+   v17: CAMPANHAS, LIVRO DO MESTRE, CARTÃO DA CRIATURA RECOLHÍVEL,
+   TRANSIÇÃO EM TODOS OS LAYOUTS
+   ===================================================================== */
+let campCur = null, campTimer = 0, campJoined = false;
+const campList = () => { const v = lsGet('mesa-camp', []); return Array.isArray(v) ? v.filter(c => c && c.id && c.code) : []; };
+const campStoreList = l => lsSet('mesa-camp', l);
+function campNew(name) {
+  const l = campList(); let c; do { c = genCode(); } while (l.some(x => x.code === c));
+  const k = {id: 'c' + Math.random().toString(36).slice(2, 9), name: String(name || 'Campanha').slice(0, 40), code: c, ts: Date.now(), last: 0};
+  l.unshift(k); campStoreList(l); return k;
+}
+function campSave() {
+  if (!isHost || !campCur || !me.id) return;
+  const st = JSON.parse(JSON.stringify(state)); st.tq = null; st.sharing = false; st.hl = st.hl || '';
+  if (st.timer) { st.timer.left = Math.max(0, timerRemaining()); st.timer.run = false; }
+  try { lsSet('mesa-campdata:' + campCur.id, {state: st, chat: chat.slice(-120), docSent, ts: Date.now()}); } catch (e) {}
+  const l = campList(), i = l.findIndex(x => x.id === campCur.id); if (i >= 0) { l[i].last = Date.now(); campStoreList(l); }
+}
+function campRestore() {
+  if (!isHost || !campCur) return;
+  const d = lsGet('mesa-campdata:' + campCur.id, null);
+  clearInterval(campTimer); campTimer = setInterval(campSave, 15000);
+  addEventListener('beforeunload', () => { try { campSave(); } catch (e) {} });
+  if (!d || !d.state) { sys(`📚 Campanha “${campCur.name}”: primeira sessão. Tudo o que acontecer fica guardado.`); return; }
+  const keepTheme = d.state;
+  state = normState(Object.assign({}, state, keepTheme, {tq: null, sharing: false}));
+  if (state.timer) { state.timer.run = false; timerLeft = state.timer.left || 0; }
+  if (Array.isArray(d.chat)) chat = d.chat.slice(-120);
+  if (d.docSent && typeof d.docSent === 'object') docSent = d.docSent;
+  try { setLayout(state.layout || 'stage'); } catch (e) {}
+  try { applyTheme(); } catch (e) {}
+  sys(`📚 Campanha “${campCur.name}” retomada de onde parou.`);
+}
+/* agentes voltam para o mesmo lugar nos turnos e no destaque */
+function campRemap() {
+  if (!isHost) return; const c = cbOf(); if (!c.list.length) return; let ch = false;
+  c.list.forEach(it => {
+    if (it.bid || roster.has(it.k)) return;
+    const p = [...roster.values()].find(p => p.role !== 'mestre' && ((chars[p.id] || {}).char || p.name) === it.n && !c.list.some(x => x.k === p.id));
+    if (p) { if (state.hl === it.k) state.hl = p.id; it.k = p.id; ch = true; }
+  });
+  if (ch) { state.cb = c; setTimeout(pushState, 0); }
+}
+setInterval(() => { try { if (isHost && campCur) campRemap(); } catch (e) {} }, 2500);
+function v17Hello(conn) { if (campCur) try { conn.send({t: 'camp', name: campCur.name, code}); } catch (e) {} }
+function v17Msg(d) {
+  if (d.t !== 'camp') return;
+  campJoined = true;
+  const pc = lsGet('mesa-pcodes', []); const l = Array.isArray(pc) ? pc : []; if (!l.includes(code)) { l.push(code); lsSet('mesa-pcodes', l.slice(-20)); }
+  lsSet('mesa-items:' + code, myItems || {});
+  const lid = lsGet('mesa-pcamp:' + code, ''); if (lid && !myCh.eq && libGet(lid)) setTimeout(() => { try { libEquip(lid); toast(`📚 ${d.name}: seu personagem voltou`); } catch (e) {} }, 400);
+}
+setInterval(() => { if (campJoined && !isHost && myCh.eq) lsSet('mesa-pcamp:' + code, myCh.eq); }, 4000);
+/* tela inicial */
+function campLobby() {
+  const box = $('#campBox'); if (!box) return; const l = campList();
+  const ago = t => { if (!t) return 'nunca jogada'; const d = Math.round((Date.now() - t) / 86400000); return d <= 0 ? 'jogada hoje' : d === 1 ? 'ontem' : 'há ' + d + ' dias'; };
+  box.innerHTML = `<div class="campH">📚 Campanhas <small>a sessão volta de onde parou</small></div>
+    ${l.map(c => `<div class="campI"><span class="tx"><b>${esc(c.name)}</b><small>sala ${esc(c.code)} · ${ago(c.last)}</small></span><button class="btn sm red" data-cp="go:${c.id}">▶ Abrir</button><button class="btn sm" data-cp="ren:${c.id}" title="Renomear">✏️</button><button class="btn sm" data-cp="exp:${c.id}" title="Salvar em arquivo">⬇</button><button class="btn sm" data-cp="rm:${c.id}" title="Apagar">🗑</button></div>`).join('')}
+    <div class="campN"><input class="in" id="cpNew" maxlength="40" placeholder="Nova campanha (ex.: Vila Lua)"><button class="btn sm" data-cp="new">+ Criar</button><button class="btn sm" data-cp="imp" title="Abrir arquivo de campanha">⬆</button></div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-cp]'); if (!b) return; const [a, id] = b.dataset.cp.split(':'); const l = campList(), c = l.find(x => x.id === id);
+  if (a === 'new') { const n = ($('#cpNew').value || '').trim(); if (!n) { $('#cpNew').focus(); toast('Dê um nome para a campanha.'); return; } campNew(n); campLobby(); toast('📚 Campanha criada. Toque em ▶ Abrir para começar.'); }
+  if (a === 'go' && c) { me.name = cleanName($('#hName').value || 'Mestre'); campCur = c; code = c.code; showPrejoin(true); }
+  if (a === 'ren' && c) { const n = prompt('Novo nome da campanha:', c.name); if (n && n.trim()) { c.name = n.trim().slice(0, 40); campStoreList(l); campLobby(); } }
+  if (a === 'rm' && c) { if (confirm(`Apagar a campanha “${c.name}”? O progresso salvo dela some (as pistas, cutscenes e bestiário continuam).`)) { campStoreList(l.filter(x => x.id !== id)); try { localStorage.removeItem('mesa-campdata:' + id); } catch (er) {} campLobby(); } }
+  if (a === 'exp' && c) { const data = {v: 1, camp: c, data: lsGet('mesa-campdata:' + c.id, null), board: lsGet('mesa-board:' + c.code, null), uv: lsGet('mesa-uvown:' + c.code, [])}; const url = URL.createObjectURL(new Blob([JSON.stringify(data)], {type: 'application/json'})); const x = document.createElement('a'); x.href = url; x.download = 'campanha-' + c.name.replace(/[^\w\-]+/g, '_') + '.json'; document.body.appendChild(x); x.click(); x.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000); }
+  if (a === 'imp') { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json,application/json'; inp.onchange = async () => { try { const j = JSON.parse(await inp.files[0].text()); if (!j || !j.camp || !j.camp.code) throw 0; const k = Object.assign({}, j.camp, {id: l.some(x => x.id === j.camp.id) ? 'c' + Math.random().toString(36).slice(2, 9) : j.camp.id}); l.unshift(k); campStoreList(l); if (j.data) lsSet('mesa-campdata:' + k.id, j.data); if (j.board) lsSet('mesa-board:' + k.code, j.board); if (j.uv) lsSet('mesa-uvown:' + k.code, j.uv); campLobby(); toast('📚 Campanha importada'); } catch (er) { toast('Arquivo de campanha inválido.'); } }; inp.click(); }
+});
+/* ---------- cartão da criatura recolhível ---------- */
+let foeMin = null, foeAuto = 0;
+function foeMinApply() {
+  const el = $('#foeCard'); if (!el) return;
+  const min = foeMin == null ? !isHost : foeMin;
+  el.classList.toggle('min', min);
+  el.classList.toggle('hid', !isHost && !!state.foeHide);
+  let t = el.querySelector('.fcTgl'); if (!t) { t = document.createElement('div'); t.className = 'fcTgl'; el.prepend(t); }
+  t.innerHTML = `<button data-fm="min" title="${min ? 'Abrir' : 'Recolher'}">${min ? '▾' : '▴'}</button>${isHost ? `<button data-fm="hide" title="${state.foeHide ? 'Mostrar o cartão para os jogadores' : 'Esconder o cartão dos jogadores'}">${state.foeHide ? '🙈' : '👁'}</button>` : ''}`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('#foeCard [data-fm]'); if (b) { e.stopPropagation(); if (b.dataset.fm === 'min') { const el = $('#foeCard'); foeMin = !(el && el.classList.contains('min')); } if (b.dataset.fm === 'hide' && isHost) { state.foeHide = !state.foeHide; pushState(); } foeMinApply(); return; }
+  const pill = e.target.closest('#foeCard.min'); if (pill && !e.target.closest('button,select,input')) { foeMin = false; foeMinApply(); }
+}, true);
+function foePeek() { if (isHost) return; const el = $('#foeCard'); if (!el) return; el.classList.add('peek'); clearTimeout(foeAuto); foeAuto = setTimeout(() => el.classList.remove('peek'), 6500); }
+/* ---------- transição leve nos outros layouts ---------- */
+function lySoft() {
+  const main = $('.mainA'); if (!main) return; const b = document.body;
+  b.classList.remove('lySw'); void b.offsetWidth; b.classList.add('lySw'); clearTimeout(lySoft._t); lySoft._t = setTimeout(() => b.classList.remove('lySw'), 800);
+  $$('.lySoft').forEach(x => x.remove()); const o = document.createElement('div'); o.className = 'lySoft'; main.appendChild(o); setTimeout(() => o.remove(), 900);
+}
+/* ---------- 📖 Livro do Mestre ---------- */
+let bkDb = null, bkList = [], bkCur = null, bkUrl = '', bkTab = 'books';
+function bkTx(mode, fn) { return new Promise((res, rej) => { const go = db => { const tx = db.transaction('b', mode); const r = fn(tx.objectStore('b')); tx.oncomplete = () => res(r && r.result); tx.onerror = () => rej(tx.error); }; if (bkDb) return go(bkDb); const q = indexedDB.open('mesa-livro', 1); q.onupgradeneeded = () => q.result.createObjectStore('b', {keyPath: 'id'}); q.onsuccess = () => { bkDb = q.result; go(bkDb); }; q.onerror = () => rej(q.error); }); }
+async function bkLoad() { try { bkList = ((await bkTx('readonly', s => s.getAll())) || []).sort((a, b) => (b.open || b.ts) - (a.open || a.ts)); } catch (e) { bkList = []; } }
+function bkOpen() {
+  if (!isHost) return; let w = $('#bookW');
+  if (w) { w.classList.toggle('hide'); if (!w.classList.contains('hide')) bkRender(); return; }
+  w = document.createElement('div'); w.id = 'bookW'; document.body.appendChild(w);
+  w.innerHTML = `<div class="bkHd"><b>📖 Livro do Mestre</b><span class="bkTabs"><button data-bk="tab:books" class="on">Livros</button><button data-bk="tab:sheets">Fichas</button></span><span style="flex:1"></span><button data-bk="max" title="Maior/menor">⤢</button><button data-bk="close" title="Fechar">✕</button></div><div class="bkBody"></div>`;
+  bkDrag(w); bkLoad().then(bkRender);
+}
+function bkDrag(w) {
+  const hd = w.querySelector('.bkHd'); let d = null;
+  hd.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; const r = w.getBoundingClientRect(); d = {x: e.clientX - r.left, y: e.clientY - r.top}; hd.setPointerCapture(e.pointerId); });
+  hd.addEventListener('pointermove', e => { if (!d) return; w.style.left = clamp(e.clientX - d.x, 0, innerWidth - 120) + 'px'; w.style.top = clamp(e.clientY - d.y, 0, innerHeight - 60) + 'px'; w.style.right = 'auto'; });
+  hd.addEventListener('pointerup', () => { d = null; });
+}
+function bkRender() {
+  const w = $('#bookW'); if (!w) return; const body = w.querySelector('.bkBody');
+  $$('#bookW [data-bk^="tab:"]').forEach(b => b.classList.toggle('on', b.dataset.bk === 'tab:' + bkTab));
+  if (bkTab === 'sheets') { body.innerHTML = bkSheetsHTML(); return; }
+  const cur = bkCur && bkList.find(x => x.id === bkCur);
+  body.innerHTML = `<div class="bkBar"><select class="in" data-bk="sel">${bkList.length ? bkList.map(b => `<option value="${b.id}"${b.id === bkCur ? ' selected' : ''}>${esc(b.name)}</option>`).join('') : '<option value="">Nenhum livro ainda</option>'}</select><label class="btn sm red">+ Livro<input type="file" accept="application/pdf,.pdf,image/*,.txt" hidden data-bk="up"></label>${cur ? `<input class="in" type="number" min="1" data-bk="pg" placeholder="pág." style="width:66px" title="Ir para a página"><button class="btn sm" data-bk="mark" title="Marcar a página">🔖</button><button class="btn sm" data-bk="rm" title="Tirar este livro">🗑</button>` : ''}</div>
+    ${cur && (cur.marks || []).length ? `<div class="bkMarks">${cur.marks.map((m, i) => `<button class="chip" data-bk="go:${m.p}" title="Página ${m.p}">🔖 ${esc(m.n)}<i data-bk="unmark:${i}">✕</i></button>`).join('')}</div>` : ''}
+    <div class="bkView">${cur ? '<iframe id="bkFrame" title="Livro"></iframe>' : '<div class="bkEmpty">📖 Envie um PDF (livro de regras, suplemento, anotações) para ler aqui dentro da mesa.<br><small>Fica guardado só neste navegador. Dentro do PDF você tem zoom, busca (Ctrl+F) e páginas.</small></div>'}</div>`;
+  if (cur) bkShow(cur, cur.page || 1);
+}
+function bkShow(b, page) {
+  const f = $('#bkFrame'); if (!f) return;
+  if (!bkUrl || bkShow.id !== b.id) { if (bkUrl) URL.revokeObjectURL(bkUrl); bkUrl = URL.createObjectURL(b.blob); bkShow.id = b.id; }
+  const isPdf = /pdf/i.test(b.blob.type || '') || /\.pdf$/i.test(b.name);
+  f.src = bkUrl + (isPdf ? '#page=' + Math.max(1, page | 0) + '&view=FitH' : '');
+  b.page = page; b.open = Date.now(); bkTx('readwrite', s => s.put(b)).catch(() => {});
+}
+function bkSheetsHTML() {
+  const ags = [...roster.values()].filter(p => p.role !== 'mestre');
+  if (!ags.length) return '<div class="bkEmpty">Ninguém na sala ainda.</div>';
+  return `<div class="bkSh">${ags.map(p => { const c = liveCh(p), st = stOf(p.id);
+    if (!c.eq) return `<div class="bkC off"><b>${esc(p.name)}</b><small>sem personagem equipado</small></div>`;
+    const f = sanFx(c.fx), k = fxCalc(f), tr = FX_PER.filter(([pk]) => (f.per[pk] || [0])[0]);
+    return `<div class="bkC"><div class="bkCh"><span class="pic" style="${c.img ? `background-image:url('${c.img}')` : ''}">${c.img ? '' : esc((c.char || p.name)[0] || '?')}</span><span><b>${esc(c.char || p.name)}</b><small>${esc(p.name)}${f.cls ? ' · ' + esc((FX_CLS[f.cls] || {}).n || f.cls) : ''}${f.nex ? ' · NEX ' + f.nex + '%' : ''}</small></span><button class="btn sm" data-bk="ed:${esc(p.id)}" title="Abrir a ficha completa">📋</button></div>
+      <div class="bkSt"><span class="v">❤ ${st.pv}/${st.pvMax}</span><span class="e">✦ ${st.pe}/${st.peMax}</span>${k.sanMax ? `<span class="s">🧠 ${f.san >= 0 ? f.san : k.sanMax}/${k.sanMax}</span>` : ''}<span>🛡 ${k.def}</span></div>
+      <div class="bkAt">${FX_ATTR.map(([ak]) => `<button data-bk="ra:${esc(p.id)}:${ak}" title="Rolar ${ak}"><small>${ak}</small><b>${f.attr[ak]}</b></button>`).join('')}</div>
+      ${tr.length ? `<div class="bkPe">${tr.map(([pk, n]) => `<button data-bk="rp:${esc(p.id)}:${pk}">${n} <b>${fxSig(fxPerTot(f, pk).bonus)}</b></button>`).join('')}</div>` : ''}
+      ${f.inv || f.ataques ? `<details class="bkMore"><summary>Ataques e inventário</summary>${f.ataques ? `<pre>${esc(f.ataques)}</pre>` : ''}${f.inv ? `<pre>${esc(f.inv)}</pre>` : ''}</details>` : ''}</div>`; }).join('')}</div>`;
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('#bookW [data-bk]'); if (!b || b.tagName === 'SELECT' || (b.tagName === 'INPUT')) return; const [a, x, y] = b.dataset.bk.split(':');
+  if (a === 'close') $('#bookW').classList.add('hide');
+  if (a === 'max') $('#bookW').classList.toggle('big');
+  if (a === 'tab') { bkTab = x; bkRender(); }
+  if (a === 'mark') { const cur = bkList.find(q => q.id === bkCur); if (!cur) return; const p = +(($('#bookW [data-bk="pg"]') || {}).value || cur.page || 1); const n = prompt('Nome do marcador (página ' + p + '):', 'Pág. ' + p); if (!n) return; cur.marks = (cur.marks || []).concat({n: n.slice(0, 30), p}).slice(0, 30); await bkTx('readwrite', s => s.put(cur)); bkRender(); }
+  if (a === 'unmark') { e.stopPropagation(); const cur = bkList.find(q => q.id === bkCur); if (!cur) return; cur.marks.splice(+x, 1); await bkTx('readwrite', s => s.put(cur)); bkRender(); return; }
+  if (a === 'go') { const cur = bkList.find(q => q.id === bkCur); if (cur) bkShow(cur, +x); }
+  if (a === 'rm') { const cur = bkList.find(q => q.id === bkCur); if (!cur || !confirm(`Tirar “${cur.name}” do Livro do Mestre?`)) return; await bkTx('readwrite', s => s.delete(cur.id)); bkCur = null; await bkLoad(); bkCur = (bkList[0] || {}).id || null; bkRender(); }
+  if (a === 'ed') openCharEditor(x);
+  if (a === 'ra' || a === 'rp') { const p = roster.get(x); if (!p) return; const c = liveCh(p), f = sanFx(c.fx); if (a === 'ra') fxRollFor(x, FX_ATTR.find(q => q[0] === y)[1], f.attr[y], 0); else { const t = fxPerTot(f, y); fxRollFor(x, (FX_PER.find(q => q[0] === y) || [])[1] || y, t.attr, t.bonus); } }
+});
+document.addEventListener('change', async e => {
+  const t = e.target.closest('#bookW [data-bk]'); if (!t) return; const a = t.dataset.bk;
+  if (a === 'sel') { bkCur = t.value || null; bkRender(); }
+  if (a === 'pg') { const cur = bkList.find(q => q.id === bkCur); if (cur) bkShow(cur, +t.value || 1); }
+  if (a === 'up') { const f = t.files[0]; if (!f) return; if (f.size > 250 * 1024 * 1024) { toast('Arquivo grande demais (máx. 250 MB).'); return; } const b = {id: 'b' + Math.random().toString(36).slice(2, 9), name: f.name.replace(/\.[^.]+$/, '').slice(0, 60), blob: f, ts: Date.now(), page: 1, marks: []}; try { await bkTx('readwrite', s => s.put(b)); } catch (er) { toast('Não consegui guardar o arquivo (espaço do navegador).', 5000); return; } bkCur = b.id; await bkLoad(); bkRender(); toast('📖 Livro guardado'); }
+});
+document.addEventListener('click', e => { if (e.target.closest('[data-v17="book"]')) bkOpen(); });
 document.addEventListener('click', e => { if (e.target.closest('[data-chars]')) { try { closePop(); } catch (er) {} openChars(); } });
-libLoad(); srchLoad();
+libLoad(); srchLoad(); campLobby();
 applyTheme();
 })();
 </script>
