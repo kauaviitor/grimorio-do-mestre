@@ -1356,6 +1356,267 @@ body:not(.isHost) #layoutBtn{display:none}
 .cePrev .eyes{position:absolute;left:50%;top:38%;width:80%;transform:translateX(-50%)}
 .cePrev .eyes svg{width:100%;height:auto;overflow:visible;display:block}
 @media (prefers-reduced-motion:reduce){.fig .L,.eye,.eG,#cutOv .cEl i{animation-duration:30s!important}}
+/* ===== v13 ===== */
+/* barras de vida nas câmeras */
+.tile .tBars{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:2px;z-index:2;pointer-events:none}
+.tile .tBars i{display:block;height:4px;background:#0009;position:relative}
+.tile .tBars i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.tile .tBars .v::after{background:linear-gradient(90deg,#b0101a,#ff3b3b);box-shadow:0 0 8px #ff2a2a}
+.tile .tBars .e::after{background:linear-gradient(90deg,#1546b8,#3b8bff);box-shadow:0 0 8px #3b8bff}
+.tile .nm{bottom:12px}
+/* personagens */
+.chList{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.chC{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--p2)}
+.chC.on{border-color:var(--red2);box-shadow:0 0 0 1px var(--red2),0 0 22px color-mix(in srgb,var(--red2) 30%,transparent)}
+.chC .pic{width:52px;height:52px;flex:none;border-radius:50%;background:var(--c,var(--p3)) center/cover;display:grid;place-items:center;font:400 24px 'Bebas Neue',Impact,sans-serif;color:#fff;border:2px solid var(--line)}
+.chC.on .pic{border-color:var(--red2)}
+.chC .nm{flex:1;min-width:0;display:flex;flex-direction:column}
+.chC .nm b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chC .nm small{color:var(--mut);font-size:12px}
+.chC .nm em{font-style:normal;font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--red2);margin-top:2px}
+.chC .ac{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:560px){.chC{flex-wrap:wrap}.chC .ac{width:100%;justify-content:flex-start}}
+/* combos na ficha */
+.cbList{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.cbRow{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) auto auto;gap:6px;align-items:center}
+.cbRow .in{padding:7px 9px;font-size:13.5px}
+/* painel de dados da ficha */
+.fdBox{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+.fdHead{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut)}
+.fdHead b{color:var(--ink)}
+.fdEd{margin-left:auto;border:1px solid var(--line);background:var(--p2);border-radius:8px;padding:2px 7px;cursor:pointer;color:var(--ink)}
+.fdAttr{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.fdAttr button{display:flex;flex-direction:column;align-items:center;padding:5px 0 3px;border-radius:10px;border:1px solid var(--line);background:var(--p2);color:var(--ink);cursor:pointer;transition:border-color .15s,transform .1s}
+.fdAttr button:hover{border-color:var(--red2);transform:translateY(-1px)}
+.fdAttr b{font:400 20px/1 'Bebas Neue',Impact,sans-serif}
+.fdAttr small{font-size:9.5px;font-weight:900;letter-spacing:.1em;color:var(--mut)}
+.fdPer,.fdCmb{display:flex;flex-wrap:wrap;gap:4px}
+.fdPer button,.fdCmb button{border:1px solid var(--line);background:var(--p2);color:var(--ink);border-radius:999px;padding:3px 9px;font-size:12px;cursor:pointer}
+.fdPer button:hover,.fdCmb button:hover{border-color:var(--red2)}
+.fdPer b{color:var(--mut);font-weight:700}
+.fdPer select{flex:1;min-width:120px;padding:3px 8px;font-size:12px;border-radius:999px;height:auto}
+.fdCmb button{background:color-mix(in srgb,var(--red) 22%,var(--p2));border-color:color-mix(in srgb,var(--red2) 55%,var(--line));font-weight:700}
+.fdNo{font-size:12.5px;color:var(--mut);display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+/* layouts em anel */
+body.lay-ring .mainA{position:relative}
+body.lay-ring #tiles{position:absolute;inset:0;display:block;overflow:visible;pointer-events:none;z-index:6;padding:0}
+body.lay-ring #tiles .tile{position:absolute;pointer-events:auto;transition:left .45s cubic-bezier(.3,.8,.3,1),top .45s cubic-bezier(.3,.8,.3,1),width .45s,transform .35s cubic-bezier(.3,1.4,.4,1),box-shadow .35s,border-color .3s;transform:rotate(var(--rot,0deg))}
+body.lay-ring #stageW{position:absolute;left:calc(var(--tw,160px) + 30px);right:calc(var(--tw,160px) + 30px);top:12px;bottom:12px;display:flex;align-items:center;justify-content:center;margin:0}
+body.lay-ring #stageW #stage{max-width:100%;max-height:100%}
+body.lay-ring #live{display:none!important}
+body.lay-invest #stageW{visibility:hidden}
+body.lay-invest #tiles .tile{border:7px solid #f3eee2;border-bottom-width:22px;border-radius:3px;box-shadow:0 10px 26px #000a}
+body.lay-invest #tiles .tile .nm{bottom:-19px;left:4px}
+body.lay-invest #tiles .tile .nm span{background:none;color:#2a2418;font-family:'Special Elite',monospace;padding:0}
+body.lay-invest #tiles .tile .tBars{bottom:-1px}
+.tile.hl{border-color:var(--red2)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--red2) 60%,transparent),0 0 46px color-mix(in srgb,var(--red2) 55%,transparent)!important;z-index:4}
+.tile.hl::before{content:"⚔️ TURNO";position:absolute;top:0;right:0;z-index:5;font:800 8.5px Inter,sans-serif;letter-spacing:.14em;color:#fff;background:var(--red2);padding:3px 8px;border-radius:0 0 0 8px;white-space:nowrap}
+body.lay-invest .tile.hl::before{content:"🔎 AGINDO"}
+body:not(.lay-combat) .tile.hl::before{content:"⭐ DESTAQUE"}
+body.lay-combat .tile.hl::before{content:"⚔️ TURNO"}
+body.lay-ring #tiles .tile.hl.rL{transform:scale(1.32) rotate(0deg);transform-origin:0 50%}
+body.lay-ring #tiles .tile.hl.rR{transform:scale(1.32) rotate(0deg);transform-origin:100% 50%}
+.lf.hl{outline:3px solid var(--red2);outline-offset:-3px;box-shadow:0 0 40px color-mix(in srgb,var(--red2) 50%,transparent)}
+@media(max-width:759px){body.lay-ring #stageW{position:relative;left:auto;right:auto;top:auto;bottom:auto}body.lay-ring #tiles{position:relative;display:grid;pointer-events:auto}body.lay-ring #tiles .tile{position:relative;transform:none!important}}
+/* turno */
+#cbBan{position:absolute;left:50%;top:14px;z-index:9;display:flex;align-items:center;gap:10px;padding:6px 16px 6px 8px;border-radius:999px;background:#0b0b0fe6;border:1px solid color-mix(in srgb,var(--red2) 60%,transparent);box-shadow:0 8px 30px #000a,0 0 30px color-mix(in srgb,var(--red2) 30%,transparent);transform:translate(-50%,-140%);opacity:0;transition:transform .45s cubic-bezier(.3,1.4,.4,1),opacity .3s;pointer-events:none}
+#cbBan.on{transform:translate(-50%,0);opacity:1}
+#cbBan small{font:800 10px Inter,sans-serif;letter-spacing:.16em;color:var(--mut)}
+#cbBan .pic{width:30px;height:30px;border-radius:50%;background:var(--p3) center/cover;display:grid;place-items:center;font-size:14px;border:2px solid var(--red2)}
+#cbBan b{font:400 22px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;color:#fff}
+#cbBan i{font-style:normal;font-size:11.5px;color:var(--mut)}
+#cbBar{position:absolute;left:50%;bottom:48px;transform:translateX(-50%);z-index:9;width:min(760px,calc(100% - 2*var(--tw,0px) - 80px));min-width:300px;background:#0d0d12f0;border:1px solid var(--line);border-radius:16px;padding:8px 10px;box-shadow:0 14px 40px #000c;backdrop-filter:blur(8px)}
+#cbBar.min .cbL,#cbBar.min .cbB{display:none}
+#cbBar .cbT{display:flex;align-items:center;justify-content:space-between;font-size:12.5px}
+#cbBar .cbT button{border:0;background:none;color:var(--mut);cursor:pointer;font-size:14px}
+#cbBar.min .cbT button{transform:rotate(180deg)}
+#cbBar .cbL{display:flex;gap:5px;overflow-x:auto;padding:6px 0;scrollbar-width:thin}
+#cbBar .cbC{display:flex;flex:none;border:1px solid var(--line);border-radius:999px;background:var(--p2);overflow:hidden}
+#cbBar .cbC button{border:0;background:none;color:var(--ink);padding:4px 10px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+#cbBar .cbC small{color:var(--mut);font-weight:800;margin-left:3px}
+#cbBar .cbC .x{padding:4px 8px 4px 0;color:var(--mut)}
+#cbBar .cbC.foe{border-style:dashed}
+#cbBar .cbC.on{border-color:var(--red2);background:color-mix(in srgb,var(--red) 35%,var(--p2));box-shadow:0 0 14px color-mix(in srgb,var(--red2) 45%,transparent)}
+#cbBar .cbB{display:flex;gap:6px;flex-wrap:wrap}
+#lyOffer{position:fixed;left:50%;bottom:28px;z-index:250;transform:translate(-50%,140%);transition:transform .45s cubic-bezier(.3,1.4,.4,1);background:#0d0d12f5;border:1px solid var(--red2);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;box-shadow:0 20px 50px #000c,0 0 40px color-mix(in srgb,var(--red2) 30%,transparent);min-width:300px}
+#lyOffer.on{transform:translate(-50%,0)}
+#lyOffer small{color:var(--mut)}
+#lyOffer>div{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+/* relógio de pressão */
+#clkW{position:absolute;left:16px;top:12px;z-index:9;display:none;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:999px;background:#0b0b0fe6;border:1px solid var(--line);box-shadow:0 8px 26px #000a;pointer-events:none}
+#clkW.on{display:flex}
+#clkW svg{width:44px;height:44px}
+#clkW path{fill:#ffffff14;stroke:#000;stroke-width:.6;transition:fill .4s}
+#clkW path.f{fill:#e5484d;filter:drop-shadow(0 0 3px #ff2a2a)}
+#clkW path.new{animation:ckNew .9s ease-out}
+#clkW .rim{fill:none;stroke:#ffffff40;stroke-width:1.2}
+#clkW b{display:block;font:400 18px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;color:#fff}
+#clkW small{font-size:11px;color:var(--mut);font-weight:700}
+#clkW.hot{border-color:#e5484d;animation:ckHot 1.2s ease-in-out infinite}
+#clkW.full{border-color:#ff2a2a;background:#3a0004f0}
+#clkW.boom{animation:ckBoom 1.2s ease-out}
+@keyframes ckNew{0%{fill:#fff}100%{fill:#e5484d}}
+@keyframes ckHot{50%{box-shadow:0 8px 26px #000a,0 0 26px #ff2a2a88}}
+@keyframes ckBoom{0%{transform:scale(1)}15%{transform:scale(1.35)}30%{transform:scale(.95)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+body.lay-ring #clkW{left:calc(var(--tw,0px) + 44px)}
+/* quadro de pistas */
+#board{position:absolute;left:calc(var(--tw,160px) + 30px);right:calc(var(--tw,160px) + 30px);top:12px;bottom:12px;z-index:5;display:none;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 10px #5a3a1c,inset 0 0 0 12px #2a1a0a,0 20px 50px #000c}
+#board.on{display:block}
+#board .bdCork{position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,#0000 0 2px,#0000 3px),repeating-radial-gradient(circle at 30% 40%,#b98a52 0 1px,#a87a45 1px 3px),linear-gradient(135deg,#c4955c,#9a6a36);filter:saturate(.85)}
+#board .bdCork::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 40%,#0007)}
+#board .bdStr{position:absolute;inset:0;pointer-events:none;z-index:2}
+#board .bdStr path{fill:none;stroke:#c4141c;stroke-width:2.6;filter:drop-shadow(0 2px 2px #0008)}
+#board .pin{position:absolute;z-index:3;transform:translate(-50%,-50%) rotate(var(--r));width:clamp(90px,13%,150px);background:#f6f1e4;padding:6px 6px 20px;box-shadow:0 8px 18px #0009;cursor:pointer;transition:transform .2s,box-shadow .2s;touch-action:none;user-select:none}
+#board .pin:hover{transform:translate(-50%,-50%) rotate(0) scale(1.06);z-index:4}
+#board .pin.drag{transform:translate(-50%,-52%) rotate(0) scale(1.1);box-shadow:0 20px 34px #000b;z-index:6;transition:none}
+#board .pin.lk{outline:3px solid #ff3b3b;outline-offset:3px}
+#board .pin img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;pointer-events:none}
+#board .pin .ph{display:grid;place-items:center;aspect-ratio:4/3;font-size:32px;background:#ddd}
+#board .pin b{position:absolute;left:6px;right:6px;bottom:3px;font:400 11px/1.15 'Special Elite',monospace;color:#2a2418;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#board .tack{position:absolute;left:50%;top:-7px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff8a8a,#c4141c 60%,#6a0a0e);box-shadow:0 3px 4px #0008;z-index:2}
+#board .pa{position:absolute;right:-6px;top:-10px;display:none;gap:2px}
+#board .pin:hover .pa{display:flex}
+#board .pa button{width:26px;height:26px;border-radius:50%;border:0;background:#111e;color:#fff;font-size:12px;cursor:pointer;box-shadow:0 2px 6px #0008}
+#board .bdTools{position:absolute;left:14px;bottom:14px;z-index:7;display:flex;gap:6px}
+#board .bdEmpty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;font:400 18px 'Special Elite',monospace;color:#2a1a0aee;z-index:2}
+#board .bdTip{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:7;background:#000d;color:#fff;padding:6px 14px;border-radius:999px;font-size:12.5px}
+.bpList{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:10px}
+.bpI{position:relative;border:2px solid var(--line);border-radius:10px;background:var(--p2);padding:4px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;gap:4px}
+.bpI img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px}
+.bpI b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bpI i{position:absolute;right:6px;top:6px;width:22px;height:22px;border-radius:50%;background:#000a;display:grid;place-items:center;font-style:normal;font-weight:900;color:transparent}
+.bpI.on{border-color:var(--red2)}.bpI.on i{background:var(--red2);color:#fff}
+/* cena de busca */
+#srOv{position:fixed;inset:0;z-index:80;background:#020203f5;display:flex;flex-direction:column;animation:srIn .45s ease both}
+#srOv.min{display:none}
+#srOv.out{animation:srOut .4s ease both}
+@keyframes srIn{from{opacity:0}}@keyframes srOut{to{opacity:0}}
+.srTop{display:flex;align-items:center;gap:12px;padding:12px 16px;flex-wrap:wrap}
+.srTop b{font:400 24px 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;color:#fff}
+.srTop small{color:var(--mut);font-size:12.5px}
+.srStage{flex:1;min-height:0;display:grid;place-items:center;padding:0 16px 16px}
+.srImg{position:relative;max-width:100%;max-height:100%;--x:-50%;--y:-50%;cursor:none;touch-action:none;user-select:none;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px #000}
+.srImg.host{cursor:default}
+.srImg img{display:block;max-width:calc(100vw - 32px);max-height:calc(100vh - 110px);pointer-events:none}
+.srImg .dim{filter:brightness(.07) saturate(.3)}
+.srImg.host .dim{filter:brightness(.55)}
+.srImg .lit{position:absolute;inset:0;-webkit-mask-image:radial-gradient(circle 16vmin at var(--x) var(--y),#000 35%,transparent 100%);mask-image:radial-gradient(circle 16vmin at var(--x) var(--y),#000 35%,transparent 100%)}
+.srImg .lit img{width:100%;height:100%;filter:sepia(.25) brightness(1.08)}
+.srImg.host .lit{display:none}
+.srImg .beam{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle 17vmin at var(--x) var(--y),#fff6d61a,#0000 70%);mix-blend-mode:screen}
+.srImg.host .beam{display:none}
+.sp{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:0;border-radius:50%;background:none;cursor:pointer;opacity:var(--o,0);transition:opacity .2s;--o:0;padding:0}
+.sp i{position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle,#fff 0 20%,#ffe9a8aa 30%,transparent 70%);animation:spGl 1.4s ease-in-out infinite;box-shadow:0 0 18px #ffe9a8}
+@keyframes spGl{50%{transform:scale(1.5);opacity:.6}}
+.sp.wait{opacity:1;--o:1}.sp.wait i{animation-duration:.4s}
+.sp.ok,.sp.no{opacity:1;width:auto;height:auto;border-radius:999px;cursor:default}
+.sp.ok span,.sp.no span{display:block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.sp.ok span{background:#1a7a3ae6;color:#fff;box-shadow:0 0 16px #2bd66a}
+.sp.no span{background:#000c;color:var(--mut)}
+.srImg.host .sp{opacity:1;width:auto;height:auto;display:flex;align-items:center;gap:6px;border-radius:999px;background:#000d;padding:3px 10px 3px 3px;border:2px solid #ffd75e;color:#fff}
+.srImg.host .sp b{width:22px;height:22px;border-radius:50%;background:#ffd75e;color:#000;display:grid;place-items:center;font-size:12px}
+.srImg.host .sp small{font-size:11px;white-space:nowrap}
+.srLog{max-height:22vh;overflow:auto;margin:0 16px 14px;padding:8px 12px;border-radius:12px;background:#0d0d12;border:1px solid var(--line);font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.srLog .ok{color:#7dffa8}.srLog .no{color:var(--mut)}
+.srLog button{margin-left:6px}
+#srFab{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);z-index:70;border:1px solid #ffd75e;background:#0d0d12f0;color:#ffd75e;border-radius:999px;padding:9px 18px;font-size:13px;cursor:pointer;box-shadow:0 10px 30px #000a,0 0 22px #ffd75e44;animation:spGl2 2s ease-in-out infinite}
+@keyframes spGl2{50%{box-shadow:0 10px 30px #000a,0 0 34px #ffd75e88}}
+.srEd .srBox{position:relative;margin-top:6px;border-radius:10px;overflow:hidden;cursor:crosshair;touch-action:none;user-select:none}
+.srEd .srBox img{display:block;width:100%;pointer-events:none}
+.srM{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:#ffd75e;color:#000;font-weight:900;font-size:13px;display:grid;place-items:center;box-shadow:0 0 0 3px #000a,0 0 16px #ffd75e;cursor:grab}
+.srM.on{background:#ff3b3b;color:#fff;box-shadow:0 0 0 3px #000a,0 0 16px #ff3b3b}
+.srPts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.srP{display:grid;grid-template-columns:28px minmax(0,1.3fr) minmax(0,1fr) 78px auto;gap:6px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:12px}
+.srP.on{border-color:var(--red2)}
+.srP .no{width:26px;height:26px;border-radius:50%;background:#ffd75e;color:#000;font-weight:900;display:grid;place-items:center;font-size:12px}
+.srP .in{padding:6px 8px;font-size:13px}
+.srP .dt{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:800;color:var(--mut)}
+.srP .dt .in{width:52px}
+.srP select[data-spf="doc"]{grid-column:2/4}
+.srP .wide2{grid-column:2/5}
+.srNow{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #ffd75e;border-radius:12px;margin-bottom:8px;font-size:13px;flex-wrap:wrap}
+.srTxt{font:400 17px/1.5 'Special Elite',monospace;white-space:pre-wrap;padding:12px;background:#f3eee2;color:#2a2418;border-radius:6px}
+.ckEd{display:flex;flex-direction:column}
+/* cutscene de investigação */
+#cutOv.c-investigacao .cBg{filter:brightness(.55) saturate(.6)}
+#cutOv .ivDark{position:absolute;inset:0;z-index:2;background:#000;-webkit-mask-image:radial-gradient(circle 26vmin at var(--lx,20%) var(--ly,40%),transparent 0,#000 100%);mask-image:radial-gradient(circle 26vmin at var(--lx,20%) var(--ly,40%),transparent 0,#000 100%);opacity:.96;animation:ivSweep 8s ease-in-out .3s both}
+#cutOv .ivBeam{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle 26vmin at var(--lx,20%) var(--ly,40%),#fff4d01f,transparent 70%);mix-blend-mode:screen;animation:ivSweep 8s ease-in-out .3s both}
+@property --lx{syntax:'<percentage>';inherits:true;initial-value:20%}
+@property --ly{syntax:'<percentage>';inherits:true;initial-value:40%}
+@keyframes ivSweep{0%{--lx:12%;--ly:30%}22%{--lx:72%;--ly:22%}42%{--lx:26%;--ly:70%}60%{--lx:78%;--ly:66%}78%{--lx:50%;--ly:42%}100%{--lx:50%;--ly:46%}}
+#cutOv .ivCards{position:absolute;inset:0;z-index:3}
+#cutOv .ivCard{position:absolute;width:13vmin;aspect-ratio:4/5;transform:translate(-50%,-50%) rotate(var(--r)) scale(.6);opacity:0;background:linear-gradient(#0000 78%,#f3eee2 78%),linear-gradient(135deg,#3a3a3a,#141414);border:5px solid #f3eee2;box-shadow:0 10px 20px #000a;animation:ivCard .6s cubic-bezier(.3,1.5,.4,1) var(--d) forwards}
+#cutOv .ivCard::after{content:"";position:absolute;left:50%;top:-6px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#c4141c;box-shadow:0 2px 3px #000a}
+@keyframes ivCard{to{opacity:1;transform:translate(-50%,-50%) rotate(var(--r)) scale(1)}}
+#cutOv .ivStr{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+#cutOv .ivStr path{fill:none;stroke:#d0161e;stroke-width:.35;stroke-dasharray:80;stroke-dashoffset:80;filter:drop-shadow(0 .3px .3px #000);animation:ivStr 1.2s ease-out forwards}
+#cutOv .ivStr path:nth-child(1){animation-delay:2.4s}#cutOv .ivStr path:nth-child(2){animation-delay:2.8s}#cutOv .ivStr path:nth-child(3){animation-delay:3.2s}#cutOv .ivStr path:nth-child(4){animation-delay:3.6s}
+@keyframes ivStr{to{stroke-dashoffset:0}}
+#cutOv .ivPapers{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+#cutOv .ivPapers i{position:absolute;top:-12%;width:5vmin;aspect-ratio:3/4;background:#efe8d6;opacity:.85;box-shadow:0 4px 8px #0008;animation:ivPaper 5.5s cubic-bezier(.4,.1,.6,1) var(--d) both}
+@keyframes ivPaper{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(var(--x),120vh) rotate(var(--r))}}
+#cutOv .ivTitle{position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;opacity:0;transition:opacity .6s}
+#cutOv.s2 .ivTitle{opacity:1}
+#cutOv .ivMag{font-size:clamp(40px,7vmin,80px);filter:drop-shadow(0 0 20px var(--mc));animation:ivMag 3s ease-in-out infinite}
+@keyframes ivMag{50%{transform:translate(8px,-6px) rotate(-8deg)}}
+#cutOv .ivTitle h1{margin:0;min-height:1.1em;font:400 clamp(34px,7vw,92px)/1 'Special Elite',monospace;color:#f3eee2;letter-spacing:.08em;text-shadow:0 0 30px #000,0 0 14px var(--mc)}
+#cutOv .ivTitle small{font:400 clamp(14px,1.8vw,22px) 'Special Elite',monospace;color:#d8d0bc;opacity:0;transition:opacity .8s .3s}
+#cutOv.s3 .ivTitle small{opacity:1}
+#cutOv .ivStamp{position:absolute;left:50%;top:50%;font:400 clamp(30px,5vw,64px)/1 'Bebas Neue',Impact,sans-serif;color:#c4141c;border:5px solid #c4141c;padding:.08em .35em 0;letter-spacing:.08em;transform:translate(-50%,-50%) rotate(-12deg) scale(3);opacity:0;mix-blend-mode:screen}
+#cutOv.s3 .ivStamp{animation:ivStamp .35s cubic-bezier(.5,0,.7,1.6) forwards;top:calc(50% + clamp(60px,9vw,120px))}
+@keyframes ivStamp{to{transform:translate(-50%,-50%) rotate(-12deg) scale(1);opacity:.85}}
+/* carta e pasta interativas */
+.anHint{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);z-index:20;padding:9px 18px;border-radius:999px;background:#000d;border:1px solid #ffffff2a;color:#fff;font-size:14px;white-space:nowrap;box-shadow:0 10px 30px #000a;pointer-events:none}
+.anHint.pop{animation:anHint .5s cubic-bezier(.3,1.5,.4,1)}
+@keyframes anHint{from{transform:translate(-50%,20px);opacity:0}}
+.anSkip{position:absolute;right:18px;bottom:18px;z-index:21;border:1px solid #ffffff33;background:#0009;color:#fff;border-radius:999px;padding:7px 14px;font-size:12.5px;cursor:pointer}
+.anEnv.iact,.anFolder.iact{touch-action:none}
+.hot{cursor:pointer;animation:hotP 1.3s ease-in-out infinite}
+@keyframes hotP{50%{filter:drop-shadow(0 0 14px #ffe9a8) brightness(1.12)}}
+.envSeal.hot{animation:hotS 1.1s ease-in-out infinite}
+@keyframes hotS{50%{transform:scale(1.12);box-shadow:0 0 0 6px #ffffff22,0 0 30px #ff6a5a}}
+.anEnv.sb .envSeal{pointer-events:none;transform:scale(1.5);opacity:0;transition:transform .3s,opacity .3s}
+.envFlap.hot{cursor:grab;transform:perspective(900px) rotateX(calc(var(--pull,0px) * -1.4deg))}
+.anEnv .letter.hot{cursor:grab;transform:translate(-50%,calc(-50% + var(--pull,0px)))}
+.anEnv.s2 .letter.hot{transform:translate(-50%,calc(-50% - 36% + var(--pull,0px)))}
+.anEnv.s3 .letter.hot{transform:translate(-50%,-50%)}
+.wax{position:absolute;left:50%;top:58%;width:10px;height:8px;background:var(--c);border-radius:40% 60% 50% 40%;z-index:30;animation:wax 1s cubic-bezier(.2,.7,.4,1) forwards;pointer-events:none}
+.anFolder .wax{top:50%;left:88%}
+@keyframes wax{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+.fStrap{position:absolute;right:0;top:50%;width:26%;height:16px;margin-top:-8px;background:linear-gradient(#5a1010,#3a0808);box-shadow:0 2px 4px #0006;transition:opacity .3s,transform .4s}
+.fSeal{position:absolute;right:6%;top:50%;width:62px;height:62px;margin-top:-31px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#c42a2a,#7a0d12 70%);color:#ffcfc8;font:800 11px Inter,sans-serif;letter-spacing:.1em;box-shadow:0 4px 10px #0008,inset 0 0 0 4px #9a1a1a;z-index:2}
+.fSeal.hot{animation:hotS 1.1s ease-in-out infinite}
+.anFolder.sb .fSeal{pointer-events:none;transform:scale(1.5);opacity:0;transition:transform .3s,opacity .3s}
+.anFolder.sb .fStrap{opacity:0;transform:translateX(30px)}
+.fCover.hot{cursor:grab;transform:rotateY(calc(var(--pull,0px) * .35deg))}
+/* opções da luz UV */
+#docView .dvBeam,#docView .bkBeam{background:radial-gradient(circle calc(var(--r,120px) * var(--uvk,1)) at var(--x,50%) var(--y,40%),var(--uvb1,#a46bff66),var(--uvb2,#6a2cff26) 55%,transparent 100%)}
+#docView .dvLit{-webkit-mask-image:radial-gradient(circle calc(var(--r,120px) * var(--uvk,1)) at var(--x,50%) var(--y,40%),#000 50%,transparent 100%);mask-image:radial-gradient(circle calc(var(--r,120px) * var(--uvk,1)) at var(--x,50%) var(--y,40%),#000 50%,transparent 100%)}
+#docView .dvLit>img:first-child{filter:brightness(.42) sepia(1) hue-rotate(var(--uvh,215deg)) saturate(2.2) contrast(1.15)}
+#docView .dvUvTx,#docView .bkUv{color:var(--ink,#e2ff6e);text-shadow:0 0 6px var(--ink2,#c8ff3a),0 0 18px var(--ink3,#7dff1e),0 0 38px var(--ink3,#39ff14)}
+#docView.uv.uvFl .dvBeam,#docView.uv.uvFl .dvLit,#docView.uv.uvFl .bkBeam,#docView.uv.uvFl .bkUvW{animation:uvFl 2.6s steps(1) infinite}
+@keyframes uvFl{0%,100%{opacity:1}12%{opacity:.25}13%{opacity:1}47%{opacity:.6}48%{opacity:1}71%{opacity:.1}73%{opacity:1}74%{opacity:.4}75%{opacity:1}}
+.uvCfg{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:12px}
+.uvCfg>div{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.uvCfg span{font-size:12px;color:var(--mut);min-width:110px}
+.uvCfg [data-uvb],.uvCfg [data-uvi]{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:var(--c);box-shadow:0 0 10px var(--c);cursor:pointer}
+.uvCfg .on{border-color:#fff;outline:2px solid var(--c);outline-offset:2px}
+.uvCfg select{width:auto}
+/* desenhos UV */
+.uvSt{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.uvStL{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.uvStL span{font-size:12px;color:var(--mut);margin-right:4px}
+.uvStL button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:#07050c;color:#c8ff3a;cursor:pointer;padding:5px;font:700 13px 'Special Elite',monospace}
+.uvStL button:hover{border-color:#c8ff3a;box-shadow:0 0 10px #c8ff3a55}
+.uvStL svg{width:100%;height:100%}
+.uvStC{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px;border:1px solid var(--line);border-radius:10px}
+.uvStC label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut)}
+.uvStC input[type=range]{width:110px}
+.uvStC .in{width:160px}
+.uvdBox{position:relative}
+.uvStamp{position:absolute;z-index:5;aspect-ratio:1;cursor:move;touch-action:none;display:grid;place-items:center;outline:1px dashed #ffffff66}
+.uvStamp svg{width:100%;height:100%;pointer-events:none}
+.uvStamp span{font:400 clamp(14px,3vw,30px) 'Special Elite',monospace;white-space:nowrap;pointer-events:none}
 </style>
 </head>
 <body>
@@ -2561,7 +2822,7 @@ function startHost() {
       if (fdNames.has(cleanName(md.name).toLowerCase())) { roster.get(id).fd = true; try { conn.send({t: 'forcedeaf', on: true}); } catch (e) {} }
       if (uvOwners.has(cleanName(md.name).toLowerCase())) { roster.get(id).uv = true; try { conn.send({t: 'item', k: 'uv', on: true, quiet: true}); } catch (e) {} }
       refreshTimerState();
-      conn.send({t: 'hello', now: Date.now(), state, roster: [...roster.values()], chat: chat.slice(-80), chars, reveal: curReveal});
+      conn.send({t: 'hello', now: Date.now(), state, roster: [...roster.values()], chat: chat.slice(-80), chars, reveal: curReveal}); v13Hello(conn);
       if (roomImg) conn.send({t: 'roomimg', img: roomImg});
       callStage(id); sys(cleanName(md.name) + ' entrou na sala'); broadcastRoster(); syncAV();
     });
@@ -2576,7 +2837,7 @@ function dropPlayer(id) {
 }
 function sendAll(m) { conns.forEach(c => { try { if (c.open) c.send(m); } catch (e) {} }); }
 function broadcastRoster() { if (me.id) roster.set(me.id, {...me}); sendAll({t: 'roster', roster: [...roster.values()]}); renderAll(); }
-function pushState() { refreshTimerState(); sendAll({t: 'state', state, now: Date.now()}); }
+function pushState() { try { v13State(); } catch (e) {} refreshTimerState(); sendAll({t: 'state', state, now: Date.now()}); }
 function saveRoom() { lsSet('mesa-room', {theme: state.theme, live: state.live, img: roomImg, uv: !!state.uv}); }
 function stageVideoTrack() { if (screenStream) return screenStream.getVideoTracks()[0]; if (!stagePh || stagePh.readyState !== 'live') { const c = document.createElement('canvas'); c.width = 320; c.height = 180; const g = c.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, 320, 180); setInterval(() => { g.fillStyle = '#000'; g.fillRect(0, 0, 320, 180); }, 1000); stagePh = c.captureStream(1).getVideoTracks()[0]; } return stagePh; }
 function callStage(id) {
@@ -2595,7 +2856,8 @@ function onHostData(conn, d) {
   if (d.t === 'chat' && typeof d.text === 'string') addChat({k: 'chat', from: name, pid: id, cn, text: d.text.slice(0, 600)}, true);
   if (d.t === 'roll' && d.r) addChat({k: 'roll', from: name, pid: id, cn, r: sanitizeRoll(d.r)}, true);
   if (d.t === 'status' && p) { p.mic = p.fm ? false : !!d.mic; p.cam = !!d.cam; p.deaf = !!d.deaf; broadcastRoster(); }
-  if (d.t === 'stats' && p) { const st = sanSt(d.s); applySt(id, st); sendAll({t: 'stats', id, s: st}); }
+  v13Host(id, d, p);
+  if (d.t === 'stats' && p && eqOf(id)) { const st = sanSt(d.s); applySt(id, st); sendAll({t: 'stats', id, s: st}); }
   if (d.t === 'docreq' && p && d.id) docReqShow(id, String(d.id));
   if (d.t === 'recall') callStage(id);
   if (d.t === 'mych' && p) { chars[id] = sanCh(d.ch); broadcastChars(); }
@@ -2667,7 +2929,8 @@ function onPlayerData(d) {
   if (d.t === 'roster') { setRoster(d.roster); renderAll(); syncAV(); }
   if (d.t === 'state') { state = normState(d.state); onRoomState(); renderStage(); }
   if (d.t === 'chars') { chars = {}; Object.entries(d.chars || {}).forEach(([k, v]) => { chars[k] = sanCh(v); }); renderTiles(); }
-  if (d.t === 'yourch') { Object.assign(myCh, sanCh(d.ch)); lsSet('mesa-ch', myCh); renderTiles(); renderSide(); }
+  v13Msg(d);
+  if (d.t === 'yourch') { Object.assign(myCh, sanCh(Object.assign({eq: myCh.eq}, d.ch))); lsSet('mesa-ch', myCh); libSave(); renderTiles(); renderSide(); }
   if (d.t === 'roomimg') { roomImg = okImg(d.img) ? d.img : ''; applyTheme(); }
   if (d.t === 'reveal') { curReveal = d.r && okImg(d.r.img) ? {id: String(d.r.id || Date.now()), img: d.r.img, cap: String(d.r.cap || '').slice(0, 120)} : null; revealHidden = false; renderReveal(); }
   if (d.t === 'whisper' && typeof d.text === 'string') showWhisper(d.text.slice(0, 200));
@@ -2693,7 +2956,7 @@ function onPlayerData(d) {
   if (d.t === 'forcemute') { forcedMute = !!d.on; if (forcedMute) { if (me.mic) setMuted(true); toast('🔇 O Mestre silenciou seu microfone no chat de voz.', 4500); } else toast('🎙️ O Mestre liberou seu microfone. Aperte o microfone para falar.', 4500); pushStatus(); renderTiles(); renderControls(); }
 }
 let prevUv = null;
-function onRoomState() { renderCover(state.cover); applyTheme(); renderClima(); syncTimerFromState(); ytSync(); if (!isHost) { uvFabSync(); } if (state.layoutTs && state.layoutTs !== roomLayoutTs) { roomLayoutTs = state.layoutTs; if (state.layout) setLayout(state.layout); } if (!isHost && state.layout && state.layout !== layout) setLayout(state.layout); renderLive(); }
+function onRoomState() { try { v13State(); } catch (e) {} renderCover(state.cover); applyTheme(); renderClima(); syncTimerFromState(); ytSync(); if (!isHost) { uvFabSync(); } if (state.layoutTs && state.layoutTs !== roomLayoutTs) { roomLayoutTs = state.layoutTs; if (state.layout) setLayout(state.layout); } if (!isHost && state.layout && state.layout !== layout) setLayout(state.layout); renderLive(); }
 function setRoster(list) { roster.clear(); (list || []).forEach(p => { if (p && p.id) roster.set(p.id, {id: p.id, name: cleanName(p.name), role: p.role === 'mestre' ? 'mestre' : 'agente', mic: !!p.mic, cam: !!p.cam, deaf: !!p.deaf, fm: !!p.fm, uv: !!p.uv, fd: !!p.fd}); }); if (me.id) roster.set(me.id, {...me, fm: forcedMute, fd: forcedDeaf}); }
 function pushStatus() {
   if (me.id) roster.set(me.id, {...me});
@@ -2945,11 +3208,11 @@ const myCh = Object.assign({char: '', sub: '', handle: '', img: '', pv: 0, pvMax
 const stN = (v, hi) => clamp(Math.round(+v || 0), 0, hi);
 const sanSt = c => { c = c || {}; return {pv: stN(c.pv, 999), pvMax: stN(c.pvMax, 999), pe: stN(c.pe, 999), peMax: stN(c.peMax, 999)}; };
 const hasSt = c => !!(c && (c.pvMax || c.peMax || c.pv || c.pe));
-const sanCh = c => Object.assign({char: String((c && c.char) || '').slice(0, 30), sub: String((c && c.sub) || '').slice(0, 40), handle: String((c && c.handle) || '').slice(0, 30), img: okImg(c && c.img) ? c.img : '', fx: sanFx(c && c.fx)}, sanSt(c));
+const sanCh = c => Object.assign({char: String((c && c.char) || '').slice(0, 30), sub: String((c && c.sub) || '').slice(0, 40), handle: String((c && c.handle) || '').slice(0, 30), img: okImg(c && c.img) ? c.img : '', fx: sanFx(c && c.fx), eq: String((c && c.eq) || '').replace(/[^a-z0-9]/gi, '').slice(0, 16)}, (c && c.eq) ? sanSt(c) : {pv: 0, pvMax: 0, pe: 0, peMax: 0});
 const stOf = id => sanSt(id === me.id ? myCh : (chars[id] || {}));
 function applySt(id, st) {
   st = sanSt(st); const old = stOf(id);
-  if (id === me.id) { Object.assign(myCh, st); lsSet('mesa-ch', myCh); }
+  if (id === me.id) { Object.assign(myCh, st); lsSet('mesa-ch', myCh); libSave(); }
   if (id !== me.id || chars[id]) chars[id] = Object.assign(chars[id] || sanCh({}), st);
   renderLive(); renderTiles(); stPopSync(id);
   stFx(id, old.pvMax ? st.pv - old.pv : 0, old.peMax ? st.pe - old.pe : 0, old.pv > 0 && st.pv <= 0 && st.pvMax > 0);
@@ -2969,12 +3232,14 @@ function stFx(id, dpv, dpe, died) {
   if (died) docSnd('dying');
 }
 function setStats(id, patch) {
+  if (!eqOf(id)) { toast(id === me.id ? 'Equipe um personagem primeiro (🎭 Personagens).' : 'Esse agente não tem personagem equipado.'); return; }
   const st = sanSt(Object.assign(stOf(id), patch));
   if (isHost) { applySt(id, st); sendAll({t: 'stats', id, s: st}); }
   else if (id === me.id) { applySt(id, st); if (hostConn && hostConn.open) hostConn.send({t: 'stats', s: st}); }
 }
 function stEdHTML(id) {
   const st = stOf(id), isMe = id === me.id;
+  if (!eqOf(id)) return `<div class="stEd"><div class="hint" style="margin:0">${isMe ? 'Você ainda não tem personagem equipado, então não tem vida nem esforço.' : 'Este agente ainda não equipou um personagem.'}</div>${isMe ? '<button class="btn sm red wide" data-chars="1" style="margin-top:6px">🎭 Meus personagens</button>' : ''}</div>`;
   return `<div class="stEd" data-sid="${esc(id)}"><h5>${isMe ? 'Sua vida e esforço' : 'Vida e esforço'} <span style="text-transform:none;letter-spacing:0;font-weight:500">· vermelho = vida · azul = esforço</span></h5>
     <div class="sr r"><span class="sl" title="Vida"></span><button data-st="pv:-1" title="Tirar 1 de vida">−</button><input type="number" inputmode="numeric" min="0" max="999" data-sv="pv" value="${st.pv}" aria-label="PV atual"><span>/</span><input type="number" inputmode="numeric" min="0" max="999" data-sv="pvMax" value="${st.pvMax}" aria-label="PV máximo"><button data-st="pv:1" title="Curar 1">+</button><span class="q"><button data-st="pv:-5" title="Tirar 5">−5</button></span></div>
     <div class="sr b"><span class="sl" title="Esforço"></span><button data-st="pe:-1" title="Gastar 1">−</button><input type="number" inputmode="numeric" min="0" max="999" data-sv="pe" value="${st.pe}" aria-label="PE atual"><span>/</span><input type="number" inputmode="numeric" min="0" max="999" data-sv="peMax" value="${st.peMax}" aria-label="PE máximo"><button data-st="pe:1" title="Recuperar 1">+</button><span class="q"><button data-st="pe:-2" title="Gastar 2">−2</button></span></div>
@@ -2993,7 +3258,7 @@ function stEdWire(pop) {
 }
 function broadcastChars() { if (!isHost) return; sendAll({t: 'chars', chars}); renderLive(); renderTiles(); }
 function setMyChar(ch) {
-  Object.assign(myCh, sanCh(ch)); lsSet('mesa-ch', myCh);
+  Object.assign(myCh, sanCh(Object.assign({eq: myCh.eq}, ch))); lsSet('mesa-ch', myCh); libSave();
   if (isHost) { if (me.id) { chars[me.id] = {...myCh}; broadcastChars(); } }
   else if (hostConn && hostConn.open) hostConn.send({t: 'mych', ch: myCh});
   renderLive(); renderTiles(); renderSide();
@@ -3021,7 +3286,7 @@ function sanFx(f) {
   const bon = {}; ['pv', 'pe', 'san', 'def'].forEach(k => { bon[k] = fxN(f.bon && f.bon[k], -99, 99); });
   return {cls: FX_CLS[f.cls] ? f.cls : '', nex: FX_NEX.includes(+f.nex) ? +f.nex : 5, orig: fxTxt(f.orig, 40), trilha: fxTxt(f.trilha, 40), title: fxTxt(f.title, 40), prof: fxTxt(f.prof, 30), attr, per, bon,
     san: fxN(f.san, -1, 999, -1), pvM: fxN(f.pvM, 0, 999), peM: fxN(f.peM, 0, 999), sanM: fxN(f.sanM, 0, 999),
-    ataques: fxTxt(f.ataques, 1500), inv: fxTxt(f.inv, 1500), hab: fxTxt(f.hab, 3000), rit: fxTxt(f.rit, 3000), desc: fxTxt(f.desc, 3000), notas: fxTxt(f.notas, 2000)};
+    ataques: fxTxt(f.ataques, 1500), inv: fxTxt(f.inv, 1500), hab: fxTxt(f.hab, 3000), rit: fxTxt(f.rit, 3000), desc: fxTxt(f.desc, 3000), notas: fxTxt(f.notas, 2000), combos: fxCombosSan(f.combos)};
 }
 const fxDefault = () => sanFx({cls: '', nex: 5, attr: {AGI: 1, FOR: 1, INT: 1, PRE: 1, VIG: 1}});
 function fxCalc(f) {
@@ -3033,112 +3298,6 @@ function fxCalc(f) {
 }
 const fxAuto = f => [FX_CLS[f.cls] && FX_CLS[f.cls].n, f.cls ? 'NEX ' + f.nex + '%' : '', f.orig].filter(Boolean).join(' · ');
 let fxOpenSync = null;
-function openCharEditor(id) {
-  const isMe = !id || id === me.id, pid = isMe ? me.id : id, p = roster.get(pid) || me;
-  const src = sanCh(isMe ? myCh : (chars[id] || {}));
-  const ch = {char: src.char, handle: src.handle}, f = src.fx ? JSON.parse(JSON.stringify(src.fx)) : fxDefault();
-  let img = src.img, tab = 'per', saveT = 0, onlyTr = false, dirty = false;
-  const live = () => stOf(pid);
-  const commit = () => {
-    clearTimeout(saveT); saveT = 0; if (!dirty) return; dirty = false;
-    const k = fxCalc(f), st = live(), auto = !!(f.cls || f.pvM || f.peM);
-    let {pv, pvMax, pe, peMax} = st;
-    if (auto) {
-      pv = !st.pvMax || st.pv >= st.pvMax ? k.pvMax : Math.min(st.pv, k.pvMax); pe = !st.peMax || st.pe >= st.peMax ? k.peMax : Math.min(st.pe, k.peMax);
-      pvMax = k.pvMax; peMax = k.peMax;
-    }
-    const nc = sanCh({char: ch.char, handle: ch.handle, sub: f.title || fxAuto(f), img, fx: f, pv, pvMax, pe, peMax});
-    const sv = $('#fxSaved'); if (sv) { sv.textContent = 'salvo ✓'; sv.classList.remove('on'); }
-    if (isMe) setMyChar(nc);
-    else if (isHost) { chars[id] = nc; broadcastChars(); const c = conns.get(id); if (c && c.open) c.send({t: 'yourch', ch: nc}); }
-  };
-  const save = () => { dirty = true; clearTimeout(saveT); saveT = setTimeout(commit, 600); const s = $('#fxSaved'); if (s) { s.textContent = 'salvando…'; s.classList.add('on'); } };
-  const cname = () => ch.char || p.name;
-  const rollFx = (label, attr, bonus) => { const r = fxRollFor(pid, label, attr, bonus); toast('🎲 ' + label + ': ' + r.total); };
-  const perRow = ([k, n, at]) => { const [g, b] = f.per[k] || [0, 0]; return `<div class="fxP ${g ? 'tr' : ''}" data-pk="${k}"${onlyTr && !g && !b ? ' hidden' : ''}><button class="dr" data-pr="${k}" title="Rolar ${n}">🎲</button><span class="nm">${n}${k === 'profissao' && f.prof ? ` <em>(${esc(f.prof)})</em>` : ''}<small>${at}</small></span><select class="in" data-pg="${k}">${FX_GRAUS.map(([v, l]) => `<option value="${v}"${g === v ? ' selected' : ''}>${l}</option>`).join('')}</select><input class="in" data-pb="${k}" type="number" value="${b || ''}" placeholder="+0" title="Outros bônus"><b class="tot">${fxSig(g + b)}</b></div>`; };
-  const paneHTML = () => {
-    if (tab === 'per') return `<div class="fxPerTop"><label class="sw" style="margin:0"><input type="checkbox" id="fxOnlyTr" ${onlyTr ? 'checked' : ''}><i></i><span>Só as treinadas</span></label><label class="fxProf">Profissão <input class="in" data-fx="prof" maxlength="30" value="${esc(f.prof)}" placeholder="ex.: jornalista"></label></div>
-      <div class="fxPerHead"><span></span><span>Perícia</span><span>Grau</span><span>Outros</span><span>Total</span></div><div class="fxPer">${FX_PER.map(perRow).join('')}</div>
-      <div class="hint">O 🎲 rola o teste no chat: dados = atributo da perícia (atributo 0 rola 2 dados e fica com o menor), somando o total.</div>`;
-    if (tab === 'cmb') { const k = fxCalc(f); return `<label class="lab" style="margin-top:0">Ataques <small>(um por linha — ex.: Faca · Luta · 1d4 · 19/x2)</small></label><textarea class="in" data-fx="ataques" rows="5">${esc(f.ataques)}</textarea>
-      <label class="lab">Inventário <small>(carga máxima: ${k.carga} espaços)</small></label><textarea class="in" data-fx="inv" rows="7" placeholder="Lanterna (1)\nKit de medicina (1)\nPistola + 2 pentes (1)">${esc(f.inv)}</textarea>`; }
-    if (tab === 'hab') return `<label class="lab" style="margin-top:0">Habilidades e poderes <small>(de classe, trilha, origem…)</small></label><textarea class="in" data-fx="hab" rows="8">${esc(f.hab)}</textarea>
-      <label class="lab">Rituais</label><textarea class="in" data-fx="rit" rows="6" placeholder="Nome · círculo · elemento · custo · efeito">${esc(f.rit)}</textarea>`;
-    return `<label class="lab" style="margin-top:0">Aparência, personalidade e história</label><textarea class="in" data-fx="desc" rows="8">${esc(f.desc)}</textarea>
-      <label class="lab">Anotações</label><textarea class="in" data-fx="notas" rows="5" placeholder="Pistas, nomes, teorias…">${esc(f.notas)}</textarea>`;
-  };
-  const upd = () => {
-    const k = fxCalc(f), st = live(), san = f.san < 0 ? k.sanMax : Math.min(f.san, k.sanMax || f.san), auto = !!(f.cls || f.pvM || f.peM);
-    const pvM = auto ? k.pvMax : st.pvMax, peM = auto ? k.peMax : st.peMax;
-    const pvV = auto && (!st.pvMax || st.pv >= st.pvMax) ? pvM : Math.min(st.pv, pvM || st.pv), peV = auto && (!st.peMax || st.pe >= st.peMax) ? peM : Math.min(st.pe, peM || st.pe);
-    const set = (sel, v) => { const e = $(sel); if (e) e.textContent = v; };
-    set('#fxPv', pvV); set('#fxPvM', pvM); set('#fxPe', peV); set('#fxPeM', peM); set('#fxSan', san); set('#fxSanM', k.sanMax); set('#fxDef', k.def); set('#fxLim', k.lim);
-    [['pv', pvV, pvM], ['pe', peV, peM], ['san', san, k.sanMax]].forEach(([n, v, m]) => { const e = $('.fxBar.' + n + ' u'); if (e) e.style.width = (m ? clamp(v / m, 0, 1) * 100 : 0) + '%'; });
-    FX_ATTR.forEach(([a]) => set(`[data-at="${a}"] b`, f.attr[a]));
-    const c = FX_CLS[f.cls], nx = Object.keys(FX_MARCOS).map(Number).find(n => n > f.nex);
-    const h = $('#fxHint'); if (h) h.innerHTML = c ? `<b>${c.e} ${c.n}</b> · perícias treinadas iniciais: ${c.per}.${nx ? ` · Próximo marco: <b>NEX ${nx}%</b> — ${FX_MARCOS[nx]}.` : ''}` : 'Escolha a classe para calcular vida, esforço e sanidade sozinho. Em “Outra”, você preenche os máximos nos ajustes.';
-    const ad = $('#fxAdjMan'); if (ad) ad.hidden = !!f.cls;
-  };
-  const draw = () => {
-    openModal(`<div class="mhead"><h3>📋 Ficha ${isMe ? 'do meu agente' : 'de ' + esc(p.name)}</h3><span id="fxSaved" class="fxSaved">salvo</span><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody fxSheet">
-      <div class="fxTop"><button class="chPic fxPic" id="chPic" title="Trocar retrato"></button><div class="fxId">
-        <input class="in fxName" data-ch="char" maxlength="30" value="${esc(ch.char)}" placeholder="Nome do personagem">
-        <div class="fxGrid4">
-          <label>Classe<select class="in" id="fxCls"><option value="">Outra / manual</option>${Object.entries(FX_CLS).map(([kk, c]) => `<option value="${kk}"${f.cls === kk ? ' selected' : ''}>${c.e} ${c.n}</option>`).join('')}</select></label>
-          <label>NEX<select class="in" id="fxNex">${FX_NEX.map(n => `<option value="${n}"${f.nex === n ? ' selected' : ''}>${n}%</option>`).join('')}</select></label>
-          <label>Origem<input class="in" data-fx="orig" maxlength="40" value="${esc(f.orig)}" placeholder="ex.: Investigador"></label>
-          <label>Trilha<input class="in" data-fx="trilha" maxlength="40" value="${esc(f.trilha)}" placeholder="ex.: Conduíte"></label>
-        </div>
-        <div class="fxGrid2"><label>Título no quadro da live<input class="in" data-fx="title" maxlength="40" value="${esc(f.title)}" placeholder="automático: classe · NEX · origem"></label><label>Seu @ (live)<input class="in" data-ch="handle" maxlength="30" value="${esc(ch.handle)}" placeholder="@seunome"></label></div>
-      </div></div>
-      <div class="fxStats">
-        <div class="fxBar pv"><span class="l">Vida</span><div class="v"><button data-fs="pv:-1">−</button><b id="fxPv"></b><i>/<span id="fxPvM"></span></i><button data-fs="pv:1">+</button></div><div class="tr"><u></u></div></div>
-        <div class="fxBar pe"><span class="l">Esforço</span><div class="v"><button data-fs="pe:-1">−</button><b id="fxPe"></b><i>/<span id="fxPeM"></span></i><button data-fs="pe:1">+</button></div><div class="tr"><u></u></div></div>
-        <div class="fxBar san"><span class="l">Sanidade</span><div class="v"><button data-fs="san:-1">−</button><b id="fxSan"></b><i>/<span id="fxSanM"></span></i><button data-fs="san:1">+</button></div><div class="tr"><u></u></div></div>
-        <div class="fxMini"><div><b id="fxDef"></b><small>Defesa</small></div><div><b id="fxLim"></b><small>PE / turno</small></div><div><b>9m</b><small>Desloc.</small></div><button class="fxRec" id="fxRec" title="Vida, esforço e sanidade no máximo">♻️<small>Recuperar</small></button></div>
-      </div>
-      <details class="fxAdj"><summary>⚙️ Ajustes manuais <small>(bônus de poderes, itens…)</small></summary><div class="fxGrid4">
-        <label>Bônus de PV<input class="in" type="number" data-bon="pv" value="${f.bon.pv || ''}" placeholder="0"></label><label>Bônus de PE<input class="in" type="number" data-bon="pe" value="${f.bon.pe || ''}" placeholder="0"></label><label>Bônus de SAN<input class="in" type="number" data-bon="san" value="${f.bon.san || ''}" placeholder="0"></label><label>Bônus de Defesa<input class="in" type="number" data-bon="def" value="${f.bon.def || ''}" placeholder="0"></label></div>
-        <div class="fxGrid4" id="fxAdjMan"><label>PV máx.<input class="in" type="number" data-man="pvM" value="${f.pvM || ''}"></label><label>PE máx.<input class="in" type="number" data-man="peM" value="${f.peM || ''}"></label><label>SAN máx.<input class="in" type="number" data-man="sanM" value="${f.sanM || ''}"></label></div></details>
-      <div class="fxAttrs">${FX_ATTR.map(([a, n]) => `<div class="fxA" data-at="${a}"><button class="fxAr" data-ar="${a}" title="Rolar ${n}"><b>${f.attr[a]}</b><span>${a}</span></button><div class="pm"><button data-ad="${a}:-1" title="Diminuir">−</button><button data-ad="${a}:1" title="Aumentar">+</button></div><small>${n}</small></div>`).join('')}</div>
-      <div class="hint fxHint" id="fxHint"></div>
-      <div class="seg fxTabs" id="fxTabs">${[['per', '🎯 Perícias'], ['cmb', '⚔️ Combate'], ['hab', '✨ Habilidades'], ['desc', '📝 Descrição']].map(([kk, l]) => `<button data-ft="${kk}" class="${tab === kk ? 'on' : ''}">${l}</button>`).join('')}</div>
-      <div id="fxPane">${paneHTML()}</div></div>`, () => { fxOpenSync = null; commit(); });
-    const pic = () => { const b = $('#chPic'); if (!b) return; b.style.backgroundImage = img ? `url("${img}")` : ''; b.textContent = img ? '' : '+'; };
-    pic(); upd();
-    $('#chPic').onclick = async () => { const [fl] = await pickFile('image/*'); if (!fl) return; try { img = await imgToDataURL(fl, 360, .85, true); pic(); save(); } catch (e) { toast('Não consegui abrir essa imagem.'); } };
-    const box = $('#mbox');
-    box.oninput = e => {
-      const t = e.target;
-      if (t.dataset.ch) { ch[t.dataset.ch] = t.value; save(); return; }
-      if (t.dataset.fx) { f[t.dataset.fx] = t.value; save(); if (t.dataset.fx === 'orig') upd(); if (t.dataset.fx === 'prof') { const n = $('[data-pk="profissao"] .nm'); if (n) n.innerHTML = 'Profissão' + (f.prof ? ` <em>(${esc(f.prof)})</em>` : '') + '<small>INT</small>'; } return; }
-      if (t.dataset.bon) { f.bon[t.dataset.bon] = fxN(t.value, -99, 99); save(); upd(); return; }
-      if (t.dataset.man) { f[t.dataset.man] = fxN(t.value, 0, 999); save(); upd(); return; }
-      if (t.dataset.pb || t.dataset.pg) { const k = t.dataset.pb || t.dataset.pg, row = t.closest('.fxP'); const g = +row.querySelector('[data-pg]').value, b = fxN(row.querySelector('[data-pb]').value, -20, 40); if (g || b) f.per[k] = [g, b]; else delete f.per[k]; row.querySelector('.tot').textContent = fxSig(g + b); row.classList.toggle('tr', !!g); save(); }
-    };
-    box.onchange = e => {
-      const t = e.target;
-      if (t.id === 'fxCls') { f.cls = t.value; save(); upd(); }
-      if (t.id === 'fxNex') { f.nex = +t.value; save(); upd(); }
-      if (t.id === 'fxOnlyTr') { onlyTr = t.checked; $$('#fxPane .fxP').forEach(r => { const k = r.dataset.pk, pp = f.per[k]; r.hidden = onlyTr && !(pp && (pp[0] || pp[1])); }); }
-    };
-    box.addEventListener('click', e => {
-      const b = e.target.closest('[data-ad],[data-ar],[data-pr],[data-fs],[data-ft],#fxRec'); if (!b) return;
-      if (b.dataset.ad) { const [a, d] = b.dataset.ad.split(':'); f.attr[a] = clamp(f.attr[a] + (+d), 0, 7); save(); upd(); }
-      if (b.dataset.ar) rollFx(FX_ATTR.find(x => x[0] === b.dataset.ar)[1], f.attr[b.dataset.ar], 0);
-      if (b.dataset.pr) { const [, n, at] = FX_PER.find(x => x[0] === b.dataset.pr), [g, bb] = f.per[b.dataset.pr] || [0, 0]; rollFx(n + (b.dataset.pr === 'profissao' && f.prof ? ' (' + f.prof + ')' : ''), f.attr[at], g + bb); }
-      if (b.dataset.fs) {
-        const [k, d] = b.dataset.fs.split(':');
-        if (k === 'san') { const m = fxCalc(f).sanMax, cur = f.san < 0 ? m : f.san; f.san = clamp(cur + (+d), 0, 999); if (m && f.san >= m) f.san = -1; save(); upd(); }
-        else { if (dirty) commit(); const st = live(); setStats(pid, {[k]: st[k] + (+d)}); upd(); }
-      }
-      if (b.id === 'fxRec') { if (dirty) commit(); const k = fxCalc(f), st = live(); setStats(pid, {pv: st.pvMax || k.pvMax, pe: st.peMax || k.peMax}); f.san = -1; save(); upd(); toast('♻️ Vida, esforço e sanidade recuperados'); }
-      if (b.dataset.ft) { tab = b.dataset.ft; $$('#fxTabs [data-ft]').forEach(x => x.classList.toggle('on', x === b)); $('#fxPane').innerHTML = paneHTML(); }
-    });
-    fxOpenSync = i2 => { if (i2 === pid && $('.fxSheet')) upd(); };
-  };
-  draw();
-}
 function fxRollFor(pid, label, attr, bonus) {
   const r = rollOP(attr, bonus); r.label = String(label).slice(0, 60);
   if (pid === me.id || !isHost) doRoll(r);
@@ -3183,16 +3342,17 @@ function fxPatch(id, patch) {
   if (id === me.id) setMyChar(nc);
   else if (isHost) { chars[id] = nc; broadcastChars(); const cn = conns.get(id); if (cn && cn.open) cn.send({t: 'yourch', ch: nc}); }
 }
-function recoverStats(id) { const st = stOf(id), f = fxOf(id); if (!st.pvMax && !st.peMax && !f) return false; setStats(id, {pv: st.pvMax || st.pv, pe: st.peMax || st.pe}); if (f && f.san !== -1) fxPatch(id, {san: -1}); if (fxOpenSync) fxOpenSync(id); return true; }
+function recoverStats(id) { const st = stOf(id), f = fxOf(id); if (!eqOf(id)) return false; if (!st.pvMax && !st.peMax && !f) return false; setStats(id, {pv: st.pvMax || st.pv, pe: st.peMax || st.pe}); if (f && f.san !== -1) fxPatch(id, {san: -1}); if (fxOpenSync) fxOpenSync(id); return true; }
 let layout = lsGet('mesa-layout', 'stage'), roomLayoutTs = 0;
-const LAYOUTS = [['stage', '🎬 Palco', 'tela grande e câmeras embaixo'], ['grid', '🔲 Grade', 'só as câmeras, todas iguais'], ['live', '📺 Live', 'quadros com personagem, estilo stream'], ['livestage', '🎥 Live + palco', 'tela do Mestre e quadros ao lado']];
+const LAYOUTS = [['combat', '⚔️ Combate', 'palco no centro, câmeras em volta e turnos'], ['invest', '🔎 Investigação', 'quadro de pistas e câmeras em polaroid'], ['stage', '🎬 Palco', 'tela grande e câmeras embaixo'], ['grid', '🔲 Grade', 'só as câmeras, todas iguais'], ['live', '📺 Live', 'quadros com personagem, estilo stream'], ['livestage', '🎥 Live + palco', 'tela do Mestre e quadros ao lado']];
 function setLayout(l) {
   if (!LAYOUTS.some(x => x[0] === l)) l = 'stage';
   layout = l; lsSet('mesa-layout', l);
   document.body.classList.toggle('gridMode', l === 'grid');
   document.body.classList.toggle('lay-live', l === 'live');
   document.body.classList.toggle('lay-livestage', l === 'livestage');
-  renderLive(); renderTiles(); if ($('#layoutBtn')) renderTop();
+  document.body.classList.toggle('lay-ring', l === 'combat' || l === 'invest'); document.body.classList.toggle('lay-combat', l === 'combat'); document.body.classList.toggle('lay-invest', l === 'invest');
+  renderLive(); renderTiles(); if ($('#layoutBtn')) renderTop(); try { v13State(); } catch (e) {}
 }
 function openLayoutMenu(anchor) {
   const pop = $('#pop');
@@ -3509,7 +3669,7 @@ function renderStage() {
 function tileHTML(p) {
   const isMe = p.id === me.id, cam = isMe ? me.cam : p.cam, mic = isMe ? me.mic : p.mic, dfn = isMe ? deaf : p.deaf;
   const ch = liveCh(p), st = sanSt(ch), fm = isMe ? forcedMute : !!p.fm, av = ch.img ? ` style="background:url('${ch.img}') center/cover;color:transparent"` : ` style="--c:${colorOf(p.name)}"`;
-  return `<div class="av"${cam ? ' style="display:none"' : ''}><i${av}>${initial(ch.char || p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}${hasSt(st) ? `<div class="hpc">${st.pvMax || st.pv ? `<b class="v">${st.pv}/${st.pvMax}</b>` : ''}${st.peMax || st.pe ? `<b class="e">${st.pe}/${st.peMax}</b>` : ''}</div>` : ''}<div class="bd">${fm ? `<b class="m fm" title="Silenciado pelo Mestre">${ic('mic', 1)}</b>` : !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${isHost && p.uv ? '<b title="Tem a lanterna UV" style="background:#3b1d7ae6">🔦</b>' : ''}${(isMe ? forcedDeaf : p.fd) ? `<b class="m fm" title="Sem áudio (o Mestre tirou)">${ic('head', 1)}</b>` : dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <em>' + esc(p.name) + '</em>' : ''}${isMe ? ' (você)' : ''}</span></div>`;
+  return `<div class="av"${cam ? ' style="display:none"' : ''}><i${av}>${initial(ch.char || p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}${tileBars(st)}${hasSt(st) ? `<div class="hpc">${st.pvMax || st.pv ? `<b class="v">${st.pv}/${st.pvMax}</b>` : ''}${st.peMax || st.pe ? `<b class="e">${st.pe}/${st.peMax}</b>` : ''}</div>` : ''}<div class="bd">${fm ? `<b class="m fm" title="Silenciado pelo Mestre">${ic('mic', 1)}</b>` : !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${isHost && p.uv ? '<b title="Tem a lanterna UV" style="background:#3b1d7ae6">🔦</b>' : ''}${(isMe ? forcedDeaf : p.fd) ? `<b class="m fm" title="Sem áudio (o Mestre tirou)">${ic('head', 1)}</b>` : dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <em>' + esc(p.name) + '</em>' : ''}${isMe ? ' (você)' : ''}</span></div>`;
 }
 function renderTiles() {
   const box = $('#tiles'); if (!box) return;
@@ -3531,7 +3691,7 @@ function renderTiles() {
   $$('.tile', box).forEach(t => { if (!seen.has(t.dataset.id)) t.remove(); });
   applyForcedMutes(); avCss();
   $$('.tile', box).forEach(t => { const st = stOf(t.dataset.id); t.classList.toggle('down', !!st.pvMax && st.pv <= 0); });
-  [...box.children].sort((a, b) => list.findIndex(p => p.id === a.dataset.id) - list.findIndex(p => p.id === b.dataset.id)).forEach(t => box.appendChild(t));
+  [...box.children].sort((a, b) => list.findIndex(p => p.id === a.dataset.id) - list.findIndex(p => p.id === b.dataset.id)).forEach(t => box.appendChild(t)); ringPlace();
   renderLive();
 }
 function cbw(id, icon, label, cls = '', extra = '') { return `<div class="cbw ${extra}"><button class="cb ${cls}" data-c="${id}" title="${esc(label)}">${icon}</button>${esc(label)}</div>`; }
@@ -3589,7 +3749,7 @@ function renderSide() {
     h = `<div class="chatTop"><span>💬 Chat da mesa</span>${isHost ? '<button class="btn sm" data-a="chatclear" title="Apaga as mensagens para todos">🧹 Limpar chat</button>' : ''}</div>
       <div id="log">${chat.map((m, i) => msgHTML(m, chat[i - 1])).join('') || '<div class="msg sys empty">Nenhuma mensagem ainda. Role dados ou converse aqui.</div>'}</div>
       <div class="chatBot">
-        <div class="dicePanel ${S.diceOpen ? '' : 'hide'}" id="diceP">
+        <div class="dicePanel ${S.diceOpen ? '' : 'hide'}" id="diceP">${fxDiceHTML()}
           <div class="diceBar"><label>Atributo</label><input class="in" id="dA" type="number" min="-3" max="10" value="${lsGet('mesa-dA', 2)}"><label>Bônus</label><input class="in" id="dB" type="number" value="${lsGet('mesa-dB', 0)}"><button class="btn red sm" data-a="rollop">🎲 Teste</button></div>
           <div class="diceBar"><input class="in wide" id="dE" value="${esc(lsGet('mesa-dE', '1d6'))}" placeholder="2d6+3"><button class="btn sm" data-a="rollex">Rolar</button></div>
         </div>
@@ -3628,7 +3788,7 @@ function renderSide() {
       + grp('svol', '🔊 Volume dos efeitos', `<input type="range" min="0" max="100" value="${Math.round(S.sfxVol * 100)}" data-a="svol"><div class="hint">Toque de novo num efeito tocando para parar só ele.</div>`, false);
   } else if (curTab === 'cover' && isHost) {
     const c = state.cover, def = COVERS[c.style] || COVERS.intervalo;
-    h = cutPaneHTML() + `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
+    h = cutPaneHTML() + v13PaneHTML() + `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
       <div class="sec">Estilo</div><div class="grid">${Object.entries(COVERS).map(([k, v]) => `<button class="tile2 ${c.style === k ? 'on' : ''}" data-cs="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>`
       + grp('ctext', `✏️ Texto da capa <small>${c.title ? esc(c.title) : 'padrão'}</small>`, `<label class="lab" style="margin-top:0">Título</label><input class="in" id="cT" maxlength="60" placeholder="${esc(def.t)}" value="${esc(c.title)}">
       <label class="lab">Subtítulo</label><input class="in" id="cS" maxlength="90" placeholder="${esc(def.s)}" value="${esc(c.sub)}">
@@ -3667,7 +3827,7 @@ function renderSide() {
   } else {
     curTab = 'people';
     const list = [...roster.values()];
-    h = `<button class="btn wide" data-a="mych" style="margin-bottom:6px">📋 ${myCh.char ? 'Minha ficha: ' + esc(myCh.char) : 'Criar minha ficha'}</button>${isHost ? '<button class="btn red wide" data-a="fichas" style="margin-bottom:6px">📋 Fichas dos agentes</button>' : ''}<div class="sec">Na sala (${list.length})</div><div class="plist">${list.map(p => { const isMe = p.id === me.id, mic = isMe ? me.mic : p.mic, cam = isMe ? me.cam : p.cam;
+    h = `<button class="btn wide" data-chars="1" style="margin-bottom:6px">🎭 ${myCh.eq && myCh.char ? 'Personagem: ' + esc(myCh.char) : isHost ? 'Personagens e NPCs' : 'Meus personagens'}</button>${myCh.eq ? '<button class="btn wide" data-a="mych" style="margin-bottom:6px">📋 Ficha equipada</button>' : ''}${isHost ? '<button class="btn red wide" data-a="fichas" style="margin-bottom:6px">📋 Fichas dos agentes</button>' : ''}<div class="sec">Na sala (${list.length})</div><div class="plist">${list.map(p => { const isMe = p.id === me.id, mic = isMe ? me.mic : p.mic, cam = isMe ? me.cam : p.cam;
       return `<div class="pl" data-p="${esc(p.id)}"><span class="av"><i style="--c:${colorOf(p.name)}">${initial(p.name)}</i></span><span class="n">${esc(p.name)}${liveCh(p).char ? ' <small style="color:var(--mut)">· ' + esc(liveCh(p).char) + '</small>' : ''}${isMe ? ' (você)' : ''}</span>${p.role === 'mestre' ? '<span class="role">Mestre</span>' : ''}<span class="st">${mic ? ic('mic') : `<span class="m">${ic('mic', 1)}</span>`}${cam ? ic('cam') : ''}</span></div>`; }).join('')}</div>
       <div class="hint">Toque em alguém (aqui ou nos quadros) para ajustar o volume${isHost ? ' ou remover da sala' : ''}.</div>
       <div class="sec">Volume da transmissão do Mestre</div><input type="range" min="0" max="100" value="${Math.round(S.stageVol * 100)}" data-a="stagevol"${isHost ? ' disabled' : ''}>`;
@@ -3769,7 +3929,7 @@ function openPop(id, anchor) {
   else {
     h += `<label class="lab">Volume para você</label><input type="range" min="0" max="100" value="${S.vols[p.name] ?? 100}" data-pa="vol">
       <label class="sw"><input type="checkbox" data-pa="lmute" ${r && r.localMute ? 'checked' : ''}><i></i><span>Silenciar só para mim</span></label>`;
-    if (isHost) h += stEdHTML(id) + `<button class="btn sm wide" data-pa="uvg" style="margin-top:8px">${uvOwners.has(p.name.toLowerCase()) ? '🔦 Retirar lanterna UV' : '🔦 Entregar lanterna UV'}</button><button class="btn sm wide" data-pa="fm" style="margin-top:6px${p.fm ? ';border-color:#ff5b5b' : ''}">${p.fm ? '🎙️ Deixar falar de novo' : '🔇 Silenciar no chat de voz'}</button><button class="btn sm wide" data-pa="fd" style="margin-top:6px${p.fd ? ';border-color:#ff5b5b' : ''}">${p.fd ? '🎧 Devolver o áudio dele' : '🎧 Tirar o áudio (não ouve ninguém)'}</button><button class="btn sm wide" data-pa="ech" style="margin-top:6px">📋 Ficha do agente</button><button class="btn sm wide" data-pa="wsp" style="margin-top:6px">🤫 Sussurrar</button><button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">🚫 Expulsar da sala</button>`;
+    if (isHost) h += stEdHTML(id) + `<button class="btn sm wide" data-pa="uvg" style="margin-top:8px">${uvOwners.has(p.name.toLowerCase()) ? '🔦 Retirar lanterna UV' : '🔦 Entregar lanterna UV'}</button><button class="btn sm wide" data-pa="fm" style="margin-top:6px${p.fm ? ';border-color:#ff5b5b' : ''}">${p.fm ? '🎙️ Deixar falar de novo' : '🔇 Silenciar no chat de voz'}</button><button class="btn sm wide" data-pa="fd" style="margin-top:6px${p.fd ? ';border-color:#ff5b5b' : ''}">${p.fd ? '🎧 Devolver o áudio dele' : '🎧 Tirar o áudio (não ouve ninguém)'}</button><button class="btn sm wide" data-pa="ech" style="margin-top:6px">📋 Ficha do agente</button><button class="btn sm wide" data-pa="hl" data-hid="${esc(id)}" style="margin-top:6px">${state.hl === id ? '⭐ Tirar destaque' : '⭐ Destacar na tela'}</button><button class="btn sm wide" data-pa="wsp" style="margin-top:6px">🤫 Sussurrar</button><button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">🚫 Expulsar da sala</button>`;
     else if (hasSt(stOf(id))) { const st = stOf(id); h += `<div class="stEd"><h5>Vida e esforço</h5><div style="display:flex;gap:14px;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px"><span style="text-shadow:0 0 10px #ff2a2a">${st.pv}/${st.pvMax}</span><span style="text-shadow:0 0 10px #3b8bff">${st.pe}/${st.peMax}</span></div></div>`; }
   }
   pop.innerHTML = h; pop.classList.remove('hide'); stEdWire(pop);
@@ -3786,7 +3946,7 @@ $('#live').addEventListener('click', e => { const f = e.target.closest('.lf'); i
 $('#tiles').addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) openPop(t.dataset.id, t); });
 /* modal */
 let modalClose = null;
-function openModal(html, onClose) { const mb = $('#mbox'); mb.innerHTML = html; mb.classList.toggle('wide', /fxSheet|fxO|dpList/.test(html)); mb.onclick = e => { const m = e.target.closest('[data-m]'); if (m) closeModal(m.dataset.m); }; $('#shade').classList.remove('hide'); modalClose = onClose || null; }
+function openModal(html, onClose) { { const o = $('#mbox'), n = o.cloneNode(false); o.replaceWith(n); } const mb = $('#mbox'); mb.innerHTML = html; mb.classList.toggle('wide', /fxSheet|fxO|dpList/.test(html)); mb.onclick = e => { const m = e.target.closest('[data-m]'); if (m) closeModal(m.dataset.m); }; $('#shade').classList.remove('hide'); modalClose = onClose || null; }
 function closeModal(r) { $('#shade').classList.add('hide'); const f = modalClose; modalClose = null; $('#mbox').innerHTML = ''; if (f) f(r); }
 $('#shade').addEventListener('pointerdown', e => { if (e.target.id === 'shade') closeModal('x'); });
 document.addEventListener('keydown', e => {
@@ -4129,9 +4289,9 @@ function docTx(store, mode, fn) { return docOpenDb().then(d => new Promise((res,
 function sanDoc(d) {
   if (!d || typeof d !== 'object' || !okImg(d.img)) return null;
   return {id: String(d.id || '').replace(/[^a-z0-9]/gi, '').slice(0, 16) || Math.random().toString(36).slice(2, 10), name: String(d.name || 'Documento').slice(0, 60), kind: DOC_KINDS[d.kind] ? d.kind : 'carta', img: d.img,
-    uvText: String(d.uvText || '').slice(0, 300), uvPos: ['top', 'mid', 'bot'].includes(d.uvPos) ? d.uvPos : 'mid', uvImg: okImg(d.uvImg) ? d.uvImg : '', back: String(d.back || '').slice(0, 300), uvBack: String(d.uvBack || '').slice(0, 300), ts: +d.ts || Date.now()};
+    uvText: String(d.uvText || '').slice(0, 300), uvPos: ['top', 'mid', 'bot'].includes(d.uvPos) ? d.uvPos : 'mid', uvImg: okImg(d.uvImg) ? d.uvImg : '', back: String(d.back || '').slice(0, 300), uvBack: String(d.uvBack || '').slice(0, 300), uvCfg: sanUvCfg(d.uvCfg), ts: +d.ts || Date.now()};
 }
-async function docLoadLib() { try { docLib = ((await docTx('lib', 'readonly', st => st.getAll())) || []).sort((a, b) => b.ts - a.ts); } catch (e) { docLib = []; } }
+async function docLoadLib() { try { docLib = ((await docTx('lib', 'readonly', st => st.getAll())) || []).filter(x => x && !x.srch).sort((a, b) => b.ts - a.ts); } catch (e) { docLib = []; } }
 async function docLoadGot() { try { docGot = ((await docTx('got', 'readonly', st => st.getAll())) || []).filter(x => x.room === code).map(x => ({...sanDoc(x.doc), seen: !!x.seen})).filter(x => x.id).sort((a, b) => b.ts - a.ts); } catch (e) { docGot = []; } }
 function docSaveGot(d) { docTx('got', 'readwrite', st => st.put({k: code + ':' + d.id, room: code, seen: !!d.seen, doc: {...d, seen: undefined}})).catch(() => {}); }
 async function imgToPNG(file, max) {
@@ -4168,11 +4328,12 @@ function openDocEditor(id, draft) {
     <textarea class="in" id="deUv" rows="3" maxlength="300" placeholder="Ex.: ELE AINDA ESTÁ NA CASA">${esc(e.uvText)}</textarea>
     <div class="row" style="margin-top:8px"><span class="hint" style="margin:0;flex:1">Posição do texto</span><select class="in" id="dePos" style="width:auto">${[['top', 'Em cima'], ['mid', 'No meio'], ['bot', 'Embaixo']].map(([k, n]) => `<option value="${k}"${e.uvPos === k ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
     <div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn sm red" id="deUvDraw">🖌️ ${e.uvImg ? 'Editar desenho UV' : 'Desenhar na luz UV'}</button><button class="btn sm" id="deUvImg">${e.uvImg ? '🔁 Trocar imagem UV' : '➕ Imagem UV'}</button>${e.uvImg ? '<button class="btn sm" id="deUvRm">Remover imagem UV</button><img alt="" class="deUvTh" src="' + e.uvImg + '">' : ''}</div>
+    ${uvCfgHTML(e.uvCfg)}
     <label class="lab">🔦 Escondido no VERSO (só aparece na luz UV)</label><textarea class="in" id="deUvBack" rows="2" maxlength="300" placeholder="Ex.: 23:47 — PORÃO">${esc(e.uvBack || '')}</textarea>
     <div class="hint">O texto e a imagem UV só aparecem quando o agente acende a lanterna UV em cima do documento. Na imagem UV, o preto fica invisível e só o que é claro brilha (bom para símbolos, digitais e manchas).</div>
     <button class="btn red wide" id="deSave" style="margin-top:14px">Salvar documento</button></div>`);
   const setHint = () => { $('#deKindHint').textContent = DOC_HINTS[docEdit.kind]; }; setHint();
-  const keepForm = () => { docEdit.name = $('#deName').value; docEdit.uvText = $('#deUv').value; docEdit.uvPos = $('#dePos').value; docEdit.back = $('#deBack').value; docEdit.uvBack = $('#deUvBack').value; };
+  const keepForm = () => { docEdit.name = $('#deName').value; docEdit.uvText = $('#deUv').value; docEdit.uvPos = $('#dePos').value; docEdit.back = $('#deBack').value; docEdit.uvBack = $('#deUvBack').value; docEdit.uvCfg = uvCfgRead(); };
   $('#dePick').onclick = async () => { const [f] = await pickFile('image/*'); if (!f) return; try { docEditFile = f; docEdit.img = await imgToDataURL(f, 1600, .85); $('#dePick').innerHTML = `<img alt="" src="${docEdit.img}">`; if (!$('#deName').value.trim()) $('#deName').value = f.name.replace(/\.[^.]+$/, '').slice(0, 60); } catch (err) { toast('Não consegui abrir essa imagem.'); } };
   $('#deTpl').onclick = () => { keepForm(); openDocTpl(ex ? ex.id : null); };
   $('#deKind').onclick = ev => { const b = ev.target.closest('[data-dk]'); if (!b) return; docEdit.kind = b.dataset.dk; $$('#deKind [data-dk]').forEach(x => x.classList.toggle('on', x === b)); setHint(); };
@@ -4189,7 +4350,7 @@ function openDocEditor(id, draft) {
     await docLoadLib(); closeModal('ok'); renderSide(); toast(ex ? 'Documento atualizado' : 'Documento guardado. Toque em “Entregar” quando quiser.');
   };
 }
-function openUvDraw(exId) {
+function openUvDraw0(exId) {
   const e = docEdit, base = new Image();
   base.onload = () => {
     let W = base.naturalWidth, H = base.naturalHeight; const k = Math.min(1100 / W, 1100 / H); W = Math.round(W * k); H = Math.round(H * k);
@@ -4249,11 +4410,6 @@ const cutBgHTML = c => !c.img ? '<div class="cBg gen"></div>' : c.img === CUT_DE
   ? `<div class="cBg vl"><div class="cBgI" style="background-image:url('${c.img}')"><i class="hMoon" style="left:${VL.moon[0]}%;top:${VL.moon[1]}%"></i><i class="hBell" style="left:${VL.bell[0]}%;top:${VL.bell[1]}%"></i><i class="hMan" style="left:${VL.man[0]}%;top:${VL.man[1]}%"></i></div></div>`
   : `<div class="cBg" style="background-image:url('${c.img}')"></div>`;
 let eyeN = 0;
-function eyesSVG(cls = 'eyes') {
-  const i = ++eyeN, L = 'M18 27 C36 6 74 8 100 35 C76 47 40 46 18 27Z', R = 'M222 27 C204 6 166 8 140 35 C164 47 200 46 222 27Z';
-  const eye = (side, d, cx) => `<g class="eye ${side}"><path class="gl" d="${d}" filter="url(#eb${i})"/><path d="${d}" fill="url(#eg${i})"/><ellipse class="pu" cx="${cx}" cy="29" rx="3.4" ry="11" fill="#160000"/><circle cx="${cx + (side === 'l' ? 7 : -7)}" cy="22" r="2.2" fill="#fff" opacity=".75"/></g>`;
-  return `<div class="${cls}"><svg viewBox="0 0 240 60" aria-hidden="true"><defs><radialGradient id="eg${i}" cx="50%" cy="58%" r="62%"><stop offset="0" stop-color="#fff3c4"/><stop offset=".16" stop-color="#ff6a3d"/><stop offset=".52" stop-color="#d40a0a"/><stop offset="1" stop-color="#3d0000"/></radialGradient><filter id="eb${i}" x="-60%" y="-160%" width="220%" height="420%"><feGaussianBlur stdDeviation="7"/></filter></defs><g class="eG">${eye('l', L, 62)}${eye('r', R, 178)}</g></svg></div>`;
-}
 const foeElOf = c => !c.foeEl || c.foeEl === 'auto' ? c.mood : c.foeEl;
 function foeFig(c, big) {
   if (!c.img) return eyesSVG(big ? 'eyesBig' : 'eyes');
@@ -4400,6 +4556,7 @@ function cutRun(c, preview) {
   const k = cutCur = {ov, timers: [], stopFns: [], alive: true, preview: !!preview, bus: null, t0: 0};
   const at = (s, f) => k.timers.push(setTimeout(() => { if (k.alive) f(); }, s * 1000));
   document.body.appendChild(ov);
+  eyeEl = foeElOf(c);
   const dur = CUT_VIS[c.type](k, c, ov, at, plan);
   cutElem(k, c, ov);
   if (isHost) { const b = document.createElement('button'); b.className = 'cSkip'; b.textContent = preview ? '✕ Fechar prévia (Esc)' : '⏭ Pular para todos (Esc)'; b.onclick = () => cutStop(false); ov.appendChild(b); }
@@ -4407,6 +4564,7 @@ function cutRun(c, preview) {
   Promise.resolve(audioInit()).then(() => { if (!k.alive || !ctx) return; const o = docOut(); if (!o) return; k.bus = gain(1, o); k.t0 = T() + .03; try { CUT_AUD[c.type](k, c, plan); } catch (e) { console.warn(e); } try { const f = CUT_EL_AUD[c.mood]; if (f) f(k, dur, [0, .6, 1, 1.4][c.int || 2]); } catch (e) { console.warn(e); } }).catch(() => {});
   if (isHost && !preview && musicBus) { cutDuck = true; try { musicBus.gain.setTargetAtTime(S.musicVol * duckLevel(), T(), .6); } catch (e) {} }
   at(dur, () => cutStop(true));
+  if (isHost && !preview && ['combate', 'chefe', 'emboscada', 'investigacao'].includes(c.type)) at(dur + 400, () => cbOffer(c.type === 'investigacao' ? 'invest' : 'combat'));
 }
 /* imagem da cena mantendo a transparência (PNG recortado) */
 async function cutImgLoad(file) {
@@ -4949,6 +5107,7 @@ function docShow(d, w, h, fade, enter) {
   if (docZm > 1) docZoomTo(docZm);
   if (d.kind === 'evidencia' && enter) setTimeout(() => { const l = $('#dvDoc .dvLabel'); if (l) { l.classList.add('on', 'slap'); docSnd('stamp'); } }, 1250);
   if (d.kind === 'item' && enter) setTimeout(() => { const r = $('.dvRays'); if (r) r.classList.remove('intro'); const t = $('.dvItemT'); if (t) t.classList.add('out'); }, 3200);
+  uvCfgApply(d);
   inspInit(d.kind);
 }
 /* drag to rotate, like inspecting an item in a game */
@@ -4990,6 +5149,7 @@ function docAnim(d, w, h) {
   const st = $('#dvStage'); let done = false;
   const finish = () => { if (done || docViewing !== d) return; done = true; docShow(d, w, h, false); };
   st.onclick = () => finish();
+  if (d.kind === 'carta' || d.kind === 'doc') { st.onclick = null; return docInteract(d, w, h, finish); }
   const bg = `background-image:url('${d.img}')`;
   if (d.kind === 'carta') {
     const ew = Math.round(w * 1.06), eh = Math.round(Math.min(h / 3 * 1.35, ew * .62));
@@ -5272,6 +5432,668 @@ setInterval(() => {
 }, 5000);
 addEventListener('beforeunload', e => { if (!leaving && !$('#room').classList.contains('hide') && (isHost ? conns.size : true)) { e.preventDefault(); e.returnValue = ''; } });
 addEventListener('resize', () => { if (innerWidth > 900) $('#side').classList.remove('open'); });
+function openCharEditor(id, lid) {
+  const isMe = !id || id === me.id;
+  if (isMe && !lid) { if (myCh.eq && libGet(myCh.eq)) lid = myCh.eq; else { openChars(); return; } }
+  if (!isMe && !(chars[id] || {}).eq) { toast('Esse agente ainda não equipou um personagem.'); return; }
+  const pid = isMe ? me.id : id, p = roster.get(pid) || me, ent = isMe ? libGet(lid) : null;
+  if (isMe && !ent) { openChars(); return; }
+  const equipped = () => isMe && myCh.eq === lid;
+  const src = isMe ? ent : sanCh(chars[id] || {});
+  const ch = {char: src.char || '', handle: src.handle || ''}, f = sanFx(src.fx) || fxDefault();
+  let img = src.img || '', tab = 'per', saveT = 0, onlyTr = false, dirty = false;
+  const live = () => !isMe || equipped() ? stOf(pid) : sanSt(ent);
+  const setSt = patch => { if (!isMe || equipped()) setStats(pid, patch); else { Object.assign(ent, sanSt(Object.assign(sanSt(ent), patch))); libStore(); } };
+  const commit = () => {
+    clearTimeout(saveT); saveT = 0; if (!dirty) return; dirty = false;
+    const k = fxCalc(f), st = live(), auto = !!(f.cls || f.pvM || f.peM);
+    let {pv, pvMax, pe, peMax} = st;
+    if (auto) {
+      pv = !st.pvMax || st.pv >= st.pvMax ? k.pvMax : Math.min(st.pv, k.pvMax); pe = !st.peMax || st.pe >= st.peMax ? k.peMax : Math.min(st.pe, k.peMax);
+      pvMax = k.pvMax; peMax = k.peMax;
+    }
+    const nc = sanCh({eq: isMe ? lid : ((chars[id] || {}).eq || ''), char: ch.char, handle: ch.handle, sub: f.title || fxAuto(f), img, fx: f, pv, pvMax, pe, peMax});
+    const sv = $('#fxSaved'); if (sv) { sv.textContent = 'salvo ✓'; sv.classList.remove('on'); }
+    if (isMe) { Object.assign(ent, nc, {id: lid, eq: ''}); libStore(); if (equipped()) setMyChar(Object.assign({}, nc, {eq: lid})); }
+    else if (isHost) { chars[id] = nc; broadcastChars(); const c = conns.get(id); if (c && c.open) c.send({t: 'yourch', ch: nc}); }
+  };
+  const save = () => { dirty = true; clearTimeout(saveT); saveT = setTimeout(commit, 600); const s = $('#fxSaved'); if (s) { s.textContent = 'salvando…'; s.classList.add('on'); } };
+  const cname = () => ch.char || p.name;
+  const rollFx = (label, attr, bonus) => { const r = fxRollFor(pid, label, attr, bonus); toast('🎲 ' + label + ': ' + r.total); };
+  const perRow = ([k, n, at]) => { const [g, b] = f.per[k] || [0, 0]; return `<div class="fxP ${g ? 'tr' : ''}" data-pk="${k}"${onlyTr && !g && !b ? ' hidden' : ''}><button class="dr" data-pr="${k}" title="Rolar ${n}">🎲</button><span class="nm">${n}${k === 'profissao' && f.prof ? ` <em>(${esc(f.prof)})</em>` : ''}<small>${at}</small></span><select class="in" data-pg="${k}">${FX_GRAUS.map(([v, l]) => `<option value="${v}"${g === v ? ' selected' : ''}>${l}</option>`).join('')}</select><input class="in" data-pb="${k}" type="number" value="${b || ''}" placeholder="+0" title="Outros bônus"><b class="tot">${fxSig(g + b)}</b></div>`; };
+  const paneHTML = () => {
+    if (tab === 'per') return `<div class="fxPerTop"><label class="sw" style="margin:0"><input type="checkbox" id="fxOnlyTr" ${onlyTr ? 'checked' : ''}><i></i><span>Só as treinadas</span></label><label class="fxProf">Profissão <input class="in" data-fx="prof" maxlength="30" value="${esc(f.prof)}" placeholder="ex.: jornalista"></label></div>
+      <div class="fxPerHead"><span></span><span>Perícia</span><span>Grau</span><span>Outros</span><span>Total</span></div><div class="fxPer">${FX_PER.map(perRow).join('')}</div>
+      <div class="hint">O 🎲 rola o teste no chat: dados = atributo da perícia (atributo 0 rola 2 dados e fica com o menor), somando o total.</div>`;
+    if (tab === 'cmbo') return `<div class="hint" style="margin-top:0">Monte rolagens prontas e role tudo com um clique. Separe as partes com <b>;</b> — perícia (<i>luta</i>, <i>pontaria+2</i>), atributo (<i>agi</i>, <i>for</i>, <i>int</i>, <i>pre</i>, <i>vig</i>) ou dados (<i>1d8+3</i>).</div>
+      <div class="cbList">${(f.combos || []).map((c, i) => `<div class="cbRow"><input class="in" data-cbi="${i}" data-cbf="n" maxlength="30" value="${esc(c.n)}" placeholder="Nome"><input class="in" data-cbi="${i}" data-cbf="p" maxlength="120" value="${esc(c.p)}" placeholder="luta; 1d8+2"><button class="btn sm red" data-cbr="${i}" title="Rolar tudo">⚡</button><button class="btn sm" data-cbx="${i}" title="Apagar">🗑</button></div>`).join('') || '<div class="hint">Nenhum combo ainda.</div>'}</div>
+      <button class="btn sm wide" id="cbAdd" style="margin-top:8px">+ Novo combo</button>
+      <div class="hint">Exemplos: <b>Facada</b> → <i>luta; 1d4+2</i> · <b>Tiro</b> → <i>pontaria; 2d6</i> · <b>Ritual</b> → <i>ocultismo; 3d6</i>. Os combos aparecem no painel 🎲 do chat.</div>`;
+    if (tab === 'cmb') { const k = fxCalc(f); return `<label class="lab" style="margin-top:0">Ataques <small>(um por linha — ex.: Faca · Luta · 1d4 · 19/x2)</small></label><textarea class="in" data-fx="ataques" rows="5">${esc(f.ataques)}</textarea>
+      <label class="lab">Inventário <small>(carga máxima: ${k.carga} espaços)</small></label><textarea class="in" data-fx="inv" rows="7" placeholder="Lanterna (1)\nKit de medicina (1)\nPistola + 2 pentes (1)">${esc(f.inv)}</textarea>`; }
+    if (tab === 'hab') return `<label class="lab" style="margin-top:0">Habilidades e poderes <small>(de classe, trilha, origem…)</small></label><textarea class="in" data-fx="hab" rows="8">${esc(f.hab)}</textarea>
+      <label class="lab">Rituais</label><textarea class="in" data-fx="rit" rows="6" placeholder="Nome · círculo · elemento · custo · efeito">${esc(f.rit)}</textarea>`;
+    return `<label class="lab" style="margin-top:0">Aparência, personalidade e história</label><textarea class="in" data-fx="desc" rows="8">${esc(f.desc)}</textarea>
+      <label class="lab">Anotações</label><textarea class="in" data-fx="notas" rows="5" placeholder="Pistas, nomes, teorias…">${esc(f.notas)}</textarea>`;
+  };
+  const upd = () => {
+    const k = fxCalc(f), st = live(), san = f.san < 0 ? k.sanMax : Math.min(f.san, k.sanMax || f.san), auto = !!(f.cls || f.pvM || f.peM);
+    const pvM = auto ? k.pvMax : st.pvMax, peM = auto ? k.peMax : st.peMax;
+    const pvV = auto && (!st.pvMax || st.pv >= st.pvMax) ? pvM : Math.min(st.pv, pvM || st.pv), peV = auto && (!st.peMax || st.pe >= st.peMax) ? peM : Math.min(st.pe, peM || st.pe);
+    const set = (sel, v) => { const e = $(sel); if (e) e.textContent = v; };
+    set('#fxPv', pvV); set('#fxPvM', pvM); set('#fxPe', peV); set('#fxPeM', peM); set('#fxSan', san); set('#fxSanM', k.sanMax); set('#fxDef', k.def); set('#fxLim', k.lim);
+    [['pv', pvV, pvM], ['pe', peV, peM], ['san', san, k.sanMax]].forEach(([n, v, m]) => { const e = $('.fxBar.' + n + ' u'); if (e) e.style.width = (m ? clamp(v / m, 0, 1) * 100 : 0) + '%'; });
+    FX_ATTR.forEach(([a]) => set(`[data-at="${a}"] b`, f.attr[a]));
+    const c = FX_CLS[f.cls], nx = Object.keys(FX_MARCOS).map(Number).find(n => n > f.nex);
+    const h = $('#fxHint'); if (h) h.innerHTML = c ? `<b>${c.e} ${c.n}</b> · perícias treinadas iniciais: ${c.per}.${nx ? ` · Próximo marco: <b>NEX ${nx}%</b> — ${FX_MARCOS[nx]}.` : ''}` : 'Escolha a classe para calcular vida, esforço e sanidade sozinho. Em “Outra”, você preenche os máximos nos ajustes.';
+    const ad = $('#fxAdjMan'); if (ad) ad.hidden = !!f.cls;
+  };
+  const draw = () => {
+    openModal(`<div class="mhead"><h3>📋 ${isMe ? esc(ch.char || 'Novo personagem') : 'Ficha de ' + esc(p.name)}</h3>${isMe ? `<button class="btn sm" id="fxChars" title="Todos os seus personagens">🎭 Personagens</button><button class="btn sm ${equipped() ? 'on' : 'red'}" id="fxEq">${equipped() ? '✓ Equipado' : '⚔️ Equipar'}</button>` : ''}<span id="fxSaved" class="fxSaved">salvo</span><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody fxSheet">
+      <div class="fxTop"><button class="chPic fxPic" id="chPic" title="Trocar retrato"></button><div class="fxId">
+        <input class="in fxName" data-ch="char" maxlength="30" value="${esc(ch.char)}" placeholder="Nome do personagem">
+        <div class="fxGrid4">
+          <label>Classe<select class="in" id="fxCls"><option value="">Outra / manual</option>${Object.entries(FX_CLS).map(([kk, c]) => `<option value="${kk}"${f.cls === kk ? ' selected' : ''}>${c.e} ${c.n}</option>`).join('')}</select></label>
+          <label>NEX<select class="in" id="fxNex">${FX_NEX.map(n => `<option value="${n}"${f.nex === n ? ' selected' : ''}>${n}%</option>`).join('')}</select></label>
+          <label>Origem<input class="in" data-fx="orig" maxlength="40" value="${esc(f.orig)}" placeholder="ex.: Investigador"></label>
+          <label>Trilha<input class="in" data-fx="trilha" maxlength="40" value="${esc(f.trilha)}" placeholder="ex.: Conduíte"></label>
+        </div>
+        <div class="fxGrid2"><label>Título no quadro da live<input class="in" data-fx="title" maxlength="40" value="${esc(f.title)}" placeholder="automático: classe · NEX · origem"></label><label>Seu @ (live)<input class="in" data-ch="handle" maxlength="30" value="${esc(ch.handle)}" placeholder="@seunome"></label></div>
+      </div></div>
+      <div class="fxStats">
+        <div class="fxBar pv"><span class="l">Vida</span><div class="v"><button data-fs="pv:-1">−</button><b id="fxPv"></b><i>/<span id="fxPvM"></span></i><button data-fs="pv:1">+</button></div><div class="tr"><u></u></div></div>
+        <div class="fxBar pe"><span class="l">Esforço</span><div class="v"><button data-fs="pe:-1">−</button><b id="fxPe"></b><i>/<span id="fxPeM"></span></i><button data-fs="pe:1">+</button></div><div class="tr"><u></u></div></div>
+        <div class="fxBar san"><span class="l">Sanidade</span><div class="v"><button data-fs="san:-1">−</button><b id="fxSan"></b><i>/<span id="fxSanM"></span></i><button data-fs="san:1">+</button></div><div class="tr"><u></u></div></div>
+        <div class="fxMini"><div><b id="fxDef"></b><small>Defesa</small></div><div><b id="fxLim"></b><small>PE / turno</small></div><div><b>9m</b><small>Desloc.</small></div><button class="fxRec" id="fxRec" title="Vida, esforço e sanidade no máximo">♻️<small>Recuperar</small></button></div>
+      </div>
+      <details class="fxAdj"><summary>⚙️ Ajustes manuais <small>(bônus de poderes, itens…)</small></summary><div class="fxGrid4">
+        <label>Bônus de PV<input class="in" type="number" data-bon="pv" value="${f.bon.pv || ''}" placeholder="0"></label><label>Bônus de PE<input class="in" type="number" data-bon="pe" value="${f.bon.pe || ''}" placeholder="0"></label><label>Bônus de SAN<input class="in" type="number" data-bon="san" value="${f.bon.san || ''}" placeholder="0"></label><label>Bônus de Defesa<input class="in" type="number" data-bon="def" value="${f.bon.def || ''}" placeholder="0"></label></div>
+        <div class="fxGrid4" id="fxAdjMan"><label>PV máx.<input class="in" type="number" data-man="pvM" value="${f.pvM || ''}"></label><label>PE máx.<input class="in" type="number" data-man="peM" value="${f.peM || ''}"></label><label>SAN máx.<input class="in" type="number" data-man="sanM" value="${f.sanM || ''}"></label></div></details>
+      <div class="fxAttrs">${FX_ATTR.map(([a, n]) => `<div class="fxA" data-at="${a}"><button class="fxAr" data-ar="${a}" title="Rolar ${n}"><b>${f.attr[a]}</b><span>${a}</span></button><div class="pm"><button data-ad="${a}:-1" title="Diminuir">−</button><button data-ad="${a}:1" title="Aumentar">+</button></div><small>${n}</small></div>`).join('')}</div>
+      <div class="hint fxHint" id="fxHint"></div>
+      <div class="seg fxTabs" id="fxTabs">${[['per', '🎯 Perícias'], ['cmbo', '⚡ Combos'], ['cmb', '⚔️ Combate'], ['hab', '✨ Habilidades'], ['desc', '📝 Descrição']].map(([kk, l]) => `<button data-ft="${kk}" class="${tab === kk ? 'on' : ''}">${l}</button>`).join('')}</div>
+      <div id="fxPane">${paneHTML()}</div></div>`, () => { fxOpenSync = null; commit(); });
+    const pic = () => { const b = $('#chPic'); if (!b) return; b.style.backgroundImage = img ? `url("${img}")` : ''; b.textContent = img ? '' : '+'; };
+    pic(); upd();
+    $('#chPic').onclick = async () => { const [fl] = await pickFile('image/*'); if (!fl) return; try { img = await imgToDataURL(fl, 360, .85, true); pic(); save(); } catch (e) { toast('Não consegui abrir essa imagem.'); } };
+    const box = $('#mbox');
+    box.oninput = e => {
+      const t = e.target;
+      if (t.dataset.cbi != null) { const c = (f.combos || [])[+t.dataset.cbi]; if (c) { c[t.dataset.cbf] = t.value; save(); } return; }
+      if (t.dataset.ch) { ch[t.dataset.ch] = t.value; save(); return; }
+      if (t.dataset.fx) { f[t.dataset.fx] = t.value; save(); if (t.dataset.fx === 'orig') upd(); if (t.dataset.fx === 'prof') { const n = $('[data-pk="profissao"] .nm'); if (n) n.innerHTML = 'Profissão' + (f.prof ? ` <em>(${esc(f.prof)})</em>` : '') + '<small>INT</small>'; } return; }
+      if (t.dataset.bon) { f.bon[t.dataset.bon] = fxN(t.value, -99, 99); save(); upd(); return; }
+      if (t.dataset.man) { f[t.dataset.man] = fxN(t.value, 0, 999); save(); upd(); return; }
+      if (t.dataset.pb || t.dataset.pg) { const k = t.dataset.pb || t.dataset.pg, row = t.closest('.fxP'); const g = +row.querySelector('[data-pg]').value, b = fxN(row.querySelector('[data-pb]').value, -20, 40); if (g || b) f.per[k] = [g, b]; else delete f.per[k]; row.querySelector('.tot').textContent = fxSig(g + b); row.classList.toggle('tr', !!g); save(); }
+    };
+    box.onchange = e => {
+      const t = e.target;
+      if (t.id === 'fxCls') { f.cls = t.value; save(); upd(); }
+      if (t.id === 'fxNex') { f.nex = +t.value; save(); upd(); }
+      if (t.id === 'fxOnlyTr') { onlyTr = t.checked; $$('#fxPane .fxP').forEach(r => { const k = r.dataset.pk, pp = f.per[k]; r.hidden = onlyTr && !(pp && (pp[0] || pp[1])); }); }
+    };
+    box.addEventListener('click', e => {
+      const b = e.target.closest('[data-ad],[data-ar],[data-pr],[data-fs],[data-ft],#fxRec,[data-cbr],[data-cbx],#cbAdd,#fxChars,#fxEq'); if (!b) return;
+      if (b.dataset.cbr) { if (dirty) commit(); comboRoll(pid, f, (f.combos || [])[+b.dataset.cbr]); return; }
+      if (b.dataset.cbx) { f.combos.splice(+b.dataset.cbx, 1); save(); $('#fxPane').innerHTML = paneHTML(); return; }
+      if (b.id === 'cbAdd') { f.combos = f.combos || []; if (f.combos.length >= 12) { toast('Máximo de 12 combos.'); return; } f.combos.push({n: 'Ataque', p: 'luta; 1d6'}); save(); $('#fxPane').innerHTML = paneHTML(); return; }
+      if (b.id === 'fxChars') { commit(); openChars(); return; }
+      if (b.id === 'fxEq') { commit(); if (equipped()) libUnequip(); else libEquip(lid); draw(); return; }
+      if (b.dataset.ad) { const [a, d] = b.dataset.ad.split(':'); f.attr[a] = clamp(f.attr[a] + (+d), 0, 7); save(); upd(); }
+      if (b.dataset.ar) rollFx(FX_ATTR.find(x => x[0] === b.dataset.ar)[1], f.attr[b.dataset.ar], 0);
+      if (b.dataset.pr) { const [, n, at] = FX_PER.find(x => x[0] === b.dataset.pr), [g, bb] = f.per[b.dataset.pr] || [0, 0]; rollFx(n + (b.dataset.pr === 'profissao' && f.prof ? ' (' + f.prof + ')' : ''), f.attr[at], g + bb); }
+      if (b.dataset.fs) {
+        const [k, d] = b.dataset.fs.split(':');
+        if (k === 'san') { const m = fxCalc(f).sanMax, cur = f.san < 0 ? m : f.san; f.san = clamp(cur + (+d), 0, 999); if (m && f.san >= m) f.san = -1; save(); upd(); }
+        else { if (dirty) commit(); const st = live(); setSt({[k]: st[k] + (+d)}); upd(); }
+      }
+      if (b.id === 'fxRec') { if (dirty) commit(); const k = fxCalc(f), st = live(); setSt({pv: st.pvMax || k.pvMax, pe: st.peMax || k.peMax}); f.san = -1; save(); upd(); toast('♻️ Vida, esforço e sanidade recuperados'); }
+      if (b.dataset.ft) { tab = b.dataset.ft; $$('#fxTabs [data-ft]').forEach(x => x.classList.toggle('on', x === b)); $('#fxPane').innerHTML = paneHTML(); }
+    });
+    fxOpenSync = i2 => { if (i2 === pid && $('.fxSheet')) upd(); };
+  };
+  draw();
+}
+/* =====================================================================
+   v13: PERSONAGENS (vários, equipar), DADOS DA FICHA, COMBOS
+   ===================================================================== */
+let charLib = [];
+const libNewId = () => 'p' + Math.random().toString(36).slice(2, 9);
+function libSan(x) { const id = String((x && x.id) || '').replace(/[^a-z0-9]/gi, '').slice(0, 16) || libNewId(); return Object.assign(sanCh(Object.assign({}, x, {eq: 'x'})), {id, eq: ''}); }
+function libStore() { try { localStorage.setItem('mesa-lib', JSON.stringify(charLib)); } catch (e) { toast('Sem espaço neste navegador para guardar mais personagens. Use retratos menores.', 5000); } }
+function libGet(id) { return charLib.find(x => x.id === id) || null; }
+function libLoad() {
+  const raw = lsGet('mesa-lib', null);
+  charLib = Array.isArray(raw) ? raw.filter(x => x && typeof x === 'object').slice(0, 40).map(libSan) : [];
+  if (!Array.isArray(raw) && (myCh.char || myCh.fx)) { const e = libSan(Object.assign({}, myCh, {id: libNewId()})); charLib.push(e); myCh.eq = e.id; libStore(); }
+  if (!myCh.eq || !libGet(myCh.eq)) { myCh.eq = ''; myCh.pv = myCh.pvMax = myCh.pe = myCh.peMax = 0; }
+  lsSet('mesa-ch', myCh);
+}
+function libSave() {
+  if (!myCh.eq) return; const e = libGet(myCh.eq); if (!e) return;
+  ['char', 'sub', 'handle', 'img', 'fx', 'pv', 'pvMax', 'pe', 'peMax'].forEach(k => { e[k] = myCh[k]; }); libStore();
+}
+const eqOf = id => !!(id === me.id ? myCh.eq : (chars[id] || {}).eq);
+function libEquip(lid) {
+  const e = libGet(lid); if (!e) return;
+  const f = sanFx(e.fx);
+  if (f && (f.cls || f.pvM || f.peM)) { const k = fxCalc(f); if (!e.pvMax) e.pv = k.pvMax; if (!e.peMax) e.pe = k.peMax; e.pvMax = k.pvMax; e.peMax = k.peMax; e.pv = Math.min(e.pv, e.pvMax); e.pe = Math.min(e.pe, e.peMax); }
+  libStore();
+  setMyChar(Object.assign({}, e, {eq: lid, sub: f ? (f.title || fxAuto(f)) : e.sub}));
+  toast('⚔️ ' + (e.char || 'Personagem') + ' equipado');
+}
+function libUnequip() { setMyChar({eq: '', char: '', sub: '', handle: myCh.handle, img: '', fx: null, pv: 0, pvMax: 0, pe: 0, peMax: 0}); toast('Personagem guardado'); }
+function openChars() {
+  const card = e => { const f = sanFx(e.fx), on = myCh.eq === e.id; return `<div class="chC${on ? ' on' : ''}"><span class="pic" style="${e.img ? `background-image:url('${e.img}')` : `--c:${colorOf(e.char || '?')}`}">${e.img ? '' : esc(initial(e.char || '?'))}</span>
+    <span class="nm"><b>${esc(e.char || 'Sem nome')}</b><small>${f ? esc(fxAuto(f) || 'sem classe') : ''}</small>${on ? '<em>EQUIPADO</em>' : ''}</span>
+    <span class="ac"><button class="btn sm ${on ? '' : 'red'}" data-lq="${e.id}">${on ? 'Guardar' : '⚔️ Equipar'}</button><button class="btn sm" data-lo="${e.id}">📋 Ficha</button><button class="btn sm" data-ld="${e.id}" title="Duplicar">⧉</button><button class="btn sm" data-lx="${e.id}" title="Apagar">🗑</button></span></div>`; };
+  openModal(`<div class="mhead"><h3>🎭 ${isHost ? 'Personagens e NPCs' : 'Meus personagens'}</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
+    <div class="hint" style="margin-top:0">Só quem tem um personagem <b>equipado</b> tem vida e esforço na mesa. Crie quantos quiser e troque quando precisar${isHost ? ' (ótimo para NPCs)' : ''}.</div>
+    <div class="chList">${charLib.map(card).join('') || '<div class="hint">Você ainda não tem personagens.</div>'}</div>
+    <button class="btn red wide" id="lNew" style="margin-top:12px">+ Novo personagem</button></div>`);
+  const mb = $('#mbox');
+  mb.addEventListener('click', ev => {
+    const b = ev.target.closest('[data-lq],[data-lo],[data-ld],[data-lx],#lNew'); if (!b) return;
+    if (b.id === 'lNew') { if (charLib.length >= 40) { toast('Máximo de 40 personagens.'); return; } const e = libSan({id: libNewId(), handle: myCh.handle, fx: fxDefault()}); charLib.unshift(e); libStore(); openCharEditor(me.id, e.id); return; }
+    if (b.dataset.lq) { if (myCh.eq === b.dataset.lq) libUnequip(); else libEquip(b.dataset.lq); openChars(); return; }
+    if (b.dataset.lo) { openCharEditor(me.id, b.dataset.lo); return; }
+    if (b.dataset.ld) { const e = libGet(b.dataset.ld); if (!e) return; const c = libSan(Object.assign(JSON.parse(JSON.stringify(e)), {id: libNewId(), char: (e.char || 'Personagem').slice(0, 24) + ' (cópia)'})); charLib.splice(charLib.indexOf(e) + 1, 0, c); libStore(); openChars(); return; }
+    if (b.dataset.lx) { const e = libGet(b.dataset.lx); if (!e) return; confirmBox(`Apagar “${e.char || 'Sem nome'}”? Não dá para desfazer.`, 'Apagar').then(ok => { if (ok) { if (myCh.eq === e.id) libUnequip(); charLib = charLib.filter(x => x !== e); libStore(); } openChars(); }); }
+  });
+}
+/* ---- combos ---- */
+const fxNorm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+function fxCombosSan(a) { return Array.isArray(a) ? a.slice(0, 12).map(c => ({n: String((c && c.n) || '').slice(0, 30), p: String((c && c.p) || '').slice(0, 120)})) : []; }
+function comboParts(f, txt) {
+  return String(txt || '').split(/[;,]/).map(s => s.trim()).filter(Boolean).slice(0, 6).map(part => {
+    const n = fxNorm(part), m = n.match(/^([a-z ]+?)\s*([+-]\s*\d+)?$/);
+    if (m) {
+      const key = m[1].trim(), bon = m[2] ? +m[2].replace(/\s/g, '') : 0;
+      const at = FX_ATTR.find(([k, nm]) => k.toLowerCase() === key || fxNorm(nm) === key);
+      if (at) return {kind: 'attr', label: at[1] + (bon ? fxSig(bon) : ''), attr: f ? f.attr[at[0]] : 1, bonus: bon};
+      const pr = FX_PER.find(([k, nm]) => k === key || fxNorm(nm) === key || fxNorm(nm).startsWith(key));
+      if (pr) { const t = fxPerTot(f, pr[0]); return {kind: 'per', label: pr[1] + (bon ? fxSig(bon) : ''), attr: t.attr, bonus: t.bonus + bon}; }
+    }
+    const r = rollExpr(part); return r ? {kind: 'dice', label: part.replace(/\s+/g, ''), expr: part} : {kind: 'bad', label: part};
+  });
+}
+function comboRoll(pid, f, combo) {
+  if (!combo) return; const parts = comboParts(f, combo.p), bad = parts.filter(x => x.kind === 'bad');
+  if (!parts.length) { toast('Esse combo está vazio.'); return; }
+  if (bad.length) { toast('Não entendi: ' + bad.map(x => x.label).join(', ')); return; }
+  const name = combo.n || 'Combo', res = [];
+  parts.forEach((x, i) => setTimeout(() => {
+    if (x.kind === 'dice') { const r = rollExpr(x.expr); r.label = (name + ' · ' + x.label).slice(0, 60); fxPostRoll(pid, r); res.push(r.total); }
+    else { const r = fxRollFor(pid, (name + ' · ' + x.label).slice(0, 60), x.attr, x.bonus); res.push(r.total); }
+    if (i === parts.length - 1) toast('⚡ ' + name + ': ' + res.join(' · '));
+  }, i * 420));
+}
+function fxPostRoll(pid, r) {
+  if (pid === me.id || !isHost) doRoll(r);
+  else { const p = roster.get(pid); if (p) addChat({k: 'roll', from: p.name, pid, cn: (chars[pid] || {}).char || '', r}, true); }
+}
+/* ---- painel de dados ligado ao personagem equipado ---- */
+function fxDiceHTML() {
+  const f = myCh.eq ? sanFx(myCh.fx) : null;
+  if (!f) return `<div class="fdNo">🎭 Equipe um personagem para rolar direto da ficha. <button class="btn sm" data-fxd="chars">Personagens</button></div>`;
+  const tr = FX_PER.filter(([k]) => (f.per[k] || [0])[0]), pick = tr.length ? tr : FX_PER.filter(([k]) => ['percepcao', 'iniciativa', 'luta', 'pontaria', 'reflexos', 'vontade', 'fortitude', 'investigacao'].includes(k));
+  return `<div class="fdBox"><div class="fdHead">🎲 Rolando como <b>${esc(myCh.char || 'personagem')}</b><button class="fdEd" data-fxd="sheet" title="Abrir ficha">📋</button></div>
+    <div class="fdAttr">${FX_ATTR.map(([k, n]) => `<button data-fxd="a:${k}" title="${n}"><b>${f.attr[k]}</b><small>${k}</small></button>`).join('')}</div>
+    <div class="fdPer">${pick.map(([k, n]) => { const t = fxPerTot(f, k); return `<button data-fxd="p:${k}">${n} <b>${fxSig(t.bonus)}</b></button>`; }).join('')}<select class="in" data-fxd="sel"><option value="">Outra perícia…</option>${FX_PER.map(([k, n]) => `<option value="${k}">${n} (${fxSig(fxPerTot(f, k).bonus)})</option>`).join('')}</select></div>
+    ${(f.combos || []).length ? `<div class="fdCmb">${f.combos.map((c, i) => `<button data-fxd="c:${i}" title="${esc(c.p)}">⚡ ${esc(c.n || 'Combo')}</button>`).join('')}</div>` : ''}</div>`;
+}
+function fxDiceAct(v) {
+  const f = myCh.eq ? sanFx(myCh.fx) : null;
+  if (v === 'chars') { openChars(); return; }
+  if (v === 'sheet') { openCharEditor(me.id); return; }
+  if (!f) return;
+  const [t, k] = v.split(':');
+  if (t === 'a') { const a = FX_ATTR.find(x => x[0] === k); fxRollFor(me.id, a[1], f.attr[k], 0); }
+  if (t === 'p') { const pr = FX_PER.find(x => x[0] === k); if (!pr) return; const x = fxPerTot(f, k); fxRollFor(me.id, pr[1] + (k === 'profissao' && f.prof ? ' (' + f.prof + ')' : ''), x.attr, x.bonus); }
+  if (t === 'c') comboRoll(me.id, f, (f.combos || [])[+k]);
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-fxd]'); if (!b || b.tagName === 'SELECT') return; e.preventDefault(); fxDiceAct(b.dataset.fxd); }, true);
+document.addEventListener('change', e => { const s = e.target.closest('select[data-fxd="sel"]'); if (!s || !s.value) return; fxDiceAct('p:' + s.value); s.value = ''; }, true);
+/* ---- barras de vida/esforço em todas as câmeras ---- */
+function tileBars(st) {
+  if (!hasSt(st)) return '';
+  const w = (v, m) => (m ? clamp(v / m, 0, 1) * 100 : 0).toFixed(1);
+  return `<div class="tBars">${st.pvMax ? `<i class="v" style="--w:${w(st.pv, st.pvMax)}%"></i>` : ''}${st.peMax ? `<i class="e" style="--w:${w(st.pe, st.peMax)}%"></i>` : ''}</div>`;
+}
+/* =====================================================================
+   v13: LAYOUTS DE COMBATE E INVESTIGAÇÃO, TURNOS, DESTAQUE, QUADRO DE
+   PISTAS, CENAS DE BUSCA E RELÓGIO DE PRESSÃO
+   ===================================================================== */
+function v13SetLayoutAll(l) { setLayout(l); if (isHost) { state.layout = layout; state.layoutTs = Date.now(); roomLayoutTs = state.layoutTs; pushState(); } }
+function ringPlace() {
+  const box = $('#tiles'), main = $('.mainA'); if (!box || !main) return;
+  const ring = layout === 'combat' || layout === 'invest', tiles = [...box.querySelectorAll('.tile')];
+  const W = main.clientWidth, H = main.clientHeight, hl = state.hl || '';
+  tiles.forEach(t => t.classList.toggle('hl', !!hl && t.dataset.id === hl));
+  $$('#live .lf').forEach(f => f.classList.toggle('hl', !!hl && f.dataset.id === hl));
+  if (!ring || W < 760) { tiles.forEach(t => { t.style.left = t.style.top = t.style.width = ''; t.classList.remove('rL', 'rR'); t.style.removeProperty('--rot'); }); main.style.removeProperty('--tw'); return; }
+  const n = tiles.length, per = Math.max(1, Math.ceil(n / 2)), gap = 12;
+  let tw = clamp(W * .15, 120, 220); const maxH = (H - 24 - gap * (per - 1)) / per;
+  if (tw * 9 / 16 > maxH) tw = Math.max(96, maxH * 16 / 9);
+  const th = tw * 9 / 16; main.style.setProperty('--tw', Math.round(tw) + 'px');
+  tiles.forEach((t, i) => {
+    const right = i % 2 === 1, row = Math.floor(i / 2), cnt = right ? Math.floor(n / 2) : Math.ceil(n / 2), tot = cnt * th + (cnt - 1) * gap, y0 = (H - tot) / 2;
+    t.style.width = Math.round(tw) + 'px'; t.style.left = (right ? W - tw - 12 : 12) + 'px'; t.style.top = Math.round(y0 + row * (th + gap)) + 'px';
+    t.classList.toggle('rL', !right); t.classList.toggle('rR', right);
+    t.style.setProperty('--rot', layout === 'invest' ? (((i * 37) % 7) - 3) + 'deg' : '0deg');
+  });
+}
+addEventListener('resize', () => { clearTimeout(ringPlace._t); ringPlace._t = setTimeout(() => { ringPlace(); boardRender(); }, 120); });
+function hlSet(id) { if (!isHost) return; state.hl = state.hl === id ? '' : id; pushState(); v13State(); }
+document.addEventListener('click', e => { const b = e.target.closest('#pop [data-pa="hl"]'); if (!b) return; e.stopPropagation(); closePop(); hlSet(b.dataset.hid); }, true);
+/* ---- turnos de combate ---- */
+const cbOf = () => { const c = state.cb || {}; return {on: !!c.on, list: Array.isArray(c.list) ? c.list.slice(0, 30) : [], cur: c.cur | 0, rnd: Math.max(1, c.rnd | 0)}; };
+let cbPrev = '';
+function cbPush(c) { state.cb = c; const it = c.list[c.cur]; state.hl = c.on && it && roster.has(it.k) ? it.k : (c.on ? '' : state.hl); pushState(); v13State(); }
+function cbRollAll() {
+  const c = cbOf(), ags = [...roster.values()].filter(p => p.role !== 'mestre' && eqOf(p.id)), keep = c.list.filter(x => !roster.has(x.k));
+  if (!ags.length && !keep.length) { toast('Nenhum agente com personagem equipado. Adicione inimigos ou peça para equiparem uma ficha.', 4500); }
+  const rolled = ags.map(p => { const t = fxPerTot(fxOf(p.id), 'iniciativa'), r = fxRollFor(p.id, 'Iniciativa', t.attr, t.bonus), ch = liveCh(p); return {k: p.id, n: ch.char || p.name, ini: r.total, img: ''}; });
+  const list = rolled.concat(keep).sort((a, b) => b.ini - a.ini);
+  cbPush({on: true, list, cur: 0, rnd: 1});
+  setTimeout(() => sys('⚡ Ordem de iniciativa: ' + list.map((x, i) => (i + 1) + 'º ' + x.n + ' (' + x.ini + ')').join(' · ')), 500);
+}
+function cbAddEnemy() {
+  openModal(`<div class="mhead"><h3>👹 Adicionar à iniciativa</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
+    <label class="lab" style="margin-top:0">Nome</label><input class="in" id="ceN" maxlength="30" placeholder="Ex.: Zumbi de Sangue">
+    <label class="lab">Iniciativa</label><div class="row"><input class="in" id="ceI" type="number" value="${dN(20)}" style="width:110px"><button class="btn sm" id="ceR">🎲 Rolar 1d20</button></div>
+    <button class="btn red wide" id="ceOk" style="margin-top:14px">Adicionar</button></div>`);
+  $('#ceR').onclick = () => { $('#ceI').value = dN(20); };
+  $('#ceOk').onclick = () => { const n = $('#ceN').value.trim() || 'Inimigo', ini = +$('#ceI').value || 0, c = cbOf(); const cur = c.list[c.cur]; c.list.push({k: 'n' + Math.random().toString(36).slice(2, 8), n: n.slice(0, 30), ini}); c.list.sort((a, b) => b.ini - a.ini); if (cur) c.cur = Math.max(0, c.list.indexOf(cur)); c.on = true; closeModal('ok'); cbPush(c); };
+  setTimeout(() => { const i = $('#ceN'); if (i) i.focus(); }, 50);
+}
+function cbStep(d) { const c = cbOf(); if (!c.list.length) return; let i = c.cur + d; if (i >= c.list.length) { i = 0; c.rnd++; } if (i < 0) { i = c.list.length - 1; c.rnd = Math.max(1, c.rnd - 1); } c.cur = i; cbPush(c); }
+function cbEnd() { state.cb = {on: false, list: [], cur: 0, rnd: 1}; state.hl = ''; pushState(); v13State(); toast('Combate encerrado'); }
+function cbRender() {
+  const main = $('.mainA'); if (!main) return; const c = cbOf(), it = c.list[c.cur];
+  let ban = $('#cbBan'); if (!ban) { ban = document.createElement('div'); ban.id = 'cbBan'; main.appendChild(ban); }
+  const showBan = c.on && it && (layout === 'combat' || layout === 'stage' || layout === 'livestage' || layout === 'grid');
+  ban.classList.toggle('on', !!showBan);
+  if (showBan) { const p = roster.get(it.k), ch = p ? liveCh(p) : {}; ban.innerHTML = `<small>RODADA ${c.rnd}</small><span class="pic" style="${ch.img ? `background-image:url('${ch.img}')` : ''}">${ch.img ? '' : '⚔️'}</span><b>${it.k === me.id ? 'SEU TURNO' : 'TURNO DE ' + esc(it.n).toUpperCase()}</b>${c.list[(c.cur + 1) % c.list.length] && c.list.length > 1 ? `<i>a seguir: ${esc(c.list[(c.cur + 1) % c.list.length].n)}</i>` : ''}`; }
+  let bar = $('#cbBar');
+  if (!isHost) { if (bar) bar.remove(); return; }
+  if (!bar) { bar = document.createElement('div'); bar.id = 'cbBar'; main.appendChild(bar); bar.addEventListener('click', e => { const b = e.target.closest('[data-cb]'); if (!b) return; const v = b.dataset.cb; if (v === 'roll') cbRollAll(); if (v === 'add') cbAddEnemy(); if (v === 'next') cbStep(1); if (v === 'prev') cbStep(-1); if (v === 'end') cbEnd(); if (v === 'min') { bar.classList.toggle('min'); } if (v.startsWith('go:')) { const c2 = cbOf(); c2.cur = +v.slice(3); cbPush(c2); } if (v.startsWith('rm:')) { const c2 = cbOf(), cur = c2.list[c2.cur]; c2.list.splice(+v.slice(3), 1); c2.cur = Math.max(0, cur ? c2.list.indexOf(cur) : 0); cbPush(c2); } }); }
+  const show = layout === 'combat' || c.on; bar.classList.toggle('hide', !show); if (!show) return;
+  bar.innerHTML = `<div class="cbT"><b>⚔️ ${c.on ? 'Rodada ' + c.rnd : 'Combate'}</b><button data-cb="min" title="Minimizar">▾</button></div>
+    <div class="cbL">${c.list.map((x, i) => `<span class="cbC${i === c.cur ? ' on' : ''}${roster.has(x.k) ? '' : ' foe'}"><button data-cb="go:${i}">${esc(x.n)} <small>${x.ini}</small></button>${roster.has(x.k) ? '' : `<button class="x" data-cb="rm:${i}" title="Tirar">×</button>`}</span>`).join('') || '<span class="hint" style="margin:0">Role a iniciativa para montar a ordem.</span>'}</div>
+    <div class="cbB"><button class="btn sm red" data-cb="roll">⚡ Iniciativa</button><button class="btn sm" data-cb="add">👹 Inimigo</button><button class="btn sm" data-cb="prev" title="Turno anterior">⏮</button><button class="btn sm red" data-cb="next">⏭ Próximo turno</button>${c.on ? '<button class="btn sm" data-cb="end">✕ Encerrar</button>' : ''}</div>`;
+}
+function cbOffer(kind) {
+  if (!isHost) return; const old = $('#lyOffer'); if (old) old.remove();
+  const inv = kind === 'investigacao', el = document.createElement('div'); el.id = 'lyOffer';
+  el.innerHTML = `<b>${inv ? '🔎 Ativar o layout de investigação?' : '⚔️ Ativar o layout de combate?'}</b><small>${inv ? 'quadro de pistas no centro e câmeras em volta' : 'tela no centro, câmeras em volta e destaque no turno'}</small><div><button class="btn sm red" data-ly="yes">Ativar</button>${inv ? '' : '<button class="btn sm red" data-ly="roll">Ativar e rolar iniciativa</button>'}<button class="btn sm" data-ly="no">Agora não</button></div>`;
+  document.body.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
+  const kill = () => { el.classList.remove('on'); setTimeout(() => el.remove(), 400); };
+  el.onclick = e => { const b = e.target.closest('[data-ly]'); if (!b) return; if (b.dataset.ly !== 'no') { v13SetLayoutAll(inv ? 'invest' : 'combat'); if (!inv) { const c = cbOf(); c.on = true; cbPush(c); } if (b.dataset.ly === 'roll') cbRollAll(); } kill(); };
+  setTimeout(kill, 15000);
+}
+/* ---- relógio de pressão ---- */
+const ckOf = () => { const k = state.clk || {}; return {on: !!k.on, n: clamp(k.n | 0 || 6, 2, 12), v: clamp(k.v | 0, 0, 12), name: String(k.name || '').slice(0, 40), cut: String(k.cut || '').slice(0, 20)}; };
+let ckPrev = -1;
+function ckSet(patch) { const k = Object.assign(ckOf(), patch); k.v = clamp(k.v, 0, k.n); const full = k.v >= k.n && ckOf().v < k.n; state.clk = k; pushState(); v13State(); if (full && k.cut) { const c = cutLib.find(x => x.id === k.cut); if (c) setTimeout(() => cutPlay(c), 1300); } }
+function ckRender() {
+  const main = $('.mainA'); if (!main) return; const k = ckOf();
+  let w = $('#clkW'); if (!w) { w = document.createElement('div'); w.id = 'clkW'; main.appendChild(w); }
+  w.classList.toggle('on', k.on); if (!k.on) { ckPrev = -1; return; }
+  const R = 22, seg = 360 / k.n, arc = (a0, a1) => { const p = a => [26 + R * Math.sin(a * Math.PI / 180), 26 - R * Math.cos(a * Math.PI / 180)]; const [x0, y0] = p(a0 + 2), [x1, y1] = p(a1 - 2); return `M26 26 L${x0.toFixed(2)} ${y0.toFixed(2)} A${R} ${R} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}Z`; };
+  w.className = 'on' + (k.v >= k.n ? ' full' : k.v / k.n >= .75 ? ' hot' : '');
+  w.innerHTML = `<svg viewBox="0 0 52 52">${Array.from({length: k.n}, (_, i) => `<path d="${arc(i * seg, (i + 1) * seg)}" class="${i < k.v ? 'f' : ''}${i === k.v - 1 && ckPrev >= 0 && k.v > ckPrev ? ' new' : ''}"/>`).join('')}<circle cx="26" cy="26" r="${R + 1.5}" class="rim"/></svg><div><b>${esc(k.name || 'Relógio')}</b><small>${k.v} / ${k.n}</small></div>`;
+  if (ckPrev >= 0 && k.v !== ckPrev) {
+    if (k.v > ckPrev) docSnd(k.v >= k.n ? 'dying' : 'thump');
+    if (k.v >= k.n) { w.classList.add('boom'); setTimeout(() => w.classList.remove('boom'), 1400); }
+  }
+  ckPrev = k.v;
+}
+/* ---- quadro de pistas (investigação) ---- */
+let board = {pins: [], links: []}, boardLink = null, bposT = 0;
+const boardSan = b => ({pins: (b && Array.isArray(b.pins) ? b.pins : []).slice(0, 30).filter(p => p && p.id).map(p => ({id: String(p.id).slice(0, 16), x: clamp(+p.x || 50, 2, 98), y: clamp(+p.y || 50, 4, 96), r: clamp(+p.r || 0, -12, 12), n: String(p.n || '').slice(0, 40), th: okImg(p.th) ? p.th : ''})), links: (b && Array.isArray(b.links) ? b.links : []).slice(0, 60).filter(l => Array.isArray(l) && l.length === 2).map(l => [String(l[0]).slice(0, 16), String(l[1]).slice(0, 16)])});
+function boardLoad() { board = boardSan(lsGet('mesa-board:' + code, null)); }
+function boardSave(send = true) { if (!isHost) return; lsSet('mesa-board:' + code, board); if (send) sendAll({t: 'board', b: board}); boardRender(); }
+function thumbOf(src) { return new Promise(res => { const im = new Image(); im.onload = () => { const k = Math.min(1, 240 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.naturalWidth * k)); c.height = Math.max(1, Math.round(im.naturalHeight * k)); const g = c.getContext('2d'); g.fillStyle = '#ddd'; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', .62)); }; im.onerror = () => res(''); im.src = src; }); }
+function boardRender() {
+  const main = $('.mainA'); if (!main) return;
+  let el = $('#board'); if (!el) { el = document.createElement('div'); el.id = 'board'; main.appendChild(el); boardWire(el); }
+  const on = layout === 'invest'; el.classList.toggle('on', on); if (!on) return;
+  const R = el.getBoundingClientRect(), pos = p => [p.x / 100 * R.width, p.y / 100 * R.height];
+  const lines = board.links.map(([a, b]) => { const A = board.pins.find(p => p.id === a), B = board.pins.find(p => p.id === b); if (!A || !B) return ''; const [x1, y1] = pos(A), [x2, y2] = pos(B), mx = (x1 + x2) / 2, my = Math.max(y1, y2) + Math.min(60, Math.hypot(x2 - x1, y2 - y1) * .12); return `<path d="M${x1.toFixed(1)} ${(y1 - 6).toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${(y2 - 6).toFixed(1)}"/>`; }).join('');
+  el.innerHTML = `<div class="bdCork"></div><svg class="bdStr" width="${R.width}" height="${R.height}">${lines}</svg>
+    ${board.pins.map(p => `<div class="pin${boardLink === p.id ? ' lk' : ''}" data-pin="${esc(p.id)}" style="left:${p.x}%;top:${p.y}%;--r:${p.r}deg"><i class="tack"></i>${p.th ? `<img alt="" src="${p.th}" draggable="false">` : '<span class="ph">📄</span>'}<b>${esc(p.n)}</b>${isHost ? `<span class="pa"><button data-pna="lk" title="Ligar com fio vermelho">🔗</button><button data-pna="see" title="Ver">👁</button><button data-pna="all" title="Mostrar a todos">🌐</button><button data-pna="rm" title="Tirar do quadro">✕</button></span>` : ''}</div>`).join('')}
+    ${!board.pins.length ? `<div class="bdEmpty">${isHost ? '📌 Prenda pistas no quadro para todos verem e ligue umas às outras com o fio vermelho.' : '🔎 O quadro de pistas está vazio por enquanto.'}</div>` : ''}
+    ${isHost ? `<div class="bdTools"><button class="btn sm red" data-bd="add">📌 Prender pista</button>${board.links.length ? '<button class="btn sm" data-bd="unlink">✂️ Cortar fios</button>' : ''}${board.pins.length ? '<button class="btn sm" data-bd="clear">🧹 Limpar quadro</button>' : ''}</div>` : ''}
+    ${boardLink ? '<div class="bdTip">Toque em outra pista para ligar com o fio · Esc cancela</div>' : ''}`;
+}
+function boardWire(el) {
+  let drag = null;
+  el.addEventListener('pointerdown', e => {
+    if (!isHost) return; const pin = e.target.closest('.pin'); if (!pin || e.target.closest('button')) return;
+    const p = board.pins.find(x => x.id === pin.dataset.pin); if (!p) return;
+    if (boardLink && boardLink !== p.id) { const a = boardLink, ix = board.links.findIndex(l => (l[0] === a && l[1] === p.id) || (l[1] === a && l[0] === p.id)); if (ix >= 0) board.links.splice(ix, 1); else board.links.push([a, p.id]); boardLink = null; boardSave(); docSnd('paper'); return; }
+    drag = {p, pin, sx: e.clientX, sy: e.clientY, x: p.x, y: p.y, moved: false}; pin.classList.add('drag'); try { pin.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  el.addEventListener('pointermove', e => {
+    if (!drag) return; const R = el.getBoundingClientRect(), dx = (e.clientX - drag.sx) / R.width * 100, dy = (e.clientY - drag.sy) / R.height * 100;
+    if (Math.abs(dx) + Math.abs(dy) > .6) drag.moved = true;
+    drag.p.x = clamp(drag.x + dx, 3, 97); drag.p.y = clamp(drag.y + dy, 6, 94); drag.pin.style.left = drag.p.x + '%'; drag.pin.style.top = drag.p.y + '%';
+    const now = performance.now(); if (now - bposT > 70) { bposT = now; sendAll({t: 'bpos', id: drag.p.id, x: +drag.p.x.toFixed(2), y: +drag.p.y.toFixed(2)}); boardStrings(); }
+  });
+  const up = () => { if (!drag) return; const d = drag; drag = null; d.pin.classList.remove('drag'); if (d.moved) boardSave(); else boardOpenPin(d.p); };
+  el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+  el.addEventListener('click', e => {
+    const a = e.target.closest('[data-pna]'), t = e.target.closest('[data-bd]'), pin = e.target.closest('.pin');
+    if (a && pin) { const id = pin.dataset.pin, v = a.dataset.pna; if (v === 'lk') { boardLink = boardLink === id ? null : id; boardRender(); } if (v === 'see') docOpen(id, false, false); if (v === 'all') { if (docLib.find(x => x.id === id)) docShowAll(id); else toast('Essa pista não está mais na biblioteca.'); } if (v === 'rm') { board.pins = board.pins.filter(x => x.id !== id); board.links = board.links.filter(l => !l.includes(id)); boardSave(); } return; }
+    if (t) { const v = t.dataset.bd; if (v === 'add') boardPick(); if (v === 'unlink') { board.links = []; boardSave(); } if (v === 'clear') confirmBox('Tirar todas as pistas do quadro?', 'Limpar').then(ok => { if (ok) { board = {pins: [], links: []}; boardSave(); } }); return; }
+    if (!isHost && pin) { const id = pin.dataset.pin; if (docGot.some(x => x.id === id)) docOpen(id, false, false); else toast('🔒 Você ainda não tem essa pista. Peça ao Mestre.'); }
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && boardLink) { boardLink = null; boardRender(); } });
+}
+function boardStrings() { const el = $('#board'); if (!el) return; const s = el.querySelector('.bdStr'); if (!s) return; const R = el.getBoundingClientRect(), pos = p => [p.x / 100 * R.width, p.y / 100 * R.height]; s.innerHTML = board.links.map(([a, b]) => { const A = board.pins.find(p => p.id === a), B = board.pins.find(p => p.id === b); if (!A || !B) return ''; const [x1, y1] = pos(A), [x2, y2] = pos(B), mx = (x1 + x2) / 2, my = Math.max(y1, y2) + Math.min(60, Math.hypot(x2 - x1, y2 - y1) * .12); return `<path d="M${x1.toFixed(1)} ${(y1 - 6).toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${(y2 - 6).toFixed(1)}"/>`; }).join(''); }
+function boardOpenPin(p) { if (docLib.find(x => x.id === p.id)) docOpen(p.id, false, false); }
+function boardPick() {
+  const avail = docLib.filter(d => !board.pins.some(p => p.id === d.id));
+  if (!avail.length) { toast(docLib.length ? 'Todas as pistas já estão no quadro.' : 'Sua biblioteca de pistas está vazia.'); return; }
+  const sel = new Set();
+  openModal(`<div class="mhead"><h3>📌 Prender no quadro</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
+    <div class="hint" style="margin-top:0">Todos veem a miniatura no quadro. Para ler a pista, o agente precisa ter recebido ela.</div>
+    <div class="bpList">${avail.map(d => `<button class="bpI" data-bp="${d.id}"><img alt="" src="${d.img}"><b>${esc(d.name)}</b><i>✓</i></button>`).join('')}</div>
+    <button class="btn red wide" id="bpGo" style="margin-top:12px" disabled>📌 Prender <b id="bpN">0</b></button></div>`);
+  $$('#mbox [data-bp]').forEach(b => { b.onclick = () => { const k = b.dataset.bp; if (sel.has(k)) sel.delete(k); else sel.add(k); b.classList.toggle('on', sel.has(k)); $('#bpN').textContent = sel.size; $('#bpGo').disabled = !sel.size; }; });
+  $('#bpGo').onclick = async () => {
+    const ids = [...sel]; closeModal('ok'); toast('📌 Prendendo…');
+    for (const id of ids) { const d = docLib.find(x => x.id === id); if (!d) continue; const th = await thumbOf(d.img), i = board.pins.length; board.pins.push({id, x: 14 + (i * 23) % 72 + rand(-3, 3), y: 20 + Math.floor(i / 4) * 26 % 62 + rand(-3, 3), r: rand(-6, 6), n: d.name, th}); }
+    board = boardSan(board); boardSave(); docSnd('stamp');
+  };
+}
+/* ---- cenas de busca (pontos escondidos + lanterna) ---- */
+let srchLib = [], srchCur = null, srchView = null;
+const SR_PER = ['investigacao', 'percepcao', 'ocultismo', 'medicina', 'tecnologia', 'crime', 'ciencias', 'atualidades', 'sobrevivencia', 'intuicao'];
+const srSan = s => ({id: String(s.id || '').replace(/[^a-z0-9_]/gi, '').slice(0, 20), srch: true, name: String(s.name || 'Busca').slice(0, 40), img: okImg(s.img) ? s.img : '', ts: +s.ts || Date.now(),
+  pts: (Array.isArray(s.pts) ? s.pts : []).slice(0, 16).map(p => ({id: String(p.id || '').slice(0, 10) || Math.random().toString(36).slice(2, 8), x: clamp(+p.x || 50, 0, 100), y: clamp(+p.y || 50, 0, 100), n: String(p.n || '').slice(0, 40), per: FX_PER.some(x => x[0] === p.per) ? p.per : 'investigacao', dt: clamp(+p.dt || 15, 0, 60), doc: String(p.doc || '').slice(0, 16), txt: String(p.txt || '').slice(0, 300)}))});
+async function srchLoad() { try { srchLib = ((await docTx('lib', 'readonly', st => st.getAll())) || []).filter(x => x && x.srch).map(srSan).sort((a, b) => b.ts - a.ts); } catch (e) { srchLib = []; } }
+async function srchStore(s) { try { await docTx('lib', 'readwrite', st => st.put(s)); } catch (e) { toast('Não consegui guardar a cena neste navegador.'); return false; } await srchLoad(); renderSide(); return true; }
+async function srchDel(id) { try { await docTx('lib', 'readwrite', st => st.delete(id)); } catch (e) {} await srchLoad(); renderSide(); }
+function srchEditor(id) {
+  const ex = srchLib.find(x => x.id === id), s = ex ? JSON.parse(JSON.stringify(ex)) : srSan({id: 'srch_' + Math.random().toString(36).slice(2, 9), name: '', pts: []});
+  let selPt = null;
+  const draw = () => {
+    openModal(`<div class="mhead"><h3>🔦 ${ex ? 'Editar' : 'Nova'} cena de busca</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody srEd">
+      <label class="lab" style="margin-top:0">Nome (os agentes veem)</label><input class="in" id="srN" maxlength="40" value="${esc(s.name)}" placeholder="Ex.: Quarto do padre">
+      <label class="lab">Imagem do local <small style="text-transform:none;letter-spacing:0;color:var(--mut)">· depois toque na imagem para esconder coisas</small></label>
+      ${s.img ? `<div class="srBox" id="srBox"><img alt="" src="${s.img}" draggable="false">${s.pts.map((p, i) => `<span class="srM${selPt === p.id ? ' on' : ''}" data-sm="${p.id}" style="left:${p.x}%;top:${p.y}%">${i + 1}</span>`).join('')}</div>` : ''}
+      <div class="row" style="margin-top:8px"><button class="btn sm" id="srImg">🖼️ ${s.img ? 'Trocar imagem' : 'Escolher imagem'}</button></div>
+      ${s.pts.length ? `<div class="srPts">${s.pts.map((p, i) => `<div class="srP${selPt === p.id ? ' on' : ''}" data-sp="${p.id}"><span class="no">${i + 1}</span>
+        <input class="in" data-spf="n" maxlength="40" value="${esc(p.n)}" placeholder="O que é (ex.: gaveta trancada)">
+        <select class="in" data-spf="per">${FX_PER.map(([k, n]) => `<option value="${k}"${p.per === k ? ' selected' : ''}>${n}</option>`).join('')}</select>
+        <label class="dt">DT<input class="in" data-spf="dt" type="number" min="0" max="60" value="${p.dt}"></label>
+        <select class="in" data-spf="doc"><option value="">— sem pista —</option>${docLib.map(d => `<option value="${d.id}"${p.doc === d.id ? ' selected' : ''}>📄 ${esc(d.name)}</option>`).join('')}</select>
+        <input class="in wide2" data-spf="txt" maxlength="300" value="${esc(p.txt)}" placeholder="Texto que o agente lê ao achar (opcional)">
+        <button class="btn sm" data-spx="${p.id}" title="Apagar ponto">🗑</button></div>`).join('')}</div>` : s.img ? '<div class="hint">Toque na imagem para marcar o primeiro ponto escondido.</div>' : ''}
+      <div class="hint">Na busca, a tela dos agentes fica escura e cada um usa uma lanterna. Perto de um ponto escondido aparece um brilho. Ao clicar, rola a perícia da ficha contra a DT: quem passar recebe a pista na hora.</div>
+      <div class="row" style="margin-top:12px;gap:8px">${ex ? '<button class="btn sm" id="srDel">🗑</button>' : ''}<span style="flex:1"></span><button class="btn sm" id="srSave">💾 Salvar</button><button class="btn sm red" id="srGo">▶ Salvar e começar</button></div></div>`);
+    const mb = $('#mbox');
+    const keep = () => { s.name = $('#srN').value; };
+    $('#srImg').onclick = async () => { const [fl] = await pickFile('image/*'); if (!fl) return; try { keep(); s.img = await imgToDataURL(fl, 1400, .8); draw(); } catch (e) { toast('Não consegui abrir essa imagem.'); } };
+    const box = $('#srBox');
+    if (box) {
+      let dg = null;
+      box.addEventListener('pointerdown', e => { const m = e.target.closest('[data-sm]'), r = box.getBoundingClientRect(); if (m) { dg = {id: m.dataset.sm, m}; try { box.setPointerCapture(e.pointerId); } catch (_) {} return; } keep(); const p = {id: Math.random().toString(36).slice(2, 8), x: +((e.clientX - r.left) / r.width * 100).toFixed(2), y: +((e.clientY - r.top) / r.height * 100).toFixed(2), n: '', per: 'investigacao', dt: 15, doc: '', txt: ''}; if (s.pts.length >= 16) { toast('Máximo de 16 pontos.'); return; } s.pts.push(p); selPt = p.id; draw(); });
+      box.addEventListener('pointermove', e => { if (!dg) return; const r = box.getBoundingClientRect(), p = s.pts.find(x => x.id === dg.id); if (!p) return; p.x = clamp((e.clientX - r.left) / r.width * 100, 0, 100); p.y = clamp((e.clientY - r.top) / r.height * 100, 0, 100); dg.m.style.left = p.x + '%'; dg.m.style.top = p.y + '%'; dg.moved = true; });
+      box.addEventListener('pointerup', () => { if (dg) { selPt = dg.id; keep(); const was = dg; dg = null; if (!was.moved) draw(); } });
+    }
+    mb.addEventListener('input', e => { const t = e.target.closest('[data-spf]'); if (!t) return; const p = s.pts.find(x => x.id === t.closest('[data-sp]').dataset.sp); if (!p) return; p[t.dataset.spf] = t.dataset.spf === 'dt' ? clamp(+t.value || 0, 0, 60) : t.value; });
+    mb.addEventListener('change', e => { const t = e.target.closest('select[data-spf]'); if (!t) return; const p = s.pts.find(x => x.id === t.closest('[data-sp]').dataset.sp); if (p) p[t.dataset.spf] = t.value; });
+    mb.addEventListener('click', e => { const x = e.target.closest('[data-spx]'); if (x) { keep(); s.pts = s.pts.filter(p => p.id !== x.dataset.spx); draw(); } });
+    const save = async () => { keep(); if (!s.img) { toast('Escolha a imagem do local.'); return null; } const v = srSan(Object.assign(s, {name: s.name.trim() || 'Busca', ts: ex ? ex.ts : Date.now()})); return (await srchStore(v)) ? v : null; };
+    $('#srSave').onclick = async () => { if (await save()) { closeModal('ok'); toast('🔦 Cena de busca salva'); } };
+    $('#srGo').onclick = async () => { const v = await save(); if (v) { closeModal('ok'); srchStart(v.id); } };
+    if ($('#srDel')) $('#srDel').onclick = () => confirmBox('Apagar esta cena de busca?', 'Apagar').then(ok => { if (ok) { srchDel(s.id); closeModal('ok'); } else draw(); });
+  };
+  draw();
+}
+const srchPublic = () => srchCur && {id: srchCur.s.id, name: srchCur.s.name, img: srchCur.s.img, pts: srchCur.s.pts.map(p => ({id: p.id, x: p.x, y: p.y, per: p.per}))};
+function srchStart(id) {
+  const s = srchLib.find(x => x.id === id); if (!s) return;
+  if (!s.pts.length) { toast('Marque pelo menos um ponto escondido na imagem.'); srchEditor(id); return; }
+  srchCur = {s, found: {}, tried: {}}; sendAll({t: 'srch', s: srchPublic()}); srchOpen(srchPublic(), true); renderSide(); sys('🔦 Busca começou: ' + s.name);
+}
+function srchStop() { srchCur = null; sendAll({t: 'srch', s: null}); srchClose(); renderSide(); toast('Busca encerrada'); }
+function srchOpen(pub, show) {
+  srchView = {pub, res: (srchView && srchView.pub && srchView.pub.id === pub.id) ? srchView.res : {}, min: !show};
+  let ov = $('#srOv'); if (ov) ov.remove(); ov = document.createElement('div'); ov.id = 'srOv'; document.body.appendChild(ov);
+  const host = isHost && srchCur;
+  ov.innerHTML = `<div class="srTop"><b>🔦 ${esc(pub.name)}</b><small>${host ? 'Você vê tudo. Os agentes procuram no escuro com a lanterna.' : 'Mova a lanterna e toque no que parecer suspeito. Cada coisa só pode ser examinada uma vez.'}</small><span style="flex:1"></span>${host ? '<button class="btn sm red" data-sr="stop">✕ Encerrar busca</button>' : ''}<button class="btn sm" data-sr="min">— Minimizar</button></div>
+    <div class="srStage"><div class="srImg${host ? ' host' : ''}" id="srImg"><img alt="" class="dim" src="${pub.img}" draggable="false"><div class="lit"><img alt="" src="${pub.img}" draggable="false"></div><div class="beam"></div>
+      ${pub.pts.map((p, i) => { const full = host ? srchCur.s.pts.find(x => x.id === p.id) : null; return `<button class="sp" data-spt="${p.id}" style="left:${p.x}%;top:${p.y}%">${host ? `<b>${i + 1}</b><small>${esc(full.n || 'Ponto ' + (i + 1))} · ${FX_PER.find(x => x[0] === full.per)[1]} DT ${full.dt}${full.doc ? ' · 📄' : ''}</small>` : '<i></i>'}</button>`; }).join('')}</div></div>
+    ${host ? `<div class="srLog" id="srLog"></div>` : ''}`;
+  if (!show) ov.classList.add('min');
+  srchFab(); srchPaint();
+  const im = $('#srImg', ov), lit = im.querySelector('.lit'), beam = im.querySelector('.beam');
+  const move = e => { const r = im.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 100, y = (e.clientY - r.top) / r.height * 100; im.style.setProperty('--x', x + '%'); im.style.setProperty('--y', y + '%'); if (!host) $$('.sp', im).forEach(b => { const dx = (parseFloat(b.style.left) - x) * r.width / 100, dy = (parseFloat(b.style.top) - y) * r.height / 100, d = Math.hypot(dx, dy), rad = r.width * .16; b.style.setProperty('--o', clamp(1 - d / rad, 0, 1).toFixed(2)); }); };
+  im.addEventListener('pointermove', move); im.addEventListener('pointerdown', move);
+  ov.addEventListener('click', e => { const b = e.target.closest('[data-sr]'); if (b) { if (b.dataset.sr === 'stop') srchStop(); if (b.dataset.sr === 'min') { ov.classList.add('min'); srchView.min = true; srchFab(); } return; } const p = e.target.closest('[data-spt]'); if (p) srchTry(p.dataset.spt); });
+  if (show) docSnd('seal');
+}
+function srchClose() { const ov = $('#srOv'); if (ov) { ov.classList.add('out'); setTimeout(() => ov.remove(), 400); } srchView = null; srchFab(); }
+function srchFab() { let f = $('#srFab'); const need = srchView && srchView.min; if (!need) { if (f) f.remove(); return; } if (!f) { f = document.createElement('button'); f.id = 'srFab'; f.innerHTML = '🔦 <b>Busca em andamento</b>'; f.onclick = () => { const ov = $('#srOv'); if (ov) ov.classList.remove('min'); srchView.min = false; srchFab(); }; document.body.appendChild(f); } }
+function srchPaint() {
+  if (!srchView) return; const im = $('#srImg'); if (!im) return;
+  Object.entries(srchView.res).forEach(([id, r]) => { const b = im.querySelector(`[data-spt="${CSS.escape(id)}"]`); if (!b || isHost) return; b.classList.toggle('ok', !!r.ok); b.classList.toggle('no', !r.ok); b.innerHTML = r.ok ? `<span>✓ ${esc(r.n || 'Encontrado')}</span>` : `<span>✗ nada (${r.total})</span>`; });
+  const lg = $('#srLog'); if (lg && srchCur) { const rows = []; Object.entries(srchCur.tried).forEach(([pn, m]) => Object.entries(m).forEach(([pid, r]) => { const i = srchCur.s.pts.findIndex(x => x.id === pid), p = srchCur.s.pts[i]; if (p) rows.push(`<div class="${r.ok ? 'ok' : 'no'}"><b>${esc(pn)}</b> · ${i + 1}. ${esc(p.n || 'ponto')} · rolou ${r.total} vs DT ${p.dt} ${r.ok ? '✓' : '✗'}${r.ok && p.doc ? ` <button class="btn sm" data-srall="${p.doc}">🌐 Mostrar a todos</button>` : ''}</div>`); })); lg.innerHTML = rows.length ? rows.join('') : '<div class="no">Ninguém examinou nada ainda.</div>'; lg.onclick = e => { const b = e.target.closest('[data-srall]'); if (b) docShowAll(b.dataset.srall); }; }
+}
+function srchTry(pid) {
+  if (!srchView) return; if (isHost) { const p = srchCur && srchCur.s.pts.find(x => x.id === pid); if (p && p.doc) docOpen(p.doc, false, false); return; }
+  if (srchView.res[pid] || srchView.pending === pid) { toast('Você já examinou isso.'); return; }
+  const pt = srchView.pub.pts.find(x => x.id === pid); if (!pt) return;
+  const f = myCh.eq ? sanFx(myCh.fx) : null, t = fxPerTot(f, pt.per), n = FX_PER.find(x => x[0] === pt.per)[1];
+  if (!f) toast('Sem personagem equipado: você rola só 1 dado.', 3500);
+  const r = rollOP(t.attr, t.bonus); r.label = ('Busca · ' + n).slice(0, 60); doRoll(r);
+  srchView.pending = pid; if (hostConn && hostConn.open) hostConn.send({t: 'srchTry', id: srchView.pub.id, pt: pid, total: r.total});
+  const b = $(`#srImg [data-spt="${CSS.escape(pid)}"]`); if (b) b.classList.add('wait');
+}
+/* ---- painel do Mestre na aba Cenas ---- */
+function v13PaneHTML() {
+  const k = ckOf();
+  return `<div class="sec">🧭 Layouts de cena</div>
+    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn sm ${layout === 'combat' ? 'on' : ''}" data-v13="ly:combat">⚔️ Combate</button><button class="btn sm ${layout === 'invest' ? 'on' : ''}" data-v13="ly:invest">🔎 Investigação</button>${layout === 'combat' || layout === 'invest' ? '<button class="btn sm" data-v13="ly:stage">↩️ Voltar ao Palco</button>' : ''}</div>
+    <div class="hint">No layout de combate, a tela fica no centro e as câmeras em volta. Toque numa câmera e use “⭐ Destacar” para mostrar quem está agindo.</div>
+    <div class="sec">🔦 Cenas de busca <small style="font-weight:500;text-transform:none;letter-spacing:0">lanterna no escuro, rolagem da ficha</small></div>
+    ${srchCur ? `<div class="srNow">▶ Em andamento: <b>${esc(srchCur.s.name)}</b><button class="btn sm" data-v13="sr:open">Abrir</button><button class="btn sm red" data-v13="sr:stop">Encerrar</button></div>` : ''}
+    <div class="cutList">${srchLib.map(s => `<div class="cutIt" style="--mc:#ffd75e"><button class="cutPlay" data-v13="sr:go:${s.id}" title="Começar a busca para todos"><span class="e">🔦</span><span class="tx"><b>${esc(s.name)}</b><small>${s.pts.length} ponto${s.pts.length === 1 ? '' : 's'} escondido${s.pts.length === 1 ? '' : 's'}</small></span></button><button class="btn sm" data-v13="sr:ed:${s.id}" title="Editar">✏️</button></div>`).join('')}</div>
+    <button class="btn sm wide" data-v13="sr:new" style="margin-top:8px">+ Nova cena de busca</button>
+    <div class="sec">⏳ Relógio de pressão</div>
+    <div class="ckEd"><input class="in" id="ckN" maxlength="40" value="${esc(k.name)}" placeholder="Ex.: A criatura acorda">
+      <div class="row" style="gap:8px;margin-top:6px"><select class="in" id="ckS" style="width:auto">${[4, 6, 8, 10, 12].map(n => `<option value="${n}"${k.n === n ? ' selected' : ''}>${n} partes</option>`).join('')}</select>
+      <select class="in" id="ckC" style="flex:1"><option value="">Ao completar: nada</option>${cutLib.map(c => `<option value="${c.id}"${k.cut === c.id ? ' selected' : ''}>Ao completar: ▶ ${esc(c.name || (CUT_TYPES[c.type] || {}).n || 'cena')}</option>`).join('')}</select></div>
+      <div class="row" style="gap:6px;margin-top:6px;flex-wrap:wrap"><button class="btn sm ${k.on ? 'on' : 'red'}" data-v13="ck:on">${k.on ? '◼ Esconder' : '▶ Mostrar a todos'}</button><button class="btn sm" data-v13="ck:-">−1</button><button class="btn sm red" data-v13="ck:+">+1 avançar</button><button class="btn sm" data-v13="ck:0">Zerar</button><span class="hint" style="margin:0">${k.v} / ${k.n}</span></div></div>
+    <div class="hint">O relógio aparece no topo da tela de todos. Quando enche, toca a cutscene escolhida (ótimo com Emboscada).</div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-v13]'); if (!b || !isHost) return; const [a, x, y] = b.dataset.v13.split(':');
+  if (a === 'ly') { v13SetLayoutAll(x); renderSide(); }
+  if (a === 'sr') { if (x === 'new') srchEditor(null); if (x === 'ed') srchEditor(y); if (x === 'go') srchStart(y); if (x === 'stop') srchStop(); if (x === 'open') { if (srchCur) srchOpen(srchPublic(), true); } }
+  if (a === 'ck') { const rd = {name: ($('#ckN') || {}).value || '', n: +(($('#ckS') || {}).value || 6), cut: ($('#ckC') || {}).value || ''}, k = ckOf(); if (x === 'on') ckSet(Object.assign(rd, {on: !k.on})); if (x === '+') ckSet(Object.assign(rd, {on: true, v: k.v + 1})); if (x === '-') ckSet(Object.assign(rd, {v: k.v - 1})); if (x === '0') ckSet(Object.assign(rd, {v: 0})); renderSide(); }
+});
+document.addEventListener('change', e => { if (!isHost || !e.target.closest('#ckS,#ckC')) return; const k = ckOf(); state.clk = Object.assign(k, {n: +$('#ckS').value, cut: $('#ckC').value, name: $('#ckN').value}); state.clk.v = Math.min(state.clk.v, state.clk.n); pushState(); v13State(); });
+/* ---- rede ---- */
+function v13Hello(conn) {
+  try { if (board.pins.length) conn.send({t: 'board', b: board}); if (srchCur) conn.send({t: 'srch', s: srchPublic()}); } catch (e) {}
+}
+function v13Msg(d) {
+  if (d.t === 'board') { board = boardSan(d.b); boardRender(); }
+  if (d.t === 'bpos') { const p = board.pins.find(x => x.id === d.id); if (p) { p.x = clamp(+d.x, 2, 98); p.y = clamp(+d.y, 4, 96); const el = $(`#board [data-pin="${CSS.escape(p.id)}"]`); if (el) { el.style.left = p.x + '%'; el.style.top = p.y + '%'; } boardStrings(); } }
+  if (d.t === 'srch') { if (!d.s) { srchClose(); toast('🔦 A busca terminou'); } else if (!srchView || srchView.pub.id !== d.s.id) { srchOpen({id: String(d.s.id).slice(0, 20), name: String(d.s.name || '').slice(0, 40), img: okImg(d.s.img) ? d.s.img : '', pts: (d.s.pts || []).slice(0, 16).map(p => ({id: String(p.id).slice(0, 10), x: clamp(+p.x, 0, 100), y: clamp(+p.y, 0, 100), per: FX_PER.some(x => x[0] === p.per) ? p.per : 'investigacao'}))}, true); } }
+  if (d.t === 'srchRes' && srchView) { const pid = String(d.pt); srchView.pending = null; srchView.res[pid] = {ok: !!d.ok, n: String(d.n || '').slice(0, 40), total: +d.total || 0}; srchPaint(); if (d.ok) { docSnd('paper'); toast('🔎 Você encontrou: ' + (d.n || 'algo') + '!', 3500); if (d.txt) openModal(`<div class="mhead"><h3>🔎 ${esc(String(d.n || 'Você encontrou algo'))}</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody"><div class="srTxt">${esc(String(d.txt).slice(0, 300))}</div></div>`); } else { docSnd('thump'); toast('Nada de útil aqui… (você rolou ' + (+d.total || 0) + ')', 3000); } }
+}
+function v13Host(id, d, p) {
+  if (d.t !== 'srchTry' || !srchCur || !p || String(d.id) !== srchCur.s.id) return;
+  const pt = srchCur.s.pts.find(x => x.id === String(d.pt)); if (!pt) return;
+  const m = srchCur.tried[p.name] = srchCur.tried[p.name] || {}; if (m[pt.id]) return;
+  const total = +d.total || 0, ok = total >= pt.dt; m[pt.id] = {ok, total};
+  const c = conns.get(id);
+  if (ok && pt.doc) { const doc = docLib.find(x => x.id === pt.doc); if (doc && c && c.open) { try { c.send({t: 'doc', doc, show: true}); } catch (e) {} docSent[doc.id] = [...new Set([...(docSent[doc.id] || []), p.name])]; } }
+  if (c && c.open) try { c.send({t: 'srchRes', pt: pt.id, ok, n: ok ? pt.n : '', txt: ok ? pt.txt : '', total}); } catch (e) {}
+  const nm = (chars[id] || {}).char || p.name;
+  sys(ok ? `🔎 ${nm} examinou ${pt.n || 'algo'} e encontrou uma pista!` : `🔎 ${nm} examinou ${pt.n || 'algo'}, mas não achou nada.`);
+  srchPaint(); renderSide();
+}
+let v13Last = '';
+let boardCode = '';
+function v13State() {
+  if (code && code !== boardCode) { boardCode = code; boardLoad(); }
+  const c = cbOf(), it = c.list[c.cur], sig = c.on && it ? it.k + ':' + c.rnd + ':' + c.cur : '';
+  if (sig && sig !== cbPrev && cbPrev !== '') { docSnd('thump'); if (it.k === me.id) { toast('⚔️ É o seu turno!', 3500); try { navigator.vibrate && navigator.vibrate([80, 60, 80]); } catch (e) {} } }
+  cbPrev = sig || (c.on ? cbPrev : '');
+  ringPlace(); cbRender(); ckRender(); boardRender();
+}
+/* =====================================================================
+   v13: OLHOS NA COR DO ELEMENTO, CUTSCENE DE INVESTIGAÇÃO, CARTA E PASTA
+   INTERATIVAS, OPÇÕES E DESENHOS DA LUZ UV
+   ===================================================================== */
+let eyeEl = 'sangue';
+const EYE_PAL = {sangue: ['#fff3c4', '#ff6a3d', '#d40a0a', '#3d0000', '#ff1a00'], lua: ['#ffffff', '#d6ecff', '#6fa8dc', '#0b2236', '#9fd0ff'], morte: ['#ffffff', '#e6e6e6', '#8a8a8a', '#0e0e0e', '#f0f0f0'], conhecimento: ['#fffbe0', '#ffe27a', '#d4a017', '#3a2a00', '#ffd75e'], energia: ['#fff0ff', '#e6b3ff', '#9b30ff', '#1e0038', '#c77dff'], medo: ['#ffffff', '#f4f8ff', '#b9c6da', '#1a2028', '#ffffff'], fogo: ['#fffbe0', '#ffc04d', '#ff6a00', '#3a1000', '#ff7a1a']};
+function eyesSVG(cls = 'eyes') {
+  const i = ++eyeN, P = EYE_PAL[eyeEl] || EYE_PAL.sangue, L = 'M18 27 C36 6 74 8 100 35 C76 47 40 46 18 27Z', R = 'M222 27 C204 6 166 8 140 35 C164 47 200 46 222 27Z';
+  const eye = (side, d, cx) => `<g class="eye ${side}"><path class="gl" d="${d}" filter="url(#eb${i})" style="fill:${P[4]}"/><path d="${d}" fill="url(#eg${i})"/><ellipse class="pu" cx="${cx}" cy="29" rx="3.4" ry="11" fill="${P[3]}"/><circle cx="${cx + (side === 'l' ? 7 : -7)}" cy="22" r="2.2" fill="#fff" opacity=".75"/></g>`;
+  return `<div class="${cls}"><svg viewBox="0 0 240 60" aria-hidden="true"><defs><radialGradient id="eg${i}" cx="50%" cy="58%" r="62%"><stop offset="0" stop-color="${P[0]}"/><stop offset=".16" stop-color="${P[1]}"/><stop offset=".52" stop-color="${P[2]}"/><stop offset="1" stop-color="${P[3]}"/></radialGradient><filter id="eb${i}" x="-60%" y="-160%" width="220%" height="420%"><feGaussianBlur stdDeviation="7"/></filter></defs><g class="eG">${eye('l', L, 62)}${eye('r', R, 178)}</g></svg></div>`;
+}
+/* ---- cutscene de investigação ---- */
+CUT_TYPES.investigacao = {e: '🔎', n: 'Investigação', d: 'Lanterna varrendo o escuro, papéis, fio vermelho ligando fotos e o título datilografado.'};
+CUT_DEF.investigacao = {title: 'INVESTIGAÇÃO', sub: 'Cada detalhe importa', mood: 'lua'};
+CUT_VIS.investigacao = function (k, c, ov, at) {
+  const cards = [[14, 22, -7], [72, 18, 5], [24, 68, 4], [78, 64, -6], [50, 40, -2]];
+  ov.innerHTML = (c.img ? cutBgHTML(c) : '<div class="cBg gen"></div>') + `<div class="ivDark"></div><div class="ivCards">${cards.map(([x, y, r], i) => `<i class="ivCard" style="left:${x}%;top:${y}%;--r:${r}deg;--d:${(1.4 + i * .35).toFixed(2)}s"></i>`).join('')}</div>
+    <svg class="ivStr" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M14 22 Q32 40 50 40"/><path d="M72 18 Q62 34 50 40"/><path d="M24 68 Q36 52 50 40"/><path d="M78 64 Q64 56 50 40"/></svg>
+    <div class="ivPapers">${Array.from({length: 7}, (_, i) => `<i style="left:${(8 + i * 13) % 92}%;--d:${(i * .55).toFixed(2)}s;--x:${(i % 2 ? 1 : -1) * (40 + i * 9)}px;--r:${(i % 3 - 1) * 120}deg"></i>`).join('')}</div>
+    <div class="ivBeam"></div><div class="cVig"></div><div class="cGrain"></div>
+    <div class="ivTitle"><span class="ivMag">🔍</span><h1 id="ivH"></h1><small>${esc(c.sub)}</small><b class="ivStamp">${esc(c.title)}</b></div>`;
+  at(.25, () => ov.classList.add('s1'));
+  at(4.2, () => { ov.classList.add('s2'); const h = $('#ivH'); if (!h) return; const t = String(c.title); let i = 0; const tick = () => { if (!k.alive || i > t.length) return; h.textContent = t.slice(0, i++); if (i <= t.length) k.timers.push(setTimeout(tick, 70)); }; tick(); });
+  at(4.4 + String(c.title).length * .07 + .5, () => ov.classList.add('s3'));
+  at(9.6, () => ov.classList.add('ending'));
+  return 10.6;
+};
+CUT_AUD.investigacao = function (k, c) {
+  const o = k.bus, t0 = k.t0;
+  const click = t => { const g = gain(0, o); env(g, t, .001, .5, .03); noise(t, .04, filt('highpass', 2500, .7, g)); const g2 = gain(0, o); env(g2, t, .001, .2, .05); osc('square', 1400, t, .06, filt('bandpass', 1400, 6, g2)); };
+  click(t0 + .25);
+  const dr = gain(0, o); dr.gain.setValueAtTime(.0001, t0); dr.gain.exponentialRampToValueAtTime(.09, t0 + 2.5); dr.gain.setValueAtTime(.09, t0 + 8.6); dr.gain.exponentialRampToValueAtTime(.0001, t0 + 10.4);
+  [55, 82.4, 110.5].forEach(f => osc('sine', f, t0, 10.6, filt('lowpass', 400, .7, dr)));
+  for (let i = 0; i < 6; i++) { const t = t0 + 1.2 + i * .45, g = gain(0, o); env(g, t, .004, .07, .16); noise(t, .2, filt('bandpass', rand(2500, 5000), .8, g)); }
+  const tl = String(c.title).length; for (let i = 0; i < tl; i++) { const t = t0 + 4.2 + i * .07, g = gain(0, o); env(g, t, .001, .18, .025); noise(t, .03, filt('bandpass', rand(1800, 3200), 2, g)); }
+  const ts = t0 + 4.4 + tl * .07 + .5, g = gain(0, o); env(g, ts, .002, .6, .25); const b = osc('sine', 140, ts, .3, g); b.frequency.exponentialRampToValueAtTime(50, ts + .2); noise(ts, .08, filt('lowpass', 900, .7, g)); send(g, .4);
+};
+/* ---- carta e pasta confidencial interativas ---- */
+function docInteract(d, w, h, finish) {
+  const st = $('#dvStage'); if (!st) return;
+  const bg = `background-image:url('${d.img}')`; let step = 0, done = false;
+  const hint = txt => { let el = st.querySelector('.anHint'); if (!el) { el = document.createElement('div'); el.className = 'anHint'; st.appendChild(el); } el.innerHTML = txt; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); };
+  const skip = document.createElement('button'); skip.className = 'anSkip'; skip.textContent = '⏭ Pular'; skip.onclick = e => { e.stopPropagation(); end(); };
+  const end = () => { if (done) return; done = true; finish(); };
+  const shards = (parent, color) => { for (let i = 0; i < 9; i++) { const s = document.createElement('i'); s.className = 'wax'; s.style.setProperty('--c', color); s.style.setProperty('--dx', rand(-90, 90) + 'px'); s.style.setProperty('--dy', rand(-70, 110) + 'px'); s.style.setProperty('--r', rand(-300, 300) + 'deg'); parent.appendChild(s); setTimeout(() => s.remove(), 1100); } };
+  const pull = (el, onDone, axis = 'y', need = 40) => {
+    let s = null;
+    el.onpointerdown = e => { e.stopPropagation(); s = {x: e.clientX, y: e.clientY}; try { el.setPointerCapture(e.pointerId); } catch (_) {} };
+    el.onpointermove = e => { if (!s) return; const dv = axis === 'y' ? Math.min(0, e.clientY - s.y) : Math.min(0, e.clientX - s.x); el.style.setProperty('--pull', dv + 'px'); };
+    el.onpointerup = e => { if (!s) return; const dv = axis === 'y' ? s.y - e.clientY : s.x - e.clientX, moved = Math.abs(e.clientX - s.x) + Math.abs(e.clientY - s.y); s = null; el.style.removeProperty('--pull'); if (dv > need || moved < 6) { el.onpointerdown = el.onpointermove = el.onpointerup = null; onDone(); } };
+  };
+  if (d.kind === 'carta') {
+    const ew = Math.round(w * 1.06), eh = Math.round(Math.min(h / 3 * 1.35, ew * .62));
+    st.innerHTML = `<div class="anEnv iact" style="width:${ew}px;height:${eh}px"><div class="envBack"></div>
+      <div class="letter" style="width:${w}px;height:${h}px;--h3:${(h / 3).toFixed(1)}px"><div class="fold f1"><i class="fa" style="${bg};background-position:0 0"></i><i class="fb"></i></div><div class="fold f2"><i class="fa" style="${bg};background-position:0 50%"></i></div><div class="fold f3"><i class="fa" style="${bg};background-position:0 100%"></i><i class="fb"></i></div></div>
+      <div class="envFront"></div><div class="envFlap"><i></i></div><div class="envSeal hot">✦</div></div>`;
+    st.appendChild(skip); docSnd('paper');
+    const env = $('.anEnv', st), seal = $('.envSeal', env), flap = $('.envFlap', env), letter = $('.letter', env);
+    hint('🖐️ Toque no <b>lacre</b> para romper');
+    seal.onclick = e => { e.stopPropagation(); if (step) return; step = 1; seal.classList.remove('hot'); env.classList.add('sb'); docSnd('seal'); shards(env, '#8e1b1b'); hint('⬆️ Arraste a <b>aba</b> para cima');
+      setTimeout(() => { flap.classList.add('hot'); pull(flap, () => { step = 2; flap.classList.remove('hot'); env.classList.add('s1'); docSnd('paper');
+        setTimeout(() => { hint('⬆️ Puxe a <b>carta</b> para fora'); letter.classList.add('hot'); pull(env, () => { step = 3; letter.classList.remove('hot'); env.classList.add('s2'); docSnd('paper');
+          setTimeout(() => { env.classList.add('s3'); hint('🖐️ Toque na carta para <b>desdobrar</b>'); letter.classList.add('hot');
+            env.onclick = ev => { ev.stopPropagation(); if (step !== 3) return; step = 4; letter.classList.remove('hot'); env.classList.add('s4'); docSnd('unfold'); const hn = st.querySelector('.anHint'); if (hn) hn.remove(); setTimeout(end, 1300); }; }, 800); }, 'y', 30); }, 650); }, 'y', 20); }, 350); };
+  } else {
+    const fw = Math.round(w * 1.08), fh = Math.round(h * 1.04);
+    st.innerHTML = `<div class="anFolder iact" style="width:${fw}px;height:${fh}px"><div class="fBack"><span>ORDO REALITAS</span></div><div class="fPaper" style="width:${w}px;height:${h}px;${bg}"></div><div class="fCover"><b>CONFIDENCIAL</b><small>${esc(d.name)}</small><i class="fStrap"></i><span class="fSeal hot">ORDO</span></div></div>`;
+    st.appendChild(skip); docSnd('paper');
+    const f = $('.anFolder', st), seal = $('.fSeal', f), cover = $('.fCover', f);
+    hint('🖐️ Toque no <b>lacre</b> para romper');
+    seal.onclick = e => { e.stopPropagation(); if (step) return; step = 1; seal.classList.remove('hot'); f.classList.add('sb'); docSnd('seal'); shards(cover, '#7a0d12'); hint('⬅️ Arraste a <b>capa</b> para abrir a pasta');
+      setTimeout(() => { cover.classList.add('hot'); pull(cover, () => { step = 2; cover.classList.remove('hot'); f.classList.add('s1'); docSnd('paper'); const hn = st.querySelector('.anHint'); if (hn) hn.remove();
+        setTimeout(() => { f.classList.add('s2'); docSnd('paper'); }, 800); setTimeout(() => f.classList.add('s3'), 1600);
+        setTimeout(() => { end(); setTimeout(() => { const s = $('#dvDoc .dvStamp'); if (s) { s.classList.add('slam'); docSnd('stamp'); const v = $('#docView'); v.classList.add('shake'); setTimeout(() => v.classList.remove('shake'), 400); } }, 150); }, 2400); }, 'x', 40); }, 350); };
+  }
+}
+/* ---- opções da luz UV ---- */
+const UV_BEAM = {roxa: ['Roxa', '#a46bff', '#6a2cff', 215], azul: ['Azul', '#5ab0ff', '#1f6bff', 180], verde: ['Verde', '#6bff9a', '#14c45a', 95], vermelha: ['Vermelha', '#ff6b6b', '#c4142a', 320]};
+const UV_INK = {lima: ['Verde-limão', '#e2ff6e', '#c8ff3a', '#39ff14'], ciano: ['Ciano', '#b8fbff', '#3df5ff', '#00b7ff'], rosa: ['Rosa', '#ffc4e6', '#ff4fb8', '#ff1a8c'], branca: ['Branca', '#ffffff', '#dfe8ff', '#9fb8ff'], dourada: ['Dourada', '#fff1b8', '#ffd23d', '#ff9d00']};
+const sanUvCfg = c => { c = c || {}; return {b: UV_BEAM[c.b] ? c.b : 'roxa', s: [.7, 1, 1.45].includes(+c.s) ? +c.s : 1, i: UV_INK[c.i] ? c.i : 'lima', f: !!c.f}; };
+function uvCfgHTML(cfg) {
+  cfg = sanUvCfg(cfg);
+  return `<div class="uvCfg"><div><span>Cor da luz</span>${Object.entries(UV_BEAM).map(([k, v]) => `<button type="button" class="${cfg.b === k ? 'on' : ''}" data-uvb="${k}" style="--c:${v[1]}" title="${v[0]}"></button>`).join('')}</div>
+    <div><span>Cor da tinta</span>${Object.entries(UV_INK).map(([k, v]) => `<button type="button" class="${cfg.i === k ? 'on' : ''}" data-uvi="${k}" style="--c:${v[2]}" title="${v[0]}"></button>`).join('')}</div>
+    <div><span>Tamanho do facho</span><select class="in" id="uvS">${[[.7, 'Pequeno'], [1, 'Médio'], [1.45, 'Grande']].map(([v, n]) => `<option value="${v}"${cfg.s === v ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
+    <label class="sw" style="margin:0"><input type="checkbox" id="uvF" ${cfg.f ? 'checked' : ''}><i></i><span>Lanterna falhando (tremula)</span></label></div>`;
+}
+function uvCfgRead() { const b = document.querySelector('.uvCfg [data-uvb].on'), i = document.querySelector('.uvCfg [data-uvi].on'), s = $('#uvS'), f = $('#uvF'); return sanUvCfg({b: b && b.dataset.uvb, i: i && i.dataset.uvi, s: s && +s.value, f: f && f.checked}); }
+document.addEventListener('click', e => { const b = e.target.closest('.uvCfg [data-uvb],.uvCfg [data-uvi]'); if (!b) return; const attr = b.dataset.uvb ? 'data-uvb' : 'data-uvi'; b.parentElement.querySelectorAll(`[${attr}]`).forEach(x => x.classList.toggle('on', x === b)); });
+function uvCfgApply(d) {
+  const v = $('#docView'); if (!v) return; const c = sanUvCfg(d && d.uvCfg), B = UV_BEAM[c.b], I = UV_INK[c.i];
+  v.style.setProperty('--uvb1', B[1] + '66'); v.style.setProperty('--uvb2', B[2] + '26'); v.style.setProperty('--uvh', B[3] + 'deg'); v.style.setProperty('--uvk', c.s);
+  v.style.setProperty('--ink', I[1]); v.style.setProperty('--ink2', I[2]); v.style.setProperty('--ink3', I[3]);
+  v.classList.toggle('uvFl', c.f);
+}
+/* ---- desenhos prontos na camada UV ---- */
+const UV_STAMPS = {
+  sigilo: ['Sigilo', '<circle cx="50" cy="50" r="44"/><circle cx="50" cy="50" r="36" stroke-dasharray="3 5"/><path d="M50 14 L81 68 L19 68 Z"/><circle cx="50" cy="50" r="9"/><path d="M50 6v10M50 84v10M6 50h10M84 50h10"/>'],
+  olho: ['Olho', '<path d="M8 50 Q50 12 92 50 Q50 88 8 50Z"/><circle cx="50" cy="50" r="15"/><circle cx="50" cy="50" r="5" fill="currentColor"/><path d="M50 10v-6M28 18l-4-6M72 18l4-6"/>'],
+  mao: ['Mão', '<path d="M32 92 C20 76 18 62 22 52 L22 30 C22 25 30 25 30 30 L30 48 L32 16 C32 10 40 10 40 16 L41 46 L44 12 C44 6 52 6 52 12 L52 46 L57 18 C57 12 65 13 64 19 L61 50 L68 38 C71 32 79 35 76 42 L66 66 C62 78 58 86 54 92Z"/>'],
+  pegadas: ['Pegadas', '<ellipse cx="34" cy="70" rx="9" ry="15"/><circle cx="28" cy="50" r="2.5"/><circle cx="33" cy="48" r="2.5"/><circle cx="38" cy="49" r="2.5"/><ellipse cx="64" cy="38" rx="9" ry="15"/><circle cx="58" cy="18" r="2.5"/><circle cx="63" cy="16" r="2.5"/><circle cx="68" cy="17" r="2.5"/>'],
+  seta: ['Seta', '<path d="M10 70 C30 70 50 60 62 36"/><path d="M48 40 L64 32 L70 50"/>'],
+  xis: ['X', '<path d="M18 18 L82 82M82 18 L18 82"/>'],
+  ritual: ['Círculo ritual', '<circle cx="50" cy="50" r="44"/><circle cx="50" cy="50" r="30"/><path d="M50 20 L67 74 L22 40 L78 40 L33 74 Z"/><path d="M50 2v6M50 92v6M2 50h6M92 50h6M16 16l4 4M84 84l-4-4M84 16l-4 4M16 84l4-4"/>'],
+  espiral: ['Espiral', '<path d="M50 50 m0 0 a4 4 0 0 1 8 0 a8 8 0 0 1 -16 0 a12 12 0 0 1 24 0 a16 16 0 0 1 -32 0 a20 20 0 0 1 40 0 a24 24 0 0 1 -48 0 a28 28 0 0 1 56 0"/>'],
+  digital: ['Digital', '<path d="M30 80 C22 62 22 40 36 28 C52 14 76 24 76 48 C76 62 70 72 66 80"/><path d="M38 82 C32 66 32 46 44 38 C56 30 68 40 66 54 C65 64 60 72 58 82"/><path d="M47 84 C42 70 42 56 50 50 C58 46 60 58 56 70"/><path d="M24 64 C20 46 26 26 46 18"/>']
+};
+function uvStampsInit() {
+  const box = $('#mbox .uvdBox'), cv = $('#uvdC'), tools = $('#mbox .uvdTools'); if (!box || !cv || !tools || $('#mbox .uvSt')) return;
+  const g = cv.getContext('2d', {willReadFrequently: true});
+  const bar = document.createElement('div'); bar.className = 'uvSt';
+  bar.innerHTML = `<div class="uvStL"><span>Desenhos prontos:</span>${Object.entries(UV_STAMPS).map(([k, [n, svg]]) => `<button type="button" data-stp="${k}" title="${n}"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">${svg}</svg></button>`).join('')}<button type="button" data-stp="txt" title="Texto">Aa</button></div>
+    <div class="uvStC hide" id="uvStC"><label>Tamanho<input type="range" id="stS" min="8" max="90" value="34"></label><label>Girar<input type="range" id="stR" min="-180" max="180" value="0"></label><label>Força<input type="range" id="stO" min="20" max="100" value="90"></label><input class="in hide" id="stT" maxlength="30" placeholder="Texto" value="ELE ESTÁ AQUI"><button type="button" class="btn sm red" id="stOk">✔ Fixar</button><button type="button" class="btn sm" id="stX">✕</button></div>`;
+  tools.after(bar);
+  let cur = null;
+  const col = () => { const b = $('#mbox .uvdCol.on'); return b ? b.dataset.col : '#b6ff3b'; };
+  const paint = () => { if (!cur) return; const el = cur.el, sz = +$('#stS').value, rot = +$('#stR').value, op = +$('#stO').value / 100; el.style.width = sz + '%'; el.style.left = cur.x + '%'; el.style.top = cur.y + '%'; el.style.transform = `translate(-50%,-50%) rotate(${rot}deg)`; el.style.opacity = op; el.style.color = col(); el.style.filter = `drop-shadow(0 0 6px ${col()})`; if (cur.k === 'txt') el.querySelector('span').textContent = $('#stT').value || 'TEXTO'; };
+  const drop = () => { if (cur) cur.el.remove(); cur = null; $('#uvStC').classList.add('hide'); };
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('[data-stp]'); if (!b) return; drop();
+    const k = b.dataset.stp, el = document.createElement('div'); el.className = 'uvStamp';
+    el.innerHTML = k === 'txt' ? '<span></span>' : `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${UV_STAMPS[k][1]}</svg>`;
+    box.appendChild(el); cur = {k, el, x: 50, y: 50}; $('#uvStC').classList.remove('hide'); $('#stT').classList.toggle('hide', k !== 'txt'); $('#stS').value = k === 'txt' ? 50 : 34; $('#stR').value = 0; paint();
+    let dg = null;
+    el.onpointerdown = ev => { ev.stopPropagation(); ev.preventDefault(); dg = {sx: ev.clientX, sy: ev.clientY, x: cur.x, y: cur.y}; try { el.setPointerCapture(ev.pointerId); } catch (_) {} };
+    el.onpointermove = ev => { if (!dg || !cur) return; const r = box.getBoundingClientRect(); cur.x = clamp(dg.x + (ev.clientX - dg.sx) / r.width * 100, 0, 100); cur.y = clamp(dg.y + (ev.clientY - dg.sy) / r.height * 100, 0, 100); paint(); };
+    el.onpointerup = () => { dg = null; };
+  });
+  bar.addEventListener('input', paint);
+  $('#mbox').addEventListener('click', e => { if (e.target.closest('.uvdCol')) setTimeout(paint, 0); });
+  $('#stX').onclick = drop;
+  $('#stOk').onclick = () => {
+    if (!cur) return; const W = cv.width, H = cv.height, sz = +$('#stS').value / 100 * W, rot = +$('#stR').value * Math.PI / 180, op = +$('#stO').value / 100, c = col(), cx = cur.x / 100 * W, cy = cur.y / 100 * H;
+    const fin = () => { drop(); toast('Desenho fixado. Ajuste mais ou salve.'); };
+    g.save(); g.globalAlpha = op; g.shadowColor = c; g.shadowBlur = sz * .06; g.translate(cx, cy); g.rotate(rot);
+    if (cur.k === 'txt') { const t = $('#stT').value || 'TEXTO'; g.fillStyle = c; g.font = `400 ${Math.round(sz / Math.max(4, t.length) * 1.7)}px "Special Elite", monospace`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, 0, 0); g.restore(); fin(); return; }
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="400" height="400" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" color="${c}">${UV_STAMPS[cur.k][1]}</svg>`, im = new Image();
+    im.onload = () => { g.drawImage(im, -sz / 2, -sz / 2, sz, sz); g.restore(); fin(); };
+    im.onerror = () => { g.restore(); toast('Não consegui fixar esse desenho.'); };
+    im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  };
+}
+function openUvDraw(exId) { openUvDraw0(exId); let n = 0; const t = setInterval(() => { if ($('#uvdC') || ++n > 60) { clearInterval(t); uvStampsInit(); } }, 50); }
+document.addEventListener('click', e => { if (e.target.closest('[data-chars]')) { try { closePop(); } catch (er) {} openChars(); } });
+libLoad(); srchLoad();
 applyTheme();
 })();
 </script>
