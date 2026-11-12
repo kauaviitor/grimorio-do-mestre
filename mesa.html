@@ -953,6 +953,158 @@ body:not(.isHost) #layoutBtn{display:none}
 .leaveOpts button{display:flex;gap:12px;align-items:center;text-align:left;padding:14px;border-radius:14px}
 .leaveOpts button b{display:block;font-size:15px}.leaveOpts button small{display:block;color:var(--mut);font-size:12px;font-weight:500;margin-top:2px}
 .leaveOpts .e{font-size:26px}
+
+/* ===== v11: cutscenes ===== */
+#cutOv{position:fixed;inset:0;z-index:300;overflow:hidden;background:#000;color:#fff;font-family:Inter,sans-serif;animation:cutIn .7s ease both;--mc:#ff3b3b;--mbg:#160404;user-select:none}
+@keyframes cutIn{from{opacity:0}}
+#cutOv.out{animation:cutOut .9s ease forwards}
+@keyframes cutOut{to{opacity:0}}
+#cutOv.shake{animation:cShake .5s}
+@keyframes cShake{10%{transform:translate(-14px,7px)}22%{transform:translate(12px,-9px)}36%{transform:translate(-9px,-4px)}52%{transform:translate(8px,6px)}70%{transform:translate(-4px,2px)}}
+#cutOv .cSkip{position:absolute;right:18px;top:16px;z-index:40;background:#000a;border:1px solid #fff3;color:#fff;border-radius:999px;padding:8px 14px;font:600 12px Inter,sans-serif;cursor:pointer;opacity:.5;transition:opacity .2s}
+#cutOv .cSkip:hover{opacity:1}
+#cutOv .cFl{position:absolute;inset:0;z-index:30;pointer-events:none;animation:cFlA .9s ease-out forwards;mix-blend-mode:screen}
+@keyframes cFlA{0%{opacity:.9}100%{opacity:0}}
+#cutOv .cVig{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.88))}
+#cutOv .cGrain{position:absolute;inset:-60%;z-index:20;pointer-events:none;opacity:.09;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:cGrain .5s steps(4) infinite}
+@keyframes cGrain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-4%)}75%{transform:translate(-1%,3%)}}
+#cutOv .cDust{position:absolute;inset:0;z-index:4;pointer-events:none;mix-blend-mode:screen}
+#cutOv .cBg{position:absolute;inset:-3%;z-index:1;background:center/cover no-repeat;opacity:0;transform:scale(1.2);transition:opacity 3.5s ease,transform 45s linear,filter 2s;filter:saturate(.85) contrast(1.06) brightness(.9)}
+#cutOv.go .cBg{opacity:1;transform:scale(1.02)}
+#cutOv .cBg.gen{background:radial-gradient(circle at 72% 22%,#eef3f5 0 4.5%,rgba(200,220,232,.45) 6%,transparent 28%),linear-gradient(#0b1520,#30424f 70%,#0b0f12)}
+#cutOv.ending .cBg{filter:brightness(.25) saturate(.6)}
+#cutOv .cFog{position:absolute;inset:-25%;z-index:2;pointer-events:none;opacity:0;transition:opacity 4s;filter:blur(10px);background:radial-gradient(ellipse 40% 16% at 20% 72%,rgba(215,228,238,.24),transparent 70%),radial-gradient(ellipse 34% 13% at 72% 80%,rgba(215,228,238,.2),transparent 70%),radial-gradient(ellipse 55% 20% at 45% 96%,rgba(215,228,238,.3),transparent 70%),radial-gradient(ellipse 30% 10% at 85% 62%,rgba(215,228,238,.14),transparent 70%);animation:cFogA 36s linear infinite alternate}
+#cutOv .cFog.f2{animation:cFogB 50s linear infinite alternate;transform:scaleX(-1)}
+#cutOv.go .cFog{opacity:1}
+@keyframes cFogA{to{translate:12% -2%}}
+@keyframes cFogB{to{translate:-14% 3%}}
+#cutOv .cBars i{position:absolute;left:0;right:0;height:0;background:#000;z-index:10;transition:height 1.8s cubic-bezier(.6,0,.2,1)}
+#cutOv .cBars i:first-child{top:0}#cutOv .cBars i:last-child{bottom:0}
+#cutOv.go .cBars i{height:11vh}
+#cutOv .cLine{position:absolute;left:9%;right:9%;bottom:15vh;z-index:12;text-align:center;font:400 clamp(19px,2.5vw,38px)/1.4 'Special Elite',monospace;color:#f3f5f6;text-shadow:0 2px 14px #000,0 0 36px rgba(0,0,0,.9);transition:opacity .9s,filter .9s}
+#cutOv .cLine .lc{display:inline-block;opacity:0;filter:blur(9px);transform:translateY(9px);animation:cLc 1s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes cLc{to{opacity:1;filter:blur(0);transform:none}}
+#cutOv .cLine.hide{opacity:0;filter:blur(7px)}
+#cutOv .cTitle{position:absolute;inset:0;z-index:12;display:grid;place-content:center;text-align:center;pointer-events:none}
+#cutOv .cTitle small{display:block;font:600 clamp(11px,1.2vw,17px) Inter,sans-serif;letter-spacing:.55em;padding-left:.55em;text-transform:uppercase;color:color-mix(in srgb,var(--mc) 65%,#fff);opacity:0;transform:translateY(12px);transition:all 1.8s .6s}
+#cutOv .cTitle h1{margin:.18em auto 0;max-width:92vw;font:400 clamp(42px,7.2vw,130px)/1.05 'Bebas Neue',Impact,sans-serif;letter-spacing:.12em;padding-left:.12em;color:#fff;text-shadow:0 0 30px var(--mc),0 0 90px color-mix(in srgb,var(--mc) 55%,transparent),0 4px 12px #000}
+#cutOv .cw{display:inline-block;white-space:nowrap}
+#cutOv .tc{display:inline-block;opacity:0;animation:cTc 1.5s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes cTc{0%{opacity:0;filter:blur(16px);transform:scale(1.7)}60%{opacity:1}100%{opacity:1;filter:blur(0);transform:none}}
+#cutOv .cRule{display:block;height:2px;margin:20px auto 0;width:0;background:linear-gradient(90deg,transparent,var(--mc),transparent);box-shadow:0 0 18px var(--mc);transition:width 2.4s .9s cubic-bezier(.2,.8,.2,1)}
+#cutOv .cTitle.show small{opacity:1;transform:none}
+#cutOv .cTitle.show .cRule{width:min(62vw,720px)}
+#cutOv.titled .cLine{opacity:0}
+/* capítulo */
+#cutOv.c-capitulo{background:radial-gradient(ellipse at 50% 58%,color-mix(in srgb,var(--mc) 14%,#000),#000 72%)}
+#cutOv.c-capitulo.go .cBg{opacity:.26;filter:blur(2px) brightness(.8)}
+#cutOv .cCh{position:absolute;inset:0;z-index:12;display:grid;place-content:center;text-align:center;padding:0 6vw}
+#cutOv .cCh .rl{display:block;height:1px;width:0;margin:0 auto;background:linear-gradient(90deg,transparent,var(--mc),transparent);box-shadow:0 0 12px var(--mc);transition:width 1.8s cubic-bezier(.2,.8,.2,1)}
+#cutOv.c-capitulo.s1 .rl{width:min(52vw,600px)}
+#cutOv .cCh h1{margin:26px 0 16px;font:400 clamp(42px,7.4vw,118px)/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.32em;padding-left:.32em;text-shadow:0 0 34px color-mix(in srgb,var(--mc) 60%,transparent)}
+#cutOv .cCh p{margin:0 0 26px;min-height:1.4em;font:400 clamp(16px,1.9vw,28px) 'Special Elite',monospace;color:#ddd}
+#cutOv .tw{opacity:0;animation:cTw .01s forwards}
+@keyframes cTw{to{opacity:1}}
+#cutOv.ending .cCh,#cutOv.ending .cTitle{transition:opacity 1.2s,filter 1.2s;opacity:0;filter:blur(8px)}
+/* combate */
+#cutOv.c-combate,#cutOv.c-chefe,#cutOv.c-emboscada{background:radial-gradient(ellipse at 50% 50%,var(--mbg),#000 78%)}
+#cutOv .cSpeed{position:absolute;inset:-40% -40% -40% -10%;z-index:1;opacity:0;transition:opacity .4s;background:repeating-linear-gradient(105deg,transparent 0 46px,color-mix(in srgb,var(--mc) 26%,transparent) 46px 49px,transparent 49px 120px);animation:cSpd .35s linear infinite}
+@keyframes cSpd{to{transform:translateX(-120px)}}
+#cutOv.s1 .cSpeed{opacity:.75}
+#cutOv .cSlash{position:absolute;left:-10%;width:120%;height:13vh;z-index:6;opacity:0;background:linear-gradient(90deg,transparent,var(--mc) 32%,#fff 50%,var(--mc) 68%,transparent);box-shadow:0 0 50px var(--mc)}
+#cutOv .cSlash.a{top:28%;transform:skewY(-9deg) translateX(-130%)}
+#cutOv .cSlash.b{top:60%;transform:skewY(-9deg) translateX(130%)}
+#cutOv.s1 .cSlash.a{animation:cSlA .6s cubic-bezier(.7,0,.3,1) forwards}
+#cutOv.s1 .cSlash.b{animation:cSlB .6s .08s cubic-bezier(.7,0,.3,1) forwards}
+@keyframes cSlA{0%{opacity:.95;transform:skewY(-9deg) translateX(-130%)}100%{opacity:0;transform:skewY(-9deg) translateX(130%)}}
+@keyframes cSlB{0%{opacity:.95;transform:skewY(-9deg) translateX(130%)}100%{opacity:0;transform:skewY(-9deg) translateX(-130%)}}
+#cutOv .cTeam{position:absolute;left:4vw;top:50%;transform:translateY(-50%);z-index:8;display:flex;flex-direction:column;gap:1.6vh;transition:filter .5s}
+#cutOv .cP{display:flex;align-items:center;gap:14px;opacity:0;transform:translateX(-60vw) skewX(-14deg);transition:transform .55s cubic-bezier(.2,.9,.25,1.25),opacity .3s;transition-delay:calc(var(--i)*.14s)}
+#cutOv.s2 .cP{opacity:1;transform:none}
+#cutOv .cP .ph{width:clamp(64px,11vh,130px);height:clamp(64px,11vh,130px);flex:none;border-radius:50%;background:#1a1a1a center/cover;border:3px solid var(--mc);box-shadow:0 0 24px var(--mc);display:grid;place-items:center;font:400 clamp(26px,4vh,44px) 'Bebas Neue',Impact,sans-serif}
+#cutOv .cP b{font:400 clamp(26px,4.6vh,52px) 'Bebas Neue',Impact,sans-serif;letter-spacing:.07em;text-shadow:0 3px 8px #000,0 0 18px color-mix(in srgb,var(--mc) 50%,transparent)}
+#cutOv .cVs{position:absolute;left:50%;top:46%;z-index:9;transform:translate(-50%,-50%) scale(4);opacity:0;font:400 clamp(80px,14vw,210px)/1 'Bebas Neue',Impact,sans-serif;color:#fff;text-shadow:0 0 40px var(--mc),5px 5px 0 var(--mc);transition:transform .32s cubic-bezier(.5,0,.3,1.5),opacity .2s}
+#cutOv.s3 .cVs{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-7deg)}
+#cutOv.s5 .cVs{opacity:0;transform:translate(-50%,-50%) scale(.6) rotate(-7deg)}
+#cutOv .cFoe{position:absolute;right:5vw;top:46%;z-index:8;display:flex;flex-direction:column;align-items:center;gap:8px;transform:translate(75vw,-50%);transition:transform .65s cubic-bezier(.2,.9,.2,1.1),filter .5s}
+#cutOv.s4 .cFoe{transform:translate(0,-50%)}
+#cutOv .cFoe .ph{position:relative;width:min(32vw,52vh);aspect-ratio:1;background:#070707 center/cover;border:3px solid var(--mc);box-shadow:0 0 70px var(--mc),inset 0 0 90px #000;clip-path:polygon(7% 0,100% 0,93% 100%,0 100%)}
+#cutOv .cFoe b{font:400 clamp(30px,5.5vh,64px) 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;text-shadow:0 0 24px var(--mc),0 3px 8px #000}
+#cutOv .cFoe small{font:800 clamp(11px,1.6vh,15px) Inter,sans-serif;letter-spacing:.32em;color:var(--mc);text-transform:uppercase}
+#cutOv .eyes,#cutOv .eyesBig{display:flex;justify-content:space-between;align-items:center}
+#cutOv .eyes{position:absolute;left:50%;top:40%;width:46%;height:12%;transform:translateX(-50%);animation:cEye 3.2s infinite}
+#cutOv .eyes::before,#cutOv .eyes::after,#cutOv .eyesBig::before,#cutOv .eyesBig::after{content:'';width:34%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 55%,#fff 0 6%,#ff5040 14%,#d40000 45%,#5a0000 75%);box-shadow:0 0 22px #ff0000,0 0 60px #ff000088}
+#cutOv .eyes::before,#cutOv .eyesBig::before{clip-path:polygon(0 8%,100% 42%,100% 100%,0 100%)}
+#cutOv .eyes::after,#cutOv .eyesBig::after{clip-path:polygon(0 42%,100% 8%,100% 100%,0 100%)}
+@keyframes cEye{0%,90%,100%{transform:translateX(-50%) scaleY(1)}94%{transform:translateX(-50%) scaleY(.08)}}
+#cutOv.s5 .cTeam,#cutOv.s5 .cFoe{filter:brightness(.45) blur(1px)}
+#cutOv .cBig{position:absolute;left:0;right:0;bottom:13vh;z-index:14;text-align:center;font:400 clamp(64px,12.5vw,210px)/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;color:#fff;text-shadow:0 0 34px var(--mc),7px 7px 0 color-mix(in srgb,var(--mc) 70%,#000)}
+#cutOv .bc{display:inline-block;opacity:0;transform:scale(3.2) translateY(-24px) rotate(-6deg)}
+#cutOv.c-combate.s5 .bc,#cutOv.c-emboscada.s3 .bc,#cutOv.c-chefe.s3 .bc{animation:cBc .34s cubic-bezier(.5,0,.3,1.4) forwards;animation-delay:calc(var(--i)*.045s)}
+@keyframes cBc{to{opacity:1;transform:none}}
+#cutOv .cSub,#cutOv .cSub2{position:absolute;left:0;right:0;bottom:7vh;z-index:14;text-align:center;font:800 clamp(13px,1.6vw,22px) Inter,sans-serif;letter-spacing:.6em;padding-left:.6em;text-transform:uppercase;color:color-mix(in srgb,var(--mc) 55%,#fff);opacity:0;transition:opacity .7s,letter-spacing 1.4s}
+#cutOv .cSub2{bottom:3.5vh;font-weight:600;letter-spacing:.4em;color:#bbb;font-size:clamp(11px,1.2vw,16px)}
+#cutOv.c-combate.s6 .cSub,#cutOv.c-emboscada.s4 .cSub,#cutOv.c-chefe.s4 .cSub,#cutOv.c-chefe.s4 .cSub2{opacity:1;letter-spacing:.34em}
+#cutOv.noteam .cTeam,#cutOv.noteam .cVs,#cutOv.nofoe .cVs,#cutOv.nofoe .cFoe{display:none}
+#cutOv.noteam .cFoe{right:auto;left:50%;transform:translate(-50%,-50%) scale(.2);opacity:0;transition:transform .7s cubic-bezier(.2,.9,.2,1.15),opacity .4s,filter .5s}
+#cutOv.noteam.s4 .cFoe{transform:translate(-50%,-56%) scale(1);opacity:1}
+#cutOv.nofoe .cTeam{left:50%;transform:translate(-50%,-62%);flex-direction:row;flex-wrap:wrap;justify-content:center;max-width:90vw}
+#cutOv.nofoe .cP{flex-direction:column;gap:6px}
+#cutOv.ending .cBig,#cutOv.ending .cSub,#cutOv.ending .cSub2,#cutOv.ending .cTeam,#cutOv.ending .cFoe,#cutOv.ending .cBoss{transition:opacity 1s,filter 1s;opacity:0;filter:blur(6px)}
+/* emboscada */
+#cutOv .cStatic{position:absolute;inset:-60%;z-index:1;opacity:.4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:cGrain .16s steps(3) infinite}
+#cutOv .cGl{position:absolute;inset:0;z-index:5;display:grid;place-content:center;font:400 clamp(26px,4.4vw,64px) 'Special Elite',monospace;letter-spacing:.14em;color:#ddd;animation:cGlt .28s steps(2) infinite}
+@keyframes cGlt{0%{transform:translate(2px,0);text-shadow:-4px 0 #f00,4px 0 #0ff}50%{transform:translate(-3px,1px);text-shadow:4px 0 #f00,-4px 0 #0ff}}
+#cutOv.c-emboscada.s1 .cStatic,#cutOv.c-emboscada.s1 .cGl{display:none}
+#cutOv .eyesBig{position:absolute;left:50%;top:42%;z-index:6;width:min(36vw,480px);height:min(7vw,90px);transform:translateX(-50%) scaleY(0);transition:transform .22s}
+#cutOv.s1 .eyesBig{transform:translateX(-50%) scaleY(1)}
+#cutOv.s2 .eyesBig{transform:translateX(-50%) scale(3.4);opacity:0;transition:all .3s}
+#cutOv .cAmb{position:absolute;inset:0;z-index:2;background:center/cover;opacity:0;filter:contrast(1.4) brightness(.6) saturate(.5)}
+#cutOv.c-emboscada.s2 .cAmb{animation:cAmb 1.2s forwards}
+@keyframes cAmb{0%{opacity:.95;transform:scale(1.25)}100%{opacity:.35;transform:scale(1.05)}}
+#cutOv.c-emboscada .cBig{bottom:auto;top:50%;transform:translateY(-50%)}
+#cutOv.c-emboscada.s3 .cBig{animation:cGlt .22s steps(2) 7}
+/* chefe */
+#cutOv .cDark{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 0,rgba(0,0,0,.6) 28%,#000 62%);transition:opacity 3s}
+#cutOv.c-chefe.s2 .cDark{opacity:.55}
+#cutOv.beat .cDark{animation:cBeat .5s}
+@keyframes cBeat{30%{background:radial-gradient(ellipse at 50% 46%,color-mix(in srgb,var(--mc) 30%,transparent) 0,rgba(0,0,0,.5) 32%,#000 66%)}}
+#cutOv .cBoss{position:absolute;left:50%;top:42%;z-index:4;width:min(48vw,64vh);aspect-ratio:1;transform:translate(-50%,-50%) scale(1.3);opacity:0;background:#050505 center/cover;border-radius:50%;filter:brightness(.15) contrast(1.4);-webkit-mask-image:radial-gradient(circle,#000 52%,transparent 71%);mask-image:radial-gradient(circle,#000 52%,transparent 71%);transition:opacity 3s,transform 8s cubic-bezier(.15,.6,.2,1),filter 3s}
+#cutOv.c-chefe.s1 .cBoss{opacity:1;transform:translate(-50%,-50%) scale(1);filter:brightness(.7) contrast(1.25)}
+#cutOv.c-chefe.s2 .cBoss{filter:brightness(1.05) contrast(1.1) drop-shadow(0 0 40px var(--mc))}
+#cutOv.c-chefe .cBig{bottom:16vh}
+/* host list */
+.cutList{display:flex;flex-direction:column;gap:6px}
+.cutIt{display:flex;gap:6px}
+.cutPlay{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;border:1px solid var(--line);border-left:3px solid var(--mc);background:linear-gradient(90deg,color-mix(in srgb,var(--mc) 12%,var(--p2)),var(--p2));color:var(--ink);cursor:pointer;text-align:left;transition:transform .12s,box-shadow .2s}
+.cutPlay:hover{box-shadow:0 0 18px color-mix(in srgb,var(--mc) 35%,transparent)}
+.cutPlay:active{transform:scale(.98)}
+.cutPlay .e{font-size:22px}
+.cutPlay .tx{flex:1;min-width:0}
+.cutPlay b{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cutPlay small{display:block;font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cutPlay .go{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--mc);color:#000;font-size:12px;flex:none}
+.cutEd{width:40px;border-radius:12px;border:1px solid var(--line);background:var(--p2);cursor:pointer;font-size:15px}
+.ceType{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.ceType .tile2{padding:8px 4px;font-size:11.5px}
+@media(max-width:560px){.ceType{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ceImg{display:flex;gap:10px;align-items:center;padding:8px;border:1px dashed var(--line);border-radius:12px}
+.ceImg img{width:120px;height:70px;object-fit:cover;border-radius:8px}
+.ceImg span{flex:1;color:var(--mut);font-size:12px}
+.ceImg .col{display:flex;flex-direction:column;gap:5px;margin-left:auto}
+.dotc{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+/* modelos de pista */
+.tplKinds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tplKinds .tile2{padding:8px 4px;font-size:11.5px}
+.tplWrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;margin-top:12px;align-items:start}
+.tplPrev{display:grid;place-items:center;background:#0b0b0b;border-radius:12px;padding:10px;min-height:200px}
+.tplPrev canvas{max-width:100%;max-height:52vh;width:auto;height:auto;box-shadow:0 10px 30px #000c;border-radius:3px}
+.tplForm .lab:first-child{margin-top:0}
+@media(max-width:640px){.tplWrap{grid-template-columns:1fr}.tplKinds{grid-template-columns:repeat(2,minmax(0,1fr))}.tplPrev canvas{max-height:36vh}}
+/* recuperar tudo */
+.stEd .stRec{display:flex;gap:6px;margin-top:8px}
+.stEd .stRec button{width:auto;flex:1;height:30px;font-size:12px;font-weight:700;background:linear-gradient(90deg,#123a22,#16301f);border-color:#2f7a4a;color:#bff5cf}
+.stEd .stRec button:hover{border-color:#5fe08f}
 </style>
 </head>
 <body>
@@ -1990,7 +2142,7 @@ let forcedMute = false;
 async function toggleMic() {
   if (forcedMute && !me.mic) { toast('🔇 O Mestre silenciou seu microfone no chat de voz.'); return; }
   if (!micStream) { if (!await openMic()) return; }
-  if (deaf) { setDeaf(false); }
+  if (deaf && !forcedDeaf) { setDeaf(false); }
   setMuted(me.mic); pushStatus(); renderTiles(); renderControls();
 }
 function setDeaf(d) {
@@ -2126,6 +2278,7 @@ function startHost() {
       const fmOn = fmNames.has(cleanName(md.name).toLowerCase());
       roster.set(id, {id, name: cleanName(md.name), role: 'agente', mic: !!md.mic, cam: !!md.cam, deaf: false, fm: fmOn});
       if (fmOn) { try { conn.send({t: 'forcemute', on: true}); } catch (e) {} }
+      if (fdNames.has(cleanName(md.name).toLowerCase())) { roster.get(id).fd = true; try { conn.send({t: 'forcedeaf', on: true}); } catch (e) {} }
       if (uvOwners.has(cleanName(md.name).toLowerCase())) { roster.get(id).uv = true; try { conn.send({t: 'item', k: 'uv', on: true, quiet: true}); } catch (e) {} }
       refreshTimerState();
       conn.send({t: 'hello', now: Date.now(), state, roster: [...roster.values()], chat: chat.slice(-80), chars, reveal: curReveal});
@@ -2254,11 +2407,14 @@ function onPlayerData(d) {
   if (d.t === 'bye') { endRoom('A sala foi encerrada', 'O Mestre saiu e fechou a sala. Obrigado por jogar!', true); }
   if (d.t === 'kicked') { kicked = true; endRoom('Você foi expulso', 'O Mestre removeu você desta sala.', false); }
   if (d.t === 'stats' && d.id) applySt(String(d.id), d.s);
+  if (d.t === 'cut' && d.c) cutRun(sanCut(d.c));
+  if (d.t === 'cutstop') cutStop(true);
+  if (d.t === 'forcedeaf') { forcedDeaf = !!d.on; setDeaf(forcedDeaf); toast(forcedDeaf ? '🎧 O Mestre tirou seu áudio: você não ouve os outros por enquanto.' : '🎧 O Mestre devolveu seu áudio.', 4500); renderControls(); renderTiles(); }
   if (d.t === 'forcemute') { forcedMute = !!d.on; if (forcedMute) { if (me.mic) setMuted(true); toast('🔇 O Mestre silenciou seu microfone no chat de voz.', 4500); } else toast('🎙️ O Mestre liberou seu microfone. Aperte o microfone para falar.', 4500); pushStatus(); renderTiles(); renderControls(); }
 }
 let prevUv = null;
 function onRoomState() { renderCover(state.cover); applyTheme(); renderClima(); syncTimerFromState(); ytSync(); if (!isHost) { uvFabSync(); } if (state.layoutTs && state.layoutTs !== roomLayoutTs) { roomLayoutTs = state.layoutTs; if (state.layout) setLayout(state.layout); } if (!isHost && state.layout && state.layout !== layout) setLayout(state.layout); renderLive(); }
-function setRoster(list) { roster.clear(); (list || []).forEach(p => { if (p && p.id) roster.set(p.id, {id: p.id, name: cleanName(p.name), role: p.role === 'mestre' ? 'mestre' : 'agente', mic: !!p.mic, cam: !!p.cam, deaf: !!p.deaf, fm: !!p.fm, uv: !!p.uv}); }); if (me.id) roster.set(me.id, {...me, fm: forcedMute}); }
+function setRoster(list) { roster.clear(); (list || []).forEach(p => { if (p && p.id) roster.set(p.id, {id: p.id, name: cleanName(p.name), role: p.role === 'mestre' ? 'mestre' : 'agente', mic: !!p.mic, cam: !!p.cam, deaf: !!p.deaf, fm: !!p.fm, uv: !!p.uv, fd: !!p.fd}); }); if (me.id) roster.set(me.id, {...me, fm: forcedMute, fd: forcedDeaf}); }
 function pushStatus() {
   if (me.id) roster.set(me.id, {...me});
   if (isHost) broadcastRoster(); else { if (hostConn && hostConn.open) hostConn.send({t: 'status', mic: me.mic, cam: me.cam, deaf: me.deaf}); }
@@ -2439,7 +2595,7 @@ const COVER_SND = {
   outro: out => TRACKS.outro.make(out)
 };
 let coverSnd = null;
-function duckLevel() { return coverSnd ? .12 : 1; }
+function duckLevel() { return (coverSnd ? .12 : 1) * (typeof cutDuck !== 'undefined' && cutDuck ? .22 : 1); }
 function syncCoverSound() {
   if (!isHost || !ctx || !musicBus) return;
   const want = state.cover.on && S.coverMusic ? state.cover.style : null;
@@ -2542,7 +2698,7 @@ function stEdHTML(id) {
   return `<div class="stEd" data-sid="${esc(id)}"><h5>${isMe ? 'Sua vida e esforço' : 'Vida e esforço'} <span style="text-transform:none;letter-spacing:0;font-weight:500">· vermelho = vida · azul = esforço</span></h5>
     <div class="sr r"><span class="sl" title="Vida"></span><button data-st="pv:-1" title="Tirar 1 de vida">−</button><input type="number" inputmode="numeric" min="0" max="999" data-sv="pv" value="${st.pv}" aria-label="PV atual"><span>/</span><input type="number" inputmode="numeric" min="0" max="999" data-sv="pvMax" value="${st.pvMax}" aria-label="PV máximo"><button data-st="pv:1" title="Curar 1">+</button><span class="q"><button data-st="pv:-5" title="Tirar 5">−5</button></span></div>
     <div class="sr b"><span class="sl" title="Esforço"></span><button data-st="pe:-1" title="Gastar 1">−</button><input type="number" inputmode="numeric" min="0" max="999" data-sv="pe" value="${st.pe}" aria-label="PE atual"><span>/</span><input type="number" inputmode="numeric" min="0" max="999" data-sv="peMax" value="${st.peMax}" aria-label="PE máximo"><button data-st="pe:1" title="Recuperar 1">+</button><span class="q"><button data-st="pe:-2" title="Gastar 2">−2</button></span></div>
-    <small>Atual / máximo. Todos veem na hora.</small></div>`;
+    <div class="stRec"><button data-strec="1" title="Vida e esforço no máximo">♻️ Recuperar tudo</button>${isHost ? '<button data-strec="all" title="Todos os agentes no máximo">♻️ Todos os agentes</button>' : ''}</div><small>Atual / máximo. Todos veem na hora.</small></div>`;
 }
 function stPopSync(id) {
   const ed = document.querySelector('#pop .stEd'); if (!ed || ed.dataset.sid !== id) return;
@@ -2550,7 +2706,7 @@ function stPopSync(id) {
 }
 function stEdWire(pop) {
   const ed = pop.querySelector('.stEd'); if (!ed) return; const id = ed.dataset.sid;
-  ed.addEventListener('click', e => { const b = e.target.closest('[data-st]'); if (!b) return; e.stopPropagation(); const [k, d] = b.dataset.st.split(':'); const st = stOf(id); setStats(id, {[k]: st[k] + (+d)}); });
+  ed.addEventListener('click', e => { const rb = e.target.closest('[data-strec]'); if (rb) { e.stopPropagation(); if (rb.dataset.strec === 'all') recoverAll(); else if (!recoverStats(id)) toast('Preencha a vida e o esforço máximos primeiro.'); else toast('♻️ Vida e esforço recuperados'); return; } const b = e.target.closest('[data-st]'); if (!b) return; e.stopPropagation(); const [k, d] = b.dataset.st.split(':'); const st = stOf(id); setStats(id, {[k]: st[k] + (+d)}); });
   ed.addEventListener('change', e => { const i = e.target.closest('[data-sv]'); if (!i) return; e.stopPropagation(); setStats(id, {[i.dataset.sv]: i.value}); });
   ed.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('[data-sv]')) { e.target.blur(); } });
 }
@@ -2913,7 +3069,7 @@ function renderStage() {
 function tileHTML(p) {
   const isMe = p.id === me.id, cam = isMe ? me.cam : p.cam, mic = isMe ? me.mic : p.mic, dfn = isMe ? deaf : p.deaf;
   const ch = liveCh(p), st = sanSt(ch), fm = isMe ? forcedMute : !!p.fm, av = ch.img ? ` style="background:url('${ch.img}') center/cover;color:transparent"` : ` style="--c:${colorOf(p.name)}"`;
-  return `<div class="av"${cam ? ' style="display:none"' : ''}><i${av}>${initial(ch.char || p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}${hasSt(st) ? `<div class="hpc">${st.pvMax || st.pv ? `<b class="v">${st.pv}/${st.pvMax}</b>` : ''}${st.peMax || st.pe ? `<b class="e">${st.pe}/${st.peMax}</b>` : ''}</div>` : ''}<div class="bd">${fm ? `<b class="m fm" title="Silenciado pelo Mestre">${ic('mic', 1)}</b>` : !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${isHost && p.uv ? '<b title="Tem a lanterna UV" style="background:#3b1d7ae6">🔦</b>' : ''}${dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <em>' + esc(p.name) + '</em>' : ''}${isMe ? ' (você)' : ''}</span></div>`;
+  return `<div class="av"${cam ? ' style="display:none"' : ''}><i${av}>${initial(ch.char || p.name)}</i></div>${p.role === 'mestre' ? '<span class="crown">MESTRE</span>' : ''}${hasSt(st) ? `<div class="hpc">${st.pvMax || st.pv ? `<b class="v">${st.pv}/${st.pvMax}</b>` : ''}${st.peMax || st.pe ? `<b class="e">${st.pe}/${st.peMax}</b>` : ''}</div>` : ''}<div class="bd">${fm ? `<b class="m fm" title="Silenciado pelo Mestre">${ic('mic', 1)}</b>` : !mic ? `<b class="m" title="Mudo">${ic('mic', 1)}</b>` : ''}${isHost && p.uv ? '<b title="Tem a lanterna UV" style="background:#3b1d7ae6">🔦</b>' : ''}${(isMe ? forcedDeaf : p.fd) ? `<b class="m fm" title="Sem áudio (o Mestre tirou)">${ic('head', 1)}</b>` : dfn ? `<b class="m" title="Ensurdecido">${ic('head', 1)}</b>` : ''}</div><div class="nm"><span>${esc(liveCh(p).char || p.name)}${liveCh(p).char ? ' <em>' + esc(p.name) + '</em>' : ''}${isMe ? ' (você)' : ''}</span></div>`;
 }
 function renderTiles() {
   const box = $('#tiles'); if (!box) return;
@@ -2924,7 +3080,7 @@ function renderTiles() {
     let t = box.querySelector(`.tile[data-id="${CSS.escape(p.id)}"]`);
     if (!t) { t = document.createElement('div'); t.className = 'tile'; t.dataset.id = p.id; t.innerHTML = '<video playsinline autoplay muted></video><div class="lay"></div>'; box.appendChild(t); }
     t.classList.toggle('me', p.id === me.id);
-    const key = JSON.stringify([p.name, p.role, liveCh(p).char, (liveCh(p).img || '').length, sanSt(liveCh(p)), !!p.uv, p.id === me.id ? [me.mic, me.cam, deaf, forcedMute] : [p.mic, p.cam, p.deaf, !!p.fm]]);
+    const key = JSON.stringify([p.name, p.role, liveCh(p).char, (liveCh(p).img || '').length, sanSt(liveCh(p)), !!p.uv, p.id === me.id ? [me.mic, me.cam, deaf, forcedMute, forcedDeaf] : [p.mic, p.cam, p.deaf, !!p.fm, !!p.fd]]);
     if (t._k !== key) { t._k = key; t.querySelector('.lay').innerHTML = tileHTML(p); }
     const v = t.querySelector('video'), cam = p.id === me.id ? me.cam : p.cam;
     let src = null;
@@ -2962,7 +3118,7 @@ $('#ctl').addEventListener('click', async e => {
   if (k === 'mic') toggleMic();
   if (k === 'cam') toggleCam();
   if (k === 'share') toggleShare();
-  if (k === 'deaf') setDeaf(!deaf);
+  if (k === 'deaf') { if (forcedDeaf) toast('🎧 O Mestre tirou seu áudio. Espere ele devolver.'); else setDeaf(!deaf); }
   if (k === 'cover') setCover({on: !state.cover.on});
   if (k === 'chat') openSide('chat');
   if (k === 'docs') openSide('docs');
@@ -2973,7 +3129,7 @@ $('#ctl').addEventListener('click', async e => {
 });
 function openSide(tab) { const s = $('#side'); if (innerWidth <= 900 && s.classList.contains('open') && curTab === tab) { s.classList.remove('open'); return; } curTab = tab; if (tab === 'chat') unread = 0; s.classList.add('open'); renderSide(); renderControls(); }
 document.addEventListener('pointerdown', e => { const s = $('#side'); if (innerWidth <= 900 && s.classList.contains('open') && !s.contains(e.target) && !e.target.closest('.ctl') && !e.target.closest('#shade') && !e.target.closest('#pop')) s.classList.remove('open'); });
-const HOST_TABS = [['chat', 'chat', 'Chat'], ['music', 'music', 'Trilha'], ['sfx', 'bolt', 'Sons'], ['cover', 'mask', 'Capa'], ['docs', 'doc', 'Pistas'], ['voice', 'voice', 'Voz'], ['room', 'palette', 'Sala'], ['people', 'people', 'Pessoas']];
+const HOST_TABS = [['chat', 'chat', 'Chat'], ['music', 'music', 'Trilha'], ['sfx', 'bolt', 'Sons'], ['cover', 'mask', 'Cenas'], ['docs', 'doc', 'Pistas'], ['voice', 'voice', 'Voz'], ['room', 'palette', 'Sala'], ['people', 'people', 'Pessoas']];
 const PLAYER_TABS = [['chat', 'chat', 'Chat'], ['docs', 'bag', 'Inventário'], ['people', 'people', 'Pessoas']];
 function renderTabs() {
   const tabs = isHost ? HOST_TABS : PLAYER_TABS;
@@ -3032,7 +3188,7 @@ function renderSide() {
       + grp('svol', '🔊 Volume dos efeitos', `<input type="range" min="0" max="100" value="${Math.round(S.sfxVol * 100)}" data-a="svol"><div class="hint">Toque de novo num efeito tocando para parar só ele.</div>`, false);
   } else if (curTab === 'cover' && isHost) {
     const c = state.cover, def = COVERS[c.style] || COVERS.intervalo;
-    h = `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
+    h = cutPaneHTML() + `<button class="btn big ${c.on ? 'on' : 'red'}" data-a="cover">${c.on ? '◼ DESTAMPAR TELA' : '🎭 TAMPAR TELA'}</button>
       <div class="sec">Estilo</div><div class="grid">${Object.entries(COVERS).map(([k, v]) => `<button class="tile2 ${c.style === k ? 'on' : ''}" data-cs="${k}"><span class="e">${v.e}</span>${v.name}</button>`).join('')}</div>`
       + grp('ctext', `✏️ Texto da capa <small>${c.title ? esc(c.title) : 'padrão'}</small>`, `<label class="lab" style="margin-top:0">Título</label><input class="in" id="cT" maxlength="60" placeholder="${esc(def.t)}" value="${esc(c.title)}">
       <label class="lab">Subtítulo</label><input class="in" id="cS" maxlength="90" placeholder="${esc(def.s)}" value="${esc(c.sub)}">
@@ -3173,7 +3329,7 @@ function openPop(id, anchor) {
   else {
     h += `<label class="lab">Volume para você</label><input type="range" min="0" max="100" value="${S.vols[p.name] ?? 100}" data-pa="vol">
       <label class="sw"><input type="checkbox" data-pa="lmute" ${r && r.localMute ? 'checked' : ''}><i></i><span>Silenciar só para mim</span></label>`;
-    if (isHost) h += stEdHTML(id) + `<button class="btn sm wide" data-pa="uvg" style="margin-top:8px">${uvOwners.has(p.name.toLowerCase()) ? '🔦 Retirar lanterna UV' : '🔦 Entregar lanterna UV'}</button><button class="btn sm wide" data-pa="fm" style="margin-top:6px${p.fm ? ';border-color:#ff5b5b' : ''}">${p.fm ? '🎙️ Deixar falar de novo' : '🔇 Silenciar no chat de voz'}</button><button class="btn sm wide" data-pa="ech" style="margin-top:6px">🎭 Editar personagem</button><button class="btn sm wide" data-pa="wsp" style="margin-top:6px">🤫 Sussurrar</button><button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">🚫 Expulsar da sala</button>`;
+    if (isHost) h += stEdHTML(id) + `<button class="btn sm wide" data-pa="uvg" style="margin-top:8px">${uvOwners.has(p.name.toLowerCase()) ? '🔦 Retirar lanterna UV' : '🔦 Entregar lanterna UV'}</button><button class="btn sm wide" data-pa="fm" style="margin-top:6px${p.fm ? ';border-color:#ff5b5b' : ''}">${p.fm ? '🎙️ Deixar falar de novo' : '🔇 Silenciar no chat de voz'}</button><button class="btn sm wide" data-pa="fd" style="margin-top:6px${p.fd ? ';border-color:#ff5b5b' : ''}">${p.fd ? '🎧 Devolver o áudio dele' : '🎧 Tirar o áudio (não ouve ninguém)'}</button><button class="btn sm wide" data-pa="ech" style="margin-top:6px">🎭 Editar personagem</button><button class="btn sm wide" data-pa="wsp" style="margin-top:6px">🤫 Sussurrar</button><button class="btn sm wide" data-pa="kick" style="margin-top:6px;color:#ff8a8a">🚫 Expulsar da sala</button>`;
     else if (hasSt(stOf(id))) { const st = stOf(id); h += `<div class="stEd"><h5>Vida e esforço</h5><div style="display:flex;gap:14px;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px"><span style="text-shadow:0 0 10px #ff2a2a">${st.pv}/${st.pvMax}</span><span style="text-shadow:0 0 10px #3b8bff">${st.pe}/${st.peMax}</span></div></div>`; }
   }
   pop.innerHTML = h; pop.classList.remove('hide'); stEdWire(pop);
@@ -3182,7 +3338,7 @@ function openPop(id, anchor) {
   pop.style.left = clamp(x, 8, innerWidth - pw - 8) + 'px'; pop.style.top = clamp(y, 8, innerHeight - ph - 8) + 'px';
   pop.oninput = e => { if (e.target.dataset.sv) return; if (e.target.dataset.pa === 'vol') { S.vols[p.name] = +e.target.value; saveS(); const rr = remotes.get(id); if (rr && rr.el) rr.el.volume = clamp(+e.target.value / 100 * S.voiceVol, 0, 1); } };
   pop.onchange = e => { if (e.target.dataset.pa === 'lmute') { const rr = remotes.get(id); if (rr) { rr.localMute = e.target.checked; if (rr.el) rr.el.muted = remoteMuted(id, rr); } } };
-  pop.onclick = async e => { const b = e.target.closest('[data-pa]'); if (!b) return; if (b.dataset.pa === 'settings') { closePop(); openSettings('audio'); } if (b.dataset.pa === 'mych') { closePop(); openCharEditor(me.id); } if (b.dataset.pa === 'ech') { closePop(); openCharEditor(id); } if (b.dataset.pa === 'wsp') { closePop(); openWhisper(id); } if (b.dataset.pa === 'fm') { closePop(); forceMute(id, !p.fm); } if (b.dataset.pa === 'uvg') { closePop(); giveUv(id, !uvOwners.has(p.name.toLowerCase())); } if (b.dataset.pa === 'kick') { closePop(); if (await confirmBox('Expulsar ' + esc(p.name) + ' da sala?<br><small style="color:var(--mut)">Ele sai na hora e não consegue voltar com esse nome enquanto a sala estiver aberta.</small>', 'Expulsar')) kick(id); } };
+  pop.onclick = async e => { const b = e.target.closest('[data-pa]'); if (!b) return; if (b.dataset.pa === 'settings') { closePop(); openSettings('audio'); } if (b.dataset.pa === 'mych') { closePop(); openCharEditor(me.id); } if (b.dataset.pa === 'ech') { closePop(); openCharEditor(id); } if (b.dataset.pa === 'wsp') { closePop(); openWhisper(id); } if (b.dataset.pa === 'fm') { closePop(); forceMute(id, !p.fm); } if (b.dataset.pa === 'fd') { closePop(); forceDeaf(id, !p.fd); } if (b.dataset.pa === 'uvg') { closePop(); giveUv(id, !uvOwners.has(p.name.toLowerCase())); } if (b.dataset.pa === 'kick') { closePop(); if (await confirmBox('Expulsar ' + esc(p.name) + ' da sala?<br><small style="color:var(--mut)">Ele sai na hora e não consegue voltar com esse nome enquanto a sala estiver aberta.</small>', 'Expulsar')) kick(id); } };
 }
 function closePop() { const p = $('#pop'); p.classList.add('hide'); p.classList.remove('emo'); p.dataset.k = ''; }
 document.addEventListener('pointerdown', e => { if (!$('#pop').classList.contains('hide') && !e.target.closest('#pop') && !e.target.closest('.tile') && !e.target.closest('.lf') && !e.target.closest('[data-p]') && !e.target.closest('#layoutBtn') && !e.target.closest('#copyLink') && !e.target.closest('[data-c="vol"]')) closePop(); });
@@ -3562,6 +3718,7 @@ function openDocEditor(id, draft) {
   const e = docEdit;
   openModal(`<div class="mhead"><h3>${ex ? '✏️ Editar' : '📜 Novo'} documento</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
     <div class="dePick" id="dePick">${e.img ? `<img alt="" src="${e.img}">` : '<span>🖼️<br>Escolher imagem<br><small>foto de uma carta, recorte de jornal, retrato, objeto…</small></span>'}</div>
+    <button class="btn sm red wide" id="deTpl" style="margin-top:8px">✍️ ${lsGet('mesa-tpl:' + e.id, null) ? 'Editar o modelo desta pista' : 'Criar sem arquivo — modelos prontos (carta, jornal, relatório…)'}</button>
     <label class="lab">Nome (os agentes veem)</label><input class="in" id="deName" maxlength="60" value="${esc(e.name)}" placeholder="Ex.: Carta de Joana para o irmão">
     <label class="lab">Como ele aparece</label><div class="grid g4" id="deKind">${Object.entries(DOC_KINDS).map(([k, [ic2, n]]) => `<button class="tile2 ${e.kind === k ? 'on' : ''}" data-dk="${k}"><span class="e">${ic2}</span>${n}</button>`).join('')}</div>
     <div class="hint" id="deKindHint"></div>
@@ -3577,13 +3734,14 @@ function openDocEditor(id, draft) {
   const setHint = () => { $('#deKindHint').textContent = DOC_HINTS[docEdit.kind]; }; setHint();
   const keepForm = () => { docEdit.name = $('#deName').value; docEdit.uvText = $('#deUv').value; docEdit.uvPos = $('#dePos').value; docEdit.back = $('#deBack').value; docEdit.uvBack = $('#deUvBack').value; };
   $('#dePick').onclick = async () => { const [f] = await pickFile('image/*'); if (!f) return; try { docEditFile = f; docEdit.img = await imgToDataURL(f, 1600, .85); $('#dePick').innerHTML = `<img alt="" src="${docEdit.img}">`; if (!$('#deName').value.trim()) $('#deName').value = f.name.replace(/\.[^.]+$/, '').slice(0, 60); } catch (err) { toast('Não consegui abrir essa imagem.'); } };
+  $('#deTpl').onclick = () => { keepForm(); openDocTpl(ex ? ex.id : null); };
   $('#deKind').onclick = ev => { const b = ev.target.closest('[data-dk]'); if (!b) return; docEdit.kind = b.dataset.dk; $$('#deKind [data-dk]').forEach(x => x.classList.toggle('on', x === b)); setHint(); };
   $('#deUvImg').onclick = async () => { const [f] = await pickFile('image/*'); if (!f) return; try { keepForm(); docEdit.uvImg = await imgToDataURL(f, 1200, .85); openDocEditor(ex ? ex.id : null, docEdit); } catch (err) { toast('Não consegui abrir essa imagem.'); } };
   if ($('#deUvRm')) $('#deUvRm').onclick = () => { keepForm(); docEdit.uvImg = ''; openDocEditor(ex ? ex.id : null, docEdit); };
   $('#deUvDraw').onclick = () => { keepForm(); if (!docEdit.img) { toast('Escolha a imagem do documento primeiro.'); return; } openUvDraw(ex ? ex.id : null); };
   $('#deSave').onclick = async () => {
     keepForm();
-    if (!docEdit.img) { toast('Escolha a imagem do documento.'); return; }
+    if (!docEdit.img) { toast('Escolha uma imagem ou crie a pista com um modelo pronto.'); return; }
     if (docEdit.kind === 'item' && docEditFile && /png|webp|gif/i.test(docEditFile.type)) { try { const png = await imgToPNG(docEditFile, 1000); if (png) docEdit.img = png; } catch (err) {} }
     const d = sanDoc({...docEdit, name: docEdit.name.trim() || 'Documento', ts: ex ? ex.ts : Date.now()});
     if (!d) { toast('Imagem grande demais. Tente outra.'); return; }
@@ -3622,6 +3780,426 @@ function openUvDraw(exId) {
   };
   base.src = e.img;
 }
+/* =====================================================================
+   v11: CUTSCENES (introdução, capítulo, combate, emboscada, chefe)
+   ===================================================================== */
+const CUT_TYPES = {
+  intro: {e: '🌕', n: 'Introdução', d: 'Abertura da campanha: imagem com névoa, narração frase a frase, sino e o título no final.'},
+  capitulo: {e: '📖', n: 'Capítulo', d: 'Cartão elegante de capítulo ou de sessão, com piano e máquina de escrever.'},
+  combate: {e: '⚔️', n: 'Combate', d: 'Os agentes entram de um lado, o inimigo do outro, “VS” e tambores. Ótimo para rolar iniciativa.'},
+  emboscada: {e: '👁️', n: 'Emboscada', d: 'Estática, sussurros, olhos no escuro e um susto. Rápida e brutal.'},
+  chefe: {e: '💀', n: 'Chefe', d: 'Batimentos no escuro, a criatura surge devagar e o chão treme.'}
+};
+const CUT_MOODS = {lua: ['#bcd6e6', '#0b141c', 'Lua'], sangue: ['#ff3b3b', '#1c0505', 'Sangue'], morte: ['#d9d9d9', '#0b0b0b', 'Morte'], conhecimento: ['#ffd75e', '#151005', 'Conhecimento'], energia: ['#c77dff', '#10061c', 'Energia'], fogo: ['#ff9d3b', '#1a0b02', 'Fogo']};
+const CUT_DEFAULT_IMG = 'cena-vila-lua.webp';
+const CUT_DEF = {
+  intro: {title: 'O SINO DA MEIA-NOITE', sub: 'Ordem Paranormal apresenta', lines: ['Toda vila pequena guarda um segredo.', 'Em Santa Aurora, o sino da igreja tocou sozinho à meia-noite.', 'Na manhã seguinte, ninguém lembrava do próprio nome.', 'A Ordem enviou seus agentes.'], img: CUT_DEFAULT_IMG, mood: 'lua'},
+  capitulo: {title: 'CAPÍTULO I', sub: 'O que dorme sob a igreja', mood: 'lua'},
+  combate: {title: 'COMBATE', sub: 'Rolem iniciativa', enemy: 'Criatura de Sangue', threat: 'VD 80', mood: 'sangue'},
+  emboscada: {title: 'EMBOSCADA!', sub: 'Teste de Percepção', mood: 'sangue'},
+  chefe: {title: 'ELE CHEGOU', sub: 'Ameaça máxima', enemy: 'O Anfitrião', threat: 'VD 300', mood: 'morte'}
+};
+const cutNewId = () => 'c' + Math.random().toString(36).slice(2, 9);
+function cutDefaults() {
+  const mk = (type, name) => Object.assign({id: cutNewId(), type, name, title: '', sub: '', lines: [], enemy: '', threat: '', img: '', mood: 'sangue'}, JSON.parse(JSON.stringify(CUT_DEF[type])));
+  return [mk('intro', 'Abertura — Santa Aurora'), mk('capitulo', 'Capítulo I'), mk('combate', 'Combate'), mk('emboscada', 'Emboscada'), mk('chefe', 'Chefe final')];
+}
+let cutLib = (() => { const l = lsGet('mesa-cuts', null); return Array.isArray(l) && l.length ? l : cutDefaults(); })();
+function cutSave() { try { localStorage.setItem('mesa-cuts', JSON.stringify(cutLib)); return true; } catch (e) { toast('Sem espaço neste navegador para guardar a imagem dessa cena. Use uma imagem menor.', 5000); return false; } }
+const okCutImg = s => typeof s === 'string' && (s === '' || s === CUT_DEFAULT_IMG || (/^data:image\/(jpeg|png|webp);base64,/.test(s) && s.length < 1500000));
+function sanCut(c) {
+  c = c || {};
+  return {id: String(c.id || cutNewId()).replace(/[^a-z0-9]/gi, '').slice(0, 20), type: CUT_TYPES[c.type] ? c.type : 'intro', name: String(c.name || '').slice(0, 40), title: String(c.title || '').slice(0, 60), sub: String(c.sub || '').slice(0, 90),
+    lines: (Array.isArray(c.lines) ? c.lines : []).map(x => String(x).slice(0, 160).trim()).filter(Boolean).slice(0, 8), enemy: String(c.enemy || '').slice(0, 40), threat: String(c.threat || '').slice(0, 30),
+    img: okCutImg(c.img) ? c.img : '', mood: CUT_MOODS[c.mood] ? c.mood : 'sangue',
+    team: Array.isArray(c.team) ? c.team.slice(0, 8).map(t => ({n: String((t && t.n) || '').slice(0, 30), img: okImg(t && t.img) ? t.img : ''})) : []};
+}
+const cutLetters = (txt, cls, step, delay = 0) => { let i = 0; return String(txt).split(' ').map(w => `<span class="cw">${[...w].map(ch => { const k = i++; return `<span class="${cls}" style="animation-delay:${(delay + k * step).toFixed(3)}s;--i:${k}">${esc(ch)}</span>`; }).join('')}</span>${(i++, '')}`).join(' '); };
+const cutBgHTML = c => c.img ? `<div class="cBg" style="background-image:url('${c.img}')"></div>` : '<div class="cBg gen"></div>';
+function cutPlan(c) {
+  if (c.type === 'intro') {
+    const lines = []; let t = 3.4;
+    (c.lines.length ? c.lines : []).forEach(L => { const d = clamp(2.4 + L.length * .055, 3.6, 7.5); lines.push([t, d]); t += d; });
+    return {lines, title: t + .4, end: t + 9.5};
+  }
+  return {capitulo: {end: 7.4}, combate: {end: 7.8}, emboscada: {end: 5.2}, chefe: {end: 11.2}}[c.type];
+}
+let cutCur = null, cutDuck = false;
+function cutFlash(ov, color, dur = .9) { const f = document.createElement('div'); f.className = 'cFl'; f.style.background = color; f.style.animationDuration = dur + 's'; ov.appendChild(f); setTimeout(() => f.remove(), dur * 1000 + 50); }
+function cutShake(ov) { ov.classList.remove('shake'); void ov.offsetWidth; ov.classList.add('shake'); }
+function cutDust(k, ov, n, rgb) {
+  const cv = document.createElement('canvas'); cv.className = 'cDust'; ov.appendChild(cv);
+  const g = cv.getContext('2d'); const W = cv.width = innerWidth, H = cv.height = innerHeight;
+  const ps = Array.from({length: n}, () => ({x: Math.random() * W, y: Math.random() * H, r: rand(.6, 2.2), vx: rand(-.12, .35), vy: rand(-.22, .08), a: rand(.12, .55), p: Math.random() * 6}));
+  const loop = () => { if (!k.alive || !cv.isConnected) return; g.clearRect(0, 0, W, H); ps.forEach(q => { q.x += q.vx; q.y += q.vy; q.p += .025; if (q.x > W + 5) q.x = -5; if (q.x < -5) q.x = W + 5; if (q.y < -5) q.y = H + 5; if (q.y > H + 5) q.y = -5; g.globalAlpha = q.a * (.55 + .45 * Math.sin(q.p)); g.fillStyle = `rgb(${rgb})`; g.beginPath(); g.arc(q.x, q.y, q.r, 0, 7); g.fill(); }); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+const CUT_VIS = {
+  intro(k, c, ov, at, plan) {
+    ov.innerHTML = cutBgHTML(c) + '<div class="cFog"></div><div class="cFog f2"></div><div class="cVig"></div><div class="cGrain"></div><div class="cBars"><i></i><i></i></div><div class="cLine" id="cutLine"></div><div class="cTitle" id="cutTitle"></div>';
+    cutDust(k, ov, 70, '225,236,245');
+    c.lines.forEach((L, i) => {
+      const [t, d] = plan.lines[i];
+      at(t, () => { const el = $('#cutLine'); if (!el) return; el.classList.remove('hide'); el.innerHTML = cutLetters(L, 'lc', Math.min(.034, 1.5 / Math.max(L.length, 1))); });
+      at(t + d - .9, () => { const el = $('#cutLine'); if (el) el.classList.add('hide'); });
+    });
+    at(plan.title, () => {
+      cutFlash(ov, 'radial-gradient(circle,#ffffffcc,var(--mc) 40%,transparent 80%)', 1.6); ov.classList.add('titled');
+      const el = $('#cutTitle'); if (!el) return;
+      el.innerHTML = `${c.sub ? `<small>${esc(c.sub)}</small>` : ''}<h1>${cutLetters(c.title, 'tc', .07, .2)}</h1><i class="cRule"></i>`;
+      requestAnimationFrame(() => el.classList.add('show'));
+    });
+    at(plan.end - 2.2, () => ov.classList.add('ending'));
+    return plan.end;
+  },
+  capitulo(k, c, ov, at) {
+    ov.innerHTML = (c.img ? cutBgHTML(c) : '') + `<div class="cVig"></div><div class="cGrain"></div><div class="cCh"><i class="rl"></i><h1>${cutLetters(c.title, 'tc', .09, 1.2)}</h1><p id="cutChSub"></p><i class="rl"></i></div>`;
+    cutDust(k, ov, 40, '255,255,255');
+    at(.4, () => ov.classList.add('s1'));
+    at(2.7, () => { const p = $('#cutChSub'); if (p) p.innerHTML = cutLetters(c.sub, 'tw', .055); });
+    at(6.2, () => ov.classList.add('ending'));
+    return 7.4;
+  },
+  combate(k, c, ov, at) {
+    const team = c.team || [], foe = !!(c.enemy || c.img);
+    if (!team.length) ov.classList.add('noteam'); if (!foe) ov.classList.add('nofoe');
+    ov.innerHTML = `<div class="cSpeed"></div><div class="cVig"></div><div class="cSlash a"></div><div class="cSlash b"></div>
+      <div class="cTeam">${team.map((p, i) => `<div class="cP" style="--i:${i}"><div class="ph"${p.img ? ` style="background-image:url('${p.img}')"` : ''}>${p.img ? '' : esc(initial(p.n))}</div><b>${esc(p.n)}</b></div>`).join('')}</div>
+      <div class="cVs">VS</div>
+      <div class="cFoe"><div class="ph"${c.img ? ` style="background-image:url('${c.img}')"` : ''}>${c.img ? '' : '<i class="eyes"></i>'}</div>${c.enemy ? `<b>${esc(c.enemy)}</b>` : ''}${c.threat ? `<small>${esc(c.threat)}</small>` : ''}</div>
+      <div class="cBig">${cutLetters(c.title, 'bc', 0)}</div><div class="cSub">${esc(c.sub)}</div><div class="cGrain"></div>`;
+    cutFlash(ov, 'var(--mc)', .5); cutShake(ov);
+    at(.12, () => ov.classList.add('s1'));
+    at(.55, () => ov.classList.add('s2'));
+    at(1.9, () => { ov.classList.add('s3'); cutShake(ov); });
+    at(2.4, () => ov.classList.add('s4'));
+    at(3.7, () => { ov.classList.add('s5'); cutFlash(ov, '#fff', .45); cutShake(ov); });
+    at(4.6, () => ov.classList.add('s6'));
+    at(6.7, () => ov.classList.add('ending'));
+    return 7.8;
+  },
+  emboscada(k, c, ov, at) {
+    ov.innerHTML = `<div class="cStatic"></div><div class="cGl">…você ouviu isso?</div><div class="cVig"></div><i class="eyesBig"></i>
+      ${c.img ? `<div class="cAmb" style="background-image:url('${c.img}')"></div>` : ''}<div class="cBig">${cutLetters(c.title, 'bc', 0)}</div><div class="cSub">${esc(c.sub)}${c.enemy ? ' · ' + esc(c.enemy) : ''}</div>`;
+    at(1.4, () => ov.classList.add('s1'));
+    at(1.95, () => { ov.classList.add('s2'); cutFlash(ov, 'var(--mc)', .7); cutShake(ov); });
+    at(2.05, () => ov.classList.add('s3'));
+    at(2.8, () => ov.classList.add('s4'));
+    at(4.3, () => ov.classList.add('ending'));
+    return 5.2;
+  },
+  chefe(k, c, ov, at) {
+    ov.innerHTML = `<div class="cBoss"${c.img ? ` style="background-image:url('${c.img}')"` : ''}>${c.img ? '' : '<i class="eyes"></i>'}</div><div class="cDark"></div><div class="cVig"></div><div class="cGrain"></div>
+      <div class="cBig">${cutLetters(c.title, 'bc', 0)}</div><div class="cSub">${esc(c.enemy || '')}${c.enemy && c.threat ? ' — ' : ''}${esc(c.threat || '')}${!c.enemy && !c.threat ? esc(c.sub) : ''}</div>${c.enemy || c.threat ? `<div class="cSub2">${esc(c.sub)}</div>` : ''}`;
+    cutDust(k, ov, 50, '255,120,120');
+    [0, .95, 1.8, 2.5, 3.05].forEach(t => at(t, () => { ov.classList.remove('beat'); void ov.offsetWidth; ov.classList.add('beat'); }));
+    at(3.1, () => ov.classList.add('s1'));
+    at(6.0, () => { ov.classList.add('s2', 's3'); cutFlash(ov, 'var(--mc)', 1.2); cutShake(ov); setTimeout(() => cutShake(ov), 450); });
+    at(7.0, () => ov.classList.add('s4'));
+    at(10.0, () => ov.classList.add('ending'));
+    return 11.2;
+  }
+};
+/* ---------- cutscene sound ---------- */
+function bell(t, out, v = .2, f = 220) {
+  [[.5, 1, 6], [1, .8, 5], [1.183, .5, 4], [1.506, .45, 3.5], [2, .4, 3], [2.514, .25, 2.5], [2.662, .2, 2.2], [3.011, .18, 2], [4.166, .1, 1.4]].forEach(([m, a, d]) => { const g = gain(0, out); env(g, t, .004, v * a, d * 1.5); osc('sine', f * m, t, d * 1.5 + .1, g); send(g, 1.3); });
+  const h = gain(0, out); env(h, t, .001, v * .5, .09); noise(t, .12, filt('bandpass', 2600, 1.5, h));
+}
+function boom(t, out, v = .8) { const g = gain(0, out); env(g, t, .005, v, 2.2); const o = osc('sine', 72, t, 2.4, g); o.frequency.exponentialRampToValueAtTime(27, t + 1.8); const n = gain(0, out); env(n, t, .003, v * .45, .7); noise(t, .8, filt('lowpass', 900, .7, n)); send(g, .5); }
+function whoosh(t, out, v = .3, dur = .55) { const g = gain(0, out); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + dur * .6); g.gain.exponentialRampToValueAtTime(.0001, t + dur); const bp = filt('bandpass', 300, 1.2, g); bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(3200, t + dur * .7); noise(t, dur + .05, bp); send(g, .3); }
+function impact(t, out, v = .9) { taiko(t, out, v, 55); boom(t, out, v * .7); const c = gain(0, out); env(c, t, .001, v * .5, .25); noise(t, .3, filt('highpass', 1800, .7, c)); send(c, .4); }
+const CUT_AUD = {
+  intro(k, c, plan) {
+    const o = k.bus, t0 = k.t0, end = t0 + plan.end;
+    const w = gain(0, o), bp = filt('bandpass', 520, .9, w), lfo = ctx.createOscillator(), lg = gain(320); lfo.frequency.value = .11; lfo.connect(lg); lg.connect(bp.frequency); lfo.start(t0); lfo.stop(end + 1); noise(t0, plan.end + 1, bp);
+    w.gain.setValueAtTime(.0001, t0); w.gain.exponentialRampToValueAtTime(.15, t0 + 3.5); w.gain.setValueAtTime(.15, end - 2.5); w.gain.exponentialRampToValueAtTime(.0001, end); send(w, .3);
+    const dr = drone([38, 45, 50], 'sawtooth', 360, .04, o); k.stopFns.push(dr.stop);
+    for (let tt = 1.2; tt < plan.title - 2; tt += 7.5) bell(t0 + tt, o, .07, 196);
+    const tt = t0 + plan.title; boom(tt, o, .75); bell(tt + .05, o, .26, 147); braam(tt, o, 31, .2, 5); strings(o, [50, 57, 62], {vol: .035, attack: 3}).stop(end);
+  },
+  capitulo(k, c) {
+    const o = k.bus, t0 = k.t0;
+    piano(t0 + .4, o, NOTE(57), .12, 4); piano(t0 + 1.2, o, NOTE(64), .1, 4); piano(t0 + 1.25, o, NOTE(60), .08, 4); boom(t0 + 1.2, o, .35);
+    [...String(c.sub)].forEach((ch, i) => { if (ch === ' ') return; const t = t0 + 2.7 + i * .055; const g = gain(0, o); env(g, t, .001, rand(.08, .13), .035); noise(t, .05, filt('bandpass', rand(2500, 4200), 1.2, g)); });
+    piano(t0 + 5.2, o, NOTE(52), .1, 3);
+  },
+  combate(k, c) {
+    const o = k.bus, t0 = k.t0, n = (c.team || []).length;
+    impact(t0, o, .9); whoosh(t0 + .1, o, .35, .5);
+    for (let i = 0; i < n; i++) { taiko(t0 + .62 + i * .14, o, .45, 95); whoosh(t0 + .55 + i * .14, o, .12, .3); }
+    snare(t0 + 1.9, o, .45); metal(t0 + 1.9, o, .1, 420); impact(t0 + 1.9, o, .6);
+    whoosh(t0 + 2.3, o, .3, .5); braam(t0 + 2.45, o, 33, .32, 2.6);
+    impact(t0 + 3.7, o, 1); snare(t0 + 3.7, o, .5);
+    for (let i = 0; i < 6; i++) { const t = t0 + 4.15 + i * .42; taiko(t, o, i % 2 ? .45 : .7, i % 2 ? 80 : 58); if (i % 2) hat(t + .21, o, .07); }
+    heartbeat(t0 + 4.4, o, .5); riser(t0 + 5.6, o, 1.4, .18); boom(t0 + 7.0, o, .5);
+  },
+  emboscada(k, c) {
+    const o = k.bus, t0 = k.t0;
+    const s = gain(0, o); s.gain.setValueAtTime(.06, t0); s.gain.setValueAtTime(.06, t0 + 1.35); s.gain.linearRampToValueAtTime(.0001, t0 + 1.4); noise(t0, 1.45, filt('highpass', 2500, .7, s));
+    whispers(t0, o, .3, 1.35, 3); heartbeat(t0 + 1.45, o, .8);
+    const t = t0 + 1.95; screech(t, o, .09, 1.3); braam(t, o, 30, .45, 2.4); boom(t, o, .8); snare(t, o, .5); taiko(t + .7, o, .7, 50);
+  },
+  chefe(k, c) {
+    const o = k.bus, t0 = k.t0;
+    const r = rumble(o, .14, 55); k.stopFns.push(r.stop);
+    [[0, .7], [.95, .8], [1.8, .9], [2.5, 1], [3.05, 1.1]].forEach(([d, v]) => heartbeat(t0 + d, o, v));
+    swell(t0 + 3.1, o, 2.8, .12, 600); const dr = drone([26, 33, 38], 'sawtooth', 220, .05, o); k.stopFns.push(dr.stop);
+    const t = t0 + 6; boom(t, o, 1); braam(t, o, 26, .55, 4.2); metal(t, o, .12, 300); impact(t + .45, o, .7);
+    [7.1, 7.55, 8.0].forEach(d => taiko(t0 + d, o, .6, 52)); r.stop(t0 + 10.5);
+  }
+};
+function cutStop(fromNet) {
+  const k = cutCur; if (!k) return; cutCur = null; k.alive = false;
+  k.timers.forEach(clearTimeout);
+  try { if (k.bus) { k.bus.gain.setTargetAtTime(.0001, T(), .25); setTimeout(() => { try { k.bus.disconnect(); } catch (e) {} }, 1600); } } catch (e) {}
+  k.stopFns.forEach(f => { try { f(T() + .3); } catch (e) {} });
+  k.ov.classList.add('out'); setTimeout(() => k.ov.remove(), 950);
+  if (cutDuck) { cutDuck = false; try { if (musicBus) musicBus.gain.setTargetAtTime(S.musicVol * duckLevel(), T(), .8); } catch (e) {} }
+  if (isHost && !fromNet && !k.preview) sendAll({t: 'cutstop'});
+}
+function cutRun(c, preview) {
+  if (cutCur) cutStop(true);
+  const old = $('#cutOv'); if (old) old.remove();
+  const m = CUT_MOODS[c.mood] || CUT_MOODS.sangue, plan = cutPlan(c);
+  const ov = document.createElement('div'); ov.id = 'cutOv'; ov.className = 'cut c-' + c.type; ov.style.setProperty('--mc', m[0]); ov.style.setProperty('--mbg', m[1]);
+  const k = cutCur = {ov, timers: [], stopFns: [], alive: true, preview: !!preview, bus: null, t0: 0};
+  const at = (s, f) => k.timers.push(setTimeout(() => { if (k.alive) f(); }, s * 1000));
+  document.body.appendChild(ov);
+  const dur = CUT_VIS[c.type](k, c, ov, at, plan);
+  if (isHost) { const b = document.createElement('button'); b.className = 'cSkip'; b.textContent = preview ? '✕ Fechar prévia (Esc)' : '⏭ Pular para todos (Esc)'; b.onclick = () => cutStop(false); ov.appendChild(b); }
+  requestAnimationFrame(() => requestAnimationFrame(() => ov.classList.add('go')));
+  Promise.resolve(audioInit()).then(() => { if (!k.alive || !ctx) return; const o = docOut(); if (!o) return; k.bus = gain(1, o); k.t0 = T() + .03; try { CUT_AUD[c.type](k, c, plan); } catch (e) { console.warn(e); } }).catch(() => {});
+  if (isHost && !preview && musicBus) { cutDuck = true; try { musicBus.gain.setTargetAtTime(S.musicVol * duckLevel(), T(), .6); } catch (e) {} }
+  at(dur, () => cutStop(true));
+}
+function cutPlay(c, preview) {
+  c = sanCut(c);
+  if (['combate', 'emboscada', 'chefe'].includes(c.type)) c.team = [...roster.values()].filter(p => p.role !== 'mestre').map(p => { const ch = liveCh(p); return {n: ch.char || p.name, img: ch.img || ''}; });
+  if (isHost && !preview) sendAll({t: 'cut', c});
+  cutRun(c, preview);
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && cutCur) { e.stopImmediatePropagation(); e.preventDefault(); cutStop(false); } }, true);
+function cutPaneHTML() {
+  return `<div class="sec" style="margin-top:0">🎬 Cutscenes <small style="font-weight:500;text-transform:none;letter-spacing:0">passam na tela de todos, com som</small></div>
+    <div class="cutList">${cutLib.map(c => { const ty = CUT_TYPES[c.type] || CUT_TYPES.intro, m = CUT_MOODS[c.mood] || CUT_MOODS.sangue; return `<div class="cutIt" style="--mc:${m[0]}"><button class="cutPlay" data-cut="${c.id}" title="Passar para todos agora"><span class="e">${ty.e}</span><span class="tx"><b>${esc(c.name || ty.n)}</b><small>${ty.n}${c.title ? ' · ' + esc(c.title) : ''}</small></span><span class="go">▶</span></button><button class="cutEd" data-cuted="${c.id}" title="Editar">✏️</button></div>`; }).join('')}</div>
+    <button class="btn sm wide" data-a="cutnew" style="margin-top:8px">+ Nova cutscene</button>
+    <div class="hint">Toque numa cena para passar para todos na hora. <b>Esc</b> pula. A trilha abaixa sozinha durante a cena. Nas cenas de luta, os agentes da sala entram com foto e nome do personagem.</div>
+    <div class="sec">🎭 Tampar a tela</div>`;
+}
+document.addEventListener('click', e => {
+  if (!isHost) return;
+  const p = e.target.closest('[data-cut]'); if (p) { const c = cutLib.find(x => x.id === p.dataset.cut); if (c) cutPlay(c); return; }
+  const ed = e.target.closest('[data-cuted]'); if (ed) { openCutEditor(ed.dataset.cuted); return; }
+  if (e.target.closest('[data-a="cutnew"]')) openCutEditor(null);
+});
+function openCutEditor(id) {
+  const ex = cutLib.find(x => x.id === id);
+  const c = ex ? JSON.parse(JSON.stringify(ex)) : Object.assign({id: cutNewId(), type: 'combate', name: '', title: '', sub: '', lines: [], enemy: '', threat: '', img: '', mood: 'sangue'}, JSON.parse(JSON.stringify(CUT_DEF.combate)), {enemy: '', threat: ''});
+  const keep = () => {
+    c.name = $('#ceName').value.trim(); c.title = $('#ceTitle').value; c.sub = $('#ceSub').value;
+    if ($('#ceLines')) c.lines = $('#ceLines').value.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 8);
+    if ($('#ceEnemy')) c.enemy = $('#ceEnemy').value; if ($('#ceThreat')) c.threat = $('#ceThreat').value;
+  };
+  const save = () => { keep(); const s = sanCut(c); delete s.team; s.name = s.name || CUT_TYPES[s.type].n; const i = cutLib.findIndex(x => x.id === s.id); if (i >= 0) cutLib[i] = s; else cutLib.push(s); if (!cutSave()) return null; renderSide(); return s; };
+  const draw = () => {
+    const ty = c.type, fight = ['combate', 'emboscada', 'chefe'].includes(ty);
+    openModal(`<div class="mhead"><h3>🎬 ${ex ? 'Editar' : 'Nova'} cutscene</h3><button class="btn sm" data-m="x">Fechar</button></div><div class="mbody">
+      <label class="lab" style="margin-top:0">Tipo</label><div class="ceType" id="ceType">${Object.entries(CUT_TYPES).map(([k, v]) => `<button class="tile2 ${ty === k ? 'on' : ''}" data-ct="${k}"><span class="e">${v.e}</span>${v.n}</button>`).join('')}</div>
+      <div class="hint" style="margin-top:6px">${CUT_TYPES[ty].d}</div>
+      <label class="lab">Nome (só você vê)</label><input class="in" id="ceName" maxlength="40" value="${esc(c.name)}" placeholder="Ex.: Abertura da sessão 1">
+      <label class="lab">${ty === 'intro' ? 'Título da campanha' : ty === 'capitulo' ? 'Título do capítulo' : 'Texto grande'}</label><input class="in" id="ceTitle" maxlength="60" value="${esc(c.title)}">
+      <label class="lab">${ty === 'intro' ? 'Linha de cima do título' : 'Subtítulo'}</label><input class="in" id="ceSub" maxlength="90" value="${esc(c.sub)}">
+      ${ty === 'intro' ? `<label class="lab">Narração — uma frase por linha (até 8)</label><textarea class="in" id="ceLines" rows="5">${esc(c.lines.join('\n'))}</textarea>` : ''}
+      ${fight ? `<div class="row" style="gap:8px;align-items:flex-end"><div style="flex:2"><label class="lab">Inimigo${ty === 'emboscada' ? ' (opcional)' : ''}</label><input class="in" id="ceEnemy" maxlength="40" value="${esc(c.enemy)}" placeholder="Ex.: Criatura de Sangue"></div><div style="flex:1"><label class="lab">Ameaça</label><input class="in" id="ceThreat" maxlength="30" value="${esc(c.threat)}" placeholder="VD 80"></div></div>` : ''}
+      <label class="lab">${fight ? 'Imagem do inimigo' : 'Imagem de fundo'} <small style="color:var(--mut)">(opcional)</small></label>
+      <div class="ceImg">${c.img ? `<img alt="" src="${c.img}">` : `<span>${fight ? 'sem imagem: aparecem olhos no escuro' : 'sem imagem'}</span>`}<div class="col"><button class="btn sm" id="ceImgUp">🖼️ Escolher</button>${!fight && c.img !== CUT_DEFAULT_IMG ? '<button class="btn sm" id="ceImgDef">🌕 Vila na lua</button>' : ''}${c.img ? '<button class="btn sm" id="ceImgRm">Remover</button>' : ''}</div></div>
+      <label class="lab">Clima / elemento</label><div class="chips" id="ceMood">${Object.entries(CUT_MOODS).map(([k, m]) => `<button class="chip ${c.mood === k ? 'on' : ''}" data-cm="${k}"><i class="dotc" style="background:${m[0]}"></i>${m[2]}</button>`).join('')}</div>
+      <div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap">${ex ? '<button class="btn sm" id="ceDel">🗑️</button>' : ''}<span style="flex:1"></span><button class="btn sm" id="cePrev">👁️ Ver só pra mim</button><button class="btn sm" id="ceSave">💾 Salvar</button><button class="btn sm red" id="ceGo">▶ Salvar e passar</button></div></div>`);
+    $('#ceType').onclick = ev => { const b = ev.target.closest('[data-ct]'); if (!b || b.dataset.ct === c.type) return; keep(); const old = CUT_DEF[c.type] || {}, nd = CUT_DEF[b.dataset.ct];
+      ['title', 'sub', 'enemy', 'threat', 'mood'].forEach(f => { if (!c[f] || c[f] === old[f]) c[f] = nd[f] || ''; });
+      if (b.dataset.ct === 'intro' && !c.lines.length) c.lines = [...nd.lines];
+      if (b.dataset.ct === 'intro' && !c.img) c.img = CUT_DEFAULT_IMG; else if (['combate', 'emboscada', 'chefe'].includes(b.dataset.ct) && c.img === CUT_DEFAULT_IMG) c.img = '';
+      c.type = b.dataset.ct; draw(); };
+    $('#ceMood').onclick = ev => { const b = ev.target.closest('[data-cm]'); if (!b) return; c.mood = b.dataset.cm; $$('#ceMood [data-cm]').forEach(x => x.classList.toggle('on', x === b)); };
+    $('#ceImgUp').onclick = async () => { const [f] = await pickFile('image/*'); if (!f) return; try { keep(); c.img = await imgToDataURL(f, 1600, .8); draw(); } catch (err) { toast('Não consegui abrir essa imagem.'); } };
+    if ($('#ceImgDef')) $('#ceImgDef').onclick = () => { keep(); c.img = CUT_DEFAULT_IMG; draw(); };
+    if ($('#ceImgRm')) $('#ceImgRm').onclick = () => { keep(); c.img = ''; draw(); };
+    $('#cePrev').onclick = () => { keep(); cutPlay(sanCut(c), true); };
+    $('#ceSave').onclick = () => { if (save()) { closeModal('ok'); toast('🎬 Cena salva'); } };
+    $('#ceGo').onclick = () => { const s = save(); if (s) { closeModal('ok'); cutPlay(s); } };
+    if ($('#ceDel')) $('#ceDel').onclick = async () => { if (!await confirmBox('Apagar esta cutscene?', 'Apagar')) { draw(); return; } cutLib = cutLib.filter(x => x.id !== c.id); cutSave(); renderSide(); };
+  };
+  draw();
+}
+
+/* =====================================================================
+   v11: MODELOS DE PISTA (sem arquivo)
+   ===================================================================== */
+const TPL = {
+  carta: {n: 'Carta', e: '✉️', kind: 'carta', W: 1100, H: 1450, f: {date: ['Data / lugar', 'Santa Aurora, 12 de agosto de 1998'], t1: ['Saudação', 'Querido irmão,'], body: ['Texto', 'Não volte para a casa da Rua das Flores.\nDesde que o símbolo apareceu na parede, ninguém dorme direito. Mamãe fala sozinha à noite e o porão está sempre frio.\n\nSe algo me acontecer, procure o padre Antônio.'], sign: ['Assinatura', 'Com amor,\nJoana']}},
+  bilhete: {n: 'Bilhete', e: '📝', kind: 'bilhete', W: 1000, H: 760, f: {body: ['Recado', 'Me encontra na igreja às 23h.\nVenha sozinho. Não conte pra Ordem.'], sign: ['Assinatura', '— M.']}},
+  jornal: {n: 'Jornal', e: '📰', kind: 'jornal', W: 1150, H: 1500, f: {t2: ['Nome do jornal', 'Gazeta de Santa Aurora'], date: ['Data', 'Terça-feira, 13 de agosto de 1998 — Edição 1.204'], t1: ['Manchete', 'SINO TOCA SOZINHO E VILA ACORDA SEM MEMÓRIA'], sign: ['Legenda da foto', 'A igreja matriz na madrugada de ontem. Moradores relatam luzes no campanário.'], body: ['Texto da matéria', 'Moradores de Santa Aurora foram surpreendidos na madrugada de segunda-feira pelo badalar do sino da igreja matriz, que segundo o padre Antônio está sem corda há mais de vinte anos.\n\nPela manhã, ao menos trinta pessoas procuraram o posto de saúde sem conseguir lembrar o próprio nome. A prefeitura não comenta o caso. Uma família que vive próxima ao cemitério afirma ter visto um homem alto parado sob a figueira da praça durante toda a noite.']}},
+  relatorio: {n: 'Relatório da Ordem', e: '🗂️', kind: 'doc', W: 1100, H: 1450, f: {t1: ['Assunto', 'Ocorrência paranormal — Santa Aurora'], date: ['Data', '13/08/1998'], sign: ['Agente responsável', 'Agente Kemi'], body: ['Relatório — use [[assim]] para tarjar', 'Às 00h03 o sino da igreja matriz tocou 13 vezes. Testemunhas descrevem uma figura de [[chapéu e sobretudo]] sob a figueira.\n\nA perda de memória atinge [[31]] moradores. Suspeita de ritual ligado ao elemento [[Conhecimento]].\n\nRecomendação: isolar a praça e recolher o diário do padre.']}},
+  diario: {n: 'Diário', e: '📔', kind: 'carta', W: 1100, H: 1450, f: {date: ['Data', '14 de agosto'], body: ['Texto', 'Hoje ouvi o sino de novo, mas ninguém mais ouviu.\nO homem da figueira sabia meu nome. Ele disse que eu já tinha esquecido o resto.\n\nEscrevo tudo aqui para não esquecer também.']}},
+  recibo: {n: 'Recibo', e: '🧾', kind: 'bilhete', W: 720, H: 1250, f: {t1: ['Loja', 'MERCEARIA SÃO JORGE'], date: ['Data e hora', '13/08/1998   23:47'], body: ['Itens — um por linha, use | antes do preço', 'Vela branca x12 | 18,00\nSal grosso 5kg | 9,50\nCorda 10m | 22,00\nFósforos | 1,20'], sign: ['Rodapé', 'OBRIGADO PELA PREFERÊNCIA\nVOLTE SEMPRE']}},
+  foto: {n: 'Foto noturna', e: '📷', kind: 'foto', W: 1000, H: 1000, f: {opt: ['Cena', [['vila', 'Vila com igreja'], ['floresta', 'Floresta'], ['estrada', 'Estrada']]], vulto: ['Vulto de olhos vermelhos', true], t1: ['Escrito à mão (opcional)', '']}},
+  mapa: {n: 'Mapa rabiscado', e: '🗺️', kind: 'carta', W: 1100, H: 1100, f: {t1: ['Título', 'Santa Aurora'], body: ['Lugares — um por linha', 'Igreja\nPoço velho\nCasa dos Almeida\nCemitério\nFigueira'], sign: ['Onde fica o X', 'Poço velho']}}
+};
+const tplDefaults = k => Object.fromEntries(Object.entries(TPL[k].f).map(([f, [, d]]) => [f, Array.isArray(d) ? d[0][0] : d]));
+function tplRand(seed) { let s = (seed >>> 0) || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return (s % 100000) / 100000; }; }
+function tplPaper(g, W, H, R, base, edge) {
+  g.fillStyle = base; g.fillRect(0, 0, W, H);
+  for (let i = 0; i < W * H / 700; i++) { g.fillStyle = R() < .5 ? `rgba(90,60,20,${R() * .07})` : `rgba(255,255,255,${R() * .08})`; g.fillRect(R() * W, R() * H, R() * 3 + 1, R() * 3 + 1); }
+  for (let i = 0; i < 3; i++) { const x = R() * W, y = R() * H, r = 60 + R() * 220, gr = g.createRadialGradient(x, y, r * .15, x, y, r); gr.addColorStop(0, 'rgba(140,90,30,.09)'); gr.addColorStop(.85, 'rgba(140,90,30,.05)'); gr.addColorStop(1, 'rgba(120,70,20,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+  const v = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .35, W / 2, H / 2, Math.max(W, H) * .75); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, edge || 'rgba(70,40,10,.38)'); g.fillStyle = v; g.fillRect(0, 0, W, H);
+}
+function tplFold(g, W, H, n) { for (let i = 1; i <= n; i++) { const y = H * i / (n + 1), gr = g.createLinearGradient(0, y - 16, 0, y + 16); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(.47, 'rgba(0,0,0,.11)'); gr.addColorStop(.53, 'rgba(255,255,255,.28)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, y - 16, W, 32); } }
+function tplWrap(g, text, maxW) { const out = []; String(text || '').split('\n').forEach(par => { if (!par.trim()) { out.push(''); return; } let line = ''; par.split(/\s+/).forEach(w => { const t = line ? line + ' ' + w : w; if (g.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t; }); out.push(line); }); return out; }
+function tplText(g, text, x, y, maxW, lh, R, jit = 0, align = 'left') { const L = tplWrap(g, text, maxW); g.textAlign = align; L.forEach((l, i) => { g.save(); g.translate(x + (jit ? (R() - .5) * jit : 0), y + i * lh); if (jit) g.rotate((R() - .5) * jit * .003); g.fillText(l, 0, 0); g.restore(); }); return y + L.length * lh; }
+function tplRedact(g, text, x, y, maxW, lh) {
+  g.textAlign = 'left'; const sp = g.measureText(' ').width;
+  String(text || '').split('\n').forEach(par => {
+    const toks = []; let red = false;
+    par.split(/(\[\[|\]\])/).forEach(p => { if (p === '[[') red = true; else if (p === ']]') red = false; else p.split(/\s+/).filter(Boolean).forEach(w => toks.push({w, red})); });
+    let cx = x;
+    toks.forEach((t, i) => { const w = g.measureText(t.w).width; if (cx + w > x + maxW && cx > x) { cx = x; y += lh; } if (t.red) { g.save(); g.fillStyle = '#121212'; g.fillRect(cx - 3, y - lh * .66, w + 6 + (toks[i + 1] && toks[i + 1].red ? sp : 0), lh * .8); g.restore(); } else g.fillText(t.w, cx, y); cx += w + sp; });
+    y += lh;
+  });
+  return y;
+}
+function tplSigil(g, x, y, r) { g.save(); g.strokeStyle = '#1d1d1d'; g.lineWidth = 4; g.beginPath(); g.arc(x, y, r, 0, 7); g.stroke(); g.lineWidth = 2; g.beginPath(); g.arc(x, y, r * .78, 0, 7); g.stroke(); g.beginPath(); for (let i = 0; i < 3; i++) { const a = -Math.PI / 2 + i * Math.PI * 2 / 3; g[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r * .7, y + Math.sin(a) * r * .7); } g.closePath(); g.stroke(); g.beginPath(); g.arc(x, y + r * .05, r * .2, 0, 7); g.fill(); g.restore(); }
+function tplPine(g, x, base, hgt) { g.fillRect(x - 3, base - hgt * .16, 6, hgt * .16 + 6); for (let i = 0; i < 4; i++) { const yy = base - hgt * .14 - i * hgt * .2, ww = hgt * (.3 - i * .055); g.beginPath(); g.moveTo(x - ww, yy); g.lineTo(x, yy - hgt * .36); g.lineTo(x + ww, yy); g.fill(); } }
+function tplTree(g, x, y, len, ang, depth, R) { if (depth <= 0 || len < 2) return; const x2 = x + Math.cos(ang) * len, y2 = y + Math.sin(ang) * len; g.lineWidth = Math.max(1, depth * depth * .32); g.beginPath(); g.moveTo(x, y); g.lineTo(x2, y2); g.stroke(); const n = depth > 7 ? 2 : 2 + (R() < .35 ? 1 : 0); for (let i = 0; i < n; i++) tplTree(g, x2, y2, len * (.7 + R() * .12), ang + (R() - .5) * .8 + (i - (n - 1) / 2) * .55, depth - 1, R); }
+function tplScene(g, x, y, w, h, R, kind, vulto, bw) {
+  g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip(); g.translate(x, y);
+  const sky = g.createLinearGradient(0, 0, 0, h); sky.addColorStop(0, '#0b1520'); sky.addColorStop(.62, '#30424f'); sky.addColorStop(1, '#0f1418'); g.fillStyle = sky; g.fillRect(0, 0, w, h);
+  const mx = w * (.62 + R() * .2), my = h * (.16 + R() * .08), mr = Math.min(w, h) * .1, mg = g.createRadialGradient(mx, my, mr * .3, mx, my, mr * 4.5); mg.addColorStop(0, 'rgba(230,240,245,.5)'); mg.addColorStop(1, 'rgba(230,240,245,0)'); g.fillStyle = mg; g.fillRect(0, 0, w, h); g.fillStyle = '#eef2f3'; g.beginPath(); g.arc(mx, my, mr, 0, 7); g.fill();
+  const hz = h * .74; g.fillStyle = 'rgba(190,210,220,.13)'; for (let i = 0; i < 7; i++) { g.beginPath(); g.ellipse(R() * w, hz - R() * h * .12, w * (.25 + R() * .3), h * .05, 0, 0, 7); g.fill(); }
+  g.fillStyle = g.strokeStyle = '#05080b'; g.lineCap = 'round';
+  if (kind === 'floresta') { for (let i = 0; i < 16; i++) tplPine(g, R() * w, hz + R() * h * .1, h * (.25 + R() * .4)); }
+  else if (kind === 'estrada') { for (let i = 0; i < 10; i++) tplPine(g, R() < .5 ? R() * w * .33 : w * .67 + R() * w * .33, hz + R() * 16, h * (.18 + R() * .3)); }
+  else {
+    for (let i = 0; i < 5; i++) { const hx = R() * w * .9, hw = w * (.1 + R() * .09), hh = h * (.07 + R() * .05); g.fillRect(hx, hz - hh, hw, hh + 6); g.beginPath(); g.moveTo(hx - 10, hz - hh); g.lineTo(hx + hw / 2, hz - hh - hh * .65); g.lineTo(hx + hw + 10, hz - hh); g.fill(); if (R() < .55) { g.fillStyle = 'rgba(255,190,90,.6)'; g.fillRect(hx + hw * .3, hz - hh * .62, hw * .15, hh * .24); g.fillStyle = '#05080b'; } }
+    const cx = w * .76; g.fillRect(cx, hz - h * .3, w * .07, h * .3); g.beginPath(); g.moveTo(cx - 6, hz - h * .3); g.lineTo(cx + w * .035, hz - h * .43); g.lineTo(cx + w * .07 + 6, hz - h * .3); g.fill(); g.fillRect(cx + w * .033, hz - h * .48, 3, h * .06); g.fillRect(cx + w * .022, hz - h * .465, w * .026, 3);
+    tplTree(g, w * .32, hz + 6, h * .13, -Math.PI / 2, 9, R);
+  }
+  g.fillRect(0, hz, w, h - hz);
+  if (kind === 'estrada') { g.fillStyle = '#161b1f'; g.beginPath(); g.moveTo(w * .485, hz); g.lineTo(w * .515, hz); g.lineTo(w * .9, h); g.lineTo(w * .1, h); g.closePath(); g.fill(); g.fillStyle = 'rgba(220,220,200,.25)'; for (let i = 0; i < 6; i++) { const t = i / 6, t2 = t + .07; g.beginPath(); g.moveTo(w * .5 - 1 - t * 4, hz + (h - hz) * t * t); g.lineTo(w * .5 + 1 + t * 4, hz + (h - hz) * t * t); g.lineTo(w * .5 + 1 + t2 * 6, hz + (h - hz) * t2 * t2); g.lineTo(w * .5 - 1 - t2 * 6, hz + (h - hz) * t2 * t2); g.fill(); } }
+  if (vulto) {
+    const fx = w * (.42 + R() * .16), fh = h * .2, top = hz - fh; g.fillStyle = '#020304';
+    g.beginPath(); g.ellipse(fx, top + fh * .1, fh * .08, fh * .1, 0, 0, 7); g.fill();
+    g.beginPath(); g.moveTo(fx - fh * .15, hz + 4); g.quadraticCurveTo(fx - fh * .18, top + fh * .4, fx, top + fh * .18); g.quadraticCurveTo(fx + fh * .18, top + fh * .4, fx + fh * .15, hz + 4); g.fill();
+    g.fillStyle = '#ff3030'; g.shadowColor = '#ff0000'; g.shadowBlur = 14; g.fillRect(fx - fh * .045, top + fh * .085, fh * .025, fh * .014); g.fillRect(fx + fh * .02, top + fh * .085, fh * .025, fh * .014); g.shadowBlur = 0;
+  }
+  for (let i = 0; i < w * h / 260; i++) { g.fillStyle = `rgba(255,255,255,${R() * .05})`; g.fillRect(R() * w, R() * h, 1.6, 1.6); }
+  const vg = g.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .3, w / 2, h / 2, Math.max(w, h) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.66)'); g.fillStyle = vg; g.fillRect(0, 0, w, h);
+  g.restore();
+  if (bw) { const id = g.getImageData(x, y, w, h), d = id.data; for (let i = 0; i < d.length; i += 4) { const l = Math.min(255, (d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11) * 1.3 + 20); d[i] = d[i + 1] = d[i + 2] = l; } g.putImageData(id, x, y); }
+}
+const TPL_DRAW = {
+  carta(g, W, H, v, R) { tplPaper(g, W, H, R, '#efe4c9'); tplFold(g, W, H, 2); g.fillStyle = 'rgba(28,32,62,.88)'; g.font = '600 46px Caveat'; g.textAlign = 'right'; g.fillText(v.date || '', W - 90, 130); g.font = '600 56px Caveat'; let y = tplText(g, v.t1, 100, 250, W - 200, 66, R, 6) + 26; g.font = '600 47px Caveat'; y = tplText(g, v.body, 100, y, W - 200, 62, R, 8); g.font = '600 52px Caveat'; tplText(g, v.sign, W - 110, Math.max(y + 70, H - 280), 700, 62, R, 4, 'right'); },
+  bilhete(g, W, H, v, R) {
+    tplPaper(g, W, H, R, '#f2e9a6', 'rgba(110,90,20,.3)'); g.strokeStyle = 'rgba(60,110,190,.35)'; g.lineWidth = 2; for (let y = 150; y < H; y += 62) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+    g.strokeStyle = 'rgba(200,40,40,.45)'; g.beginPath(); g.moveTo(110, 0); g.lineTo(110, H); g.stroke();
+    g.fillStyle = 'rgba(0,0,0,.18)'; g.beginPath(); g.moveTo(0, 0); for (let x = 0; x <= W; x += 16) g.lineTo(x, 18 + R() * 20); g.lineTo(W, 0); g.fill();
+    g.fillStyle = 'rgba(25,30,62,.9)'; g.font = '600 58px Caveat'; const y = tplText(g, v.body, 140, 138, W - 200, 62, R, 6); g.font = '600 54px Caveat'; g.textAlign = 'right'; g.fillText(v.sign || '', W - 70, Math.min(H - 50, y + 46));
+    g.save(); g.translate(W / 2, 30); g.rotate(-.04); g.fillStyle = 'rgba(240,240,220,.55)'; g.fillRect(-120, -26, 240, 54); g.restore();
+  },
+  jornal(g, W, H, v, R) {
+    tplPaper(g, W, H, R, '#e5ddc8', 'rgba(60,50,30,.38)'); g.fillStyle = '#1b1b1b'; g.textAlign = 'center';
+    g.font = '900 86px Georgia, "Times New Roman", serif'; g.fillText(v.t2 || '', W / 2, 130); g.fillRect(55, 160, W - 110, 6); g.font = 'italic 27px Georgia, serif'; g.fillText(v.date || '', W / 2, 202); g.fillRect(55, 222, W - 110, 2);
+    g.font = 'bold 62px Georgia, "Times New Roman", serif'; let y = tplText(g, v.t1, W / 2, 305, W - 130, 70, R, 0, 'center');
+    const ph = {x: 55, y: y - 20, w: W - 110, h: 430}; tplScene(g, ph.x, ph.y, ph.w, ph.h, R, 'vila', true, true);
+    g.fillStyle = '#333'; g.font = 'italic 23px Georgia, serif'; y = tplText(g, v.sign, ph.x, ph.y + ph.h + 32, ph.w, 28, R) + 26;
+    g.fillStyle = '#222'; g.font = '25px Georgia, serif'; const colW = (W - 150) / 2, L = tplWrap(g, v.body, colW), per = Math.ceil(L.length / 2); g.textAlign = 'left';
+    L.forEach((l, i) => { const col = i < per ? 0 : 1, yy = y + (i % per) * 33; if (yy < H - 30) g.fillText(l, 55 + col * (colW + 40), yy); });
+    g.fillRect(W / 2 - 1, y - 22, 2, Math.min(per * 33, H - y - 10));
+  },
+  relatorio(g, W, H, v, R) {
+    tplPaper(g, W, H, R, '#f1eee4', 'rgba(40,40,30,.28)'); g.fillStyle = '#1d1d1d'; tplSigil(g, 130, 125, 62);
+    g.textAlign = 'left'; g.font = '36px "Special Elite", monospace'; g.fillText('ORDO REALITAS', 220, 115); g.font = '22px "Special Elite", monospace'; g.fillText('RELATÓRIO DE MISSÃO — USO INTERNO', 222, 152); g.fillRect(60, 205, W - 120, 3);
+    g.font = '26px "Special Elite", monospace'; g.fillText('ASSUNTO: ' + (v.t1 || ''), 70, 262); g.fillText('DATA: ' + (v.date || ''), 70, 304); g.fillText('AGENTE: ' + (v.sign || ''), 70, 346); g.fillRect(60, 375, W - 120, 2);
+    g.font = '28px "Special Elite", monospace'; tplRedact(g, v.body, 70, 440, W - 140, 42);
+    g.save(); g.translate(W - 260, H - 190); g.rotate(-.2); g.globalAlpha = .78; g.strokeStyle = '#b8141a'; g.lineWidth = 7; g.strokeRect(-185, -52, 370, 104); g.fillStyle = '#b8141a'; g.font = '52px "Special Elite", monospace'; g.textAlign = 'center'; g.fillText('CONFIDENCIAL', 0, 17); g.restore();
+  },
+  diario(g, W, H, v, R) {
+    tplPaper(g, W, H, R, '#f1eadb', 'rgba(60,40,20,.32)'); g.strokeStyle = 'rgba(80,120,190,.28)'; g.lineWidth = 2; for (let y = 232; y < H - 40; y += 58) { g.beginPath(); g.moveTo(50, y); g.lineTo(W - 50, y); g.stroke(); }
+    g.strokeStyle = 'rgba(200,60,60,.35)'; g.beginPath(); g.moveTo(140, 0); g.lineTo(140, H); g.stroke();
+    const cx = W - 210, cy = H - 260; g.strokeStyle = 'rgba(110,70,30,.2)'; g.lineWidth = 14; g.beginPath(); g.arc(cx, cy, 110, 0, 7); g.stroke(); g.lineWidth = 4; g.beginPath(); g.arc(cx + 7, cy - 4, 120, .3, 4.4); g.stroke();
+    g.fillStyle = 'rgba(30,30,55,.88)'; g.font = '600 56px Caveat'; g.textAlign = 'left'; g.fillText(v.date || '', 160, 160); g.font = '600 46px Caveat'; tplText(g, v.body, 160, 222, W - 240, 58, R, 7);
+  },
+  recibo(g, W, H, v, R) {
+    g.fillStyle = '#f7f5ee'; g.fillRect(0, 0, W, H); for (let i = 0; i < 5000; i++) { g.fillStyle = `rgba(0,0,0,${R() * .035})`; g.fillRect(R() * W, R() * H, 2, 2); }
+    g.fillStyle = '#2a2a2a'; g.font = '34px "Special Elite", monospace'; let y = tplText(g, v.t1, W / 2, 110, W - 80, 42, R, 0, 'center'); g.font = '24px "Special Elite", monospace'; g.fillText(v.date || '', W / 2, y + 16); y += 70;
+    const dash = () => { g.textAlign = 'center'; g.fillText('- - - - - - - - - - - - - - - - - - -', W / 2, y); y += 44; }; dash(); g.font = '25px "Special Elite", monospace'; let tot = 0;
+    String(v.body || '').split('\n').filter(s => s.trim()).slice(0, 18).forEach(l => { const [a, b] = l.split('|').map(s => s.trim()); g.textAlign = 'left'; g.fillText((a || '').slice(0, 26), 50, y); if (b) { g.textAlign = 'right'; g.fillText(b, W - 50, y); const n = parseFloat(b.replace(/\./g, '').replace(',', '.')); if (!isNaN(n)) tot += n; } y += 40; });
+    dash(); if (tot) { g.font = '31px "Special Elite", monospace'; g.textAlign = 'left'; g.fillText('TOTAL', 50, y); g.textAlign = 'right'; g.fillText('R$ ' + tot.toFixed(2).replace('.', ','), W - 50, y); y += 64; }
+    g.font = '22px "Special Elite", monospace'; y = tplText(g, v.sign, W / 2, y + 6, W - 80, 32, R, 0, 'center');
+    let bx = 90; const by = Math.min(H - 170, y + 40); while (bx < W - 90) { const w = 2 + Math.floor(R() * 6); g.fillRect(bx, by, w, 110); bx += w + 2 + Math.floor(R() * 5); }
+    const fd = g.createLinearGradient(0, 0, W, 0); fd.addColorStop(0, 'rgba(247,245,238,0)'); fd.addColorStop(.5, 'rgba(247,245,238,.35)'); fd.addColorStop(1, 'rgba(247,245,238,0)'); g.fillStyle = fd; g.fillRect(0, 0, W, H);
+  },
+  foto(g, W, H, v, R) { tplScene(g, 0, 0, W, H, R, v.opt || 'vila', v.vulto !== false, false); if (v.t1) { g.fillStyle = 'rgba(255,255,255,.78)'; g.font = '600 50px Caveat'; tplText(g, v.t1, W - 50, H - 60, W - 100, 54, R, 3, 'right'); } },
+  mapa(g, W, H, v, R) {
+    tplPaper(g, W, H, R, '#e8d6ab', 'rgba(90,50,10,.48)'); g.fillStyle = 'rgba(40,30,20,.88)'; g.font = '600 66px Caveat'; g.textAlign = 'center'; g.fillText(v.t1 || '', W / 2, 105);
+    g.strokeStyle = 'rgba(50,90,150,.5)'; g.lineWidth = 18; g.lineCap = 'round'; g.beginPath(); g.moveTo(-20, H * .32); g.bezierCurveTo(W * .3, H * .14, W * .5, H * .62, W + 20, H * .56); g.stroke();
+    g.strokeStyle = 'rgba(60,40,20,.65)'; g.lineWidth = 4; g.setLineDash([14, 10]); for (let i = 0; i < 4; i++) { g.beginPath(); g.moveTo(R() * W, H * .16 + R() * H * .1); g.bezierCurveTo(R() * W, R() * H, R() * W, R() * H, R() * W, H * .86 + R() * H * .08); g.stroke(); } g.setLineDash([]);
+    const places = String(v.body || '').split('\n').map(s => s.trim()).filter(Boolean).slice(0, 10), off = R() * 6;
+    places.forEach((p, i) => {
+      const ang = off + i / places.length * Math.PI * 2, rr = Math.min(W, H) * (.24 + R() * .1), x = W / 2 + Math.cos(ang) * rr, y = H / 2 + 30 + Math.sin(ang) * rr * .82, isX = v.sign && p.toLowerCase() === v.sign.trim().toLowerCase();
+      g.lineWidth = 3; g.strokeStyle = 'rgba(40,30,20,.85)';
+      if (isX) { g.strokeStyle = 'rgba(185,20,20,.9)'; g.lineWidth = 10; g.beginPath(); g.moveTo(x - 30, y - 30); g.lineTo(x + 30, y + 30); g.moveTo(x + 30, y - 30); g.lineTo(x - 30, y + 30); g.stroke(); g.lineWidth = 4; g.beginPath(); g.ellipse(x, y, 64, 52, R() * .5, 0, 6); g.stroke(); }
+      else { g.strokeRect(x - 18, y - 14, 36, 28); g.beginPath(); g.moveTo(x - 23, y - 14); g.lineTo(x, y - 34); g.lineTo(x + 23, y - 14); g.stroke(); }
+      g.fillStyle = isX ? 'rgba(170,20,20,.95)' : 'rgba(40,30,20,.9)'; g.font = '600 42px Caveat'; g.textAlign = 'center'; g.fillText(p, x, y + (isX ? 96 : 62));
+    });
+    const cx = W - 115, cy = H - 125; g.strokeStyle = 'rgba(40,30,20,.7)'; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, 55, 0, 7); g.stroke(); g.beginPath(); g.moveTo(cx, cy - 72); g.lineTo(cx + 12, cy); g.lineTo(cx, cy + 72); g.lineTo(cx - 12, cy); g.closePath(); g.stroke(); g.fillStyle = 'rgba(40,30,20,.85)'; g.font = 'bold 30px Georgia, serif'; g.fillText('N', cx, cy - 82);
+    tplFold(g, W, H, 1);
+  }
+};
+function tplRender(cv, k, v, seed) { const t = TPL[k]; cv.width = t.W; cv.height = t.H; const g = cv.getContext('2d', {willReadFrequently: true}); g.textBaseline = 'alphabetic'; TPL_DRAW[k](g, t.W, t.H, v, tplRand(seed)); }
+function openDocTpl(exId) {
+  const saved = lsGet('mesa-tpl:' + docEdit.id, null);
+  let k = saved && TPL[saved.k] ? saved.k : 'carta', v = saved && saved.v ? {...tplDefaults(k), ...saved.v} : tplDefaults(k), seed = (saved && saved.seed) || (Math.random() * 1e9 | 0);
+  const fontsReady = Promise.all(['600 40px Caveat', '30px "Special Elite"'].map(f => document.fonts ? document.fonts.load(f).catch(() => {}) : 0));
+  let rT = 0;
+  const redraw = () => { clearTimeout(rT); rT = setTimeout(() => { const cv = $('#tplCv'); if (cv) fontsReady.then(() => tplRender(cv, k, v, seed)); }, 120); };
+  const fieldsHTML = () => Object.entries(TPL[k].f).map(([f, [lab, d]]) => {
+    if (Array.isArray(d)) return `<label class="lab">${lab}</label><select class="in" data-tf="${f}">${d.map(([a, b]) => `<option value="${a}"${v[f] === a ? ' selected' : ''}>${b}</option>`).join('')}</select>`;
+    if (typeof d === 'boolean') return `<label class="sw"><input type="checkbox" data-tf="${f}" ${v[f] !== false ? 'checked' : ''}><i></i><span>${lab}</span></label>`;
+    const big = f === 'body' || String(d).includes('\n');
+    return `<label class="lab">${lab}</label>${big ? `<textarea class="in" data-tf="${f}" rows="${f === 'body' ? 6 : 2}">${esc(v[f] || '')}</textarea>` : `<input class="in" data-tf="${f}" value="${esc(v[f] || '')}">`}`;
+  }).join('');
+  const draw = () => {
+    openModal(`<div class="mhead"><h3>✍️ Pista a partir de um modelo</h3><button class="btn sm" data-m="x">Voltar</button></div><div class="mbody">
+      <div class="tplKinds" id="tplK">${Object.entries(TPL).map(([kk, t]) => `<button class="tile2 ${k === kk ? 'on' : ''}" data-tk="${kk}"><span class="e">${t.e}</span>${t.n}</button>`).join('')}</div>
+      <div class="tplWrap"><div class="tplPrev"><canvas id="tplCv"></canvas></div><div class="tplForm" id="tplF">${fieldsHTML()}</div></div>
+      <div class="row" style="margin-top:12px;gap:8px"><button class="btn sm" id="tplSeed" title="Muda manchas, dobras e a posição das coisas">🎲 Variar</button><span style="flex:1"></span><button class="btn red" id="tplUse">✅ Usar esta pista</button></div></div>`, () => openDocEditor(exId, docEdit));
+    $('#tplK').onclick = ev => { const b = ev.target.closest('[data-tk]'); if (!b || b.dataset.tk === k) return; k = b.dataset.tk; v = tplDefaults(k); draw(); };
+    const upd = ev => { const i = ev.target.closest('[data-tf]'); if (!i) return; v[i.dataset.tf] = i.type === 'checkbox' ? i.checked : i.value; redraw(); };
+    $('#tplF').oninput = upd; $('#tplF').onchange = upd;
+    $('#tplSeed').onclick = () => { seed = Math.random() * 1e9 | 0; redraw(); };
+    $('#tplUse').onclick = () => { fontsReady.then(() => {
+      const cv = document.createElement('canvas'); tplRender(cv, k, v, seed); let u = cv.toDataURL('image/jpeg', .88); if (u.length > 880000) u = cv.toDataURL('image/jpeg', .72); if (u.length > 880000) u = cv.toDataURL('image/jpeg', .55);
+      docEdit.img = u; docEdit.kind = TPL[k].kind; if (!String(docEdit.name || '').trim()) docEdit.name = String(v.t1 || v.t2 || TPL[k].n).split('\n')[0].slice(0, 60);
+      lsSet('mesa-tpl:' + docEdit.id, {k, v, seed}); docEditFile = null; closeModal('ok'); toast('✍️ Pista criada. Revise e salve o documento.');
+    }); };
+    redraw();
+  };
+  draw();
+}
+
+/* =====================================================================
+   v11: Mestre tira o áudio do jogador (como no Discord) + recuperar tudo
+   ===================================================================== */
+const fdNames = new Set(); let forcedDeaf = false;
+function forceDeaf(id, on) {
+  const p = roster.get(id), c = conns.get(id); if (!p) return; p.fd = !!on;
+  if (on) fdNames.add(p.name.toLowerCase()); else fdNames.delete(p.name.toLowerCase());
+  try { if (c && c.open) c.send({t: 'forcedeaf', on: !!on}); } catch (e) {}
+  broadcastRoster(); renderTiles(); toast(on ? '🎧 ' + p.name + ' não ouve mais ninguém' : '🎧 ' + p.name + ' voltou a ouvir');
+}
+function recoverStats(id) { const st = stOf(id); if (!st.pvMax && !st.peMax) return false; setStats(id, {pv: st.pvMax || st.pv, pe: st.peMax || st.pe}); return true; }
+function recoverAll() { let n = 0; roster.forEach(p => { if (p.role !== 'mestre' && recoverStats(p.id)) n++; }); toast(n ? `♻️ ${n} agente${n > 1 ? 's' : ''} recuperado${n > 1 ? 's' : ''}` : 'Ninguém tem vida/esforço máximos preenchidos ainda.'); }
+
 async function docDelete(id) { if (!await confirmBox('Apagar este documento da sua lista? (quem já recebeu continua com ele, a não ser que você recolha)', 'Apagar')) return; try { await docTx('lib', 'readwrite', st => st.delete(id)); } catch (e) {} await docLoadLib(); renderSide(); }
 let docPickAfter = null;
 function docShowAll(id, by) {
