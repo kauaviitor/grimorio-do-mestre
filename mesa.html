@@ -1892,6 +1892,28 @@ body.lay-ring #foeCard{top:80px}
 .quickD{gap:4px}.dq{padding:5px 8px}
 .dTg{opacity:.55;transition:opacity .2s,background .2s}.dTg.on{opacity:1}
 body.noDice .quickD,body.noDice .dicePanel{display:none!important}
+
+/* v16b: cartão do inimigo menor */
+#foeCard{width:min(250px,calc(100% - 32px));padding:7px 9px 9px;border-radius:13px}
+#foeCard .fcTag{font-size:8.5px;padding:3px 9px;letter-spacing:.14em}
+#foeCard .fcTop{gap:8px;margin-top:2px}
+#foeCard .fcPic{width:36px;height:36px;border-radius:9px;font-size:19px}
+#foeCard .fcNm b{font-size:18px}
+#foeCard .fcHp{height:4px;margin:3px 0 2px}
+#foeCard .fcSub{font-size:10.5px}
+#foeCard .fcRoll:not(:empty){margin-top:6px;padding-top:5px}
+#foeCard .fcLab{font-size:10.5px;margin-bottom:2px}
+#foeCard .fcDice{gap:4px;min-height:10px}
+#foeCard .fcDw.blind::after{font-size:22px}#foeCard .fcDw.sm.blind::after{font-size:16px}
+#foeCard .fcRes>b{font-size:28px}
+#foeCard .fcRes small{font-size:11px}
+#foeCard .fcAct:not(:empty){margin-top:6px;gap:4px}
+#foeCard .btn.sm{padding:3px 8px;font-size:11px;border-radius:8px}
+#foeCard .fcRow{gap:4px;margin-top:2px}
+#foeCard .fcRow select,#foeCard .fcRow .in{padding:3px 6px;font-size:11px;height:auto}
+#foeCard .fcRow label{font-size:10.5px}
+#foeCard .fcRev{font-size:10.5px;color:#ffb3b3;margin-top:2px}
+#foeCard{max-height:calc(100% - 180px)}
 </style>
 </head>
 <body>
@@ -6571,7 +6593,7 @@ function tqAnimate(r, q, by) {
   setTimeout(() => {
     [...st.children].forEach((w, i) => { w.classList.toggle('keep', i === r.keep); w.classList.toggle('lose', i !== r.keep); });
     const ok = q.dt ? r.total >= q.dt : null, crit = r.crit, fail = r.fail;
-    out.innerHTML = q.oc ? '<div class="tqTot q">?</div><div class="tqV">🕶️ Só o Mestre sabe o resultado…</div>' + (by ? '<div class="tqBy">O Mestre rolou por você</div>' : '') + '<button class="btn sm" id="tqOk">OK</button>' : `<div class="tqTot">${r.total}</div>${r.bonus ? `<small>${r.dice[r.keep]} ${fxSig(r.bonus)}</small>` : ''}${q.sec ? '<div class="tqV">📨 Resultado enviado ao Mestre</div>' : crit ? '<div class="tqV crit">✦ CRÍTICO! ✦</div>' : fail ? '<div class="tqV fail">DESASTRE</div>' : ok === true ? '<div class="tqV ok">SUCESSO</div>' : ok === false ? '<div class="tqV no">FALHA</div>' : ''}${by ? '<div class="tqBy">O Mestre rolou por você</div>' : ''}<button class="btn sm" id="tqOk">OK</button>`;
+    out.innerHTML = q.oc ? '<div class="tqTot q">?</div>' + (by ? '<div class="tqBy">O Mestre rolou por você</div>' : '') + '<button class="btn sm" id="tqOk">OK</button>' : `<div class="tqTot">${r.total}</div>${r.bonus ? `<small>${r.dice[r.keep]} ${fxSig(r.bonus)}</small>` : ''}${q.sec ? '<div class="tqV">📨 Resultado enviado ao Mestre</div>' : crit ? '<div class="tqV crit">✦ CRÍTICO! ✦</div>' : fail ? '<div class="tqV fail">DESASTRE</div>' : ok === true ? '<div class="tqV ok">SUCESSO</div>' : ok === false ? '<div class="tqV no">FALHA</div>' : ''}${by ? '<div class="tqBy">O Mestre rolou por você</div>' : ''}<button class="btn sm" id="tqOk">OK</button>`;
     ov.classList.add('done'); if (!q.sec) ov.classList.toggle('crit', !!crit), ov.classList.toggle('fail', !!fail && !crit), ov.classList.toggle('okv', ok === true && !crit), ov.classList.toggle('nov', ok === false && !fail);
     docSnd(!q.sec && (crit || ok === true) ? 'heal' : !q.sec && (fail || ok === false) ? 'hit' : 'stamp');
     const close = () => { tqLocal = null; ov.classList.add('out'); setTimeout(() => ov.remove(), 400); };
@@ -6828,34 +6850,36 @@ function foeClick(e) {
   if (a === 'atk') { const bb = bstGet(it.bid); const at = bb && bb.atk[+x]; if (!at) return; const t = bstTest(bb, at.per); foeRoll(at.n, rollOP(t.attr, t.bonus + at.bon), rollExpr(at.dano), foeTgt); }
   if (a === 'hp') { const v = Math.max(1, +(($('#fcHpV') || {}).value || 1)), c = cbOf(), cur = c.list[c.cur]; if (!cur) return; cur.pv = clamp((cur.pv | 0) + (x === '-' ? -v : v), 0, cur.pvMax || 9999); cbPush(c); docSnd(x === '-' ? 'hit' : 'heal'); if (cur.pv <= 0) toast('💀 ' + cur.n + ' caiu'); }
   if (a === 'dmg') { const pid = x, v = +y; if (!roster.has(pid) || !eqOf(pid)) { toast('Esse agente não tem personagem equipado.'); return; } const st = stOf(pid); setStats(pid, {pv: Math.max(0, st.pv - v)}); try { docSnd('hit'); } catch (er) {} toast(`💥 ${v} de dano aplicado`); b.disabled = true; }
-  if (a === 'rev' && foeLast) { const L = foeLast; sys(`👹 ${L.who} — ${L.lab}: ${L.r.total}${L.tgtN ? ` contra Defesa ${L.def} de ${L.tgtN} (${L.hit ? 'acertou' : 'errou'})` : ''}${L.dmg ? ` · dano ${L.dmg.total}` : ''}`); b.disabled = true; }
+  if (a === 'rev' && foeLast) { const L = foeLast; sendAll({t: 'foeRev', lab: L.lab, who: L.who, d: L.r.dice.slice(0, 5), k: L.r.keep, mode: L.r.mode, tot: L.r.total, dd: L.dmg ? L.dmg.dice.slice(0, 6) : [], df: L.dmg ? L.dmg.faces.slice(0, 6) : [], dt: L.dmg ? L.dmg.total : null, dl: L.dmg ? L.dmg.label : '', def: L.def, tgtN: L.tgtN, hit: L.hit}); sys(`👹 ${L.who} — ${L.lab}: ${L.r.total}${L.tgtN ? ` contra Defesa ${L.def} de ${L.tgtN} (${L.hit ? 'acertou' : 'errou'})` : ''}${L.dmg ? ` · dano ${L.dmg.total}` : ''}`); b.disabled = true; }
 }
 function foeRoll(lab, r, dmg, tgt) {
   const it = foeCur(); if (!it) return;
   sendAll({t: 'foeRoll', lab: String(lab).slice(0, 30), who: it.n, n: r.dice.length, nd: dmg ? Math.min(6, dmg.dice.length) : 0});
   const p = tgt && roster.get(tgt), ch = p ? liveCh(p) : null, f = ch && ch.eq ? sanFx(ch.fx) : null, def = f ? fxCalc(f).def : null;
   foeLast = {who: it.n, lab, r, dmg, tgt, tgtN: p ? (ch.char || p.name) : '', def, hit: def != null ? r.total >= def : null};
-  foeAnim(true, lab, it.n, r, dmg);
+  foeAnim(true, lab, it.n, r, dmg, 0, 0, foeLast);
 }
-function foeAnim(real, lab, who, r, dmg, n, nd) {
+function foeAnim(real, lab, who, r, dmg, n, nd, info) {
   const box = $('#fcRoll'); if (!box) return;
   const dice = real ? r.dice.slice(0, 5) : Array.from({length: Math.min(5, n || 1)}, () => dN(20));
   const dd = real ? (dmg ? dmg.dice.slice(0, 6) : []) : Array.from({length: Math.min(6, nd || 0)}, () => dN(6));
   box.innerHTML = `<div class="fcLab">${esc(who)} · ${esc(lab)}</div><div class="fcDice"></div>${dd.length ? '<div class="fcDice dm"></div>' : ''}<div class="fcRes"></div>`;
   const [d1, d2] = box.querySelectorAll('.fcDice');
-  dice.forEach((v, i) => { const w = document.createElement('span'); w.className = 'fcDw' + (real ? '' : ' blind'); w.appendChild(DIE.make(20, v, 54, {animate: true, delay: i * 140, dur: 1300})); d1.appendChild(w); });
-  if (d2) dd.forEach((v, i) => { const w = document.createElement('span'); w.className = 'fcDw sm' + (real ? '' : ' blind'); w.appendChild(DIE.make(real ? (dmg.faces[i] || 6) : 6, v, 38, {animate: true, delay: 300 + i * 120, dur: 1200})); d2.appendChild(w); });
+  dice.forEach((v, i) => { const w = document.createElement('span'); w.className = 'fcDw' + (real ? '' : ' blind'); w.appendChild(DIE.make(20, v, 34, {animate: true, delay: i * 140, dur: 1300})); d1.appendChild(w); });
+  if (d2) dd.forEach((v, i) => { const w = document.createElement('span'); w.className = 'fcDw sm' + (real ? '' : ' blind'); w.appendChild(DIE.make(real ? (dmg.faces[i] || 6) : 6, v, 26, {animate: true, delay: 300 + i * 120, dur: 1200})); d2.appendChild(w); });
   try { diceSound(dice.length + dd.length); } catch (e) {}
   setTimeout(() => {
     const res = box.querySelector('.fcRes'); if (!res) return;
-    if (!real) { res.innerHTML = '<b class="q">?</b><small>só o Mestre sabe</small>'; return; }
+    if (!real) { res.innerHTML = '<b class="q">?</b>'; return; }
     [...d1.children].forEach((w, i) => w.classList.toggle('lose', r.mode !== 'soma' && i !== r.keep));
-    const L = foeLast || {};
+    const L = info || {};
     res.innerHTML = `<b>${r.total}</b>${L.def != null ? `<small>vs Defesa ${L.def} de ${esc(L.tgtN)} → <em class="${L.hit ? 'ok' : 'no'}">${L.hit ? 'ACERTA' : 'ERRA'}</em></small>` : ''}${dmg ? `<small>Dano <b>${dmg.total}</b> (${esc(dmg.label)})</small>` : ''}
-      <div class="fcRow">${dmg && L.tgt ? `<button class="btn sm red" data-fa="dmg:${esc(L.tgt)}:${dmg.total}">💥 Aplicar ${dmg.total} em ${esc(L.tgtN)}</button>` : ''}<button class="btn sm" data-fa="rev">📢 Revelar na mesa</button></div>`;
+      ${isHost ? `<div class="fcRow">${dmg && L.tgt ? `<button class="btn sm red" data-fa="dmg:${esc(L.tgt)}:${dmg.total}">💥 Aplicar ${dmg.total} em ${esc(L.tgtN)}</button>` : ''}<button class="btn sm" data-fa="rev">📢 Revelar na mesa</button></div>` : '<div class="fcRev">📢 Revelado pelo Mestre</div>'}`;
   }, 1500 + Math.max(dice.length, dd.length) * 140);
 }
-function v16Msg(d) { if (d.t === 'foeRoll') { foeRender(); foeAnim(false, d.lab || '', d.who || '', null, null, d.n | 0, d.nd | 0); } }
+function v16Msg(d) {
+  if (d.t === 'foeRev') { foeRender(); const box = $('#fcRoll'); if (!box) return; const L = {def: d.def, tgtN: String(d.tgtN || ''), hit: d.hit}; const d1 = (d.d || []).map(x => clamp(+x || 1, 1, 20)); foeAnim(true, String(d.lab || ''), String(d.who || ''), {dice: d1, keep: d.k | 0, total: +d.tot || 0, mode: d.mode || 'maior'}, d.dt != null ? {dice: (d.dd || []).map(x => +x || 1), faces: (d.df || []).map(x => +x || 6), total: +d.dt || 0, label: String(d.dl || '')} : null, 0, 0, L); try { docSnd('stamp'); } catch (e) {} }
+  if (d.t === 'foeRoll') { foeRender(); foeAnim(false, d.lab || '', d.who || '', null, null, d.n | 0, d.nd | 0); } }
 /* ---------- chat: esconder os dados ---------- */
 let diceHidden = false;
 document.addEventListener('click', e => { const b = e.target.closest('[data-dtg]'); if (!b) return; e.preventDefault(); diceHidden = !diceHidden; document.body.classList.toggle('noDice', diceHidden); b.classList.toggle('on', !diceHidden); });
