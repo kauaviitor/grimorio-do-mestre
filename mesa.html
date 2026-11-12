@@ -2008,6 +2008,21 @@ body.lySw #stageW,body.lySw #tiles,body.lySw #live{animation:lySw .65s cubic-bez
 #cbBan{padding:4px 14px 4px 6px}
 #cbBan b{font-size:18px}
 .tile.hl{animation:none}
+/* v18: volume geral */
+#allVolB{font-size:16px}
+#allVolB.on{color:var(--ink);background:var(--p3)}
+#allVolP{position:fixed;z-index:9000;width:260px;padding:12px 14px;border-radius:14px;background:#111d;backdrop-filter:blur(10px);border:1px solid #fff2;box-shadow:0 10px 30px #000a;animation:avIn .16s ease-out}
+@keyframes avIn{from{opacity:0;transform:translateY(-6px)}}
+#allVolP .avH{font-weight:700;font-size:13px;margin-bottom:8px}
+#allVolP .avH small{font-weight:400;color:var(--mut);margin-left:6px}
+#allVolP .avR{display:flex;align-items:center;gap:8px}
+#allVolP .avR button{width:32px;height:32px;border-radius:50%;background:#fff1;font-size:16px;flex:none}
+#allVolP .avR input{flex:1;accent-color:#c0262f}
+#allVolP .avR b{width:40px;text-align:right;font-size:12px}
+#allVolP .avQ{display:flex;gap:6px;margin-top:10px}
+#allVolP .avQ button{flex:1;padding:4px 0;border-radius:8px;background:#fff1;font-size:11px;color:var(--mut)}
+#allVolP .avQ button:hover{background:#fff2;color:var(--ink)}
+#allVolP .avN{display:block;margin-top:8px;font-size:10.5px;line-height:1.35;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -2071,7 +2086,7 @@ body.lySw #stageW,body.lySw #tiles,body.lySw #live{animation:lySw .65s cubic-bez
     <div class="code">SALA <b id="rCode">-----</b><button class="btn sm" id="copyLink">Convidar ▾</button></div>
     <span class="sp"></span>
     <div class="net" id="net"><i></i><span id="netTxt">conectando…</span></div>
-    <button class="tbb" data-v17="book" title="Livro do Mestre">📖</button><button class="tbb" id="layoutBtn" title="Visualização: palco, grade, live"></button>
+    <button class="tbb" id="allVolB" title="Volume geral">🔊</button><button class="tbb" data-v17="book" title="Livro do Mestre">📖</button><button class="tbb" id="layoutBtn" title="Visualização: palco, grade, live"></button>
     <button class="tbb" id="bfsBtn" title="Tela cheia"></button>
     <button class="tbb" id="setBtn" title="Configurações"></button>
   </header>
@@ -2193,10 +2208,11 @@ let micStream = null, micSrc = null, gateNode = null, voiceIn, fxOut, cleanOut, 
 function audioInit() {
   if (audioReady) { if (ctx.state !== 'running') ctx.resume().catch(() => {}); return audioReady; }
   try { ctx = new AudioContext({latencyHint: 'interactive', sampleRate: 48000}); } catch (e) { ctx = new AudioContext(); }
+  ctx.__all = ctx.createGain(); ctx.__all.gain.value = allV(); ctx.__all.connect(ctx.destination);
   musicBus = gain(S.musicVol); sfxBus = gain(S.sfxVol);
   masterComp = ctx.createDynamicsCompressor(); masterComp.threshold.value = -12; masterComp.ratio.value = 3; masterComp.attack.value = .01; masterComp.release.value = .25;
   monitor = gain(S.monVol); stageDest = ctx.createMediaStreamDestination();
-  musicBus.connect(masterComp); sfxBus.connect(masterComp); masterComp.connect(monitor); monitor.connect(ctx.destination); stageOut = gain(state.pvol ?? 1); stageAn = ctx.createAnalyser(); stageAn.fftSize = 1024; masterComp.connect(stageOut); stageOut.connect(stageDest); stageOut.connect(stageAn);
+  musicBus.connect(masterComp); sfxBus.connect(masterComp); masterComp.connect(monitor); monitor.connect(ctx.__all); stageOut = gain(state.pvol ?? 1); stageAn = ctx.createAnalyser(); stageAn.fftSize = 1024; masterComp.connect(stageOut); stageOut.connect(stageDest); stageOut.connect(stageAn);
   noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
   const nd = noiseBuf.getChannelData(0); for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
   absCurve = new Float32Array(1024); for (let i = 0; i < 1024; i++) absCurve[i] = Math.abs(i / 512 - 1);
@@ -3014,7 +3030,7 @@ function buildVoiceChain() {
   vBufI = new Float32Array(2048); vBufO = new Float32Array(2048); setInterval(vLevelTick, 60); pres.connect(comp); comp.connect(cleanOut);
   muteGain = gain(0); avDest = ctx.createMediaStreamDestination(); cleanOut.connect(muteGain); muteGain.connect(avDest);
   outAn = ctx.createAnalyser(); outAn.fftSize = 512; muteGain.connect(outAn);
-  selfMon = gain(0, ctx.destination); cleanOut.connect(selfMon);
+  selfMon = gain(0, ctx.__all); cleanOut.connect(selfMon);
   rawAn = ctx.createAnalyser(); rawAn.fftSize = 1024;
   if (workletOK) { gateNode = new AudioWorkletNode(ctx, 'gate'); gateNode.parameters.get('threshold').value = S.gate; gateNode.connect(voiceIn); }
   applyVoice(voiceId);
@@ -4578,7 +4594,7 @@ function ytExpected() {
   if (d > 1 && p >= d - .3) p = y.loop ? p % d : d;
   return Math.max(0, p);
 }
-function ytLevel() { const y = state.yt; if (!y || deaf) return 0; return Math.round(clamp(y.v * (state.cover && state.cover.on ? .3 : 1) * (isHost ? S.monVol : S.stageVol * (state.pvol ?? 1)), 0, 1) * 100); }
+function ytLevel() { const y = state.yt; if (!y || deaf) return 0; return Math.round(clamp(y.v * (state.cover && state.cover.on ? .3 : 1) * (isHost ? S.monVol : S.stageVol * (state.pvol ?? 1)) * allV(), 0, 1) * 100); }
 function ytApply(seek) {
   if (!ytP || !ytReady || !state.yt) return;
   try {
@@ -5609,7 +5625,7 @@ document.addEventListener('keydown', e => {
 
 /* ----- document sounds (played only on this computer) ----- */
 let docBus = null;
-function docOut() { if (!ctx) return null; if (!docBus) { docBus = gain(1); docBus.connect(ctx.destination); } docBus.gain.value = deaf ? 0 : (isHost ? S.monVol : S.stageVol * (state.pvol ?? 1)) * .9; return docBus; }
+function docOut() { if (!ctx) return null; if (!docBus) { docBus = gain(1); docBus.connect(ctx.__all); } docBus.gain.value = deaf ? 0 : (isHost ? S.monVol : S.stageVol * (state.pvol ?? 1)) * .9; return docBus; }
 function docSnd(k) {
   Promise.resolve(audioInit()).then(() => {
     const o = docOut(); if (!o) return; const t = T() + .02;
@@ -6757,7 +6773,7 @@ document.addEventListener('dblclick', e => { if (e.target.closest('#timerOv') &&
 document.addEventListener('click', e => { const b = e.target.closest('#timerOv [data-tm]'); if (!b || !isHost) return; const v = b.dataset.tm; if (v === 's') { state.tmSz = state.tmSz === 'p' ? '' : state.tmSz === 'g' ? 'p' : 'g'; pushState(); renderTimer(); } if (v === 'o') { state.tmPos = null; pushState(); renderTimer(); } });
 /* ---------- pré-escuta (só o mestre ouve) ---------- */
 let prvMode = false, prvBusN = null, prvRevN = null, prvStopF = null, prvId = '', prvName = '';
-function prvBus() { if (!prvBusN) { prvBusN = gain(.9); prvBusN.__p = 1; prvBusN.connect(ctx.destination); } return prvBusN; }
+function prvBus() { if (!prvBusN) { prvBusN = gain(.9); prvBusN.__p = 1; prvBusN.connect(ctx.__all); } return prvBusN; }
 function prvRev() { if (!prvRevN) { prvRevN = ctx.createConvolver(); prvRevN.buffer = reverb.buffer; const g = gain(.85); prvRevN.connect(g); g.connect(prvBus()); } return prvRevN; }
 function prvStop() { const f = prvStopF; prvStopF = null; prvId = ''; prvName = ''; if (f) try { f(); } catch (e) {} prvRender(); }
 async function prvPlay(kind, id, nm) {
@@ -7133,6 +7149,47 @@ document.addEventListener('change', async e => {
   if (a === 'up') { const f = t.files[0]; if (!f) return; if (f.size > 250 * 1024 * 1024) { toast('Arquivo grande demais (máx. 250 MB).'); return; } const b = {id: 'b' + Math.random().toString(36).slice(2, 9), name: f.name.replace(/\.[^.]+$/, '').slice(0, 60), blob: f, ts: Date.now(), page: 1, marks: []}; try { await bkTx('readwrite', s => s.put(b)); } catch (er) { toast('Não consegui guardar o arquivo (espaço do navegador).', 5000); return; } bkCur = b.id; await bkLoad(); bkRender(); toast('📖 Livro guardado'); }
 });
 document.addEventListener('click', e => { if (e.target.closest('[data-v17="book"]')) bkOpen(); });
+/* ---------- v18: volume geral (afeta tudo o que este aparelho toca) ---------- */
+const allV = () => (S.allMuted ? 0 : clamp(S.allVol ?? 1, 0, 1));
+const _mVol = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'volume');
+const allMedia = new Set();
+function allApplyEl(el) { try { const rv = el.__rv ?? _mVol.get.call(el); el.__rv = rv; _mVol.set.call(el, clamp(rv * allV(), 0, 1)); } catch (e) {} }
+Object.defineProperty(HTMLMediaElement.prototype, 'volume', {configurable: true, enumerable: true,
+  get() { return this.__rv ?? _mVol.get.call(this); },
+  set(v) { this.__rv = +v; _mVol.set.call(this, clamp(+v * allV(), 0, 1)); }});
+const _mPlay = HTMLMediaElement.prototype.play;
+HTMLMediaElement.prototype.play = function () { allApplyEl(this); if (!this.isConnected) allMedia.add(new WeakRef(this)); return _mPlay.apply(this, arguments); };
+function allApply() {
+  if (ctx && ctx.__all) ctx.__all.gain.setTargetAtTime(allV(), ctx.currentTime, .04);
+  document.querySelectorAll('audio,video').forEach(allApplyEl);
+  allMedia.forEach(w => { const el = w.deref(); if (!el) allMedia.delete(w); else allApplyEl(el); });
+  try { ytApply(false); } catch (e) {}
+  allIcon();
+}
+function allIcon() {
+  const v = allV(), ic = v <= .001 ? '🔇' : v < .34 ? '🔈' : v < .67 ? '🔉' : '🔊';
+  const b = $('#allVolB'); if (b) { b.textContent = ic; b.classList.toggle('on', v < .999); b.title = 'Volume geral: ' + Math.round(v * 100) + '%'; }
+  const p = $('#allVolP'); if (p) { p.querySelector('[data-av="m"]').textContent = ic; p.querySelector('b').textContent = Math.round(v * 100) + '%'; const r = p.querySelector('input'); if (+r.value !== Math.round((S.allVol ?? 1) * 100)) r.value = Math.round((S.allVol ?? 1) * 100); }
+}
+function allSet(v) { S.allVol = clamp(v, 0, 1); if (S.allVol > .001) S.allMuted = false; saveS(); allApply(); }
+function allToggle() { S.allMuted = !S.allMuted; if (!S.allMuted && (S.allVol ?? 1) <= .001) S.allVol = .5; saveS(); allApply(); }
+function allPop() {
+  let p = $('#allVolP'); if (p) { p.remove(); return; }
+  p = document.createElement('div'); p.id = 'allVolP';
+  p.innerHTML = '<div class="avH">Volume geral <small>tudo o que toca aqui</small></div><div class="avR"><button data-av="m" title="Silenciar tudo"></button><input type="range" min="0" max="100" step="1" aria-label="Volume geral"><b></b></div><div class="avQ"><button data-av="25">25%</button><button data-av="50">50%</button><button data-av="75">75%</button><button data-av="100">100%</button></div><small class="avN">Músicas, sons, vozes, YouTube, cutscenes e transmissão. Os volumes separados continuam funcionando por dentro.</small>';
+  document.body.appendChild(p);
+  const b = $('#allVolB').getBoundingClientRect(); p.style.top = (b.bottom + 8) + 'px'; p.style.left = Math.max(8, Math.min(innerWidth - 268, b.right - 260)) + 'px';
+  p.querySelector('input').addEventListener('input', e => allSet(+e.target.value / 100));
+  p.addEventListener('click', e => { const a = e.target.closest('[data-av]'); if (!a) return; if (a.dataset.av === 'm') allToggle(); else allSet(+a.dataset.av / 100); });
+  allIcon();
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('#allVolB')) { allPop(); return; }
+  const p = $('#allVolP'); if (p && !e.target.closest('#allVolP')) p.remove();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { const p = $('#allVolP'); if (p) p.remove(); } });
+document.addEventListener('wheel', e => { if (e.target.closest('#allVolB,#allVolP')) { e.preventDefault(); allSet((S.allVol ?? 1) + (e.deltaY < 0 ? .05 : -.05)); } }, {passive: false});
+setTimeout(allIcon, 0);
 document.addEventListener('click', e => { if (e.target.closest('[data-chars]')) { try { closePop(); } catch (er) {} openChars(); } });
 libLoad(); srchLoad(); campLobby();
 applyTheme();
