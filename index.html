@@ -764,7 +764,63 @@ function render() {
   for (const id in els) if (!live.has(id)) { els[id].remove(); delete els[id]; }
   if (sel && !items[sel]) sel = null;
   drawLinks(); updateToolbar(); updateWelcome();
+  maybeAutoStack();
 }
+
+/* ---------- campanhas prontas (pacotes) ---------- */
+const PACKS = [
+  {file: 'campanhas/curral-dos-inocentes/curral-dos-inocentes.json', id: 'cdiC', emoji: '🩸', name: 'Curral dos Inocentes', desc: 'Locke and Key · Ato I. Guia completo do mestre: sessões, verdade, NPCs, ameaças, locais, pistas, documentos, finais, glossário e improviso.'}
+];
+function openPacks() {
+  openSheet(`<div class="sh-h"><b>Campanhas prontas</b><button class="btn ghost" data-done>Fechar</button></div><div class="menu">${PACKS.map((p, i) => `<button data-pk="${i}"><span>${p.emoji}</span><div>${esc(p.name)}<small>${esc(p.desc)}</small></div></button>`).join('')}</div><div class="hint" style="margin-top:14px">A campanha entra numa pasta própria e fica toda editável. Nada do que você já tem é apagado.</div>`);
+  $('#sheetIn').querySelectorAll('[data-pk]').forEach(b => b.onclick = () => importPack(PACKS[+b.dataset.pk]));
+}
+async function importPack(p) {
+  closeSheet('done');
+  if (boards[p.id] && !await confirmBox(`Você já tem <b>${esc(p.name)}</b>. Importar de novo volta os cartões originais do guia ao texto de fábrica (cartões que você criou continuam). Continuar?`, 'Importar')) return;
+  toast('Baixando campanha…', true);
+  try {
+    const r = await fetch(p.file, {cache: 'no-store'});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const f = new File([await r.blob()], p.file.split('/').pop(), {type: 'application/json'});
+    const dt = new DataTransfer(); dt.items.add(f);
+    $('#fileJson').files = dt.files;
+    $('#fileJson').onchange();
+  } catch (e) { toast('Não consegui baixar a campanha: ' + errMsg(e)); }
+}
+/* empilha os cartões de um quadro importado pela altura real (uma vez só) */
+let stacking = false;
+function maybeAutoStack() {
+  const b = boards[curBoard];
+  if (!b || !b.autostack || stacking || !Object.keys(items).length) return;
+  stacking = true;
+  const bid = curBoard;
+  const go2 = () => { try { autoStack(bid); } finally { stacking = false; } };
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(go2, 350));
+}
+function autoStack(bid) {
+  if (bid !== curBoard || view !== 'board') return;
+  const b = boards[bid]; if (!b || !b.autostack) return;
+  const nb = {...b}; delete nb.autostack; boards[bid] = nb;
+  let top = null; const cols = {};
+  for (const [id, it] of Object.entries(items)) {
+    const el = els[id]; if (!el || it.type === 'link') continue;
+    if (it.type === 'heading') { const bt = it.y + el.offsetHeight + 28; top = top == null ? bt : Math.max(top, bt); continue; }
+    (cols[it.x] = cols[it.x] || []).push(id);
+  }
+  for (const x in cols) {
+    const ids = cols[x].sort((a, c) => items[a].y - items[c].y);
+    let y = top != null ? top : items[ids[0]].y;
+    for (const id of ids) {
+      const it = items[id];
+      if (it.y !== Math.round(y)) putItem(bid, id, {...it, y: Math.round(y)});
+      y += els[id].offsetHeight + 22;
+    }
+  }
+  putBoard(bid, nb);
+  requestAnimationFrame(() => fit(true));
+}
+
 function drawLinks() {
   let s = '';
   for (const l of Object.values(items)) {
@@ -1322,12 +1378,14 @@ $('#bMenu').onclick = () => {
     <button data-m="exp"><span>💾</span><div>Fazer backup<small>Baixa um arquivo com tudo (campanhas, notas e fotos)</small></div></button>
     <button data-m="imp"><span>📥</span><div>Restaurar backup<small>Adiciona o conteúdo de um arquivo de backup</small></div></button>
     <button data-m="fold"><span>📂</span><div>Nova pasta</div></button>
+    <button data-m="pack"><span>📚</span><div>Campanhas prontas<small>Guias completos para importar (ex.: Curral dos Inocentes)</small></div></button>
     <button data-m="tema"><span>🎨</span><div>Tema de cores<small>Ordem, Sangue, Morte, Conhecimento, Energia, Medo…</small></div></button></div>
     <div class="hint" style="margin-top:14px">${mode === 'db' ? 'Seus dados ficam salvos na sua conta Claude e aparecem em qualquer aparelho em que você abrir esta página.' : 'Seus dados ficam salvos <b>neste navegador</b>. Faça backup de vez em quando, e use “Restaurar” para levar tudo para outro aparelho.'}</div>`);
   $('#sheetIn').querySelector('[data-m="exp"]').onclick = () => { closeSheet('done'); exportBackup(); };
   $('#sheetIn').querySelector('[data-m="imp"]').onclick = () => { closeSheet('done'); $('#fileJson').click(); };
   $('#sheetIn').querySelector('[data-m="fold"]').onclick = () => openFolderEditor(null);
   $('#sheetIn').querySelector('[data-m="tema"]').onclick = openThemePicker;
+  $('#sheetIn').querySelector('[data-m="pack"]').onclick = openPacks;
 };
 const blobToDataURL = b => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(b); });
 async function exportBackup() {
