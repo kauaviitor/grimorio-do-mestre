@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="Arial,Helvetica,sans-serif">
+<rect width="1000" height="700" fill="#e9dfc9"/>
+<rect x="12" y="12" width="976" height="676" fill="none" stroke="#2a221c" stroke-width="4"/>
+<g font-size="13" font-weight="700" fill="#2a221c" letter-spacing="1">
+<path d="M370 170 Q370 40 520 32 Q670 40 670 170 Z" fill="#bfae94" stroke="#2a221c" stroke-width="3"/>
+<path d="M430 70 Q470 110 455 160 M500 50 Q545 100 525 160 M570 55 Q610 100 600 160" stroke="#8a7a64" stroke-width="2" fill="none"/>
+<text x="580" y="78">PEDRA DO CRUZEIRO</text>
+<rect x="500" y="135" width="40" height="20" fill="#9e0f18"/><text x="430" y="128" fill="#9e0f18" font-size="12">FURNA DAS ALMAS</text>
+<path d="M520 155 L515 215 L512 260 L505 330" stroke="#2a221c" stroke-width="2.5" stroke-dasharray="7 6" fill="none"/>
+<g stroke="#2a221c" stroke-width="2">
+<path d="M440 195v14M435 200h10M465 190v14M460 195h10M490 196v14M485 201h10M545 192v14M540 197h10M570 197v14M565 202h10M595 192v14M590 197h10M450 222v14M445 227h10M478 225v14M473 230h10M500 220v14M495 225h10M535 224v14M530 229h10M560 226v14M555 231h10M585 222v14M580 227h10"/>
+</g>
+<text x="420" y="268">CEMITÉRIO DAS ALMAS (1932)</text>
+<rect x="420" y="290" width="54" height="30" fill="none" stroke="#2a221c" stroke-width="2"/><text x="310" y="310" font-size="12">CEM. S. LÁZARO</text>
+<path d="M440 298v14M435 303h10M458 298v14M453 303h10" stroke="#2a221c" stroke-width="1.5"/>
+<path d="M150 390 L900 390 M150 400 L900 400" stroke="#2a221c" stroke-width="2.5"/>
+<path d="M100 420 L150 400 M335 400 V495 M343 400 V495 M520 400 V420 M527 400 V420 M660 400 V470 M668 400 V470" stroke="#2a221c" stroke-width="2.5"/>
+<path d="M520 470 Q515 560 505 640" stroke="#2a221c" stroke-width="4" fill="none"/>
+<path d="M500 345 l20 -20 l20 20 v35 h-40 Z" fill="#2a221c"/><text x="440" y="378">IGREJA</text>
+<rect x="560" y="350" width="26" height="22" fill="#2a221c"/><text x="592" y="365" font-size="10.5">CASA PAROQUIAL</text><text x="595" y="380" font-size="11" font-weight="400">(Afonsa)</text>
+<rect x="210" y="362" width="22" height="18" fill="#2a221c"/><text x="205" y="355" font-size="12">ROSA</text>
+<rect x="250" y="362" width="22" height="18" fill="#7a6e60"/><text x="240" y="342" font-size="11">DORINHA</text>
+<rect x="380" y="362" width="22" height="18" fill="#2a221c"/>
+<rect x="710" y="362" width="22" height="18" fill="#7a6e60"/><text x="700" y="352" font-size="11">EXPEDITO</text>
+<rect x="770" y="362" width="22" height="18" fill="#2a221c"/>
+<rect x="830" y="362" width="22" height="18" fill="#2a221c"/><rect x="838" y="362" width="6" height="18" fill="#2f6fb5"/><text x="820" y="352" font-size="12">IRACEMA</text>
+<rect x="190" y="410" width="22" height="18" fill="#2a221c"/><rect x="290" y="410" width="22" height="18" fill="#2a221c"/>
+<rect x="380" y="410" width="22" height="18" fill="#7a6e60"/><text x="378" y="445" font-size="11">JOANA</text>
+<rect x="610" y="410" width="22" height="18" fill="#2a221c"/><rect x="720" y="410" width="22" height="18" fill="#2a221c"/>
+<rect x="475" y="410" width="100" height="44" fill="none" stroke="#2a221c" stroke-width="2" stroke-dasharray="6 4"/><text x="503" y="437" font-size="12">PRAÇA</text>
+<rect x="510" y="465" width="26" height="18" fill="#2a221c"/><text x="500" y="500" font-size="12">BODEGA</text>
+<rect x="340" y="470" width="22" height="18" fill="#2a221c"/><rect x="380" y="480" width="22" height="18" fill="#2a221c"/>
+<rect x="650" y="475" width="22" height="18" fill="#2a221c"/><rect x="700" y="465" width="22" height="18" fill="#2a221c"/>
+<rect x="90" y="430" width="22" height="18" fill="#7a6e60"/><rect x="85" y="460" width="45" height="22" fill="none" stroke="#2a221c" stroke-width="2"/><text x="78" y="505" font-size="11">SÍTIO DE</text><text x="78" y="520" font-size="11">RAIMUNDO</text>
+<ellipse cx="225" cy="585" rx="100" ry="50" fill="#cdbfa6" stroke="#2a221c" stroke-width="3"/>
+<path d="M160 570 l40 10 l30 -15 l35 20 M175 600 l50 -5 l40 10 M200 555 l10 25" stroke="#7a6a54" stroke-width="1.5" fill="none"/>
+<rect x="282" y="555" width="20" height="10" fill="#2a221c"/><circle cx="312" cy="560" r="8" fill="none" stroke="#9e0f18" stroke-width="3"/><text x="300" y="585" fill="#9e0f18" font-size="11">galeria</text>
+<text x="150" y="655">AÇUDE DO QUEIROZ (SECO)</text>
+<path d="M690 500 Q760 520 800 560" stroke="#2a221c" stroke-width="2.5" stroke-dasharray="7 6" fill="none"/>
+<path d="M740 640 Q790 540 850 538 Q910 540 950 640 Z" fill="#bfae94" stroke="#2a221c" stroke-width="3"/>
+<rect x="822" y="560" width="22" height="16" fill="#2a221c"/>
+<text x="780" y="530">ALTO DO SERROTE</text><text x="800" y="512" font-size="11" font-weight="400">(Seu Zé e Duke)</text>
+<text x="530" y="640" font-size="12" font-weight="400">→ QUIXADÁ (40 min)</text>
+<path d="M930 50 l10 30 l-10 -8 l-10 8 Z" fill="#9e0f18"/><path d="M930 110 l10 -30 l-10 8 l-10 -8 Z" fill="#2a221c"/><text x="925" y="45">N</text>
+<path d="M50 50 h120" stroke="#2a221c" stroke-width="4"/><text x="45" y="42" font-size="11" font-weight="400">0</text><text x="150" y="42" font-size="11" font-weight="400">500 m</text>
+</g></svg>
