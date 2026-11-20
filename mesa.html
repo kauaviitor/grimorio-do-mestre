@@ -3259,6 +3259,7 @@ function callStage(id) {
 }
 function onHostData(conn, d) {
   if (!d || typeof d !== 'object') return;
+  if (d.t === 'x') { try { if (window.MesaBridge && MesaBridge.onHost) MesaBridge.onHost(conn.peer, d.m); } catch (e) { console.error(e); } return; }
   const id = conn.peer, p = roster.get(id), name = p ? p.name : 'Agente';
   const cn = String((chars[id] || {}).char || '').slice(0, 30);
   if (d.t === 'chat' && typeof d.text === 'string') addChat({k: 'chat', from: name, pid: id, cn, text: d.text.slice(0, 600)}, true);
@@ -3332,6 +3333,7 @@ function connectHost() {
 }
 function onPlayerData(d) {
   if (!d || typeof d !== 'object') return;
+  if (d.t === 'x') { try { if (window.MesaBridge && MesaBridge.onPlayer) MesaBridge.onPlayer(d.m); } catch (e) { console.error(e); } return; }
   if ((d.t === 'hello' || d.t === 'state') && typeof d.now === 'number') hostSkew = Date.now() - d.now;
   if (d.t === 'hello') { docLoadGot().then(() => { docQueue = docGot.filter(x => !x.seen).map(x => x.id); docDropRender(); renderSide(); renderControls(); }); state = normState(d.state); setRoster(d.roster); chat = []; (d.chat || []).forEach(m => chat.push(m)); chars = {}; Object.entries(d.chars || {}).forEach(([k, v]) => { chars[k] = sanCh(v); }); curReveal = d.reveal && okImg(d.reveal.img) ? d.reveal : null; revealHidden = false; onRoomState(); renderAll(); syncAV(); }
   if (d.t === 'roster') { setRoster(d.roster); renderAll(); syncAV(); }
@@ -4103,6 +4105,7 @@ function renderControls() {
   h += cbw('vol', ic('vol'), 'Volume', '', 'deskOnly');
   if (!isHost) h += cbw('docs', ic('bag') + (docUnseen() ? '<i class="dot"></i>' : ''), 'Inventário');
   if (isHost) h += cbw('cover', ic('mask'), state.cover.on ? 'Destampar' : 'Tampar', state.cover.on ? 'act' : '');
+  try { if (window.MesaX) h += MesaX.dockHTML(cbw); } catch (e) {}
   h += '<span class="cbgap"></span>';
   h += cbw('chat', ic('chat') + (unread ? '<i class="dot"></i>' : ''), 'Chat', '', 'mobOnly');
   if (isHost) h += cbw('panel', ic('panel'), 'Mestre', '', 'mobOnly');
@@ -4113,6 +4116,7 @@ function renderControls() {
 $('#ctl').addEventListener('click', async e => {
   const b = e.target.closest('[data-c]'); if (!b) return;
   const k = b.dataset.c;
+  if (window.MesaX && MesaX.onDock(k)) return;
   if (k === 'mic') toggleMic();
   if (k === 'cam') toggleCam();
   if (k === 'share') toggleShare();
@@ -7193,7 +7197,18 @@ setTimeout(allIcon, 0);
 document.addEventListener('click', e => { if (e.target.closest('[data-chars]')) { try { closePop(); } catch (er) {} openChars(); } });
 libLoad(); srchLoad(); campLobby();
 applyTheme();
+
+/* ---------- ponte para os módulos extras (jogos.js: salão de jogos e celular) ---------- */
+window.MesaBridge = {
+  isHost: () => isHost, me: () => me, roster: () => [...roster.values()], chars: () => chars, code: () => code,
+  connected: () => !!(isHost ? (peer && me.id) : (hostConn && hostConn.open)),
+  sendTo: (id, m) => { const c = conns.get(id); if (c && c.open) { try { c.send({t: 'x', m}); } catch (e) {} } },
+  toHost: m => { if (hostConn && hostConn.open) { try { hostConn.send({t: 'x', m}); } catch (e) {} } },
+  toast: t => toast(t), sys: t => { if (isHost) addChat({k: 'sys', text: t}, true); },
+  refresh: () => { try { renderControls(); } catch (e) {} }, onHost: null, onPlayer: null
+};
 })();
 </script>
+<script src="jogos.js"></script>
 </body>
 </html>
