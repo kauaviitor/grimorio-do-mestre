@@ -7205,10 +7205,10 @@ window.MesaBridge = {
   sendTo: (id, m) => { const c = conns.get(id); if (c && c.open) { try { c.send({t: 'x', m}); } catch (e) {} } },
   toHost: m => { if (hostConn && hostConn.open) { try { hostConn.send({t: 'x', m}); } catch (e) {} } },
   toast: t => toast(t), sys: t => { if (isHost) addChat({k: 'sys', text: t}, true); },
-  refresh: () => { try { renderControls(); } catch (e) {} }, onHost: null, onPlayer: null
+  refresh: () => { try { renderControls(); } catch (e) {} }, camp: () => (campCur ? {name: campCur.name, code: campCur.code} : null), onHost: null, onPlayer: null
 };
 })();
 </script>
-<script src="jogos.js?v=20.1"></script>
+<script src="jogos.js?v=21"></script>
 </body>
 </html>
