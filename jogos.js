@@ -515,7 +515,34 @@ hostSave();
 rosterList().forEach(p => { if (p.id !== B().me().id) B().sendTo(p.id, {k: 'gv', t: tablesView(kOf(p.name))}); });
 const old = GV; GV = tablesView(GM); turnCheck(old); renderGames(); renderDockBadges();
 }
+/* ---------- entregue / lido (os tracinhos do WhatsApp) ---------- */
+function canRecv(id) {
+const idd = H.ph.ids[id]; if (!idd) return false;
+if (idd.npc) return true;
+const ph = H.ph.phones[idd.key]; return !!(ph && ph.sig && ph.has && keyToPid(idd.key));
+}
+function readAt(id, cid) {
+const idd = H.ph.ids[id]; if (!idd) return 0;
+if (idd.npc) return (H.ph.gmRead || {})[cid] || 0;
+return ((H.ph.phones[idd.key] || {}).read || {})[cid] || 0;
+}
+function markDelivered() {
+Object.values(H.ph.chats).forEach(c => c.msgs.forEach(m => {
+if (m.q || m.dv || m.sys) return;
+const rc = c.mem.filter(x => x !== m.f); m.dl = m.dl || [];
+rc.forEach(id => { if (!m.dl.includes(id) && canRecv(id)) m.dl.push(id); });
+if (rc.every(id => m.dl.includes(id))) { m.dv = 1; delete m.dl; }
+}));
+}
+function msgSt(m, c) {
+if (m.q) return 0;
+const rc = c.mem.filter(x => x !== m.f);
+if (rc.length && rc.every(id => readAt(id, c.id) >= m.ts)) return 3;
+return m.dv ? 2 : 1;
+}
+function withSt(c, msgs) { return msgs.map(m => m.sys ? m : {...m, st: msgSt(m, c), dl: undefined}); }
 function syncPhones() {
+markDelivered();
 hostSave();
 rosterList().forEach(p => { if (p.id !== B().me().id) B().sendTo(p.id, {k: 'pv', v: phoneView(kOf(p.name))}); });
 const old = PV; PV = phoneView(GM); phoneNotify(old, PV); renderPhone(); renderDockBadges();
@@ -732,12 +759,12 @@ function phoneView(key) {
 hostInit();
 const P = H.ph;
 if (key === GM) {
-return {gm: true, ids: P.ids, chats: Object.values(P.chats).map(c => ({...c, msgs: c.msgs})), posts: P.posts,
+return {gm: true, ids: P.ids, chats: Object.values(P.chats).map(c => ({...c, msgs: withSt(c, c.msgs)})), posts: P.posts,
 phones: Object.entries(P.phones).map(([k, ph]) => ({key: k, ...ph, online: !!keyToPid(k)})), read: P.gmRead || {}};
 }
 const ph = P.phones[key]; if (!ph) return null;
 const me = P.ids[ph.id];
-const chats = Object.values(P.chats).filter(c => c.mem.includes(ph.id)).map(c => ({...c, msgs: visibleMsgs(c, ph)})).filter(c => c.grp || c.msgs.length || true);
+const chats = Object.values(P.chats).filter(c => c.mem.includes(ph.id)).map(c => ({...c, msgs: withSt(c, visibleMsgs(c, ph))})).filter(c => c.grp || c.msgs.length || true);
 const need = new Set([ph.id, ...ph.contacts]); chats.forEach(c => c.mem.forEach(x => need.add(x)));
 const posts = P.posts.filter(p => ph.sig || !ph.off || p.ts <= ph.off);
 posts.forEach(p => { need.add(p.by); p.likes.forEach(x => need.add(x)); p.com.forEach(c => need.add(c.by)); });
@@ -938,12 +965,14 @@ const CSS = `
 .mxp-it .tx{flex:1;min-width:0}.mxp-it .tx b{display:block;font-size:15px;font-weight:600}.mxp-it .tx small{display:block;color:#8696a0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mxp-it .tm{font-size:11px;color:#8696a0;text-align:right}.mxp-it .tm .n{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:10px;background:#25d366;color:#0b141a;font-weight:700;margin-top:4px;padding:0 5px}
 .mxp-chat{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:#0b141a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.035' stroke-width='1.5'%3E%3Ccircle cx='20' cy='20' r='7'/%3E%3Cpath d='M55 15l8 8M63 15l-8 8M15 55h12M60 60a6 6 0 1 0 1 0'/%3E%3C/g%3E%3C/svg%3E")}
-.mxp-m{max-width:80%;padding:6px 9px 4px;border-radius:9px;font-size:14px;line-height:1.35;position:relative;word-wrap:break-word;white-space:pre-wrap;box-shadow:0 1px 1px rgba(0,0,0,.2)}
+.mxp-m{max-width:80%;min-width:64px;padding:6px 9px 6px;border-radius:9px;font-size:14px;line-height:1.35;position:relative;word-wrap:break-word;white-space:pre-wrap;box-shadow:0 1px 1px rgba(0,0,0,.2)}
 .mxp-m.o{align-self:flex-end;background:#005c4b;border-top-right-radius:2px}
 .mxp-m.i{align-self:flex-start;background:#202c33;border-top-left-radius:2px}
 .mxp-m .who{font-size:12px;font-weight:700;margin-bottom:2px}
-.mxp-m .mt{font-size:10px;color:rgba(255,255,255,.6);float:right;margin:6px 0 -2px 10px}
-.mxp-m .mt .ck{color:#53bdeb}
+.mxp-m .mt{position:absolute;right:7px;bottom:4px;display:flex;align-items:center;gap:3px;font-size:11px;line-height:1;color:rgba(255,255,255,.6);white-space:nowrap}
+.mxp-m .mtsp{display:inline-block;width:40px;height:10px;vertical-align:baseline}.mxp-m .mtsp.w{width:58px}
+.mxp-m .ck{display:block;flex:none}
+.mxp-it .ck.li{display:inline-block;vertical-align:-1px;margin-right:3px}
 .mxp-m img{display:block;max-width:100%;border-radius:6px;margin:2px 0}
 .mxp-sys{align-self:center;font-size:11.5px;background:#182229;color:#8696a0;padding:4px 10px;border-radius:7px;margin:6px 0}
 .mxp-in{display:flex;gap:6px;align-items:flex-end;padding:7px 8px 22px;background:#0b141a;flex:none}
@@ -1635,6 +1664,12 @@ const ls = pEl.querySelector('.mxp-list'); if (ls) ls.scrollTop = keepScroll;
 if (scr.startsWith('chat:') && !spyKey) { const c = (v && v.chats || []).find(x => x.id === scr.slice(5)); if (c && unreadOf(c)) markRead(c.id); }
 if (focusK) { const f = pEl.querySelector(`[data-k="${focusK}"]`); if (f) { f.focus(); try { f.setSelectionRange(f.value.length, f.value.length); } catch (e) {} } }
 }
+function tickSVG(st, inList) {
+const col = st === 3 ? '#53bdeb' : 'rgba(255,255,255,.55)', cls = 'ck' + (inList ? ' li' : '');
+if (st === 0) return `<svg class="${cls}" viewBox="0 0 16 16" width="13" height="13"><circle cx="8" cy="8" r="6" fill="none" stroke="${col}" stroke-width="1.5"/><path d="M8 4.6V8l2.3 1.4" fill="none" stroke="${col}" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+if (st === 1) return `<svg class="${cls}" viewBox="0 0 16 11" width="14" height="10"><path d="M2.5 5.8 5.6 8.8 12.6 1.6" fill="none" stroke="${col}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+return `<svg class="${cls} ${st === 3 ? 'rd' : ''}" viewBox="0 0 20 11" width="17" height="10"><path d="M1.5 5.8 4.6 8.8 11.6 1.6" fill="none" stroke="${col}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.2 8.2 8.8 8.8 15.8 1.6" fill="none" stroke="${col}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
 /* ---------- barra de status viva ---------- */
 function batLvl() { return Math.max(7, 94 - Math.floor((Date.now() - batStart) / 150000)); }
 function sbHTML(sig) {
@@ -1721,7 +1756,7 @@ return `<div class="mxp-home" style="background:${WALLS[(v.wall || 0) % WALLS.le
 }
 if (s === 'zap') {
 const cs = chatsFor(v);
-return `<div class="mxp-ap"><div class="mxp-top"><span class="bk" data-a="go" data-s="home">‹</span><b>WhatsApp</b></div>${gmBar(v)}${offBan}<div class="mxp-list">${cs.map(c => { const last = c.msgs[c.msgs.length - 1]; const u = unreadOf(c); const o = chatOther(v, c); return `<div class="mxp-it" data-a="go" data-s="chat:${c.id}">${c.grp ? `<div class="mxp-av" style="background:#2a3942">👥</div>` : avHTML(v, o)}<div class="tx"><b>${esc(chatTitle(v, c))}</b><small>${last ? (last.sys ? esc(nameOf(v, last.f) + ' ' + last.sys) : (last.f === meIdOf(v) ? (last.q ? '🕓 ' : '✓✓ ') : c.grp ? esc(nameOf(v, last.f)) + ': ' : '') + (last.img && !last.tx ? '📷 Foto' : esc(last.tx))) : 'Toque para conversar'}</small></div><div class="tm">${last ? dayLbl(last.ts) : ''}${u ? `<br><span class="n">${u}</span>` : ''}</div></div>`; }).join('') || '<div style="padding:30px;text-align:center;color:#8696a0;font-size:14px">Nenhuma conversa ainda.<br>Toque em ✎ para começar.</div>'}</div>${!v.gm || gmAs ? '<div class="mxp-fab" data-a="go" data-s="new">✎</div>' : ''}</div>`;
+return `<div class="mxp-ap"><div class="mxp-top"><span class="bk" data-a="go" data-s="home">‹</span><b>WhatsApp</b></div>${gmBar(v)}${offBan}<div class="mxp-list">${cs.map(c => { const last = c.msgs[c.msgs.length - 1]; const u = unreadOf(c); const o = chatOther(v, c); return `<div class="mxp-it" data-a="go" data-s="chat:${c.id}">${c.grp ? `<div class="mxp-av" style="background:#2a3942">👥</div>` : avHTML(v, o)}<div class="tx"><b>${esc(chatTitle(v, c))}</b><small>${last ? (last.sys ? esc(nameOf(v, last.f) + ' ' + last.sys) : (last.f === meIdOf(v) ? tickSVG(last.st, 1) : c.grp ? esc(nameOf(v, last.f)) + ': ' : '') + (last.img && !last.tx ? '📷 Foto' : esc(last.tx))) : 'Toque para conversar'}</small></div><div class="tm">${last ? dayLbl(last.ts) : ''}${u ? `<br><span class="n">${u}</span>` : ''}</div></div>`; }).join('') || '<div style="padding:30px;text-align:center;color:#8696a0;font-size:14px">Nenhuma conversa ainda.<br>Toque em ✎ para começar.</div>'}</div>${!v.gm || gmAs ? '<div class="mxp-fab" data-a="go" data-s="new">✎</div>' : ''}</div>`;
 }
 if (s === 'new') {
 const me = meIdOf(v);
@@ -1749,7 +1784,7 @@ if (m.sys) return sep + `<div class="mxp-sys">${esc(nameOf(v, m.f))} ${esc(m.sys
 const mine = m.f === me || (v.gm && !me && false);
 const who = c.grp && !mine ? `<div class="who" style="color:${(v.ids[m.f] || {}).color || '#53bdeb'}">${esc(nameOf(v, m.f))}</div>` : (v.gm && !me && !c.grp ? `<div class="who" style="color:${(v.ids[m.f] || {}).color || '#53bdeb'}">${esc(nameOf(v, m.f))}</div>` : '');
 const nw = prevScr === scr && !seenMsg.has(m.id); seenMsg.add(m.id);
-return sep + `<div class="mxp-m ${mine ? 'o' : 'i'} ${nw ? 'nw' : ''}">${who}${m.img ? `<img src="${m.img}" alt="">` : m.lost ? '<i style="opacity:.6">📷 foto apagada</i>' : ''}${esc(m.tx)}<span class="mt">${hhmm(m.ts)}${mine ? (m.q ? ' 🕓' : ' <span class="ck">✓✓</span>') : ''}</span></div>`;
+return sep + `<div class="mxp-m ${mine ? 'o' : 'i'} ${nw ? 'nw' : ''}">${who}${m.img ? `<img src="${m.img}" alt="">` : m.lost ? '<i style="opacity:.6">📷 foto apagada</i>' : ''}${esc(m.tx)}<span class="mtsp ${mine ? 'w' : ''}"></span><span class="mt">${hhmm(m.ts)}${mine ? tickSVG(m.st) : ''}</span></div>`;
 }).join('');
 const ttl = chatTitle(v, c), sub = c.grp ? c.mem.map(x => nameOf(v, x)).join(', ') : ((v.ids[o] || {}).num || '');
 return `<div class="mxp-ap"><div class="mxp-top"><span class="bk" data-a="go" data-s="zap">‹</span>${c.grp ? '<div class="mxp-av s" style="background:#2a3942">👥</div>' : avHTML(v, o, 's')}<div style="flex:1;min-width:0"><b style="display:block;font-size:15px">${esc(ttl)}</b><small style="color:#8696a0;font-size:11.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(sub)}</small></div>${v.gm && !spyKey ? `<span data-a="delchat" data-id="${c.id}" title="Apagar conversa" style="cursor:pointer;opacity:.6">🗑</span>` : ''}</div>${offBan}<div class="mxp-chat">${msgs || '<div class="mxp-sys">🔒 As mensagens são protegidas. Ou quase.</div>'}</div>${canType ? `<div class="mxp-in"><button class="g" data-a="img" title="Foto">📷</button><textarea rows="1" data-k="m:${c.id}" data-enter="send" placeholder="Mensagem">${esc(pDraft['m:' + c.id] || '')}</textarea><button data-a="send" data-id="${c.id}">➤</button></div>` : v.gm && !spyKey ? '<div class="mxp-ban" style="background:#1f2c34;color:#8696a0">Escolha lá em cima um NPC dessa conversa para responder.</div>' : ''}</div>`;
