@@ -479,7 +479,7 @@ function onHostMsg(pid, m) {
 hostInit();
 if (!m || typeof m !== 'object') return;
 const key = kOf(pidName(pid)); if (!key) return;
-if (m.k === 'hello') { ensurePhone(key, pid); syncTo(pid); return; }
+if (m.k === 'hello') { ensurePhone(key, pid); hostSave(); syncTo(pid); return; }
 if (m.k === 'g') { const e = gameIntent(key, m); if (e) B().sendTo(pid, {k: 'err', t: e}); syncGames(); return; }
 if (m.k === 'p') { ensurePhone(key, pid); const e = phoneIntent(key, m); if (e) B().sendTo(pid, {k: 'err', t: e}); syncPhones(); return; }
 }
@@ -494,7 +494,7 @@ if (isH()) { hostInit(); const e = m.k === 'g' ? gameIntent(GM, m) : phoneIntent
 else B().toHost(m);
 }
 function syncTo(pid) {
-const key = kOf(pidName(pid));
+const key = kOf(pidName(pid)); if (key) ensurePhone(key, pid);
 B().sendTo(pid, {k: 'gv', t: tablesView(key)});
 B().sendTo(pid, {k: 'pv', v: phoneView(key)});
 }
@@ -1244,9 +1244,9 @@ sel[t.id] = p !== '.' && R.xadrez.col(p) === side ? q : null; return renderGames
 function promoPick(side) {
 return new Promise(res => { const d = document.createElement('div'); d.className = 'mx-modal'; d.innerHTML = `<div><b>Promover para</b><div class="mx-row">${['q', 'r', 'b', 'n'].map(p => `<button class="mx-b" data-p="${p}" style="font-size:34px;padding:6px 14px"><span class="mx-pc ${side}">${PCS[p]}</span></button>`).join('')}</div></div>`; gEl.querySelector('.mx-stage').appendChild(d); d.addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (b || e.target === d) { d.remove(); res(b ? b.dataset.p : null); } }); });
 }
-let pOpen = false, pEl = null, scr = 'home', gmAs = '', spyKey = '', pDraft = {}, igSel = null, newGrp = null;
+let pErr = '', pOpenAt = 0, pOpen = false, pEl = null, scr = 'home', gmAs = '', spyKey = '', pDraft = {}, igSel = null, newGrp = null;
 const WALLS = ['linear-gradient(160deg,#1d2b64,#7a1a20)', 'linear-gradient(160deg,#0f2027,#2c5364)', 'linear-gradient(160deg,#3a1c71,#d76d77,#ffaf7b)', 'linear-gradient(160deg,#111,#3a0a0e)', 'linear-gradient(160deg,#134e5e,#71b280)', 'radial-gradient(circle at 30% 20%,#c3161f,#140507 70%)'];
-function openPhone() { ensureCSS(); pOpen = true; if (!isH() && !PV) B().toHost({k: 'hello'}); renderPhone(); renderDockBadges(); }
+function openPhone() { ensureCSS(); pOpen = true; pOpenAt = Date.now(); if (!isH() && !PV) B().toHost({k: 'hello'}); renderPhone(); renderDockBadges(); }
 function closePhone() { pOpen = false; if (pEl) pEl.remove(); pEl = null; spyKey = ''; renderDockBadges(); }
 const hhmm = ts => { const d = new Date(ts); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
 const dayLbl = ts => { const d = new Date(ts), n = new Date(); return d.toDateString() === n.toDateString() ? hhmm(ts) : d.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'}); };
@@ -1310,7 +1310,14 @@ const keepList = pEl.querySelector('.mxp-chat'); const atBottom = !keepList || k
 const keepScroll = pEl.querySelector('.mxp-list') ? pEl.querySelector('.mxp-list').scrollTop : 0;
 const focusK = document.activeElement && pEl.contains(document.activeElement) ? document.activeElement.dataset.k : null;
 let body;
-if (!v) body = `<div class="mxp-off"><div><b>📱</b>Conectando ao celular…</div></div>`;
+if (!v) {
+const slow = Date.now() - pOpenAt > 7000, on = B() && B().connected();
+let hint = '';
+if (pErr) hint = `<small style="opacity:.75">Deu um erro no celular: ${esc(pErr)}</small>`;
+else if (!isH() && !on) hint = `<small style="opacity:.75">Você ainda não está conectado à sala.</small>`;
+else if (slow && !isH()) hint = `<small style="opacity:.75">O Mestre não respondeu. Peça para ele recarregar a Mesa com <b style="display:inline;font-size:inherit;margin:0">Ctrl+F5</b>: o celular só funciona se o Mestre também estiver na versão nova.</small>`;
+body = `<div class="mxp-off"><div><b>📱</b>${slow || pErr ? 'Sem conexão com o celular' : 'Conectando ao celular…'}${hint ? '<br>' + hint : ''}${slow || pErr ? '<br><button data-a="retry" style="margin-top:14px;padding:8px 16px;border-radius:20px;border:0;background:#fff;color:#000;font-weight:600;cursor:pointer">Tentar de novo</button>' : ''}</div></div>`;
+}
 else if (!v.gm && !v.has) body = `<div class="mxp-off" style="background:#000"><div><b>📵</b>Você está sem o celular.<br><small style="opacity:.6">O Mestre está com ele.</small></div></div>`;
 else body = screenHTML(v);
 const sig = v && (v.gm || v.sig);
@@ -1416,6 +1423,7 @@ if (e.type === 'change' && !['SELECT', 'INPUT'].includes(b.tagName)) return;
 if (e.type === 'click' && b.tagName === 'SELECT') return;
 const a = b.dataset.a, v = view();
 if (a === 'close') return closePhone();
+if (a === 'retry') { pOpenAt = Date.now(); pErr = ''; if (isH()) { PV = null; tick(); } else B().toHost({k: 'hello'}); return renderPhone(); }
 if (a === 'home') { scr = 'home'; return renderPhone(); }
 if (a === 'spyoff') { spyKey = ''; scr = 'ctrl'; return renderPhone(); }
 if (!v) return;
@@ -1470,11 +1478,12 @@ rosterList().forEach(p => { if (p.id !== b.me().id && p.role !== 'mestre') ensur
 Object.values(H.tables).forEach(t => t.seats.forEach(s => { if (s && !s.npc) s.name = dispName(s.key); }));
 syncGames(); syncPhones();
 }
-if (!PV) { PV = phoneView(GM); GV = tablesView(GM); renderDockBadges(); }
+if (!PV) { try { PV = phoneView(GM); GV = tablesView(GM); pErr = ''; } catch (e) { pErr = e && e.message || String(e); console.error(e); } renderDockBadges(); if (pOpen) renderPhone(); }
 } else {
 const c = b.connected();
-if (c && (!lastConn || Date.now() - helloAt > 60000 && !PV)) { helloAt = Date.now(); b.toHost({k: 'hello'}); }
+if (c && (!lastConn || (!PV && Date.now() - helloAt > 3000))) { helloAt = Date.now(); b.toHost({k: 'hello'}); }
 if (!c && lastConn) { GV = {}; }
+if (pOpen && !PV) renderPhone();
 lastConn = c;
 }
 if (pOpen && scr === 'home') { const ck = pEl && pEl.querySelector('.mxp-clock'); if (ck) ck.textContent = hhmm(Date.now()); }
